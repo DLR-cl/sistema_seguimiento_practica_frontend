@@ -13,10 +13,10 @@ import { AuthService } from '../../../auth/services/auth.service';
 })
 export class UserLoginComponent {
 
-  private _authService = Inject(AuthService);
-  private _formBuilder:FormBuilder = Inject(FormBuilder);
   constructor(
-    private router: Router
+    private router: Router,
+    private _formBuilder: FormBuilder,
+    private readonly _authService: AuthService
   ){
   }
 
@@ -34,7 +34,11 @@ export class UserLoginComponent {
     }
 
     const {email, password} = this.loginForm.getRawValue();
-    this._authService.signUp(email, password);
+
+    this._authService.login(email, password).subscribe({
+      next: (response: any) => console.log(response),
+      error: (error: any) => console.log(error),
+    });
   }
 
 } 

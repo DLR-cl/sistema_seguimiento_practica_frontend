@@ -17,14 +17,14 @@ export class AuthService {
   ) { }
 
   signUp(register: RegisterDto): Observable<any>{
-    return this._http.post(`${enviroment.API_URL}/register`, {});
+    return this._http.post(`${enviroment.API_URL}/auth/register`, {});
   }
 
-  login(user_name: string, password: string): Observable<any>{
-    return this._http.post<any>(`${enviroment.API_URL}/login`, {user_name, password}).pipe(
+  login(correo: string, password: string): Observable<any>{
+    return this._http.post<any>(`${enviroment.API_URL}/auth/login`, {correo, password}).pipe(
       tap( response => {
-        if(response.token){
-          console.log(response.token);
+        if(response.access_token){
+          console.log(response.access_token);
         }
       }
       )
