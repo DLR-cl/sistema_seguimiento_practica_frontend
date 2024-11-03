@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-fin-informe-jefe-empleador',
@@ -9,4 +10,9 @@ import { Component } from '@angular/core';
 })
 export class FinInformeJefeEmpleadorComponent {
 
+  private readonly _router = inject(Router);
+
+  goToHome(){
+    this._router.navigate(['home-jefe-alumno']);
+  }
 }

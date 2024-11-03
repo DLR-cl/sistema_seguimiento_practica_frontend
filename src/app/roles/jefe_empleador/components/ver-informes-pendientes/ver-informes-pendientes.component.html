@@ -1,0 +1,67 @@
+<div class="container m-auto mt-10 p-6 bg-gray-50 rounded-lg shadow-lg">
+
+    <h2 class="text-4xl text-center mb-8 font-semibold text-gray-700">Informes</h2>
+
+    <div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left text-gray-600">
+            <thead class="text-xs text-gray-500 uppercase bg-blue-100 rounded-t-lg">
+                <tr>
+                    <th scope="col" class="px-6 py-3 rounded-tl-lg">Informe</th>
+                    <th scope="col" class="px-6 py-3">Nombre Alumno</th>
+                    <th scope="col" class="px-6 py-3">Estado</th>
+                    <th scope="col" class="px-6 py-3 rounded-tr-lg">Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Fila para "Practica I" -->
+                <tr class="bg-white hover:bg-blue-50 transition-colors">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        Practica I
+                    </th>
+                    <td class="px-6 py-4">Maximiliano Perez</td>
+                    <td class="px-6 py-4 text-green-600 font-semibold">Enviado</td>
+                    <td class="px-6 py-4">
+                        <button
+                            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+                            >
+                            Ver
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- Fila para "Practica II" -->
+                <tr class="bg-white hover:bg-blue-50 transition-colors">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        Practica II
+                    </th>
+                    <td class="px-6 py-4">Milena Gutierrez</td>
+                    <td class="px-6 py-4 text-red-600 font-semibold">Sin Enviar</td>
+                    <td class="px-6 py-4">
+                        <button
+                            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                            (click)="goToInforme()">
+                            Realizar
+                        </button>
+                    </td>
+                </tr>
+
+                <!-- Fila para "Práctica III" -->
+                <tr class="bg-white hover:bg-blue-50 transition-colors">
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        Práctica III
+                    </th>
+                    <td class="px-6 py-4">Alfonso Mamani</td>
+                    <td class="px-6 py-4 text-green-600 font-semibold">Enviado</td>
+                    <td class="px-6 py-4">
+                        <button
+                            class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition"
+                            >
+                            Ver
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>

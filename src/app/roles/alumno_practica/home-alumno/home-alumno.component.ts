@@ -9,4 +9,17 @@ import { Component } from '@angular/core';
 })
 export class HomeAlumnoComponent {
 
+  dataAlumno: any;
+  
+  public goToEstado(){
+
+  }
+
+  public goToInformes(){
+
+  }
+
+  public signOut(){
+
+  }
 }

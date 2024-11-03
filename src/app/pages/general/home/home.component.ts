@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { HeaderComponent } from "../../../roles/jefe_compartido/header-jefes/header.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -10,4 +11,10 @@ import { HeaderComponent } from "../../../roles/jefe_compartido/header-jefes/hea
 })
 export class HomeComponent {
 
+  private _router = inject(Router);
+
+  toLogin(){
+    this._router.navigate(['login']);
+  }
+  
 }

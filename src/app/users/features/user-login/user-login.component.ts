@@ -35,10 +35,12 @@ export class UserLoginComponent {
 
     const {email, password} = this.loginForm.getRawValue();
 
-    this._authService.login(email, password).subscribe({
-      next: (response: any) => console.log(response),
+    this._authService.logIn(email, password).subscribe({
+      next: (response: any) => {},
       error: (error: any) => console.log(error),
     });
+    ;
+    
   }
 
 } 

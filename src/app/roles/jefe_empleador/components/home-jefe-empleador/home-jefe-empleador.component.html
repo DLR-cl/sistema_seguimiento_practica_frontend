@@ -1,26 +1,62 @@
-<!-- Header -->
+<div class="min-h-screen bg-gradient-to-br from-red-50 to-gray-50">
+    <!-- Header con Navbar responsive -->
+    <header class="bg-white shadow-md py-4 px-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-800">Sistema de Seguimiento</h1>
+            
+            <!-- Botón de menú hamburguesa para pantallas pequeñas -->
+            <div class="lg:hidden">
+                <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
 
-<!-- Main -->
-<div class="">
-    <div class="">
-        <h2>Bienvenido Jefe de Alumno</h2>
-    </div>
-    
-    <div>
-        <h2>Revisa los informes confidenciales pendientes</h2>
-        <button>Ver</button> <!-- Debe ir al formulario -->
-    </div>
-</div>
-
-<div>
-    <div>
-        <h2>Informes confidenciales</h2>
-    </div>
-
-    <div class="container-informes">
-        <div class="informe">
-            <!-- Practica 1 | Nombre del alumno prácticante | rut del alumno | horas práctica en formato card-->
-            <button>Realizar Informe</button>
+            <!-- Navbar links -->
+            <nav id="menu" class="hidden lg:flex space-x-6">
+                <button class="text-gray-700 hover:text-blue-500 transition duration-200" (click)="goToInformes()">Ver informes</button>
+                <button class="text-gray-700 hover:text-blue-500 transition duration-200" (click)="goToData()">Datos de la empresa</button>
+                <button class="text-gray-700 hover:text-red-500 transition duration-200" (click)="signOut()">Cerrar sesión</button>
+            </nav>
         </div>
+
+        <!-- Menú desplegable para pantallas pequeñas -->
+        <div id="menu-items" class="lg:hidden hidden flex-col items-start space-y-4 mt-4 px-8">
+            <a href="#" class="text-gray-700 hover:text-blue-500 transition duration-200">Ver informes</a>
+            <button class="text-gray-700 hover:text-blue-500 transition duration-200" (click)="goToData()">Datos de la empresa</button>
+            <button class="text-gray-700 hover:text-red-500 transition duration-200" (click)="signOut()">Cerrar sesión</button>
+        </div>
+    </header>
+
+    <!-- Mensaje de bienvenida central -->
+    <div class="text-center mt-8 mb-10">
+        <h2 class="text-4xl font-bold text-gray-800">Bienvenido, {{dataJefe?.nombre}}</h2>
+    </div>
+
+    <!-- Contenedor de columnas -->
+    <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 py-10">
+        
+        <!-- Contenido 1 -->
+        <div class="bg-white shadow-lg rounded-lg p-8">
+            <div class="text-center space-y-8">
+                <h3 class="text-xl text-gray-600">Revisa los informes confidenciales</h3>
+                <button class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" (click)="goToInformes()">
+                    Ver
+                </button>
+            </div>
+        </div>
+        
+        <!-- Contenido 2 -->
+        <div class="bg-white shadow-lg rounded-lg p-8">
+            <div class="text-center space-y-8">
+                <h3 class="text-xl text-gray-600">Visualiza tus datos y los de tu empresa</h3>
+                <button class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" (click)="goToData()">
+                    Ver
+                </button>
+            </div>
+        </div>
+
     </div>
 </div>
+
