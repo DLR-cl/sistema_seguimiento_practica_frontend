@@ -33,7 +33,8 @@ export class AuthService {
       tap( (response) => {
         this._storage.set('session', JSON.stringify(response));
         this.redirectUserByRol();
-      }
+      },
+      
       )
     );
   }
@@ -55,7 +56,7 @@ export class AuthService {
           this._router.navigate(['home-jefe-alumno']);
           break;
         case Tipo_usuario.alumno_practica:
-          this._router.navigate(['home-alumno-practica']);
+          this._router.navigate(['home-alumno']);
           break;
         case Tipo_usuario.jefe_departamento:
           this._router.navigate(['home-administracion']);

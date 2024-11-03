@@ -12,6 +12,9 @@ import { Tipo_usuario } from './enum/tipo-usuario.enum';
 import { NotFoundComponent } from './pages/general/not-found/not-found.component';
 import { HomeAdministracionComponent } from './roles/jefe_compartido/home/home-administracion.component';
 import { FinInformeJefeEmpleadorComponent } from './roles/jefe_empleador/components/fin-informe-jefe-empleador/fin-informe-jefe-empleador.component';
+import { HomeAlumnoComponent } from './roles/alumno_practica/home-alumno/home-alumno.component';
+import { EstadoPracticaComponent } from './roles/alumno_practica/estado-practica/estado-practica.component';
+import { InformePrimeraPracticaAlumnoComponent } from './roles/alumno_practica/informe-primera-practica/informe-primera-practica.component';
 
 export const routes: Routes = [
     {
@@ -49,6 +52,29 @@ export const routes: Routes = [
         path: 'agradecimientos', loadComponent: () => FinInformeJefeEmpleadorComponent,
         canActivate: [privateGuard, roleGuard([Tipo_usuario.jefe_empleador])]
     },
+    {
+        path: 'home-alumno',
+        loadComponent: () => HomeAlumnoComponent,
+        canActivate: [
+            privateGuard,
+            roleGuard([Tipo_usuario.alumno_practica])
+        ]
+    },
+    {
+        path: 'estado-practica', loadComponent: () => EstadoPracticaComponent,
+        canActivate: [
+            privateGuard, 
+            roleGuard([Tipo_usuario.alumno_practica])
+        ]
+    },
+    {
+        path: 'informe-practica-alumno', loadComponent: () => InformePrimeraPracticaAlumnoComponent,
+        canActivate: [
+            privateGuard,
+            roleGuard([Tipo_usuario.alumno_practica])
+        ]
+    },
+    
     {
         path: '**', component: NotFoundComponent
     }

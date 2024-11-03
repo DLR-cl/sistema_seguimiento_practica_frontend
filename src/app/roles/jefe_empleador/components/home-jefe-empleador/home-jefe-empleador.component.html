@@ -1,62 +1,41 @@
 <div class="min-h-screen bg-gradient-to-br from-red-50 to-gray-50">
     <!-- Header con Navbar responsive -->
-    <header class="bg-white shadow-md py-4 px-8">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-gray-800">Sistema de Seguimiento</h1>
-            
-            <!-- Botón de menú hamburguesa para pantallas pequeñas -->
-            <div class="lg:hidden">
-                <button id="menu-toggle" class="text-gray-700 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Navbar links -->
-            <nav id="menu" class="hidden lg:flex space-x-6">
-                <button class="text-gray-700 hover:text-blue-500 transition duration-200" (click)="goToInformes()">Ver informes</button>
-                <button class="text-gray-700 hover:text-blue-500 transition duration-200" (click)="goToData()">Datos de la empresa</button>
-                <button class="text-gray-700 hover:text-red-500 transition duration-200" (click)="signOut()">Cerrar sesión</button>
-            </nav>
-        </div>
-
-        <!-- Menú desplegable para pantallas pequeñas -->
-        <div id="menu-items" class="lg:hidden hidden flex-col items-start space-y-4 mt-4 px-8">
-            <a href="#" class="text-gray-700 hover:text-blue-500 transition duration-200">Ver informes</a>
-            <button class="text-gray-700 hover:text-blue-500 transition duration-200" (click)="goToData()">Datos de la empresa</button>
-            <button class="text-gray-700 hover:text-red-500 transition duration-200" (click)="signOut()">Cerrar sesión</button>
-        </div>
-    </header>
+    <app-header-jefe-empleador></app-header-jefe-empleador>
 
     <!-- Mensaje de bienvenida central -->
     <div class="text-center mt-8 mb-10">
-        <h2 class="text-4xl font-bold text-gray-800">Bienvenido, {{dataJefe?.nombre}}</h2>
+        <h2 class="text-4xl font-bold text-gray-800">Bienvenido, {{ dataJefe?.nombre }}</h2>
+        <p class="text-lg text-gray-600 mt-2">Estamos encantados de tenerte aquí. Por favor, elige una de las opciones a continuación para comenzar a gestionar los informes y datos de tu empresa.</p>
     </div>
 
     <!-- Contenedor de columnas -->
     <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 py-10">
         
-        <!-- Contenido 1 -->
-        <div class="bg-white shadow-lg rounded-lg p-8">
+        <!-- Contenido 1: Informes confidenciales -->
+        <div class="bg-white shadow-lg rounded-lg p-8 transition-transform transform hover:scale-105 duration-300 ease-in-out">
             <div class="text-center space-y-8">
-                <h3 class="text-xl text-gray-600">Revisa los informes confidenciales</h3>
-                <button class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" (click)="goToInformes()">
-                    Ver
+                <h3 class="text-xl font-semibold text-gray-600">Revisa los informes confidenciales</h3>
+                <p class="text-gray-500">Accede a los informes generados sobre las prácticas y el rendimiento de los estudiantes en tu empresa. Asegúrate de que la información entregada esté actualizada y sea precisa.</p>
+                <button 
+                    class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" 
+                    (click)="goToInformes()">
+                    Ver Informes
                 </button>
             </div>
         </div>
         
-        <!-- Contenido 2 -->
-        <div class="bg-white shadow-lg rounded-lg p-8">
+        <!-- Contenido 2: Datos de la empresa -->
+        <div class="bg-white shadow-lg rounded-lg p-8 transition-transform transform hover:scale-105 duration-300 ease-in-out">
             <div class="text-center space-y-8">
-                <h3 class="text-xl text-gray-600">Visualiza tus datos y los de tu empresa</h3>
-                <button class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" (click)="goToData()">
-                    Ver
+                <h3 class="text-xl font-semibold text-gray-600">Visualiza tus datos y los de tu empresa</h3>
+                <p class="text-gray-500">Consulta información de tu empresa.</p>
+                <button 
+                    class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" 
+                    (click)="goToData()">
+                    Ver Datos
                 </button>
             </div>
         </div>
 
     </div>
 </div>
-

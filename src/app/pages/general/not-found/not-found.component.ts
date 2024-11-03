@@ -30,7 +30,7 @@ export class NotFoundComponent {
         this._router.navigate(['home-jefe-alumno']);
         break;
         case Tipo_usuario.alumno_practica:
-          this._router.navigate(['home-alumno-practica']);
+          this._router.navigate(['home-alumno']);
         break;
         case Tipo_usuario.jefe_departamento:
           this._router.navigate(['home-administracion']);

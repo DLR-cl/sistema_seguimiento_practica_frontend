@@ -1,19 +1,17 @@
-<!-- component -->
-<!-- component -->
-<div class="bg-sky-100 flex justify-center items-center h-screen">
+<div class="bg-sky-100 flex justify-center items-center h-screen container-login">
     <!-- Left: Image -->
-    <div class="w-1/2 h-screen hidden lg:block">
-        <img src="departamento_dici.png" alt="Placeholder Image"
-            class="object-cover w-full h-full image-login">
-    </div>
     <!-- Right: Login Form -->
-    <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-        <h1 class="text-2xl font-bold mb-20">Portal de seguimiento de practica ICI</h1>
-        <h2 class="text-2xl font-semibold mb-4">Login</h2>
+    <div class="lg:p-36 md:p-52 sm:p-20 p-8 w-full lg:w-1/2 bg-white shadow-lg rounded-lg" >
+        <div class="flex justify-center mb-6">
+            <img src="ici_icon.png" alt="logo_dici" class="w-24 h-24">
+        </div>
+        <h1 class="text-3xl font-bold text-center mb-4">Portal de seguimiento de práctica ICI</h1>
+        <h2 class="text-2xl font-semibold text-center mb-6">Iniciar Sesión</h2>
+
         <form [formGroup]="loginForm" (ngSubmit)="submit()">
-            <!-- Username Input -->
-            <div class="mb-4 bg-sky-100">
-                <label for="username" class="block text-gray-600">Correo</label>
+            <!-- Correo Input -->
+            <div class="mb-4">
+                <label for="correo" class="block text-gray-700 font-semibold mb-1">Correo</label>
                 <input 
                     type="text" 
                     id="correo" 
@@ -22,28 +20,58 @@
                     autocomplete="off"
                     formControlName="email"
                 >
+                <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)" class="text-red-500 text-sm mt-1">
+                    Por favor, introduzca un correo válido.
+                </div>
             </div>
             <!-- Password Input -->
             <div class="mb-4">
-                <label for="password" class="block text-gray-800">Contraseña</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password"
-                    class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                    autocomplete="off"
-                    formControlName="password"
-                >
+                <label for="password" class="block text-gray-700 font-semibold mb-1">Contraseña</label>
+                <div class="relative">
+                    <input 
+                        [type]="showPassword ? 'text' : 'password'" 
+                        id="password" 
+                        name="password"
+                        class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+                        autocomplete="off"
+                        formControlName="password"
+                    >
+                    <button type="button" (click)="togglePasswordVisibility()" class="absolute right-3 top-2 text-gray-600">
+                        <span *ngIf="showPassword">
+                            <!-- Icono para mostrar contraseña -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                            </svg>
+                        </span>
+                        <span *ngIf="!showPassword">
+                            <!-- Icono para ocultar contraseña -->
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828"></path>
+                                <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87"></path>
+                                <path d="M3 3l18 18"></path>
+                            </svg>
+                        </span>
+                    </button>
+                </div>
+                <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)" class="text-red-500 text-sm mt-1">
+                    La contraseña es obligatoria.
+                </div>
             </div>
 
             <!-- Forgot Password Link -->
-            <div class="mb-6 text-blue-500">
+            <div class="mb-6 text-blue-500 text-center">
                 <a href="#" class="hover:underline">¿Olvidó su contraseña?</a>
             </div>
+
             <!-- Login Button -->
             <button type="submit"
-                class="bg-red-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full">Login</button>
+                class="bg-red-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full transition duration-200 ease-in-out"
+                [disabled]="loginForm.invalid">Iniciar Sesión</button>
         </form>
-
+        
+        <div *ngIf="errorMessage" class="text-red-500 text-center mt-4">
+            {{ errorMessage }}
+        </div>
     </div>
 </div>

@@ -3,11 +3,12 @@ import { AuthStateService } from '../../../../shared/data-access/auth-state.serv
 import { PayloadInterface } from '../../../../shared/interface/payload.interface';
 import { JefeAlumnoInterface } from '../../data-access/interface/jefe-alumno.interface';
 import { JefeEmpleadorService } from '../../data-access/jefe-empleador.service';
+import { HeaderJefeEmpleadorComponent } from "../header-jefe-empleador/header-jefe-empleador.component";
 
 @Component({
   selector: 'app-ver-datos-jefe',
   standalone: true,
-  imports: [],
+  imports: [HeaderJefeEmpleadorComponent],
   templateUrl: './ver-datos-jefe.component.html',
   styleUrl: './ver-datos-jefe.component.css'
 })

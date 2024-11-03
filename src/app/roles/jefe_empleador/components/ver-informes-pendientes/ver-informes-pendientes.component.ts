@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { HeaderJefeEmpleadorComponent } from "../header-jefe-empleador/header-jefe-empleador.component";
 
 @Component({
   selector: 'app-ver-informes-pendientes',
   standalone: true,
-  imports: [],
+  imports: [HeaderJefeEmpleadorComponent],
   templateUrl: './ver-informes-pendientes.component.html',
   styleUrl: './ver-informes-pendientes.component.css'
 })

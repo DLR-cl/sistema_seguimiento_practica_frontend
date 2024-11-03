@@ -1,60 +1,37 @@
 <div class="min-h-screen bg-gradient-to-br from-red-50 to-gray-50">
     <!-- Header con Navbar responsive -->
-    <header class="bg-white shadow-md py-4 px-8">
-        <div class="container mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold text-gray-800">Sistema de Seguimiento</h1>
-            
-            <!-- Botón de menú hamburguesa para pantallas pequeñas -->
-            <div class="lg:hidden">
-                <button id="menu-toggle" class="text-gray-700 focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Navbar links -->
-            <nav id="menu" class="hidden lg:flex space-x-6">
-                <button class="text-gray-700 hover:text-blue-500 transition duration-200" (click)="goToInformes()">Estado del Informe</button>
-                <button class="text-gray-700 hover:text-red-500 transition duration-200" (click)="signOut()">Cerrar sesión</button>
-            </nav>
-        </div>
-
-        <!-- Menú desplegable para pantallas pequeñas -->
-        <div id="menu-items" class="lg:hidden hidden flex-col items-start space-y-4 mt-4 px-8">
-            <a href="#" class="text-gray-700 hover:text-blue-500 transition duration-200">Estado del Informe</a>
-            <button class="text-gray-700 hover:text-red-500 transition duration-200" (click)="signOut()">Cerrar sesión</button>
-        </div>
-    </header>
+    <app-header></app-header>
 
     <!-- Mensaje de bienvenida central -->
     <div class="text-center mt-8 mb-10">
-        <h2 class="text-4xl font-bold text-gray-800">Bienvenido, {{dataJefe?.nombre}}</h2>
+        <h2 class="text-4xl font-bold text-gray-800">Bienvenido, {{dataAlumno?.nombre}}</h2>
+        <p class="text-gray-600 mt-2">Aquí puedes gestionar y dar seguimiento a tu práctica profesional. Revisa el estado de tus solicitudes y sube tu informe de avance.</p>
     </div>
 
     <!-- Contenedor de columnas -->
     <div class="container mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 py-10">
         
-        <!-- Contenido 1 -->
+        <!-- Contenido 1: Estado de la práctica -->
         <div class="bg-white shadow-lg rounded-lg p-8">
-            <div class="text-center space-y-8">
-                <h3 class="text-xl text-gray-600">Visualiza el Estado de tu informe</h3>
+            <div class="text-center space-y-6">
+                <h3 class="text-xl font-semibold text-gray-700">Estado de tu Práctica Profesional</h3>
+                <p class="text-gray-600">Consulta el estado actual de tu práctica, incluyendo las aprobaciones y comentarios recibidos. Mantente al tanto de los requisitos pendientes y las evaluaciones.</p>
                 <button class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" (click)="goToEstado()">
-                    Ver
+                    Ver Estado
                 </button>
             </div>
         </div>
         
-        <!-- Contenido 2 -->
+        <!-- Contenido 2: Informe de práctica -->
         <div class="bg-white shadow-lg rounded-lg p-8">
-            <div class="text-center space-y-8">
-                <h3 class="text-xl text-gray-600">Realiza el Informe de Practica</h3>
-                <button class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" (click)="goToInformes()">
-                    Ver
+            <div class="text-center space-y-6">
+                <h3 class="text-xl font-semibold text-gray-700">Sube tu Informe de Práctica</h3>
+                <p class="text-gray-600">Accede al área de subida de informes. Asegúrate de que el archivo esté en formato PDF, cumpliendo con los estándares establecidos por la universidad.</p>
+                <button class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" (click)="goToInforme()">
+                    Subir Informe
                 </button>
             </div>
         </div>
 
     </div>
 </div>
-
