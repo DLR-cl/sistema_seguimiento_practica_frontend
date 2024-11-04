@@ -7,29 +7,17 @@
 
         <!-- Contenedor de preguntas con paginación -->
         <div class="preguntas-container min-h-[450px] mb-6">
-            <div *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }" class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm">
+            <div *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index" class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm">
                 <p class="text-lg font-semibold text-gray-700">{{ preg }}</p>
                 
                 <div class="respuestas mt-4 space-y-3">
-                    <label class="flex items-center">
-                        <input type="radio" name="experiencia" value="1" class="form-radio h-4 w-4 text-blue-600">
-                        <span class="ml-3 text-gray-600">1 - Muy en desacuerdo</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="experiencia" value="2" class="form-radio h-4 w-4 text-blue-600">
-                        <span class="ml-3 text-gray-600">2 - En desacuerdo</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="experiencia" value="3" class="form-radio h-4 w-4 text-blue-600">
-                        <span class="ml-3 text-gray-600">3 - Neutral</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="experiencia" value="4" class="form-radio h-4 w-4 text-blue-600">
-                        <span class="ml-3 text-gray-600">4 - De acuerdo</span>
-                    </label>
-                    <label class="flex items-center">
-                        <input type="radio" name="experiencia" value="5" class="form-radio h-4 w-4 text-blue-600">
-                        <span class="ml-3 text-gray-600">5 - Muy de acuerdo</span>
+                    <label class="flex items-center" *ngFor="let value of [1, 2, 3, 4, 5]">
+                        <input type="radio" 
+                               [name]="'experiencia_' + (i + page * preguntas_paginas)"
+                               [value]="value" 
+                               [(ngModel)]="respuestas[i + page * preguntas_paginas]" 
+                               class="form-radio h-4 w-4 text-blue-600">
+                        <span class="ml-3 text-gray-600">{{ value }} - {{ getOptionText(value) }} </span>
                     </label>
                 </div>
             </div>

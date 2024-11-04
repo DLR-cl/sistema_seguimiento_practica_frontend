@@ -3,10 +3,11 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { HeaderJefeEmpleadorComponent } from "../components/header-jefe-empleador/header-jefe-empleador.component";
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-informe-primera-practica',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, HeaderJefeEmpleadorComponent],
+  imports: [CommonModule, NgxPaginationModule, HeaderJefeEmpleadorComponent, FormsModule],
   templateUrl: './informe-primera-practica.component.html',
   styleUrl: './informe-primera-practica.component.css'
 })
@@ -14,7 +15,7 @@ export class InformePrimeraPracticaComponent {
 
   private readonly _router = inject(Router);
 
-  public page!: number;
+  public page: number=1;
   preguntas= [
     "El practicante demostró conocimiento técnico adecuado para las tareas asignadas.",
     "El practicante realizó su trabajo con precisión y atención al detalle.",
@@ -30,6 +31,20 @@ export class InformePrimeraPracticaComponent {
     "El practicante cumplió con las normas de seguridad establecidas en la empresa.",
     "El practicante mostró capacidad para aprender y aplicar nuevos conocimientos rápidamente."
   ]
+  getOptionText(value: number): string {
+    switch(value) {
+      case 1: return 'Muy en desacuerdo';
+      case 2: return 'En desacuerdo';
+      case 3: return 'Neutral';
+      case 4: return 'De acuerdo';
+      case 5: return 'Muy de acuerdo';
+      default: return '';
+    }
+  }
+  
+
+  respuestas: { [key: number]: number} = {};
+
   preguntas_paginas = 3;
   preguntas_len = Math.ceil(this.preguntas.length / this.preguntas_paginas);
 

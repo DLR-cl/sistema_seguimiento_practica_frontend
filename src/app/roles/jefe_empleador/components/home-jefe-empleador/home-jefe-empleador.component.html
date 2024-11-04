@@ -4,8 +4,8 @@
 
     <!-- Mensaje de bienvenida central -->
     <div class="text-center mt-8 mb-10">
-        <h2 class="text-4xl font-bold text-gray-800">Bienvenido, {{ dataJefe?.nombre }}</h2>
-        <p class="text-lg text-gray-600 mt-2">Estamos encantados de tenerte aquí. Por favor, elige una de las opciones a continuación para comenzar a gestionar los informes y datos de tu empresa.</p>
+        <h2 class="text-4xl font-bold text-gray-800">Bienvenido {{ dataJefe?.nombre }}</h2>
+        <p class="text-lg text-gray-600 mt-2">Estamos encantados de tenerte aquí. Por favor, elige una de las opciones a continuación para comenzar a gestionar los informes y los datos de tu empresa.</p>
     </div>
 
     <!-- Contenedor de columnas -->
@@ -14,8 +14,8 @@
         <!-- Contenido 1: Informes confidenciales -->
         <div class="bg-white shadow-lg rounded-lg p-8 transition-transform transform hover:scale-105 duration-300 ease-in-out">
             <div class="text-center space-y-8">
-                <h3 class="text-xl font-semibold text-gray-600">Revisa los informes confidenciales</h3>
-                <p class="text-gray-500">Accede a los informes generados sobre las prácticas y el rendimiento de los estudiantes en tu empresa. Asegúrate de que la información entregada esté actualizada y sea precisa.</p>
+                <h3 class="text-xl font-semibold text-gray-600 ">Revisa los informes confidenciales</h3>
+                <p class="text-gray-500 min-h-14">Accede a los informes generados sobre las prácticas y el rendimiento de los estudiantes en tu empresa. Asegúrate de que la información entregada esté actualizada y sea precisa.</p>
                 <button 
                     class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" 
                     (click)="goToInformes()">
@@ -28,7 +28,7 @@
         <div class="bg-white shadow-lg rounded-lg p-8 transition-transform transform hover:scale-105 duration-300 ease-in-out">
             <div class="text-center space-y-8">
                 <h3 class="text-xl font-semibold text-gray-600">Visualiza tus datos y los de tu empresa</h3>
-                <p class="text-gray-500">Consulta información de tu empresa.</p>
+                <p class="text-gray-500 min-h-14">Consulta información de tu empresa.</p>
                 <button 
                     class="bg-green-500 text-white font-medium rounded-lg px-6 py-3 w-3/4 md:w-1/2 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" 
                     (click)="goToData()">
