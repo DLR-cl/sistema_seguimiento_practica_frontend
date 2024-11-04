@@ -1,0 +1,47 @@
+.custom-pagination {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+}
+
+.custom-pagination .ngx-pagination {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.custom-pagination .ngx-pagination .current {
+    background-color: #007bff; /* Color de fondo del botón de página actual */
+    color: white;
+    border-radius: 4px;
+    padding: 5px 10px;
+}
+
+.custom-pagination .ngx-pagination a {
+    color: #007bff;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.custom-pagination .ngx-pagination a:hover {
+    background-color: #e0e0e0; /* Color de fondo al pasar el cursor */
+}
+
+.custom-pagination .ngx-pagination .disabled {
+    color: #ccc;
+}
+
+.custom-pagination .ngx-pagination .pagination-previous,
+.custom-pagination .ngx-pagination .pagination-next {
+    font-weight: bold;
+    padding: 5px 10px;
+}
+
+.text-center {
+    text-align: center;
+    margin-top: 10px;
+}
