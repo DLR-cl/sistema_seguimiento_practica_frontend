@@ -1,0 +1,48 @@
+.section_top{
+    min-width: 100%;
+    min-height: 100%;
+    height: 59.1rem;
+    overflow: hidden;
+    position: relative;
+    background:linear-gradient( rgba(0, 0, 0, 0.537) 100%, rgba(0, 0, 0, 0.6)100%),url("../../../../../public/departamento_vista_subida.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    text-align: center;
+    justify-content: center;
+    animation: change 30s infinite ease-in-out;
+}
+
+.content{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@keyframes change{
+    0%
+    {
+        background-image: url('../../../../../public/transicion_1.jpg');
+    }
+    20%
+    {
+        background-image: url('../../../../../public//transicion_2.jpg');
+    }
+    40%
+    {
+        background-image: url('../../../../../public/transicion_4.jpg');
+    }
+    60%
+    {
+        background-image: url('../../../../../public/transicion_5.jpg');
+    }
+    80%
+    {
+        background-image: url('../../../../../public/transicion_6.jpg');
+    }
+    100%
+    {
+        background-image: url('../../../../../public/transicion_3.jpg');
+    }
+}

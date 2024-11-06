@@ -1,0 +1,4 @@
+.container-login {
+    background:linear-gradient( rgba(0, 0, 0, 0.5) 100%, rgba(0, 0, 0, 0.5)100%),url("../../../../../public/departamento_entrada_ici.jpg");
+    background-size: cover;
+}
