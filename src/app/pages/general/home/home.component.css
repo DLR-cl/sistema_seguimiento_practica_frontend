@@ -1,48 +1,61 @@
-.section_top{
+/* Precargador de imágenes */
+.preload-images {
+    display: none;
+    background-image: url('../../../../../public/departamento_ici/transicion_1.webp'),
+                      url('../../../../../public/departamento_ici/transicion_2.webp'),
+                      url('../../../../../public/departamento_ici/laboratorio_ici.webp'),
+                      url('../../../../../public/departamento_ici/transicion_4.webp'),
+                      url('../../../../../public/departamento_ici/transicion_5.webp'),
+                      url('../../../../../public/departamento_ici/transicion_6.webp');
+}
+
+.section_top {
     min-width: 100%;
     min-height: 100%;
-    height: 59.1rem;
     overflow: hidden;
     position: relative;
-    background:linear-gradient( rgba(0, 0, 0, 0.537) 100%, rgba(0, 0, 0, 0.6)100%),url("../../../../../public/departamento_vista_subida.jpg");
+    background: linear-gradient(rgba(0, 0, 0, 0.537) 100%, rgba(0, 0, 0, 0.6)100%), url("../../../../../public/departamento_ici/departamento_vista_subida.webp");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
     text-align: center;
     justify-content: center;
-    animation: change 30s infinite ease-in-out;
+    animation: change 40s infinite ease-in-out;
 }
 
-.content{
+.content {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-@keyframes change{
-    0%
-    {
-        background-image: url('../../../../../public/transicion_1.jpg');
+@keyframes change {
+    0% {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_1.webp');
     }
-    20%
-    {
-        background-image: url('../../../../../public//transicion_2.jpg');
+    20% {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_2.webp');
     }
-    40%
-    {
-        background-image: url('../../../../../public/transicion_4.jpg');
+    40% {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/laboratorio_ici.webp');
     }
-    60%
-    {
-        background-image: url('../../../../../public/transicion_5.jpg');
+    60% {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_4.webp');
     }
-    80%
-    {
-        background-image: url('../../../../../public/transicion_6.jpg');
+    80% {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_5.webp');
     }
-    100%
-    {
-        background-image: url('../../../../../public/transicion_3.jpg');
+    100% {
+        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_6.webp');
     }
+}
+
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: white;
 }

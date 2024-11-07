@@ -1,7 +1,8 @@
 <!-- Header -->
+<div class="preload-images"></div>
 
-<!--Main content: depends of role -->
-<div class="max-w-5xl mx-auto px-4 text-center section_top">
+<!-- Agregar clase de precarga mientras las imágenes no están listas -->
+<div *ngIf="imagesLoaded" class="max-w-5xl mx-auto px-4 text-center section_top h-screen">
     <div class="w-full max-w-3xl mx-auto content">
         <h1 class="text-5xl m-auto font-bold text-white mt-2 mb-6">Sistema de Seguimiento de Prácticas Profesionales</h1>
         <p class="px-4 text-2xl leading-relaxed text-white">
@@ -16,4 +17,7 @@
     </div>
 </div>
 
-<!-- Footer -->
+<div *ngIf="!imagesLoaded" class="loading-spinner">
+    <!-- Aquí puedes poner un spinner o algún mensaje de carga -->
+    Cargando imágenes...
+</div>
