@@ -1,0 +1,5 @@
+.background-image {
+    background:linear-gradient( rgba(0, 0, 0, 0.5) 100%, rgba(0, 0, 0, 0.5)100%),url("../../../../../../public/departamento_ici/departamento_entrada_ici.webp");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
