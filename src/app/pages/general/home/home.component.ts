@@ -25,14 +25,37 @@ export class HomeComponent implements OnInit {
   private imagePreloaderService= inject(ImagePreloaderService);
 
   private _router = inject(Router);
-  imagesLoaded = false;
+
+  currentImageIndex: number = 0;
+  backgroundImage: string = '';
+  imagesLoaded: boolean = false;
+  intervalId: any;
+  imageCache: Map<string, HTMLImageElement> = new Map();
+  animateScaleUp: boolean = true;  // Controlar la animación de escala
+
 
   ngOnInit(): void {
-    this.imagePreloaderService.preloadImages(this.imageUrls).then(() => {
-      this.imagesLoaded = true;
+    this.imagePreloaderService.preloadImages(this.imageUrls).subscribe((cache) => {
+      if (cache) {
+        this.imageCache = cache;
+        this.imagesLoaded = true;
+        this.backgroundImage = this.imageUrls[this.currentImageIndex];
+        this.startImageRotation();
+      }
     });
   }
 
+  startImageRotation() {
+    this.intervalId = setInterval(() => {
+      this.currentImageIndex = (this.currentImageIndex + 1) % this.imageUrls.length;
+      this.backgroundImage = this.imageUrls[this.currentImageIndex];
+    }, 4000);
+  }
+
+  getBackgroundImage(): string {
+    const img = this.imageCache.get(this.backgroundImage);
+    return img ? `url(${img.src})` : '';
+  }
 
   toLogin(){
     this._router.navigate(['login']);

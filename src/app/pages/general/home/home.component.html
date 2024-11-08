@@ -1,8 +1,15 @@
 <!-- Header -->
-<div class="preload-images"></div>
 
 <!-- Agregar clase de precarga mientras las imágenes no están listas -->
-<div *ngIf="imagesLoaded" class="max-w-5xl mx-auto px-4 text-center section_top h-screen">
+<div *ngIf="imagesLoaded" class="max-w-5xl mx-auto px-4 text-center section_top h-screen relative overflow-hidden">
+    
+    <div [ngStyle]="{ 'background-image': getBackgroundImage() }"
+         class="absolute inset-0 bg-cover background-container bg-center">
+         <!-- animate-ScaleUp en class-->
+    </div>
+
+    <div class="absolute inset-0 bg-black opacity-60"></div>
+
     <div class="w-full max-w-3xl mx-auto content">
         <h1 class="text-5xl m-auto font-bold text-white mt-2 mb-6">Sistema de Seguimiento de Prácticas Profesionales</h1>
         <p class="px-4 text-2xl leading-relaxed text-white">

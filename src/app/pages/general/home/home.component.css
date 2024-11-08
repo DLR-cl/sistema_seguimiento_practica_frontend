@@ -1,14 +1,3 @@
-/* Precargador de imágenes */
-.preload-images {
-    display: none;
-    background-image: url('../../../../../public/departamento_ici/transicion_1.webp'),
-                      url('../../../../../public/departamento_ici/transicion_2.webp'),
-                      url('../../../../../public/departamento_ici/laboratorio_ici.webp'),
-                      url('../../../../../public/departamento_ici/transicion_4.webp'),
-                      url('../../../../../public/departamento_ici/transicion_5.webp'),
-                      url('../../../../../public/departamento_ici/transicion_6.webp');
-}
-
 .section_top {
     min-width: 100%;
     min-height: 100%;
@@ -20,7 +9,6 @@
     background-size: cover;
     text-align: center;
     justify-content: center;
-    animation: change 40s infinite ease-in-out;
 }
 
 .content {
@@ -28,27 +16,6 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-@keyframes change {
-    0% {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_1.webp');
-    }
-    20% {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_2.webp');
-    }
-    40% {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/laboratorio_ici.webp');
-    }
-    60% {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_4.webp');
-    }
-    80% {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_5.webp');
-    }
-    100% {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.537), rgba(0, 0, 0, 0.6)), url('../../../../../public/departamento_ici/transicion_6.webp');
-    }
 }
 
 .loading-spinner {
@@ -59,3 +26,22 @@
     font-size: 1.5rem;
     color: white;
 }
+
+@keyframes scaleUp {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.03);
+    }
+}
+
+.animate-scaleUp {
+    animation: scaleUp 3s ease-in-out infinite;
+    transform-origin: center center;
+}
+
+.background-container {
+    transition: background-image 1.5s ease-in-out;
+}
+
