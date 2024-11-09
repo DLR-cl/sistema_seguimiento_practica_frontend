@@ -15,6 +15,7 @@ import { FinInformeJefeEmpleadorComponent } from './roles/jefe_empleador/compone
 import { HomeAlumnoComponent } from './roles/alumno_practica/home-alumno/home-alumno.component';
 import { EstadoPracticaComponent } from './roles/alumno_practica/estado-practica/estado-practica.component';
 import { InformePrimeraPracticaAlumnoComponent } from './roles/alumno_practica/informe-primera-practica/informe-primera-practica.component';
+import { FinInformeAlumnoComponent } from './roles/alumno_practica/components/fin-informe-alumno/fin-informe-alumno.component';
 
 export const routes: Routes = [
     {
@@ -55,6 +56,13 @@ export const routes: Routes = [
     {
         path: 'home-alumno',
         loadComponent: () => HomeAlumnoComponent,
+        canActivate: [
+            privateGuard,
+            roleGuard([Tipo_usuario.alumno_practica])
+        ]
+    },
+    {
+        path: 'agradecimientos-alumno', loadComponent: () => FinInformeAlumnoComponent,
         canActivate: [
             privateGuard,
             roleGuard([Tipo_usuario.alumno_practica])
