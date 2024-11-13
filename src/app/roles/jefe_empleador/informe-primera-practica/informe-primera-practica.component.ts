@@ -42,7 +42,7 @@ export class InformePrimeraPracticaComponent {
       tipo: "Cerrada",
     },
     {
-      enunciado: "Según ¿Cómo describiría el trabajo realizado por el practicante?",
+      enunciado: "¿Cómo describiría el trabajo realizado por el practicante?",
       tipo: "Abierta",
     },
     {

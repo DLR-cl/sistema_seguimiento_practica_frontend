@@ -49,10 +49,6 @@ export class InformePrimeraPracticaAlumnoComponent {
       tipo: "Abierta",
     },
     {
-      enunciado: "¿Qué nota le pondrías a tu desempeño en esta práctica? (Esta evaluación no afecta tu nota final, es solo para fines de autoevaluación y mejora continua)",
-      tipo: "Evaluativa",
-    },
-    {
       enunciado: "¿Qué asignaturas de la carrera te ayudaron más en la practica? (Máximo 4)",
       tipo: "Asignaturas",
     },
