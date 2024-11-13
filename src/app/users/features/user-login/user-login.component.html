@@ -1,7 +1,14 @@
-<div class="flex justify-center items-center h-screen container-login bg-no-repeat relative ">
+<div *ngIf="imagesLoaded" class="flex justify-center items-center h-screen bg-no-repeat relative ">
+
+    <div [ngStyle]="{ 'background-image': getBackgroundImage() }"
+         class="absolute inset-0 bg-cover background-container bg-center">
+         <!-- animate-ScaleUp en class-->
+    </div>
+
+    <div class="absolute inset-0 bg-black opacity-60"></div>
     <!-- Left: Image -->
     <!-- Right: Login Form -->
-    <div class="lg:p-36 md:p-52 sm:p-20 p-8 w-full lg:w-1/2 bg-white shadow-lg rounded-lg opacity-90" >
+    <div class="lg:p-36 md:p-52 sm:p-20 p-8 w-full lg:w-1/2 bg-white shadow-lg rounded-lg opacity-90" >    
         <div class="flex justify-center mb-6">
             <img src="logo_industria.png" alt="logo_dici" class="w-24 h-24">
         </div>
@@ -75,3 +82,8 @@
         </div>
     </div>
 </div>
+<div *ngIf="!imagesLoaded" class="loading-spinner">
+    <div class="spinner"></div>
+    <p class="text-3xl font-semibold text-blue-700">Cargando....</p>
+</div>
+

@@ -19,15 +19,15 @@ import { FinInformeAlumnoComponent } from './roles/alumno_practica/components/fi
 
 export const routes: Routes = [
     {
-        path: '', loadComponent: () => HomeComponent,
+        path: '', component: HomeComponent,
         canActivate: [publicGuard()]
     },
     {
-        path: 'login', loadComponent: () => UserLoginComponent,
+        path: 'login', component: UserLoginComponent,
         canActivate: [publicGuard()]
     },
     {
-        path: 'home-administracion', loadComponent: () => HomeAdministracionComponent,
+        path: 'home-administracion', component: HomeAdministracionComponent,
         canActivate: [privateGuard, roleGuard([Tipo_usuario.jefe_departamento, Tipo_usuario.jefe_carrera])]
     },
     {
@@ -38,7 +38,7 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([Tipo_usuario.jefe_empleador])]
     },
     {
-        path:'ver-informes-jefe', loadComponent: () => VerInformesPendientesComponent,
+        path: 'ver-informes-jefe', component: VerInformesPendientesComponent,
         canActivate: [privateGuard, roleGuard([Tipo_usuario.jefe_empleador])]
     },
     {
@@ -46,43 +46,29 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([Tipo_usuario.jefe_empleador])]
     },
     {
-        path: 'ver-datos-jefe', loadComponent: () => VerDatosJefeComponent,
+        path: 'ver-datos-jefe', component: VerDatosJefeComponent,
         canActivate: [privateGuard, roleGuard([Tipo_usuario.jefe_empleador])]
     },
     {
-        path: 'agradecimientos', loadComponent: () => FinInformeJefeEmpleadorComponent,
+        path: 'agradecimientos', component: FinInformeJefeEmpleadorComponent,
         canActivate: [privateGuard, roleGuard([Tipo_usuario.jefe_empleador])]
     },
     {
-        path: 'home-alumno',
-        loadComponent: () => HomeAlumnoComponent,
-        canActivate: [
-            privateGuard,
-            roleGuard([Tipo_usuario.alumno_practica])
-        ]
+        path: 'home-alumno', component: HomeAlumnoComponent,
+        canActivate: [privateGuard, roleGuard([Tipo_usuario.alumno_practica])]
     },
     {
-        path: 'agradecimientos-alumno', loadComponent: () => FinInformeAlumnoComponent,
-        canActivate: [
-            privateGuard,
-            roleGuard([Tipo_usuario.alumno_practica])
-        ]
+        path: 'agradecimientos-alumno', component: FinInformeAlumnoComponent,
+        canActivate: [privateGuard, roleGuard([Tipo_usuario.alumno_practica])]
     },
     {
-        path: 'estado-practica', loadComponent: () => EstadoPracticaComponent,
-        canActivate: [
-            privateGuard, 
-            roleGuard([Tipo_usuario.alumno_practica])
-        ]
+        path: 'estado-practica', component: EstadoPracticaComponent,
+        canActivate: [privateGuard, roleGuard([Tipo_usuario.alumno_practica])]
     },
     {
-        path: 'informe-practica-alumno', loadComponent: () => InformePrimeraPracticaAlumnoComponent,
-        canActivate: [
-            privateGuard,
-            roleGuard([Tipo_usuario.alumno_practica])
-        ]
+        path: 'informe-practica-alumno', component: InformePrimeraPracticaAlumnoComponent,
+        canActivate: [privateGuard, roleGuard([Tipo_usuario.alumno_practica])]
     },
-    
     {
         path: '**', component: NotFoundComponent
     }

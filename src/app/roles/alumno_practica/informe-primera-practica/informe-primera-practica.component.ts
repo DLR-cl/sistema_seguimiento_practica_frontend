@@ -25,31 +25,31 @@ export class InformePrimeraPracticaAlumnoComponent {
   public page: number=1;
   preguntas: Pregunta[]= [
     {
-      enunciado: "El practicante demostró conocimiento técnico adecuado para las tareas asignadas.",
+      enunciado: "¿Qué tan satisfecho estás con la experiencia general que obtuviste en esta práctica?",
       tipo: "Cerrada",
     },
     {
-      enunciado: "El practicante realizó su trabajo con precisión y atención al detalle.",
+      enunciado: "¿Consideras que tus tareas y responsabilidades fueron adecuadas para tu nivel de conocimiento y habilidades?",
       tipo: "Cerrada"
     },
     {
-      enunciado: "El practicante entregó las tareas asignadas en el tiempo acordado.",
+      enunciado: "¿Sientes que tus habilidades y conocimientos fueron valorados en el lugar donde realizaste tu práctica?",
       tipo: "Cerrada",
     },
     {
-      enunciado: "El practicante mostró habilidades efectivas para resolver problemas de manera autónoma.",
+      enunciado: "¿Cómo calificarías el ambiente laboral y la relación con tus compañeros y supervisores?",
       tipo: "Cerrada",
     },
     {
-      enunciado: "Según ¿Cómo describiría el trabajo realizado por el practicante?",
+      enunciado: "¿Qué aspectos de tu desempeño consideras que fueron tus fortalezas durante la práctica?",
       tipo: "Abierta",
     },
     {
-      enunciado: "¿Cuáles son los aspectos a mejorar?",
+      enunciado: "¿En qué aspectos crees que podrías mejorar en futuras oportunidades de práctica o empleo?",
       tipo: "Abierta",
     },
     {
-      enunciado: "¿Qué nota le evaluaría al alumno? (esto no afecta a la nota final del alumno)",
+      enunciado: "¿Qué nota le pondrías a tu desempeño en esta práctica? (Esta evaluación no afecta tu nota final, es solo para fines de autoevaluación y mejora continua)",
       tipo: "Evaluativa",
     },
     {
@@ -61,7 +61,27 @@ export class InformePrimeraPracticaAlumnoComponent {
       "Introducción a la ingeniería industrial",
       "Taller  de ingeniería industrial",
       "Gestión de empresas",
-      "Contabilidad y costos"      
+      "Contabilidad y costos",     
+      "Microeconomía",
+      "Macroeconomía",
+      "Taller de intregración de conocimientos",
+      "Investigación operativa",
+      "Ingenieria económica",
+      "Gestión de operaciones I",
+      "Finanzas",
+      "Marketing",
+      "Comportamiento organizacional y capital humano",
+      "Estadística para ingeniería",
+      "Sistema de información administrativa",
+      "Prep. y evaluación de proyectos de ingeniería industrial",
+      "Sistema de gestión y aseguramiento de la calidad",
+      "Modelos estocásticos",
+      "Econometría",
+      "Dirección estratégica",
+      "Gestión de proyectos",
+      "Gestión de operaciones II",
+      "Logística",
+      
   ]
   asignaturas_seleccionadas: string[] = [];
   asignaturaSeleccionada: string = '';

@@ -4,9 +4,9 @@
     <div class="bg-gray-50 py-12 flex items-center justify-center">
         <div class="container max-w-screen-lg p-10 bg-white rounded-lg shadow-lg">
             <div *ngIf="!datos_listo">
-                <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">Formulario de Seguimiento de Práctica</h1>
-                <p class="text-center text-gray-600 mb-10">Por favor, complete las preguntas para ayudar en el seguimiento del
-                    desempeño del alumno en su práctica profesional.</p>
+                <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">Encuesta de Satisfacción de la Experiencia de Práctica</h1>
+                <p class="text-center text-gray-600 mb-10">Por favor, responda las preguntas
+                    reflexionando sobre tu desempeño, aprendizaje y satisfacción durante tu periodo de práctica profesional, con el objetivo de mejorar futuras experiencias formativas</p>
         
                 <div class="preguntas-container min-h-[450px] mb-6">
                     <div *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index"
@@ -36,8 +36,8 @@
                                 respuesta</label>
         
                             <label for="number-input"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Califica al
-                                alumno</label>
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Califica
+                            </label>
                             <input type="number" id="number-input" aria-describedby="helper-text-explanation"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  resize-none"
                                 placeholder="7.0" required />

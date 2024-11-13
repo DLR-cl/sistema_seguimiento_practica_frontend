@@ -38,7 +38,9 @@ export class HomeComponent implements OnInit {
     this.imagePreloaderService.preloadImages(this.imageUrls).subscribe((cache) => {
       if (cache) {
         this.imageCache = cache;
-        this.imagesLoaded = true;
+        setTimeout(() => {
+          this.imagesLoaded = true;
+        }, 500);
         this.backgroundImage = this.imageUrls[this.currentImageIndex];
         this.startImageRotation();
       }
