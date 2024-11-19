@@ -1,14 +1,6 @@
 .section_top {
     min-width: 100%;
-    min-height: 100%;
-    overflow: hidden;
-    position: relative;
-    background: linear-gradient(rgba(0, 0, 0, 0.537) 100%, rgba(0, 0, 0, 0.6)100%), url("../../../../../public/departamento_ici/departamento_vista_subida.webp");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    text-align: center;
-    justify-content: center;
+
 }
 
 .content {

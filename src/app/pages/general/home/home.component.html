@@ -1,7 +1,7 @@
 <!-- Header -->
 
 <!-- Agregar clase de precarga mientras las imágenes no están listas -->
-<div *ngIf="imagesLoaded" class="max-w-5xl mx-auto px-4 text-center section_top h-screen relative overflow-hidden">
+<div *ngIf="imagesLoaded" class="max-w-5xl mx-auto px-4 text-center min-w-full h-screen relative overflow-hidden">
     
     <div [ngStyle]="{ 'background-image': getBackgroundImage() }"
          class="absolute inset-0 bg-cover background-container bg-center">
@@ -17,9 +17,13 @@
             brindando acceso a estudiantes, jefes de empleados, académicos y secretarías.
         </p>
 
-        <div class="mt-6">
+        <div class="mt-6 flex justify-center gap-x-10">
             <button class="inline-block py-4 px-8 leading-none text-white bg-blue-600 hover:bg-blue-700 rounded shadow text-sm font-semibold transition duration-300"
-               (click)="toLogin()">Iniciar Sesión</button>
+               (click)="toLogin()">Iniciar Sesión
+            </button>
+            <button class="inline-block py-4 px-8 leading-none text-white bg-blue-600 hover:bg-blue-700 rounded shadow text-sm font-semibold transition duration-300"
+                (click)="toLetter()">Solicitar practicante
+            </button>
         </div>
     </div>
 </div>
