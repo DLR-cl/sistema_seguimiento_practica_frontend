@@ -1,5 +1,6 @@
 import { NgClass, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,9 +11,31 @@ import { Component } from '@angular/core';
 })
 export class HeaderComponent {
 
-  isMenuOpen: boolean = false;
-  toggleMenu(){
-    this.isMenuOpen= !this.isMenuOpen;
-    console.log('Hola')
+  constructor(
+    private router: Router
+  ){}
+
+  isMenuOpen = false;
+  isSubMenuOpen = false;
+
+  // Método para mostrar la alerta
+  alerta(mensaje: string) {
+    alert(mensaje);
+  }
+
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  toggleSubMenu() {
+    this.isSubMenuOpen = !this.isSubMenuOpen;
+  }
+
+  goToInformeAlumno(){
+    this.router.navigate(['preguntas/alumno'])
+  }
+
+  goToinformeConfidencial(){
+    this.router.navigate(['preguntas/confidencial'])
   }
 }

@@ -54,114 +54,149 @@
     </div>  
 
     <form [formGroup]="formPractica" (ngSubmit)="onSubmit()">
-        <div *ngIf="pasoActual === 1" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8">
-            <h2 class="text-2xl font-semibold my-5">Seleccionar empresa</h2>
-            <p>Seleccione una empresa asociada para la práctica desde el listado.
-            Si la empresa no está en la lista, haga clic en el botón "Agregar empresa" para registrarla.</p>
-
-            <select formControlName="id_empresa" id="id_empresa" class="mt-5 block p-2 w-2/6 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black">
-                <option value="" disabled selected>Seleccione...</option>
-                <option *ngFor="let empresa of empresas" [value]=empresa.id_empresa>
-                    {{ empresa.nombre_razon_social }}
-                </option>
-            </select>
-
-            <button class="my-5 px-3 py-1 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700" (click)="openModal('empresa')">
-                Nueva empresa
+        <div *ngIf="pasoActual === 1" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8 py-6">
+            <h2 class="text-2xl font-semibold mb-4">Seleccionar empresa</h2>
+            <p class="text-gray-600">
+              Seleccione una empresa asociada para la práctica desde el listado.
+              Si la empresa no está en la lista, haga clic en el botón 
+              <span class="font-semibold text-blue-600">"Nueva empresa"</span> para registrarla.
+            </p>
+          
+            <div class="mt-6 w-1/4">
+              <label for="id_empresa" class="block text-sm font-medium text-gray-700 mb-2">
+                Empresa asociada
+              </label>
+              <p-dropdown 
+                [options]="empresas" 
+                optionLabel="nombre_razon_social" 
+                optionValue="id_empresa" 
+                placeholder="Seleccione..." 
+                formControlName="id_empresa" 
+                class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-1/4">
+              </p-dropdown>
+            </div>
+            
+            <button 
+              class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300" 
+              (click)="openModal('empresa')">
+              Nueva empresa
             </button>
-        </div>
+          </div>
+          
 
-        <div *ngIf="pasoActual === 2" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8">
-            <h2 class="text-2xl font-semibold my-5">Seleccionar jefe supervisor de práctica</h2>
-            <p>Seleccione al supervisor asignado al alumno en la empresa seleccionada para la práctica desde el listado disponible. 
-            Si el supervisor no aparece en la lista, haga clic en el botón "Agregar supervisor" para registrarlo.</p>
+          <div *ngIf="pasoActual === 2" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8 py-6">
+            <h2 class="text-2xl font-semibold mb-4">Seleccionar jefe supervisor de práctica</h2>
+            <p class="text-gray-600">
+              Seleccione al supervisor asignado al alumno en la empresa seleccionada para la práctica desde el listado disponible. 
+              Si el supervisor no aparece en la lista, haga clic en el botón 
+              <span class="font-semibold text-blue-600">"Nuevo supervisor"</span> para registrarlo.
+            </p>
+          
+            <div class="mt-6 w-1/4">
+              <label for="id_supervisor" class="block text-sm font-medium text-gray-700 mb-2">
+                Supervisor de práctica
+              </label>
+              <p-dropdown 
+                [options]="supervisoresFiltrados" 
+                optionLabel="usuario.nombre" 
+                optionValue="id_user" 
+                placeholder="{{ formPractica.get('id_empresa')?.value ? 'Seleccione supervisor' : 'Seleccione primero una empresa' }}"
+                formControlName="id_supervisor"
+                [disabled]="!formPractica.get('id_empresa')?.value"
+                class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-1/4">
+              </p-dropdown>
+            </div>
+          
+            <div *ngIf="formPractica.get('id_empresa')?.value && supervisoresFiltrados.length === 0" class="text-red-500 font-semibold mt-4">
+              No hay supervisores en esta empresa. Por favor, agrega uno.
+            </div>
+          
+            <button 
+              [disabled]="!formPractica.get('id_empresa')?.value" 
+              [ngClass]="{'hover:bg-blue-700': formPractica.get('id_empresa')?.value, 'bg-gray-300': !formPractica.get('id_empresa')?.value}"
+              class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
+              (click)="openModal('supervisor')">
+              Nuevo supervisor
+            </button>
+          </div>
+          
 
-            <select formControlName="id_supervisor" id="idSupervisor" class="mt-5 block p-2 w-2/6 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black">
-                <option value="" disabled selected>{{ this.formPractica.get('id_empresa')?.value ? 'Seleccione supervisor' : 'Seleccione primero una empresa' }}</option>
-                <option *ngFor="let supervisor of supervisoresFiltrados" [value]=supervisor.id_user>
-                    {{supervisor.usuario.nombre}}
-                </option>
-            </select>
-
-            <div *ngIf="formPractica.get('id_empresa')?.value && supervisoresFiltrados.length === 0" class="text-red-500 font-semibold">
-                No hay supervisores en esta empresa. Por favor, agrega uno.
+          <div *ngIf="pasoActual === 3" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8 py-6">
+            <h2 class="text-2xl font-semibold mb-4">Seleccionar alumno que realizará la práctica</h2>
+            <p class="text-gray-600">
+              Seleccione al alumno que realizará la práctica desde el listado. 
+              Si el alumno no se encuentra en la lista, haga clic en el botón 
+              <span class="font-semibold text-blue-600">"Nuevo alumno"</span> para registrarlo.
+            </p>
+          
+            <div class="mt-6 w-1/4">
+              <label for="id_alumno" class="block text-sm font-medium text-gray-700 mb-2">
+                Alumno
+              </label>
+              <p-dropdown 
+                [options]="alumnos" 
+                optionLabel="nombre" 
+                optionValue="id_usuario" 
+                placeholder="Seleccione..." 
+                formControlName="id_alumno"
+                class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-1/4">
+              </p-dropdown>
+            </div>
+          
+            <button 
+              class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
+              (click)="openModal('alumno')">
+              Nuevo alumno
+            </button>
+          </div>
+          
+        
+          <div *ngIf="pasoActual === 4" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8 py-6">
+            <h2 class="text-2xl font-semibold my-5">Completar formulario de práctica</h2>
+            <p class="text-gray-600">
+              Seleccione al jefe supervisor del alumno, perteneciente a la empresa seleccionada para la práctica desde el listado.
+              Si el jefe supervisor no está en la lista, haga clic en el botón <span class="font-semibold text-blue-600">"Agregar supervisor"</span> para registrarlo.
+            </p>
+          
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 gap-x-20 mt-5 mb-10">
+              <!-- Fecha de inicio -->
+              <div>
+                <label for="fecha_inicio" class="block text-sm font-medium text-gray-700">Fecha de inicio</label>
+                <p-calendar formControlName="fecha_inicio" id="fechaInicio" dateFormat="dd/mm/yy" class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl font-medium" appendTo="body"></p-calendar>
               </div>
               
-              <button [disabled]="!formPractica.get('id_empresa')?.value" [ngClass]="{'hover:bg-blue-700': formPractica.get('id_empresa')?.value, 'bg-gray-300': !formPractica.get('id_empresa')?.value}" class="my-5 px-3 py-1 bg-blue-600 text-white font-semibold rounded" (click)="openModal('supervisor')">
-                Nuevo supervisor
-              </button>
-
-        </div>
-
-        <div *ngIf="pasoActual === 3" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8">
-            <h2 class="text-2xl font-semibold my-5">Seleccionar alumno que realizara la práctica</h2>
-            <p>Seleccione al alumno que realizará la práctica desde el listado. Si el alumno no se encuentra en la lista,
-            haga clic en el botón "Agregar alumno" para registrarlo.</p>
-
-            <select formControlName="id_alumno" id="idAlumno" class="mt-5 block p-2 w-2/6 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black">
-                <option value="" disabled selected>Seleccione...</option>
-                <option *ngFor="let alumno of alumnos" [value]=alumno.id_usuario>
-                    {{ alumno.nombre }}
-                </option>
-            </select>
-
-            <button class="my-5 px-3 py-1 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700" (click)="openModal('alumno')">
-                Nuevo alumno
-            </button>
-        </div>
-        
-        <div *ngIf="pasoActual === 4" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8">
-            <h2 class="text-2xl font-semibold my-5">Completar formulario de práctica </h2>
-            <p>Seleccione al jefe supervisor del alumno, perteneciente a la empresa seleccionada para la práctica desde el listado.
-            Si la jefe supervisor no está en la lista, haga clic en el botón "Agregar supervisor" para registrarlo.</p>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 gap-x-20 px-10 mt-5 mb-10">
-                    <div>
-                        <label for="fecha_inicio" class="block text-sm font-medium text-gray-700">Fecha de inicio</label>
-                        <input type="date" id="fechaInicio" formControlName="fecha_inicio" 
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black">
-                    </div>
-                
-                    <div>
-                        <label for="fecha_termino" class="block text-sm font-medium text-gray-700">Fecha de termino</label>
-                        <input type="date" id="fecha_termino" formControlName="fecha_termino" 
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black">
-                    </div>
-                
-                    <div>
-                        <label for="tipo_practica" class="block text-sm font-medium text-gray-700">Seleccione tipo de práctica</label>
-                        <select formControlName="tipo_practica" id="tipo_practica" 
-                                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black">
-                            <option value="" disabled selected>Seleccione...</option>
-                            <option value="PRACTICA_UNO">Práctica Profesional I</option>
-                            <option value="PRACTICA_DOS">Práctica Profesional II</option>
-                        </select>
-                    </div>
-                
-                    <div>
-                        <label for="modalidad" class="block text-sm font-medium text-gray-700">Seleccione modalidad de práctica</label>
-                        <select formControlName="modalidad" id="modalidad" 
-                                class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black">
-                            <option value="" disabled selected>Seleccione...</option>
-                            <option value="PRESENCIAL">Presencial</option>
-                            <option value="SEMI_PRESENCIAL">Semipresencial</option>
-                            <option value="REMOTO">Remoto</option>
-                        </select>
-                    </div>
-                
-                    <div>
-                        <label for="cantidad_horas" class="block text-sm font-medium text-gray-700">Horas totales</label>
-                        <input type="number" id="cantidad_horas" formControlName="cantidad_horas" min="1"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black">
-                    </div>
-                
-                    <div>
-                        <label for="horas_semanales" class="block text-sm font-medium text-gray-700">Horas semanales</label>
-                        <input type="number" id="horas_semanales" formControlName="horas_semanales" min="1"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black">
-                    </div>
-                </div>
-        </div>
+              <!-- Fecha de término -->
+              <div>
+                <label for="fecha_termino" class="block text-sm font-medium text-gray-700">Fecha de término</label>
+                <p-calendar formControlName="fecha_termino" id="fechaTermino" dateFormat="dd/mm/yy" class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl font-medium" appendTo="body"></p-calendar>
+              </div>
+              
+              <!-- Tipo de práctica -->
+              <div>
+                <label for="tipo_practica" class="block text-sm font-medium text-gray-700">Seleccione tipo de práctica</label>
+                <p-dropdown formControlName="tipo_practica" id="tipoPractica" [options]="tipoPracticas"  optionLabel="titulo" optionValue="tipo" placeholder="Seleccione..." class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-1/4"></p-dropdown>
+              </div>
+              
+              <!-- Modalidad de práctica -->
+              <div>
+                <label for="modalidad" class="block text-sm font-medium text-gray-700">Seleccione modalidad de práctica</label>
+                <p-dropdown formControlName="modalidad" id="modalidad" [options]="modalidades" optionLabel="titulo" optionValue="tipo" placeholder="Seleccione..." class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl"></p-dropdown>
+              </div>
+              
+              <!-- Horas totales -->
+              <div>
+                <label for="cantidad_horas" class="block text-sm font-medium text-gray-700">Horas totales</label>
+                <input type="number" id="cantidad_horas" formControlName="cantidad_horas" min="1" class="bg-gray-100 focus:outline-none w-full px-3 py-2 border-2 shadow-lg rounded-2xl font-medium">
+              </div>
+              
+              <!-- Horas semanales -->
+              <div>
+                <label for="horas_semanales" class="block text-sm font-medium text-gray-700">Horas semanales</label>
+                <input type="number" id="horas_semanales" formControlName="horas_semanales" min="1" class="bg-gray-100 focus:outline-none w-full px-3 py-2 border-2 shadow-lg rounded-2xl font-medium">
+              </div>
+            </div>
+          </div>
+          
         
         <div class="w-full flex justify-center space-x-10 mt-5">
             <button *ngIf="pasoActual > 1" class="my-5 w-2/12 px-3 py-1 bg-gray-400 text-lg text-white font-semibold rounded hover:bg-gray-500"
@@ -179,66 +214,184 @@
         </div>
     </form>
 
-    <div *ngIf="showModal" class="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
-        <div class="bg-white p-5 rounded-lg shadow-lg w-1/2">
-            <h2 class="text-xl font-semibold mb-4">
-                {{ modalTitle }}
-            </h2>
-            
-            @if(modalType === 'empresa'){
-                <form [formGroup]="formEmpresa" (ngSubmit)="submitModal()">
-                    <div>
+    <p-dialog 
+    [(visible)]="showModal" 
+    [modal]="true" 
+    [draggable]="false"
+    [closable]="true" 
+    [style]="{ width: '50vw' }" 
+    class="rounded-lg shadow-lg">
+    
+    <ng-template pTemplate="header">
+        <h2 class="text-3xl font-bold text-center text-blue-600 w-full">{{modalTitle}}</h2>
+    </ng-template>
+
+    <div class="p-6">
+        <!-- Formulario para Empresa -->
+        <ng-container *ngIf="modalType === 'empresa'">
+            <h3 class="font-semibold text-xl w-full text-white rounded-md bg-blue-600 ps-3 py-2 mb-8">Detalles de la empresa</h3>
+            <form [formGroup]="formEmpresa" (ngSubmit)="submitModal()" class="space-y-7">
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="nombreEmpresa" 
+                            pInputText 
+                            formControlName="nombre_razon_social" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
                         <label for="nombreEmpresa">Nombre de la Empresa</label>
-                        <input type="text" formControlName="nombre_razon_social" class="w-full border p-2 rounded" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="ubicacionEmpresa" 
+                            pInputText 
+                            formControlName="ubicacion" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
                         <label for="ubicacionEmpresa">Ubicación de la Empresa</label>
-                        <input type="text" formControlName="ubicacion" class="w-full border p-2 rounded" />
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="rubroEmpresa" 
+                            pInputText 
+                            formControlName="rubro" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
                         <label for="rubroEmpresa">Rubro de la Empresa</label>
-                        <input type="text" formControlName="rubro" class="w-full border p-2 rounded" />
-                        <label for="nombreGerente">Nombre del gerente de la Empresa</label>
-                        <input type="text" formControlName="nombre_gerente" class="w-full border p-2 rounded" />
                     </div>
+                </div>
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="nombreGerente" 
+                            pInputText 
+                            formControlName="nombre_gerente" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                        <label for="nombreGerente">Nombre del Gerente</label>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        type="button" 
+                        class="mt-5 px-4 py-2 bg-gray-200 border border-gray-300 text-black font-semibold rounded hover:bg-gray-300" 
+                        (click)="closeModal()">Cancelar</button>
+                    <button 
+                        type="submit" 
+                        [disabled]="!formEmpresa.valid" 
+                        class="mt-5 px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 disabled:bg-blue-400 disabled:hover:bg-blue-400">Guardar</button>
+                </div>
+            </form>
+        </ng-container>
 
-                    <div class="flex justify-end mt-5 space-x-3">
-                        <button type="button" class="px-3 py-1 bg-gray-300 rounded" (click)="closeModal()">Cancelar</button>
-                        <button type="submit" [disabled]="!formEmpresa.valid" class="px-3 py-1 bg-blue-600 text-white rounded">Guardar</button>
+        <!-- Formulario para Supervisor -->
+        <ng-container *ngIf="modalType === 'supervisor'">
+            <h3 class="font-semibold text-xl w-full text-white rounded-md bg-blue-600 ps-3 py-2 mb-8">Detalles del supervisor</h3>
+            <form [formGroup]="formSupervisor" (ngSubmit)="submitModal()" class="space-y-7">
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="nombreSupervisor" 
+                            pInputText 
+                            formControlName="nombre" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                        <label for="nombreSupervisor">Nombre Completo</label>
                     </div>
-                </form>
-            } @else if (modalType === 'supervisor'){
-                <form [formGroup]="formSupervisor" (ngSubmit)="submitModal()">
-                    <div>
-                        <label for="nombreSupervisor">Nombre Completo del Supervisor</label>
-                        <input type="text" formControlName="nombre" class="w-full border p-2 rounded" />
-                        <label for="rutSupervisor">RUT del Supervisor</label>
-                        <input type="text" formControlName="rut" class="w-full border p-2 rounded" />
-                        <label for="correoSupervisor">Correo del Supervisor</label>
-                        <input type="text" formControlName="correo" class="w-full border p-2 rounded" />
-                        <label for="cargoSupervisor">Cargo del Supervisor</label>
-                        <input type="text" formControlName="cargo" class="w-full border p-2 rounded" />
+                </div>
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="rutSupervisor" 
+                            pInputText
+                            formControlName="rut" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                        <label for="rutSupervisor">RUT</label>
                     </div>
+                </div>
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="correoSupervisor" 
+                            type="email" 
+                            pInputText 
+                            formControlName="correo" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                        <label for="correoSupervisor">Correo Electrónico</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="cargoSupervisor" 
+                            pInputText 
+                            formControlName="cargo" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                        <label for="cargoSupervisor">Cargo</label>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        type="button" 
+                        class="mt-5 px-4 py-2 bg-gray-200 border border-gray-300 text-black font-semibold rounded hover:bg-gray-300" 
+                        (click)="closeModal()">Cancelar</button>
+                    <button 
+                        type="submit" 
+                        [disabled]="!formSupervisor.valid" 
+                        class="mt-5 px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 disabled:bg-blue-400 disabled:hover:bg-blue-400">Guardar</button>
+                </div>
+            </form>
+        </ng-container>
 
-                    <div class="flex justify-end mt-5 space-x-3">
-                        <button type="button" class="px-3 py-1 bg-gray-300 rounded" (click)="closeModal()">Cancelar</button>
-                        <button type="submit" [disabled]="!formSupervisor.valid" class="px-3 py-1 bg-blue-600 text-white rounded">Guardar</button>
+        <!-- Formulario para Alumno -->
+        <ng-container *ngIf="modalType === 'alumno'">
+            <h3 class="font-semibold text-xl w-full text-white rounded-md bg-blue-600 ps-3 py-2 mb-8">Detalles del supervisor</h3>
+            <form [formGroup]="formAlumno" (ngSubmit)="submitModal()" class="space-y-7">
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="nombreAlumno" 
+                            pInputText 
+                            formControlName="nombre" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                        <label for="nombreAlumno">Nombre del Alumno</label>
                     </div>
-                </form>
-            } @else {
-                <form [formGroup]="formAlumno" (ngSubmit)="submitModal()">
-                    <div>
-                        <label for="nombreEmpresa">Nombre del Alumno</label>
-                        <input type="text" formControlName="nombre" class="w-full border p-2 rounded" />
-                        <label for="nombreEmpresa">Correo del Alumno</label>
-                        <input type="email" formControlName="correo" class="w-full border p-2 rounded" />
-                        <label for="nombreEmpresa">Rut del Alumno</label>
-                        <input type="text" formControlName="rut" class="w-full border p-2 rounded" />
+                </div>
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="correoAlumno" 
+                            type="email" 
+                            pInputText 
+                            formControlName="correo" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                        <label for="correoAlumno">Correo del Alumno</label>
                     </div>
-
-                    <div class="flex justify-end mt-5 space-x-3">
-                        <button type="button" class="px-3 py-1 bg-gray-300 rounded" (click)="closeModal()">Cancelar</button>
-                        <button type="submit" [disabled]="!formAlumno.valid" class="px-3 py-1 bg-blue-600 text-white rounded">Guardar</button>
+                </div>
+                <div class="field">
+                    <div class="p-float-label">
+                        <input 
+                            id="rutAlumno" 
+                            pInputText 
+                            formControlName="rut" 
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                        <label for="rutAlumno">RUT del Alumno</label>
                     </div>
-                </form>
-            }
-        </div>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button 
+                        type="button" 
+                        class="mt-5 px-4 py-2 bg-gray-200 border border-gray-300 text-black font-semibold rounded hover:bg-gray-300" 
+                        (click)="closeModal()">Cancelar</button>
+                    <button 
+                        type="submit" 
+                        [disabled]="!formAlumno.valid" 
+                        class="mt-5 px-4 py-2 bg-blue-600 text-white font-semibold rounded hover:bg-blue-700 disabled:bg-blue-400 disabled:hover:bg-blue-400">Guardar</button>
+                </div>
+            </form>
+        </ng-container>
     </div>
+</p-dialog>
+
+
 
 </div>

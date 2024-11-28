@@ -18,6 +18,7 @@ import { InformePrimeraPracticaAlumnoComponent } from './roles/alumno_practica/i
 import { FinInformeAlumnoComponent } from './roles/alumno_practica/components/fin-informe-alumno/fin-informe-alumno.component';
 import { SolicitarPracticanteComponent } from './pages/general/solicitar-practicante/solicitar-practicante.component';
 import { NuevaPracticaComponent } from './roles/jefe_compartido/nueva-practica/nueva-practica.component';
+import { PreguntasInformeComponent } from './roles/jefe_compartido/preguntas-informe/preguntas-informe.component';
 
 export const routes: Routes = [
     {
@@ -34,6 +35,11 @@ export const routes: Routes = [
     },
     {
         path: 'nueva-practica', component: NuevaPracticaComponent,
+        // canActivate: [privateGuard, roleGuard([Tipo_usuario.jefe_departamento, Tipo_usuario.jefe_carrera])]
+
+    },
+    {
+        path: 'preguntas/:tipo', component: PreguntasInformeComponent,
         // canActivate: [privateGuard, roleGuard([Tipo_usuario.jefe_departamento, Tipo_usuario.jefe_carrera])]
 
     },

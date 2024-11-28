@@ -44,38 +44,13 @@
                         </div>
                         <div *ngIf="preg.tipo == 'Asignaturas'" class="respuestas mt-4 space-y-3">
         
-                            <!-- Agregar libreria para visualizar y hacer zoom a la imagen -->
-                            <!-- <img src="malla.jpg" alt=""> -->
-        
-                            <div class="mt-6">
-                                <h2 *ngIf="asignaturas_seleccionadas.length != 0" class="text-sm font-medium text-gray-700">Asignaturas seleccionadas:</h2>
-                                <div *ngFor="let asignatura of asignaturas_seleccionadas" class="flex w-3/6 justify-between bg-blue-100 p-2 rounded-2xl my-2 mx-2 items-center">
-                                    <p class="text-sm text-gray-600 ms-1">{{ asignatura }}</p>
-                                    <button
-                                        class="ms-2 text-red-500 hover:text-red-700 me-1"
-                                        (click)="eliminarAsignatura(asignatura)">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
-                                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-        
-                            <div *ngIf="asignaturas_seleccionadas.length < 4" class="flex items-center w-3/6">
-                                <select class="block p-2 w-full ms-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-black"
-                                [(ngModel)]="asignaturaSeleccionada">
-                                    <option value="" disabled selected>Seleccione...</option>
-                                    <option *ngFor="let asignatura of obtenerAsignaturasDisponibles()" [value]="asignatura">
-                                        {{ asignatura }}
-                                    </option>
-                                </select>
-                                <button
-                                    class="ml-2 px-3 py-1 text-blue-600 font-semibold rounded hover:text-blue-700" (click)="agregarAsignatura()">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
-                                    </svg>
-                                </button>
-                            </div>
+                            <button
+                            type="button"
+                            class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
+                            (click)="mostrarDialogo()"
+                            >Seleccionar asignaturas</button>
+                            
+
                         </div>
                         
                     </div>
@@ -154,3 +129,48 @@
     </div>
 </div>
 
+<p-dialog
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [draggable]="false"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '1300px' }"
+>
+    <ng-template pTemplate="header">
+        <h2 class="text-3xl font-bold text-center text-blue-600 w-full">{{tituloDialogo}}</h2>
+    </ng-template>
+
+    <h3 class="text-xl font-semibold mb-5">
+        Selecciona las asignaturas que más te ayudaron en tu práctica
+    </h3>
+    <div class="overflow-x-scroll pb-8 px-8 flex gap-3">
+        <!-- Semestres como columnas -->
+        <div *ngFor="let semestre of semestres" class="flex flex-col gap-3 w-56">
+        <h3 class="text-xl font-medium text-center">{{ semestre.nombre }}</h3>
+        <div class="flex flex-col gap-3">
+            <!-- Asignaturas dentro de cada semestre -->
+            <div
+            *ngFor="let asignatura of semestre.asignaturas"
+            [ngClass]="{
+                'text-white': asignatura.tipo === 'FG' || isSelected(asignatura),
+                'bg-[#ffff00] hover:bg-[#d4d400]': asignatura.tipo === 'FB',
+                'bg-[#fb0100] hover:bg-[#d40100]': asignatura.tipo === 'FG',
+                'bg-[#01ffff] hover:bg-[#01dcdc]': asignatura.tipo === 'FP' && asignaturasFPCeleste.includes(asignatura.codigo),
+                'bg-[#00ff01] hover:bg-[#01dc03]': asignatura.tipo === 'FP' && !asignaturasFPCeleste.includes(asignatura.codigo),
+                'bg-blue-600 scale-105 hover:bg-blue-700': isSelected(asignatura)
+              }"
+            class="flex flex-col cursor-pointer justify-center text-black text-center p-4 rounded-sm border border-black w-44 h-24 shadow transition-transform hover:scale-105 hover:opacity"
+            (click)="toggleSeleccion(asignatura)"
+            >
+            <p class="font-bold text-xs">{{ asignatura.nombre }}</p>
+            <p class="text-xs">({{ asignatura.codigo }})</p>
+            </div>
+        </div>
+        </div>
+    </div>
+    <ng-template pTemplate="footer">
+        <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-2 rounded-lg" (click)="dialogVisible = false">Cerrar</button>
+        <button type="button" class="bg-blue-600 hover:bg-blue-700 ms-4 px-3 py-2 text-white rounded-lg" (click)="dialogVisible = false">Seleccionar</button>
+    </ng-template>
+</p-dialog>
