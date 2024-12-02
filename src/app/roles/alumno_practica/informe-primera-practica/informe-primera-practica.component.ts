@@ -328,7 +328,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
 
       this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
         console.log(resultRespuestas)
-        formData.append('id', result.)
+        formData.append('id', result.id_informe)
         formData.append('file', this.uploadedFile!)
         this.respuestasService.enviarInforme(formData).subscribe(resultInforme =>{
           console.log(resultInforme)
