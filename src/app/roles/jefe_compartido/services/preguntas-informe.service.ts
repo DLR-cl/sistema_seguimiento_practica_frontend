@@ -52,12 +52,12 @@ export class PreguntasInformeService {
   }
 
   public createDimension(dimension: any){
-    return this.http.post<any>(`${this.url_dimensiones}/crear`, dimension)
+    return this.http.post<any>(`${this.url_dimensiones}`, dimension)
   }
 
   public getPreguntas(){
     return this.http.get<any>(`${this.url_preguntas}`)
-  }
+  } 
 
   public createPreguntas(preguntas: Pregunta){
     console.log(preguntas)

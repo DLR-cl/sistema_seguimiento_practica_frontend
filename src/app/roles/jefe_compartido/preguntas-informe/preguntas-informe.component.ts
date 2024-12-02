@@ -73,9 +73,11 @@ export class PreguntasInformeComponent implements OnInit {
     })
   }
 
+
+  //this.preguntasPrueba cabmiar
   public createPreguntas(){
     const pregunta : Pregunta = { preguntas: this.formPregunta.value }
-    this.preguntasService.createPreguntas(pregunta).subscribe(result =>{
+    this.preguntasService.createPreguntas(this.preguntasPrueba).subscribe(result =>{
       console.log(result)
     })
   }
@@ -89,7 +91,7 @@ export class PreguntasInformeComponent implements OnInit {
 
   public createDimension(){
     const dimension = this.formDimension.value;
-    this.preguntasService.createDimension(dimension).subscribe(result => {
+    this.preguntasService.createDimension(this.dimensionPrueba).subscribe(result => {
       console.log(result)
     });
   }
@@ -119,7 +121,7 @@ export class PreguntasInformeComponent implements OnInit {
       },
       {
         enunciado_pregunta: "enunciado prueba 4",
-        tipo_pregunta: "DESARRROLLO_PROFESIONAL",
+        tipo_pregunta: "DESARROLLO_PROFESIONAL",
         id_dimension: 1
       },
     ]

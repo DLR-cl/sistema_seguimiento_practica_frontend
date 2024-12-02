@@ -82,7 +82,7 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([Tipo_usuario.alumno_practica])]
     },
     {
-        path: 'informe-practica-alumno', component: InformePrimeraPracticaAlumnoComponent,
+        path: 'informe-practica-alumno/:idAlumno/:idPractica', component: InformePrimeraPracticaAlumnoComponent,
         canActivate: [privateGuard, roleGuard([Tipo_usuario.alumno_practica])]
     },
     {

@@ -11,50 +11,44 @@
                 <div class="preguntas-container min-h-[450px] mb-6">
                     <div *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index"
                         class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm">
-                        <p class="text-lg font-semibold text-gray-700">{{ preg.enunciado }}</p>
-        
-                        <div *ngIf="preg.tipo == 'Cerrada'" class="respuestas mt-4 space-y-3">
-                            <label class="flex items-center" *ngFor="let value of [1, 2, 3, 4, 5]">
-                                <input type="radio" [name]="'experiencia_' + (i + page * preguntas_paginas)" [value]="value"
-                                    [(ngModel)]="respuestas[i + page * preguntas_paginas]"
-                                    class="form-radio h-4 w-4 text-blue-600">
-                                <span class="ml-3 text-gray-600">{{ value }} - {{ getOptionText(value) }} </span>
-                            </label>
-                        </div>
-                        <div *ngIf="preg.tipo == 'Abierta'" class="respuestas mt-4 space-y-3">
-        
-                            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Tu
-                                respuesta</label>
-                            <textarea id="message" rows="4"
-                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500  dark:placeholder-gray-400 dark:text-black resize-none"
-                                placeholder="Deja tu respuesta aquí"></textarea>
-        
-                        </div>
-                        <div *ngIf="preg.tipo == 'Evaluativa'" class="respuestas mt-4 space-y-3">
-        
-                            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Tu
-                                respuesta</label>
-        
-                            <label for="number-input"
-                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Califica
-                            </label>
-                            <input type="number" id="number-input" aria-describedby="helper-text-explanation"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  resize-none"
-                                placeholder="7.0" required />
-                        </div>
-                        <div *ngIf="preg.tipo == 'Asignaturas'" class="respuestas mt-4 space-y-3">
-        
-                            <button
-                            type="button"
-                            class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
-                            (click)="mostrarDialogo()"
-                            >Seleccionar asignaturas</button>
-                            
-
+                        <p class="text-lg font-semibold text-gray-700">{{ preg.enunciado_pregunta }}</p>
+                    
+                        <div *ngIf="preg.tipo_pregunta == 'CERRADA'" class="respuestas mt-4 space-y-3">
+                        <label class="flex items-center" *ngFor="let value of [1, 2, 3, 4, 5]">
+                            <input type="radio" [name]="'experiencia_' + (i + page * preguntas_paginas)" [value]="value"
+                            [(ngModel)]="respuestasAlumno[i]!.puntaje"
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: value })"
+                            class="form-radio h-4 w-4 text-blue-600">
+                            <span class="ml-3 text-gray-600">{{ value }} - {{ getOptionText(value) }} </span>
+                        </label>
                         </div>
                         
+                        <div *ngIf="preg.tipo_pregunta == 'ABIERTA'" class="respuestas mt-4 space-y-3">
+                        <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Tu respuesta</label>
+                        <textarea id="message" rows="4" [(ngModel)]="respuestasAlumno[i]!.texto"
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, texto: $event })"
+                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:placeholder-gray-400 dark:text-black resize-none"
+                            placeholder="Deja tu respuesta aquí"></textarea>
+                        </div>
+                    
+                        <div *ngIf="preg.tipo_pregunta == 'EVALUATIVA'" class="respuestas mt-4 space-y-3">
+                        <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Tu respuesta</label>
+                        <label for="number-input"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Califica</label>
+                        <input type="number" id="number-input" aria-describedby="helper-text-explanation" [(ngModel)]="respuestasAlumno[i]!.puntaje"
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: $event })"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 resize-none"
+                            placeholder="7.0" required />
+                        </div>
+                    
+                        <div *ngIf="preg.tipo_pregunta == 'DESARROLLO_PROFESIONAL'" class="respuestas mt-4 space-y-3">
+                        <button type="button"
+                            class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
+                            (click)="mostrarDialogo()">Seleccionar asignaturas</button>
+                        </div>
                     </div>
                 </div>
+                      
         
                 <!-- Controles de paginación -->
                 <div class="nav-buttons text-center mb-4">
@@ -66,8 +60,14 @@
                 <div class="text-center" *ngIf="page === preguntas_len">
                     <button
                         class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
-                        (click)="changeForm()"
-                        >Subir informe</button>
+                        (click)="changeForm()">
+                        Subir informe
+                    </button>
+                    <button
+                        class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
+                        (click)="datos()">
+                        Mostrar datos
+                    </button>
                 </div>
             </div>
         
@@ -115,7 +115,7 @@
                     <!-- Botón de enviar informe -->
                     <button
                         class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
-                        (click)="goTofin()">Enviar informe
+                        (click)="enviarInforme()">Enviar informe
                     </button>
                 </div>
         
@@ -171,6 +171,6 @@
     </div>
     <ng-template pTemplate="footer">
         <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-2 rounded-lg" (click)="dialogVisible = false">Cerrar</button>
-        <button type="button" class="bg-blue-600 hover:bg-blue-700 ms-4 px-3 py-2 text-white rounded-lg" (click)="dialogVisible = false">Seleccionar</button>
+        <button type="button" class="bg-blue-600 hover:bg-blue-700 ms-4 px-3 py-2 text-white rounded-lg" (click)="guardarAsignaturas()">Seleccionar</button>
     </ng-template>
 </p-dialog>

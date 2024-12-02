@@ -1,17 +1,20 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HeaderComponent } from "../components/header/header.component";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
+import { PreguntasInformeService } from '../../jefe_compartido/services/preguntas-informe.service';
+import { createInforme, ListaRespuestas, Respuesta, RespuestasInformeService } from '../services/respuestas-informe.service';
 
 
 
 interface Pregunta{
-  enunciado:string,
-  tipo: string,
+  id_pregunta: number,
+  enunciado_pregunta:string,
+  tipo_pregunta: string,
 }
 
 interface Asignatura{
@@ -28,167 +31,31 @@ interface Asignatura{
   templateUrl: './informe-primera-practica.component.html',
   styleUrl: './informe-primera-practica.component.css'
 })
-export class InformePrimeraPracticaAlumnoComponent {
+export class InformePrimeraPracticaAlumnoComponent implements OnInit {
+
+  constructor(
+    private preguntasService: PreguntasInformeService,
+    private respuestasService: RespuestasInformeService,
+    private route: ActivatedRoute,
+  ){}
+
+  ngOnInit(): void {
+    this.obtenerPreguntas()
+    this.idAlumno = Number(this.route.snapshot.paramMap.get('idAlumno'))!;
+    this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
+  }
 
   private readonly _router = inject(Router);
-  public datos_listo = false;
-  public page: number=1;
-  preguntas: Pregunta[]= [
-    {
-      enunciado: "¿Qué tan satisfecho estás con la experiencia general que obtuviste en esta práctica?",
-      tipo: "Cerrada",
-    },
-    {
-      enunciado: "¿Consideras que tus tareas y responsabilidades fueron adecuadas para tu nivel de conocimiento y habilidades?",
-      tipo: "Cerrada"
-    },
-    {
-      enunciado: "¿Sientes que tus habilidades y conocimientos fueron valorados en el lugar donde realizaste tu práctica?",
-      tipo: "Cerrada",
-    },
-    {
-      enunciado: "¿Cómo calificarías el ambiente laboral y la relación con tus compañeros y supervisores?",
-      tipo: "Cerrada",
-    },
-    {
-      enunciado: "¿Qué aspectos de tu desempeño consideras que fueron tus fortalezas durante la práctica?",
-      tipo: "Abierta",
-    },
-    {
-      enunciado: "¿En qué aspectos crees que podrías mejorar en futuras oportunidades de práctica o empleo?",
-      tipo: "Abierta",
-    },
-    {
-      enunciado: "¿Qué asignaturas de la carrera te ayudaron más en la practica? (Máximo 4)",
-      tipo: "Asignaturas",
-    },
-  ]
-  asignaturas: string[] = [
-      "Introducción a la ingeniería industrial",
-      "Taller  de ingeniería industrial",
-      "Gestión de empresas",
-      "Contabilidad y costos",     
-      "Microeconomía",
-      "Macroeconomía",
-      "Taller de intregración de conocimientos",
-      "Investigación operativa",
-      "Ingenieria económica",
-      "Gestión de operaciones I",
-      "Finanzas",
-      "Marketing",
-      "Comportamiento organizacional y capital humano",
-      "Estadística para ingeniería",
-      "Sistema de información administrativa",
-      "Prep. y evaluación de proyectos de ingeniería industrial",
-      "Sistema de gestión y aseguramiento de la calidad",
-      "Modelos estocásticos",
-      "Econometría",
-      "Dirección estratégica",
-      "Gestión de proyectos",
-      "Gestión de operaciones II",
-      "Logística",
-      
-  ]
-  asignaturas_seleccionadas: string[] = [];
-  asignaturas_seleccionadas2: Asignatura[] = [];
-
-  asignaturaSeleccionada: string = '';
-  respuestas: { [key: number]: number} = {};  
+  datos_listo = false;
+  page: number = 1;
+  preguntas: Pregunta[]= []
   preguntas_paginas = 3;
-  preguntas_len = Math.ceil(this.preguntas.length / this.preguntas_paginas);
+  preguntas_len!: number;
   
-  uploadedFile: File | null = null;
-  errorMessage: string = '';
+  idAlumno!: number
+  idPractica!: number
 
-  onFileSelect(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    const file = fileInput.files ? fileInput.files[0] : null;
-    this.processFile(file);
-  }
-
-  onDrop(event: DragEvent): void {
-    event.preventDefault();
-    this.errorMessage = '';  // Clear previous errors
-
-    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
-      const file = event.dataTransfer.files[0];
-      this.processFile(file);
-    }
-  }
-
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-  }
-
-  processFile(file: File | null): void {
-    if (file) {
-      // Verificar que el archivo sea PDF
-      if (file.type === 'application/pdf') {
-        this.uploadedFile = file;
-        this.errorMessage = '';
-      } else {
-        this.uploadedFile = null;
-        this.errorMessage = 'Solo se permiten archivos PDF. Por favor, selecciona un archivo válido.';
-      }
-    }
-  }
-
-  removeFile(): void {
-    this.uploadedFile = null;
-    this.errorMessage = '';
-  }
-
-  seleccionarArchivo(){
-    const fileInput = document.getElementById('dropzone-file') as HTMLInputElement;
-    if (fileInput) {
-        fileInput.click(); // Simula un clic en el input de archivo
-    }
-  }
-
-  goTofin(){
-    this._router.navigate(['agradecimientos-alumno'])
-  }
-
-  changeForm(){
-    this.datos_listo = !this.datos_listo;
-  }
-
-  getOptionText(value: number): string {
-    switch(value) {
-      case 1: return 'Muy en desacuerdo';
-      case 2: return 'En desacuerdo';
-      case 3: return 'Neutral';
-      case 4: return 'De acuerdo';
-      case 5: return 'Muy de acuerdo';
-      default: return '';
-    }
-  }
-
-  agregarAsignatura() {
-    if (this.asignaturaSeleccionada) {
-      this.asignaturas_seleccionadas.push(this.asignaturaSeleccionada);
-      this.asignaturaSeleccionada = ''; // Reinicia la asignatura seleccionada
-    }
-  }
-
-  eliminarAsignatura(asignatura: string) {
-    this.asignaturas_seleccionadas = this.asignaturas_seleccionadas.filter(a => a !== asignatura);
-  }
-
-  obtenerAsignaturasDisponibles() {
-    return this.asignaturas.filter(asignatura => !this.asignaturas_seleccionadas.includes(asignatura));
-  }
-
-
-  dialogVisible: boolean = false;
-  tituloDialogo: string = 'Malla Curricular';
-
-  mostrarDialogo() {
-    this.dialogVisible = true;
-  }
-  
   asignaturasFPCeleste: string[] = ['ME-167', 'CC-802', 'ME-260', 'ME-263', 'ME-445', 'ME-264', 'ME-266']
-
   semestres = [
     {
       nombre: 'Primer Semestre',
@@ -290,21 +157,183 @@ export class InformePrimeraPracticaAlumnoComponent {
         { nombre: 'E.F.P. IV', codigo: 'YY-036', tipo: 'FP' },
       ],
     },
-  ];
+  ]; 
+  asignaturas_seleccionadas: Asignatura[] = [];  
+  
+  
+  respuestas: { [key: number]: number} = {};
+  respuestasAlumno: Respuesta[] = []  
+  
+  
+  uploadedFile: File | null = null;
+  errorMessage: string = '';
 
+  // Este método actualizará las respuestas según la pregunta
+  actualizarRespuesta(preguntaId: number, respuesta: Respuesta) {
+    const index = this.respuestasAlumno.findIndex(r => r.id_pregunta === preguntaId);
+    if (index !== -1) {
+      this.respuestasAlumno[index] = respuesta; // Actualizamos la respuesta si existe
+    } else {
+      this.respuestasAlumno.push(respuesta); // Si no existe, agregamos una nueva respuesta
+    }
+  }
+  
+  public guardarAsignaturas() {
+    this.respuestasAlumno.forEach(respuesta => {
+      // Verificamos si la respuesta tiene el atributo 'asignaturas'
+      if (respuesta.asignaturas) {
+        // Extraemos solo los nombres de las asignaturas
+        respuesta.asignaturas = this.asignaturas_seleccionadas.map(asignatura => asignatura.nombre);
+      }
+    });
+    this.dialogVisible = false;
+    console.log('Respuestas con asignaturas asignadas:', this.respuestasAlumno);
+  }
+
+  public datos(){
+    // console.log(this.respuestas),
+    // console.log(this.asignaturas_seleccionadas)
+    console.log(this.respuestasAlumno)
+  }
+
+  public obtenerPreguntas(){
+    this.preguntasService.getPreguntasAlumno().subscribe(result=>{
+      console.log(result)
+      this.preguntas = result
+      this.preguntas_len = Math.ceil(result.length / this.preguntas_paginas)
+      this.respuestasAlumno = this.preguntas.map(preg => {
+        let respuesta: Respuesta = {
+          id_pregunta: preg.id_pregunta
+        };    
+        if (preg.tipo_pregunta === 'DESARROLLO_PROFESIONAL') {
+          respuesta.asignaturas = []; 
+        }    
+        if (preg.tipo_pregunta === 'ABIERTA') {
+          respuesta.texto = '';
+        }    
+        if (preg.tipo_pregunta === 'EVALUATIVA' || preg.tipo_pregunta === 'CERRADA') {
+          respuesta.puntaje = 0;
+        }
+        return respuesta;
+      });
+      console.log(this.respuestasAlumno)
+    })
+  }
+
+  onFileSelect(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    const file = fileInput.files ? fileInput.files[0] : null;
+    this.processFile(file);
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.errorMessage = '';  // Clear previous errors
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      const file = event.dataTransfer.files[0];
+      this.processFile(file);
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+  }
+
+  processFile(file: File | null): void {
+    if (file) {
+      // Verificar que el archivo sea PDF
+      if (file.type === 'application/pdf') {
+        this.uploadedFile = file;
+        this.errorMessage = '';
+      } else {
+        this.uploadedFile = null;
+        this.errorMessage = 'Solo se permiten archivos PDF. Por favor, selecciona un archivo válido.';
+      }
+    }
+  }
+
+  removeFile(): void {
+    this.uploadedFile = null;
+    this.errorMessage = '';
+  }
+
+  seleccionarArchivo(){
+    const fileInput = document.getElementById('dropzone-file') as HTMLInputElement;
+    if (fileInput) {
+        fileInput.click(); // Simula un clic en el input de archivo
+    }
+  }
+
+  goTofin(){
+    this._router.navigate(['agradecimientos-alumno'])
+  }
+
+  changeForm(){
+    this.datos_listo = !this.datos_listo;
+  }
+
+  getOptionText(value: number): string {
+    switch(value) {
+      case 1: return 'Muy en desacuerdo';
+      case 2: return 'En desacuerdo';
+      case 3: return 'Neutral';
+      case 4: return 'De acuerdo';
+      case 5: return 'Muy de acuerdo';
+      default: return '';
+    }
+  }
+
+  dialogVisible: boolean = false;
+  tituloDialogo: string = 'Malla Curricular';
+
+  mostrarDialogo() {
+    this.dialogVisible = true;
+  }
+  
   isSelected(asignatura: Asignatura): boolean {
-    return this.asignaturas_seleccionadas2.some(a => a.codigo == asignatura.codigo);
+    return this.asignaturas_seleccionadas.some(a => a.codigo == asignatura.codigo);
   }
 
   // Alterna la selección de una asignatura
   toggleSeleccion(asignatura: Asignatura): void {
     if (this.isSelected(asignatura)) {
       // Si ya está seleccionada, la elimina
-      this.asignaturas_seleccionadas2 = this.asignaturas_seleccionadas2.filter(a => a.codigo != asignatura.codigo);
+      this.asignaturas_seleccionadas = this.asignaturas_seleccionadas.filter(a => a.codigo != asignatura.codigo);
     } else {
       // Si no está seleccionada, la agrega
-      this.asignaturas_seleccionadas2.push(asignatura);
+      this.asignaturas_seleccionadas.push(asignatura);
     }
-    console.log(this.asignaturas_seleccionadas2)
+    console.log(this.asignaturas_seleccionadas)
+  }
+
+  enviarInforme(){
+
+    const nuevoInforme: createInforme = {
+      id_alumno: this.idAlumno,
+      id_practica: this.idPractica
+    }
+    const formData = new FormData()
+
+    this.respuestasService.crearInformeAlumno(nuevoInforme).subscribe(result =>{
+      console.log(result)
+      this.respuestasAlumno = this.respuestasAlumno.map(respuesta => ({
+        ...respuesta,
+        id_informe: result.id_informe
+      }));
+
+      const asociarRespuestas: ListaRespuestas = {
+        respuestas: this.respuestasAlumno
+      }
+
+      this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
+        console.log(resultRespuestas)
+        formData.append('id', result.)
+        formData.append('file', this.uploadedFile!)
+        this.respuestasService.enviarInforme(formData).subscribe(resultInforme =>{
+          console.log(resultInforme)
+        })
+      })
+    })
   }
 }
