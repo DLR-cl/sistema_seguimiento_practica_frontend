@@ -23,7 +23,7 @@
         </div>
         
         <!-- Contenido 2: Informe de práctica -->
-        <div class="bg-white shadow-lg rounded-lg p-8 transition-transform transform hover:scale-105 duration-300 ease-in-out">
+        <div *ngIf="informeEnEspera()" class="bg-white shadow-lg rounded-lg p-8 transition-transform transform hover:scale-105 duration-300 ease-in-out">
             <div class="text-center space-y-6">
                 <h3 class="text-xl font-semibold text-gray-700">Sube tu Informe de Práctica</h3>
                 <p class="text-gray-600 min-h-14">Accede al área de subida de informes. Asegúrate de que el archivo esté en formato PDF, cumpliendo con los estándares establecidos por la universidad.</p>

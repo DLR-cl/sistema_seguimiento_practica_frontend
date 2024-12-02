@@ -4,11 +4,16 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { alumno, empresa, GenerarPracticaService, jefeSupervisor, nuevaPractica, nuevoAlumno, nuevoSupervisor } from '../services/generar-practica.service';
+import { DialogModule } from 'primeng/dialog';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { InputTextModule } from 'primeng/inputtext';
+import { DropdownModule } from 'primeng/dropdown';
+import { CalendarModule } from 'primeng/calendar';
 
 @Component({
   selector: 'app-nueva-practica',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, RouterLink, ReactiveFormsModule],
+  imports: [HeaderComponent, CommonModule, RouterLink, ReactiveFormsModule, DialogModule, FloatLabelModule, InputTextModule, DropdownModule, CalendarModule],
   templateUrl: './nueva-practica.component.html',
   styleUrl: './nueva-practica.component.css'
 })
@@ -26,6 +31,10 @@ export class NuevaPracticaComponent implements OnInit{
   
   empresas: empresa[] = [];
 
+  tipoPracticas: any = [{tipo: "PRACTICA_UNO", titulo:'Práctica profesional I'},{tipo:"PRACTICA_DOS", titulo:"Práctica profesional II"}]
+
+  modalidades: any = [{tipo: "PRESENCIAL", titulo: "Presencial"},{tipo: "SEMIPRESENCIAL", titulo: "Semipresencial"}, {tipo: "REMOTO", titulo: "Remoto"}]
+  
   supervisoresFiltrados: jefeSupervisor[] = [];
 
   alumnos: alumno[] = [];
@@ -77,6 +86,9 @@ export class NuevaPracticaComponent implements OnInit{
   closeModal() {
     this.showModal = false;
     this.modalType = null;
+    this.formAlumno.reset()
+    this.formEmpresa.reset()
+    this.formSupervisor.reset()
   }
 
   submitModal() {
