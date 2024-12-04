@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { PreguntasInformeService } from '../../jefe_compartido/services/preguntas-informe.service';
 import { createInforme, ListaRespuestas, Respuesta, RespuestasInformeService } from '../services/respuestas-informe.service';
+import { AsignaturaBack, AsignaturasService, Semestre } from '../services/asignaturas.service';
 
 
 
@@ -37,16 +38,18 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     private preguntasService: PreguntasInformeService,
     private respuestasService: RespuestasInformeService,
     private route: ActivatedRoute,
+    private asignaturasService: AsignaturasService
   ){}
 
   ngOnInit(): void {
     this.obtenerPreguntas()
+    this.obtenerAsignaturas()
     this.idAlumno = Number(this.route.snapshot.paramMap.get('idAlumno'))!;
     this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
   }
 
   private readonly _router = inject(Router);
-  datos_listo = false;
+  datos_listo = true;
   page: number = 1;
   preguntas: Pregunta[]= []
   preguntas_paginas = 3;
@@ -54,111 +57,13 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   
   idAlumno!: number
   idPractica!: number
+  idInforme: number = 17 //DE PRUEBA
 
   asignaturasFPCeleste: string[] = ['ME-167', 'CC-802', 'ME-260', 'ME-263', 'ME-445', 'ME-264', 'ME-266']
-  semestres = [
-    {
-      nombre: 'Primer Semestre',
-      asignaturas: [
-        { nombre: 'Introducción al Cálculo', codigo: 'MA-067', tipo: 'FB' },
-        { nombre: 'Introducción al Álgebra', codigo: 'MA-069', tipo: 'FB' },
-        { nombre: 'Introducción a la Física', codigo: 'FI-035', tipo: 'FB' },
-        { nombre: 'Taller de comunicación y redacción de informes', codigo: 'IN-043', tipo: 'FG' },
-        { nombre: 'Introducción a la ingeniería industrial', codigo: 'IN-048', tipo: 'FP' },
-      ],
-    },
-    {
-      nombre: 'Segundo Semestre',
-      asignaturas: [
-        { nombre: 'Cálculo I', codigo: 'MA-601', tipo: 'FB' },
-        { nombre: 'Álgebra I', codigo: 'MA-611', tipo: 'FB' },
-        { nombre: 'Química inorgánica y orgánica', codigo: 'QU-833', tipo: 'FB' },
-        { nombre: 'Interpretación gráfica para ingeniería', codigo: 'ME-167', tipo: 'FP' },
-        { nombre: 'Taller de ingeniería industrial', codigo: 'IN-600', tipo: 'FP' },
-      ],
-    },
-    {
-      nombre: 'Tercer Semestre',
-      asignaturas: [
-        { nombre: 'Cálculo II', codigo: 'MA-602', tipo: 'FB' },
-        { nombre: 'Álgebra II', codigo: 'MA-612', tipo: 'FB' },
-        { nombre: 'Mecánica clásica', codigo: 'FI-601', tipo: 'FB' },
-        { nombre: 'Programación y algoritmo', codigo: 'CC-802', tipo: 'FP' },
-        { nombre: 'Gestión de empresas', codigo: 'IN-055', tipo: 'FP' },
-      ],
-    },
-    {
-      nombre: 'Cuarto Semestre',
-      asignaturas: [
-        { nombre: 'Cálculo III', codigo: 'MA-603', tipo: 'FB' },
-        { nombre: 'Ecuaciones diferenciales', codigo: 'MA-220', tipo: 'FB' },
-        { nombre: 'Ingeniería de materiales', codigo: 'ME-260', tipo: 'FP' },
-        { nombre: 'Termodinámica', codigo: 'ME-263', tipo: 'FP' },
-        { nombre: 'Contabilidad y costos', codigo: 'IN-605', tipo: 'FP' },
-      ],
-    },
-    {
-      nombre: 'Quinto Semestre',
-      asignaturas: [
-        { nombre: 'Electromagnetismo', codigo: 'FI-604', tipo: 'FB' },
-        { nombre: 'Estadística y probabilidad', codigo: 'MA-424', tipo: 'FP' },
-        { nombre: 'Operaciones unitarias', codigo: 'ME-445', tipo: 'FP' },
-        { nombre: 'Mecánica de fluidos', codigo: 'ME-264', tipo: 'FP' },
-        { nombre: 'Microeconomía', codigo: 'IN-054', tipo: 'FP' },
-      ],
-    },
-    {
-      nombre: 'Sexto Semestre',
-      asignaturas: [
-        { nombre: 'Formación cultural', codigo: 'II-006', tipo: 'FG' },
-        { nombre: 'Investigación operativa', codigo: 'IN-009', tipo: 'FP' },
-        { nombre: 'Ingeniería económica', codigo: 'IN-010', tipo: 'FP' },
-        { nombre: 'Procesos industriales y manufactura', codigo: 'ME-266', tipo: 'FP' },
-        { nombre: 'Macroeconomía', codigo: 'IN-156', tipo: 'FP' },
-      ],
-    },
-    {
-      nombre: 'Septimo Semestre',
-      asignaturas: [
-        { nombre: 'Gestión de operaciones I', codigo: 'IN-217', tipo: 'FP' },
-        { nombre: 'Finanzas', codigo: 'IN-014', tipo: 'FP' },
-        { nombre: 'Marketing', codigo: 'IN-434', tipo: 'FP' },
-        { nombre: 'Comportamiento organizacional y capital humano', codigo: 'IN-049', tipo: 'FP' },
-        { nombre: 'Estadística para ingeniería', codigo: 'IN-059', tipo: 'FP' },
-      ],
-    },
-    {
-      nombre: 'Octavo Semestre',
-      asignaturas: [
-        { nombre: 'Sistema de información administrativa', codigo: 'IN-061', tipo: 'FP' },
-        { nombre: 'Prep. y evaluación de proyectos de ingeniería industrial', codigo: 'IN-062', tipo: 'FP' },
-        { nombre: 'Sistema de gestión y aseguramiento de la calidad', codigo: 'IN-063', tipo: 'FP' },
-        { nombre: 'Modelos estocásticos', codigo: 'IN-064', tipo: 'FP' },
-        { nombre: 'Econometría', codigo: 'IN-065', tipo: 'FP' },
-      ],
-    },
-    {
-      nombre: 'Noveno Semestre',
-      asignaturas: [
-        { nombre: 'Inglés comunicacional preintermedio I', codigo: 'DI-088', tipo: 'FG' },
-        { nombre: 'Dirección estratégica', codigo: 'IN-067', tipo: 'FP' },
-        { nombre: 'Gestión de proyectos', codigo: 'IN-608', tipo: 'FP' },
-        { nombre: 'Gestión de operaciones II', codigo: 'IN-068', tipo: 'FP' },
-        { nombre: 'Logística', codigo: 'IN-069', tipo: 'FP' },
-      ],
-    },
-    {
-      nombre: 'Decimo Semestre',
-      asignaturas: [
-        { nombre: 'Inglés comunicacional preintermedio II', codigo: 'DI-089', tipo: 'FG' },
-        { nombre: 'E.F.P. I', codigo: 'YY-036', tipo: 'FP' },
-        { nombre: 'E.F.P. II', codigo: 'YY-036', tipo: 'FP' },
-        { nombre: 'E.F.P. III', codigo: 'YY-036', tipo: 'FP' },
-        { nombre: 'E.F.P. IV', codigo: 'YY-036', tipo: 'FP' },
-      ],
-    },
-  ]; 
+  semestres: Semestre[] = []; 
   asignaturas_seleccionadas: Asignatura[] = [];  
+  asignaturas_seleccionadasRespaldo: Asignatura[] = [];  
+
   
   
   respuestas: { [key: number]: number} = {};
@@ -168,32 +73,87 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   uploadedFile: File | null = null;
   errorMessage: string = '';
 
-  // Este método actualizará las respuestas según la pregunta
-  actualizarRespuesta(preguntaId: number, respuesta: Respuesta) {
-    const index = this.respuestasAlumno.findIndex(r => r.id_pregunta === preguntaId);
-    if (index !== -1) {
-      this.respuestasAlumno[index] = respuesta; // Actualizamos la respuesta si existe
-    } else {
-      this.respuestasAlumno.push(respuesta); // Si no existe, agregamos una nueva respuesta
+  public obtenerAsignaturas() {
+    this.asignaturasService.obtenerAsignaturas().subscribe((result: AsignaturaBack[]) => {
+      console.log(result); // Ver los datos que llegan del backend
+
+      // Creamos un objeto para agrupar por semestre
+      const semestresMap: { [key: number]: Semestre } = {};
+
+      // Iteramos sobre las asignaturas y las agrupamos por semestre (sin tener en cuenta la parte decimal)
+      result.forEach(asignatura => {
+        const semestreEntero = Math.floor(asignatura.semestre); // Usamos solo la parte entera del semestre
+
+        // Si no existe el semestre, lo inicializamos
+        if (!semestresMap[semestreEntero]) {
+          semestresMap[semestreEntero] = {
+            nombre: `Semestre ${semestreEntero}`,
+            asignaturas: []
+          };
+        }
+
+        // Mapeamos el tipo de asignatura a una forma más corta (FB, FP, FG)
+        const tipo = this.obtenerTipoAsignatura(asignatura.tipo_asignatura);
+
+        // Agregamos la asignatura al semestre correspondiente
+        semestresMap[semestreEntero].asignaturas.push({
+          nombre: asignatura.nombre,
+          codigo: asignatura.codigo,
+          tipo: tipo
+        });
+      });
+
+      // Convertimos el objeto semestresMap a un arreglo de semestres y lo ordenamos
+      this.semestres = Object.values(semestresMap).sort((a, b) => {
+        const semestreA = parseInt(a.nombre.split(' ')[1]);
+        const semestreB = parseInt(b.nombre.split(' ')[1]);
+        return semestreA - semestreB; // Ordenamos por el número del semestre
+      });
+
+      console.log(this.semestres); // Ver el resultado final
+    });
+  }
+  
+  // Método para convertir tipo de asignatura
+  private obtenerTipoAsignatura(tipo: string): string {
+    switch (tipo) {
+      case 'FORMACION_BASICA': return 'FB';
+      case 'FORMACION_PROFESIONAL': return 'FP';
+      case 'FORMACION_GENERAL': return 'FG';
+      default: return '';
     }
   }
   
-  public guardarAsignaturas() {
-    this.respuestasAlumno.forEach(respuesta => {
-      // Verificamos si la respuesta tiene el atributo 'asignaturas'
-      if (respuesta.asignaturas) {
-        // Extraemos solo los nombres de las asignaturas
-        respuesta.asignaturas = this.asignaturas_seleccionadas.map(asignatura => asignatura.nombre);
-      }
-    });
-    this.dialogVisible = false;
-    console.log('Respuestas con asignaturas asignadas:', this.respuestasAlumno);
+  public volverCuestionario(){
+    this.datos_listo = !this.datos_listo
+  }
+
+  public actualizarRespuesta(preguntaId: number, respuesta: Respuesta) {
+    const index = this.respuestasAlumno.findIndex(r => r.id_pregunta === preguntaId);
+    if (index !== -1) {
+      this.respuestasAlumno[index] = respuesta; // actualiza la respuesta si existe
+    } else {
+      this.respuestasAlumno.push(respuesta); // si no existe agregas una nueva respuesta
+    }
   }
 
   public datos(){
     // console.log(this.respuestas),
     // console.log(this.asignaturas_seleccionadas)
     console.log(this.respuestasAlumno)
+    this.respuestasService.obtenerArchivo(13).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'informe.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('Error al descargar', err);
+      },
+    })
   }
 
   public obtenerPreguntas(){
@@ -270,7 +230,29 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   changeForm(){
-    this.datos_listo = !this.datos_listo;
+    const nuevoInforme: createInforme = {
+      id_alumno: this.idAlumno,
+      id_practica: this.idPractica
+    }
+
+    console.log(this.respuestasAlumno)
+
+    this.respuestasService.crearInformeAlumno(nuevoInforme).subscribe(result =>{
+      console.log(result)
+      this.respuestasAlumno = this.respuestasAlumno.map(respuesta => ({
+        ...respuesta,
+        id_informe: result.id_informe
+      }));
+
+      const asociarRespuestas: ListaRespuestas = {
+        respuestas: this.respuestasAlumno
+      }
+
+      this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
+        console.log(resultRespuestas)
+        this.datos_listo = !this.datos_listo;
+      })
+    })
   }
 
   getOptionText(value: number): string {
@@ -289,6 +271,25 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
 
   mostrarDialogo() {
     this.dialogVisible = true;
+    this.asignaturas_seleccionadasRespaldo = [...this.asignaturas_seleccionadas]; // Hacer una copia
+  }
+
+  public guardarAsignaturas() {
+    this.respuestasAlumno.forEach(respuesta => {
+      // Verificamos si la respuesta tiene el atributo 'asignaturas'
+      if (respuesta.asignaturas) {
+        // Extraemos solo los nombres de las asignaturas
+        respuesta.asignaturas = this.asignaturas_seleccionadas.map(asignatura => asignatura.nombre);  
+      }
+    });
+    this.dialogVisible = false;
+    console.log('Respuestas con asignaturas asignadas:', this.respuestasAlumno);
+  }
+
+  public cancelar(): void {
+    this.asignaturas_seleccionadas = [...this.asignaturas_seleccionadasRespaldo]; // Restaurar la copia
+    this.dialogVisible = false;
+    console.log('Cambios cancelados. Estado restaurado:', this.asignaturas_seleccionadas);
   }
   
   isSelected(asignatura: Asignatura): boolean {
@@ -308,32 +309,19 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   enviarInforme(){
+    const formData: FormData = new FormData()
+    
+    formData.append('id', ''+this.idInforme)
+    formData.append('file', this.uploadedFile!)
+    formData.forEach((value, key) => {
+      console.log(`${key}:`, value);
+    });
+    
+    this.respuestasService.enviarInforme(formData).subscribe(resultInforme =>{
+      console.log(resultInforme)
+      this.goTofin()
+    });
 
-    const nuevoInforme: createInforme = {
-      id_alumno: this.idAlumno,
-      id_practica: this.idPractica
-    }
-    const formData = new FormData()
-
-    this.respuestasService.crearInformeAlumno(nuevoInforme).subscribe(result =>{
-      console.log(result)
-      this.respuestasAlumno = this.respuestasAlumno.map(respuesta => ({
-        ...respuesta,
-        id_informe: result.id_informe
-      }));
-
-      const asociarRespuestas: ListaRespuestas = {
-        respuestas: this.respuestasAlumno
-      }
-
-      this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
-        console.log(resultRespuestas)
-        formData.append('id', result.id_informe)
-        formData.append('file', this.uploadedFile!)
-        this.respuestasService.enviarInforme(formData).subscribe(resultInforme =>{
-          console.log(resultInforme)
-        })
-      })
-    })
+   
   }
 }

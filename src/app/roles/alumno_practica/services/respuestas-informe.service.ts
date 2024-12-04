@@ -43,5 +43,10 @@ export class RespuestasInformeService {
     return this.http.post<any>(`${this.url_informe}/upload`, formData)
   }
 
+  public obtenerArchivo(idInforme: number){
+    return this.http.get(`${this.url_informe}/${idInforme}/archivo`, {
+      responseType: 'blob'
+    })
+  }
 
 }

@@ -63,11 +63,11 @@
                         (click)="changeForm()">
                         Subir informe
                     </button>
-                    <button
+                    <!-- <button
                         class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
                         (click)="datos()">
                         Mostrar datos
-                    </button>
+                    </button> -->
                 </div>
             </div>
         
@@ -109,7 +109,7 @@
                     <!-- Botón de volver al cuestionario -->
                     <button
                         class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
-                        (click)="changeForm()">Volver al cuestionario
+                        (click)="volverCuestionario()"> cuestionario
                     </button>
             
                     <!-- Botón de enviar informe -->
@@ -170,7 +170,7 @@
         </div>
     </div>
     <ng-template pTemplate="footer">
-        <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-2 rounded-lg" (click)="dialogVisible = false">Cerrar</button>
+        <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-2 rounded-lg" (click)="cancelar()">Cancelar</button>
         <button type="button" class="bg-blue-600 hover:bg-blue-700 ms-4 px-3 py-2 text-white rounded-lg" (click)="guardarAsignaturas()">Seleccionar</button>
     </ng-template>
 </p-dialog>
