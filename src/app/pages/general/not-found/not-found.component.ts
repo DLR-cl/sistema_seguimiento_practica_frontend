@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
-import { Tipo_usuario } from '../../../enum/enumerables.enum';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,20 +21,20 @@ export class NotFoundComponent {
 
   }
 
-  private redirectUserByRol(rol: Tipo_usuario | null){
+  private redirectUserByRol(rol: TipoUsuario | null){
     const session = this._autStateService.getSession();
     if(session){
       switch(rol){
-        case Tipo_usuario.jefe_empleador:
+        case TipoUsuario.JEFE_EMPLEADOR:
         this._router.navigate(['home-jefe-alumno']);
         break;
-        case Tipo_usuario.alumno_practica:
+        case TipoUsuario.ALUMNO_PRACTICA:
           this._router.navigate(['home-alumno']);
         break;
-        case Tipo_usuario.jefe_departamento:
+        case TipoUsuario.JEFE_DEPARTAMENTO:
           this._router.navigate(['home-administracion']);
           break;
-          case Tipo_usuario.secretaria:
+          case TipoUsuario.SECRETARIA:
             this._router.navigate(['home-secretaria']);
             break;
             default:

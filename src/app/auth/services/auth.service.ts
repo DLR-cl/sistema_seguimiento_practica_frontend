@@ -7,7 +7,6 @@ import { RegisterDto } from '../dto/register.dto';
 import { Router } from '@angular/router';
 import { StorageService } from '../../shared/data-access/storage.service';
 import { AuthStateService } from '../../shared/data-access/auth-state.service';
-import { Tipo_usuario } from '../../enum/enumerables.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -52,16 +51,16 @@ export class AuthService {
     if(session){
       const userRole = this._authService.getRole();
       switch(userRole){
-        case Tipo_usuario.jefe_empleador:
+        case TipoUsuario.JEFE_EMPLEADOR:
           this._router.navigate(['home-jefe-alumno']);
           break;
-        case Tipo_usuario.alumno_practica:
+        case TipoUsuario.ALUMNO_PRACTICA:
           this._router.navigate(['home-alumno']);
           break;
-        case Tipo_usuario.jefe_departamento:
+        case TipoUsuario.JEFE_CARRERA:
           this._router.navigate(['home-administracion']);
           break;
-        case Tipo_usuario.secretaria:
+        case TipoUsuario.SECRETARIA:
           this._router.navigate(['home-secretaria']);
           break;
         default:
