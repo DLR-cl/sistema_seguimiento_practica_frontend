@@ -3,11 +3,12 @@ import { HeaderSecretariaComponent } from "../header-secretaria/header-secretari
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'app-practicas-secretaria',
   standalone: true,
-  imports: [HeaderSecretariaComponent, CommonModule, DropdownModule, FormsModule],
+  imports: [HeaderSecretariaComponent, CommonModule, DropdownModule, FormsModule, DialogModule],
   templateUrl: './practicas-secretaria.component.html',
   styleUrl: './practicas-secretaria.component.css'
 })
@@ -45,28 +46,56 @@ export class PracticasSecretariaComponent {
   ];
 
   profesores = [
-    'Andrés Martínez',
-    'Laura Sánchez',
-    'Javier Gómez',
-    'Claudia Díaz',
+    { nombre: 'Andrés Martínez', informesAsignados: 2 },
+    { nombre: 'Laura Sánchez', informesAsignados: 1 },
+    { nombre: 'Javier Gómez', informesAsignados: 0 },
+    { nombre: 'Claudia Díaz', informesAsignados: 4 },
   ];
 
-  // Variable para saber cuál práctica se está editando
-  selectedPracticaId: number | null = null;
+  modalAbierto = false;
+  practicaSeleccionada: any = null;
 
-  // Función para activar o desactivar la visibilidad del dropdown
-  toggleDropdown(practicaId: number) {
-    // Solo mostramos el dropdown si la práctica no tiene profesor asignado
-    if (this.selectedPracticaId === practicaId) {
-      this.selectedPracticaId = null; // Si ya es la práctica seleccionada, desactivamos
-    } else {
-      this.selectedPracticaId = practicaId; // Si no, la seleccionamos
-    }
+  // Abre el modal para seleccionar el profesor
+  abrirModal(practica: any) {
+    this.modalAbierto = true;
+    this.practicaSeleccionada = practica;
   }
 
-  // Función para asignar profesor
-  asignarProfesor(practica: any, profesor: string) {
-    practica.profesor = profesor;
-    this.selectedPracticaId = null; // Ocultar el dropdown después de asignar
+  // Asigna un profesor a la práctica
+  asignarProfesor(profesor: any) {
+    if (this.practicaSeleccionada.profesor) {
+      // Si ya hay un profesor asignado, lo quitamos y decrementamos los informes asignados
+      const profesorAnterior = this.profesores.find(p => p.nombre === this.practicaSeleccionada.profesor);
+      if (profesorAnterior) {
+        profesorAnterior.informesAsignados--;
+      }
+    }
+
+    // Asignar el nuevo profesor
+    this.practicaSeleccionada.profesor = profesor.nombre;
+    profesor.informesAsignados++; // Incrementa los informes asignados
+  }
+
+  // Quita un profesor de la práctica
+  quitarProfesor() {
+    const profesor = this.profesores.find(p => p.nombre === this.practicaSeleccionada.profesor);
+    if (profesor) profesor.informesAsignados--; // Decrementa los informes asignados
+
+    this.practicaSeleccionada.profesor = null; // Elimina la asignación
+  }
+
+  // Confirma la asignación y cierra el modal
+  confirmarAsignacion() {
+    this.modalAbierto = false;
+  }
+
+  // Cancela la asignación y restaura el estado
+  cancelarAsignacion() {
+    const profesor = this.profesores.find(p => p.nombre === this.practicaSeleccionada.profesor);
+    if (profesor && this.practicaSeleccionada.profesor) {
+      profesor.informesAsignados--; // Restaura los informes asignados
+    }
+    this.practicaSeleccionada.profesor = null; // Restaura la asignación
+    this.modalAbierto = false;
   }
 }
