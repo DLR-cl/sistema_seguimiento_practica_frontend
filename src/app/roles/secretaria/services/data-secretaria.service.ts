@@ -72,7 +72,7 @@ export class DataSecretariaService {
         }
       ),
       catchError((error) => {
-        console.error('Error al obtener las prácticas');
+        console.error('Error al obtener las prácticas encontradas');
         throw error;
       })
     )
