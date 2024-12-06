@@ -10,7 +10,7 @@ import { NgOptimizedImage } from '@angular/common'
 @Component({
   selector: 'app-home-jefe-empleador',
   standalone: true,
-  imports: [HeaderJefeEmpleadorComponent, NgOptimizedImage],
+  imports: [HeaderJefeEmpleadorComponent],
   templateUrl: './home-jefe-empleador.component.html',
   styleUrl: './home-jefe-empleador.component.css'
 })

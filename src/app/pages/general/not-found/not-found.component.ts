@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
-import { Tipo_usuario } from '../../../enum/tipo-usuario.enum';
+import { Tipo_usuario } from '../../../enum/enumerables.enum';
 import { Router } from '@angular/router';
 
 @Component({

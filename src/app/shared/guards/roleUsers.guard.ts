@@ -3,11 +3,10 @@ import { CanActivateFn, Router } from "@angular/router";
 import { StorageService } from "../data-access/storage.service";
 import * as jwt_decode from "jwt-decode";
 import { PayloadInterface } from "../interface/payload.interface";
-import { Tipo_usuario } from "../../enum/tipo-usuario.enum";
 import { AuthStateService } from "../data-access/auth-state.service";
 import { Session } from "../data-access/interface/session.interface";
 
-export const roleGuard = (roles: Tipo_usuario[]): CanActivateFn => {
+export const roleGuard = (roles: TipoUsuario[]): CanActivateFn => {
     return () => {
         const router = inject(Router);
         const authState = inject(AuthStateService);

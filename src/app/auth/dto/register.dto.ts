@@ -1,4 +1,4 @@
-import { Tipo_usuario } from "../../enum/tipo-usuario.enum";
+import { Tipo_usuario } from "../../enum/enumerables.enum";
 
 export interface RegisterDto {
     password: string;
