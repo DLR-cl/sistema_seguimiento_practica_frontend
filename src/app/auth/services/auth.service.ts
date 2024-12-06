@@ -7,7 +7,7 @@ import { RegisterDto } from '../dto/register.dto';
 import { Router } from '@angular/router';
 import { StorageService } from '../../shared/data-access/storage.service';
 import { AuthStateService } from '../../shared/data-access/auth-state.service';
-import { Tipo_usuario } from '../../enum/tipo-usuario.enum';
+import { Tipo_usuario } from '../../enum/enumerables.enum';
 
 @Injectable({
   providedIn: 'root'
