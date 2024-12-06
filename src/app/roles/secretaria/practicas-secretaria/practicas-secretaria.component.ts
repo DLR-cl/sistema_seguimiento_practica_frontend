@@ -24,6 +24,13 @@ export class PracticasSecretariaComponent {
     },
     {
       tipo: 'II',
+      nombreAlumno: 'Juan Gonzalez',
+      estadoInforme: 'En espera de revisión',
+      fechaFinalizacion: new Date('2024-12-15'),
+      profesor: null,
+    },
+    {
+      tipo: 'II',
       nombreAlumno: 'Ana Gómez',
       estadoInforme: 'Revisado',
       fechaFinalizacion: new Date('2023-11-20'),
@@ -53,49 +60,53 @@ export class PracticasSecretariaComponent {
   ];
 
   modalAbierto = false;
-  practicaSeleccionada: any = null;
+  practicaSeleccionada: any = null; // Referencia a la práctica original
+  copiaPractica: any = null; // Copia temporal para modificaciones
 
-  // Abre el modal para seleccionar el profesor
   abrirModal(practica: any) {
+    console.log(practica)
     this.modalAbierto = true;
-    this.practicaSeleccionada = practica;
+    this.practicaSeleccionada = practica;  
+    this.copiaPractica = { ...practica }; // Crear copia temporal
   }
 
-  // Asigna un profesor a la práctica
   asignarProfesor(profesor: any) {
-    if (this.practicaSeleccionada.profesor) {
-      // Si ya hay un profesor asignado, lo quitamos y decrementamos los informes asignados
-      const profesorAnterior = this.profesores.find(p => p.nombre === this.practicaSeleccionada.profesor);
-      if (profesorAnterior) {
-        profesorAnterior.informesAsignados--;
-      }
+    // Actualiza la copia temporal
+    if (this.copiaPractica.profesor) {
+      const profesorAnterior = this.profesores.find(p => p.nombre === this.copiaPractica.profesor);
+      if (profesorAnterior) profesorAnterior.informesAsignados--;
     }
 
-    // Asignar el nuevo profesor
-    this.practicaSeleccionada.profesor = profesor.nombre;
-    profesor.informesAsignados++; // Incrementa los informes asignados
+    this.copiaPractica.profesor = profesor.nombre;
+    profesor.informesAsignados++;
   }
 
-  // Quita un profesor de la práctica
   quitarProfesor() {
-    const profesor = this.profesores.find(p => p.nombre === this.practicaSeleccionada.profesor);
-    if (profesor) profesor.informesAsignados--; // Decrementa los informes asignados
-
-    this.practicaSeleccionada.profesor = null; // Elimina la asignación
+    const profesor = this.profesores.find(p => p.nombre === this.copiaPractica.profesor);
+    if (profesor) profesor.informesAsignados--;
+    this.copiaPractica.profesor = null;
   }
 
-  // Confirma la asignación y cierra el modal
   confirmarAsignacion() {
-    this.modalAbierto = false;
+    Object.assign(this.practicaSeleccionada, this.copiaPractica);
+    this.cerrarModal();
   }
 
-  // Cancela la asignación y restaura el estado
   cancelarAsignacion() {
-    const profesor = this.profesores.find(p => p.nombre === this.practicaSeleccionada.profesor);
-    if (profesor && this.practicaSeleccionada.profesor) {
-      profesor.informesAsignados--; // Restaura los informes asignados
+    if (this.copiaPractica.profesor) {
+      const profesorActual = this.profesores.find(p => p.nombre === this.copiaPractica.profesor);
+      if (profesorActual) profesorActual.informesAsignados--;
     }
-    this.practicaSeleccionada.profesor = null; // Restaura la asignación
+  
+    if (this.practicaSeleccionada.profesor) {
+      const profesorOriginal = this.profesores.find(p => p.nombre === this.practicaSeleccionada.profesor);
+      if (profesorOriginal) profesorOriginal.informesAsignados++;
+    }  
+    this.cerrarModal();
+  }
+
+  cerrarModal() {
     this.modalAbierto = false;
+    this.copiaPractica = null; // Limpiar la copia temporal
   }
 }
