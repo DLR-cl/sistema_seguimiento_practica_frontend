@@ -54,7 +54,7 @@ export class DataSecretariaService {
           }
       )
   }
-
+  // yapo
   public getUserId(): number | null {
       let token = localStorage.getItem('session')
       if (token) {
