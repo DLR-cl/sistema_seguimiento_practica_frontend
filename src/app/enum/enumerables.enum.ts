@@ -1,9 +1,9 @@
-enum TipoPractica {
+export enum TipoPractica {
     PRACTICA_UNO = "PRACTICA_UNO",
     PRACTICA_DOS = "PRACTICA_DOS"
   }
   
-  enum TipoUsuario {
+  export enum TipoUsuario {
     JEFE_CARRERA = "JEFE_CARRERA",
     ALUMNO_PRACTICA = "ALUMNO_PRACTICA",
     JEFE_DEPARTAMENTO = "JEFE_DEPARTAMENTO",
@@ -11,20 +11,20 @@ enum TipoPractica {
     JEFE_EMPLEADOR = "JEFE_EMPLEADOR"
   }
   
-  enum ModalidadPractica {
+ export enum ModalidadPractica {
     PRESENCIAL = "PRESENCIAL",
     SEMI_PRESENCIAL = "SEMI_PRESENCIAL",
     REMOTO = "REMOTO"
   }
   
-  enum TipoPregunta {
+ export enum TipoPregunta {
     ABIERTA = "ABIERTA",
     CERRADA = "CERRADA",
     EVALUATIVA = "EVALUATIVA",
     DESARROLLO_PROFESIONAL = "DESARROLLO_PROFESIONAL"
   }
   
-  enum EstadoInforme {
+  export enum EstadoInforme {
     ENVIADA = "ENVIADA",
     REVISION = "REVISION",
     APROBADA = "APROBADA",
@@ -32,7 +32,7 @@ enum TipoPractica {
     DESAPROBADA = "DESAPROBADA"
   }
   
-  enum EstadoPractica {
+  export enum EstadoPractica {
     CURSANDO = "CURSANDO",
     ESPERA_INFORME_ALUMNO = "ESPERA_INFORME_ALUMNO",
     REVISION_INFORME_ALUMNO = "REVISION_INFORME_ALUMNO",
@@ -42,7 +42,7 @@ enum TipoPractica {
     FINALIZADA = "FINALIZADA"
   }
   
-  enum TipoAsignatura {
+ export enum TipoAsignatura {
     FORMACION_BASICA = "FORMACION_BASICA",
     FORMACION_GENERAL = "FORMACION_GENERAL",
     FORMACION_PROFESIONAL = "FORMACION_PROFESIONAL"

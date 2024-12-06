@@ -1,3 +1,5 @@
+import { TipoUsuario } from "../../../../enum/enumerables.enum";
+
 export interface AlumnoInterface {
 
     correo: string;

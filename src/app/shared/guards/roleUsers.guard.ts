@@ -5,6 +5,7 @@ import * as jwt_decode from "jwt-decode";
 import { PayloadInterface } from "../interface/payload.interface";
 import { AuthStateService } from "../data-access/auth-state.service";
 import { Session } from "../data-access/interface/session.interface";
+import { TipoUsuario } from "../../enum/enumerables.enum";
 
 export const roleGuard = (roles: TipoUsuario[]): CanActivateFn => {
     return () => {

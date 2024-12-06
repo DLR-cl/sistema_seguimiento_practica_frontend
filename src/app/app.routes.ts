@@ -19,6 +19,7 @@ import { FinInformeAlumnoComponent } from './roles/alumno_practica/components/fi
 import { EstadoPracticaComponent } from './roles/alumno_practica/estado-practica/estado-practica.component';
 import { InformePrimeraPracticaAlumnoComponent } from './roles/alumno_practica/informe-primera-practica/informe-primera-practica.component';
 import { NotFoundComponent } from './pages/general/not-found/not-found.component';
+import { TipoUsuario } from './enum/enumerables.enum';
 
 export const routes: Routes = [
     {

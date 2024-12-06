@@ -1,3 +1,4 @@
+import { TipoUsuario } from "../../../../enum/enumerables.enum";
 
 export interface JefeAlumnoInterface {
     id_usuario: number;

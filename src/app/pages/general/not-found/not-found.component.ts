@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
 import { Router } from '@angular/router';
+import { TipoUsuario } from '../../../enum/enumerables.enum';
 
 @Component({
   selector: 'app-not-found',

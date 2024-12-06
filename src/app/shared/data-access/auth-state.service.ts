@@ -3,6 +3,7 @@ import { StorageService } from "./storage.service";
 import { Session } from "./interface/session.interface";
 import { PayloadInterface } from "../interface/payload.interface";
 import * as jwt_decode from "jwt-decode";
+import { TipoUsuario } from "../../enum/enumerables.enum";
 
 @Injectable({
     providedIn: 'root'

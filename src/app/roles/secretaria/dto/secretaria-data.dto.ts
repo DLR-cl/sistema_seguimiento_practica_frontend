@@ -1,3 +1,4 @@
+import { EstadoInforme, EstadoPractica, TipoUsuario } from "../../../enum/enumerables.enum";
 
 
 export class AsignacionDto {
