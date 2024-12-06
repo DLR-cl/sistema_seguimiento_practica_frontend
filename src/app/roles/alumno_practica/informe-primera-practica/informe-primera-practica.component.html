@@ -42,9 +42,25 @@
                         </div>
                     
                         <div *ngIf="preg.tipo_pregunta == 'DESARROLLO_PROFESIONAL'" class="respuestas mt-4 space-y-3">
-                        <button type="button"
+                        <!-- Mostrar las asignaturas seleccionadas -->
+                        <div *ngIf="asignaturas_seleccionadas.length > 0" class="my-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
+                            <h3 class="text-md font-semibold text-blue-600 mb-4">Asignaturas seleccionadas:</h3>
+                            <ul class="list-disc pl-6 space-y-2">
+                              <li *ngFor="let asignatura of asignaturas_seleccionadas" class="text-sm text-gray-700 bg-blue-200 p-2 rounded shadow-md mb-3">
+                                <span class="font-semibold text-gray-700">{{ asignatura.nombre }}</span> 
+                                ({{ asignatura.codigo }})
+                              </li>
+                            </ul>
+                          </div>
+                        
+                          <!-- Si no hay asignaturas seleccionadas, mostrar mensaje -->
+                          <div *ngIf="asignaturas_seleccionadas.length === 0" class="my-4 bg-white rounded-lg shadow-lg p-4">
+                            No se han seleccionado asignaturas aún.
+                          </div>
+                            <button type="button"
                             class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
-                            (click)="mostrarDialogo()">Seleccionar asignaturas</button>
+                            (click)="mostrarDialogo()">Seleccionar asignaturas
+                            </button>
                         </div>
                     </div>
                 </div>

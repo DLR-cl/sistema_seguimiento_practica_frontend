@@ -32,7 +32,7 @@ export class RespuestasInformeService {
 
 
   public crearInformeAlumno(informe: createInforme){
-    return this.http.post<any>(`${this.url_informe}/crear-informe`, informe)
+    return this.http.post<any>(`${this.url_informe}`, informe)
   }
 
   public asociarRespuestas(respuestas: ListaRespuestas){

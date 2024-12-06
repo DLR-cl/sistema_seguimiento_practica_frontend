@@ -19,6 +19,8 @@ import { FinInformeAlumnoComponent } from './roles/alumno_practica/components/fi
 import { SolicitarPracticanteComponent } from './pages/general/solicitar-practicante/solicitar-practicante.component';
 import { NuevaPracticaComponent } from './roles/jefe_compartido/nueva-practica/nueva-practica.component';
 import { PreguntasInformeComponent } from './roles/jefe_compartido/preguntas-informe/preguntas-informe.component';
+import { HomeSecretariaComponent } from './roles/secretaria/home-secretaria/home-secretaria.component';
+import { PracticasSecretariaComponent } from './roles/secretaria/practicas-secretaria/practicas-secretaria.component';
 
 export const routes: Routes = [
     {
@@ -48,6 +50,14 @@ export const routes: Routes = [
     },
     {
         path: 'solicitar-practicante', component: SolicitarPracticanteComponent,
+    },
+    {
+        path: 'home-secretaria',  component: HomeSecretariaComponent,
+        canActivate: [privateGuard, roleGuard([Tipo_usuario.secretaria])]
+    },
+    {
+        path: 'ver-practicas-secretaria', component: PracticasSecretariaComponent,
+        canActivate: [privateGuard, roleGuard([Tipo_usuario.secretaria])]
     },
     {
         path: 'home-jefe-alumno', component: HomeJefeEmpleadorComponent,
