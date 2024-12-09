@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { HeaderSecretariaComponent } from "../header-secretaria/header-secretaria.component";
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
+import { AcademicoAsociado, AcademicoInformes, AsignacionInformesService, PracticaInfo } from '../services/asignacion-informes.service';
 
 @Component({
   selector: 'app-practicas-secretaria',
@@ -12,101 +13,93 @@ import { DialogModule } from 'primeng/dialog';
   templateUrl: './practicas-secretaria.component.html',
   styleUrl: './practicas-secretaria.component.css'
 })
-export class PracticasSecretariaComponent {
+export class PracticasSecretariaComponent implements OnInit {
 
-  practicas = [
-    {
-      tipo: 'I',
-      nombreAlumno: 'Juan Pérez',
-      estadoInforme: 'En espera de revisión',
-      fechaFinalizacion: new Date('2023-12-15'),
-      profesor: null,
-    },
-    {
-      tipo: 'II',
-      nombreAlumno: 'Juan Gonzalez',
-      estadoInforme: 'En espera de revisión',
-      fechaFinalizacion: new Date('2024-12-15'),
-      profesor: null,
-    },
-    {
-      tipo: 'II',
-      nombreAlumno: 'Ana Gómez',
-      estadoInforme: 'Revisado',
-      fechaFinalizacion: new Date('2023-11-20'),
-      profesor: 'Jhosep Marca',
-    },
-    {
-      tipo: 'I',
-      nombreAlumno: 'Carlos Fuentes',
-      estadoInforme: 'En espera de subida',
-      fechaFinalizacion: new Date('2024-01-10'),
-      profesor: null,
-    },
-    {
-      tipo: 'II',
-      nombreAlumno: 'Lucía Torres',
-      estadoInforme: 'Revisado',
-      fechaFinalizacion: new Date('2023-12-01'),
-      profesor: 'Leandro Molina',
-    },
-  ];
+  private readonly _asignacionService = inject(AsignacionInformesService);
 
-  profesores = [
-    { nombre: 'Andrés Martínez', informesAsignados: 2 },
-    { nombre: 'Laura Sánchez', informesAsignados: 1 },
-    { nombre: 'Javier Gómez', informesAsignados: 0 },
-    { nombre: 'Claudia Díaz', informesAsignados: 4 },
-  ];
+  ngOnInit(): void {
+    this.getProfesores(),
+    this.getPracticas()
+  }
 
-  modalAbierto = false;
-  practicaSeleccionada: any = null; // Referencia a la práctica original
-  copiaPractica: any = null; // Copia temporal para modificaciones
+  practicasBackend: PracticaInfo[] = []
+  profesoresBackend: AcademicoInformes[] = []
+  
+  modalAsignacion = false;
+  modalDetalles = false;
+  practicaSeleccionada!: PracticaInfo | null;
+  copiaPractica!: PracticaInfo | null;
 
-  abrirModal(practica: any) {
+  abrirModal(practica: PracticaInfo) {
     console.log(practica)
-    this.modalAbierto = true;
+    this.modalAsignacion = true;
     this.practicaSeleccionada = practica;  
     this.copiaPractica = { ...practica }; // Crear copia temporal
   }
 
-  asignarProfesor(profesor: any) {
+  asignarProfesor(profesor: AcademicoInformes) {
     // Actualiza la copia temporal
-    if (this.copiaPractica.profesor) {
-      const profesorAnterior = this.profesores.find(p => p.nombre === this.copiaPractica.profesor);
-      if (profesorAnterior) profesorAnterior.informesAsignados--;
+    if (this.copiaPractica!.academico_nombre) {
+      const profesorAnterior = this.profesoresBackend.find(p => p.nombre_academico === this.copiaPractica!.academico_nombre);
+      if (profesorAnterior) profesorAnterior.cantidad_informes--;
     }
 
-    this.copiaPractica.profesor = profesor.nombre;
-    profesor.informesAsignados++;
+    this.copiaPractica!.academico_nombre = profesor.nombre_academico;
+    this.copiaPractica!.academico_rut = profesor.rut_academico;
+    profesor.cantidad_informes++;
   }
 
   quitarProfesor() {
-    const profesor = this.profesores.find(p => p.nombre === this.copiaPractica.profesor);
-    if (profesor) profesor.informesAsignados--;
-    this.copiaPractica.profesor = null;
+    const profesor = this.profesoresBackend.find(p => p.nombre_academico === this.copiaPractica!.academico_nombre);
+    if (profesor) profesor.cantidad_informes--;
+    this.copiaPractica!.academico_nombre = '';
+    this.copiaPractica!.academico_rut = '';
   }
 
   confirmarAsignacion() {
-    Object.assign(this.practicaSeleccionada, this.copiaPractica);
-    this.cerrarModal();
+    const academicoAsociado: AcademicoAsociado = {
+      id_informe: this.copiaPractica?.id_informe!,
+      id_academico: this.profesoresBackend.find(academico => academico.nombre_academico === this.copiaPractica?.academico_nombre)?.id_academico!
+    }
+
+    console.log(academicoAsociado)
+    this._asignacionService.asociarInformeAcademico(academicoAsociado).subscribe(result => {
+      console.log(result)
+      this.cerrarModalAsignacion();
+      this.getPracticas();
+      this.getProfesores();
+    })
   }
 
   cancelarAsignacion() {
-    if (this.copiaPractica.profesor) {
-      const profesorActual = this.profesores.find(p => p.nombre === this.copiaPractica.profesor);
-      if (profesorActual) profesorActual.informesAsignados--;
+    if (this.copiaPractica!.academico_nombre) {
+      const profesorActual = this.profesoresBackend.find(p => p.nombre_academico === this.copiaPractica!.academico_nombre);
+      if (profesorActual) profesorActual.cantidad_informes--;
     }
   
-    if (this.practicaSeleccionada.profesor) {
-      const profesorOriginal = this.profesores.find(p => p.nombre === this.practicaSeleccionada.profesor);
-      if (profesorOriginal) profesorOriginal.informesAsignados++;
+    if (this.practicaSeleccionada?.academico_nombre) {
+      const profesorOriginal = this.profesoresBackend.find(p => p.nombre_academico === this.practicaSeleccionada?.academico_nombre);
+      if (profesorOriginal) profesorOriginal.cantidad_informes++;
     }  
-    this.cerrarModal();
+    this.cerrarModalAsignacion();
   }
 
-  cerrarModal() {
-    this.modalAbierto = false;
-    this.copiaPractica = null; // Limpiar la copia temporal
+  cerrarModalAsignacion() {
+    this.modalAsignacion = false;
+    this.copiaPractica = null;
+  }
+
+  public getProfesores(){
+   this._asignacionService.getProfesores().subscribe(result =>{
+    this.profesoresBackend = result
+    console.log(this.profesoresBackend)
+   }) 
+  }
+
+  public getPracticas(){
+    this._asignacionService.getPracticas().subscribe(result =>{
+      this.practicasBackend = result
+      console.log(this.practicasBackend)
+    })
   }
 }
