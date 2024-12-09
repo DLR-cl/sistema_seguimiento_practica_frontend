@@ -1,0 +1,9 @@
+.container-indicadores {
+    min-height: 20rem;
+}
+.chart {
+    
+    width: 100%; /* Ajusta el tamaño de cada gráfico */
+    height: 150px;
+    text-align: center; /* Centra el título */
+  }

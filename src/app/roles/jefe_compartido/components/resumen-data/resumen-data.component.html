@@ -1,0 +1,61 @@
+<div class="bg-white shadow-[rgba(0,_0,_0,_0.24)_0px_3px_8px] rounded-lg p-4 divide-y ml-4 container-review">
+    <!-- Header -->
+    <div class="text-lg font-semibold mb-4 text-center">Resumen</div>
+
+<!-- Primer puntaje -->
+<div class="px-4">
+    <!-- Manteniendo las líneas punteadas correctamente con divide-x -->
+    <div class="flex justify-around items-center divide-x divide-dotted">
+      <!-- Elemento con el valor principal -->
+       <div class="min-w-20">
+         <span class="text-gray-700 text-lg px-2">{{alumnos_en_practica?.cantidad_alumnos_practica}}</span>
+       </div>
+      <!-- Contenedor interno para el contenido con padding separado de las líneas punteadas -->
+      <div class="flex flex-col justify-between px-4 ml-2 py-4 text-data">
+        <span class="text-gray-500">Estudiantes en práctica</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Segundo puntaje -->
+  <div class="px-4">
+    <div class="flex justify-around  items-center divide-x divide-dotted">
+      <div class="min-w-20">
+        <span class="text-gray-700 text-lg px-2">100</span>
+      </div>
+      <div class="flex flex-col justify-between px-4 ml-2 py-4 text-data">
+        <span class="text-gray-500">Carga Docente</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tercer puntaje -->
+  <div class="px-4">
+    <div class="flex justify-around  items-center divide-x divide-dotted">
+      <div class="min-w-20">
+        <span class="text-gray-700 text-lg px-2">{{alumnos_en_practica?.cantidad_alumnos_practica}}</span>
+      </div>
+      <div class="flex flex-col justify-between px-4 ml-2 py-4 text-data">
+        <span class="text-gray-500">Estudiantes sin calificar</span>
+      </div>
+    </div>
+  </div>
+  
+
+    <!-- Gráfico con barras comparativas -->
+    <div class="py-4">
+        <div class="flex justify-between mb-2 text-sm text-gray-600">
+            <span class="items-center" >Practicas por Mes</span>
+        </div>
+        <div class="flex items-center dashboard-container">
+          <p-chart type="bar" [data]="basicData" [options]="basicOptions" height="15rem" width="100%"/>
+      </div> 
+
+    <!-- Botón en la parte inferior -->
+    <div class="mt-4 text-center ">
+        <button
+            class="w-full bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            On Demand Review
+        </button>
+    </div>
+</div>
