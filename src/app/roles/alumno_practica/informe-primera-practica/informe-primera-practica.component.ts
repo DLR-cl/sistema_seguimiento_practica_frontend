@@ -49,7 +49,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   private readonly _router = inject(Router);
-  datos_listo = false;
+  datos_listo = true;
   page: number = 1;
   preguntas: Pregunta[]= []
   preguntas_paginas = 3;
@@ -57,7 +57,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   
   idAlumno!: number
   idPractica!: number
-  idInforme: number = 21 //DE PRUEBA
+  idInforme: number = 22 //DE PRUEBA
 
   asignaturasFPCeleste: string[] = ['ME-167', 'CC-802', 'ME-260', 'ME-263', 'ME-445', 'ME-264', 'ME-266']
   semestres: Semestre[] = []; 
