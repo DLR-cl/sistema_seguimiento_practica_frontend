@@ -30,15 +30,24 @@ export class PracticasSecretariaComponent implements OnInit {
   practicaSeleccionada!: PracticaInfo | null;
   copiaPractica!: PracticaInfo | null;
 
-  abrirModal(practica: PracticaInfo) {
-    console.log(practica)
+  textoEstado: Record<string, string> = {
+    REVISION_INFORME_ALUMNO: 'Revisión Informe Alumno',
+    REVISION_GENERAL: 'Revisión General',
+    ESPERA_INFORME_ALUMNO: 'Espera Informe Alumno',
+    CURSANDO: 'Cursando'
+  };
+
+  textoModalidad: Record<string, string> = {
+    PRESENCIAL: 'Presencial',
+    REMOTO: 'Remoto',
+    SEMI_PRESENCIAL: 'Semipresencial'
+  };
+
+  abrirModal() {
     this.modalAsignacion = true;
-    this.practicaSeleccionada = practica;  
-    this.copiaPractica = { ...practica }; // Crear copia temporal
   }
 
   asignarProfesor(profesor: AcademicoInformes) {
-    // Actualiza la copia temporal
     if (this.copiaPractica!.academico_nombre) {
       const profesorAnterior = this.profesoresBackend.find(p => p.nombre_academico === this.copiaPractica!.academico_nombre);
       if (profesorAnterior) profesorAnterior.cantidad_informes--;
@@ -54,21 +63,26 @@ export class PracticasSecretariaComponent implements OnInit {
     if (profesor) profesor.cantidad_informes--;
     this.copiaPractica!.academico_nombre = '';
     this.copiaPractica!.academico_rut = '';
+    console.log(this.copiaPractica)
   }
 
   confirmarAsignacion() {
-    const academicoAsociado: AcademicoAsociado = {
-      id_informe: this.copiaPractica?.id_informe!,
-      id_academico: this.profesoresBackend.find(academico => academico.nombre_academico === this.copiaPractica?.academico_nombre)?.id_academico!
+    if(this.copiaPractica?.academico_nombre !== ''){
+      const academicoAsociado: AcademicoAsociado = {
+        id_informe: this.copiaPractica?.id_informe!,
+        id_academico: this.profesoresBackend.find(academico => academico.nombre_academico === this.copiaPractica?.academico_nombre)?.id_academico!
+      }
+  
+      this._asignacionService.asociarInformeAcademico(academicoAsociado).subscribe(result => {
+        this.cerrarModalAsignacion();
+        this.getProfesores()
+        this.getPracticas();
+        console.log(this.copiaPractica)
+      })
+    } else{
+      alert('Debe asignar un profesor antes de confirmar')
     }
-
-    console.log(academicoAsociado)
-    this._asignacionService.asociarInformeAcademico(academicoAsociado).subscribe(result => {
-      console.log(result)
-      this.cerrarModalAsignacion();
-      this.getPracticas();
-      this.getProfesores();
-    })
+    
   }
 
   cancelarAsignacion() {
@@ -81,25 +95,38 @@ export class PracticasSecretariaComponent implements OnInit {
       const profesorOriginal = this.profesoresBackend.find(p => p.nombre_academico === this.practicaSeleccionada?.academico_nombre);
       if (profesorOriginal) profesorOriginal.cantidad_informes++;
     }  
+    this.copiaPractica = {... this.practicaSeleccionada!}
     this.cerrarModalAsignacion();
   }
 
   cerrarModalAsignacion() {
     this.modalAsignacion = false;
-    this.copiaPractica = null;
   }
 
   public getProfesores(){
    this._asignacionService.getProfesores().subscribe(result =>{
     this.profesoresBackend = result
-    console.log(this.profesoresBackend)
    }) 
   }
 
   public getPracticas(){
     this._asignacionService.getPracticas().subscribe(result =>{
       this.practicasBackend = result
-      console.log(this.practicasBackend)
+      if(this.modalDetalles){
+        this.practicaSeleccionada = result.find(practica => practica.id_practica == this.practicaSeleccionada?.id_practica)!
+      }
     })
   }
+
+  abrirModalDetalles(practica: any) {
+    this.practicaSeleccionada = practica;
+    this.modalDetalles = true;  
+    this.copiaPractica = { ...practica };
+  }
+  
+  cerrarModalDetalles() {
+    this.modalDetalles = false;
+    this.practicaSeleccionada = null;
+  }
+
 }

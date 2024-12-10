@@ -46,10 +46,11 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     this.obtenerAsignaturas()
     this.idAlumno = Number(this.route.snapshot.paramMap.get('idAlumno'))!;
     this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
+    this.existeRespuesta()
   }
 
   private readonly _router = inject(Router);
-  datos_listo = true;
+  datos_listo = false;
   page: number = 1;
   preguntas: Pregunta[]= []
   preguntas_paginas = 3;
@@ -57,8 +58,8 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   
   idAlumno!: number
   idPractica!: number
-  idInforme: number = 22 //DE PRUEBA
-
+  idInforme!: number
+  
   asignaturasFPCeleste: string[] = ['ME-167', 'CC-802', 'ME-260', 'ME-263', 'ME-445', 'ME-264', 'ME-266']
   semestres: Semestre[] = []; 
   asignaturas_seleccionadas: Asignatura[] = [];  
@@ -239,6 +240,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
 
     this.respuestasService.crearInformeAlumno(nuevoInforme).subscribe(result =>{
       console.log(result)
+      this.idInforme = result.id_informe
       this.respuestasAlumno = this.respuestasAlumno.map(respuesta => ({
         ...respuesta,
         id_informe: result.id_informe
@@ -321,9 +323,16 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
       console.log(resultInforme)
       this.goTofin()
     });
-
-   
   }
 
+  public existeRespuesta(){
+    this.respuestasService.existeRespuesta(this.idPractica).subscribe(result => {
+      if(JSON. stringify(result) != '{}'){
+        this.datos_listo = true;
+      } else {
+        this.datos_listo = false
+      }
+    })
+  }
   
 }

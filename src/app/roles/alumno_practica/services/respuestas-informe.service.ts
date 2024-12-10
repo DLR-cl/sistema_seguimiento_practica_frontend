@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { enviroment } from '../../../environment/environment';
 
 export interface createInforme{
   id_practica: number;
@@ -27,26 +28,25 @@ export class RespuestasInformeService {
     private http: HttpClient,
   ) { }
 
-  private url_respuestasInforme = 'http://localhost:3000/respuestas-informe-alumno';
-  private url_informe = 'http://localhost:3000/informe-alumno'
-
-
   public crearInformeAlumno(informe: createInforme){
-    return this.http.post<any>(`${this.url_informe}`, informe)
+    return this.http.post<any>(`${enviroment.API_URL}/informe-alumno`, informe)
   }
 
   public asociarRespuestas(respuestas: ListaRespuestas){
-    return this.http.post<any>(`${this.url_respuestasInforme}`, respuestas)
+    return this.http.post<any>(`${enviroment.API_URL}/respuestas-informe-alumno`, respuestas)
   }
 
   public enviarInforme(formData: FormData){
-    return this.http.post<any>(`${this.url_informe}/upload`, formData)
+    return this.http.post<any>(`${enviroment.API_URL}/informe-alumno/upload`, formData)
   }
 
   public obtenerArchivo(idInforme: number){
-    return this.http.get(`${this.url_informe}/${idInforme}/archivo`, {
+    return this.http.get(`${enviroment.API_URL}/informe-alumno/${idInforme}/archivo`, {
       responseType: 'blob'
     })
   }
 
+  public existeRespuesta(idPractica: number){
+    return this.http.get(`${enviroment.API_URL}/informe-alumno/existeRespuesta/${idPractica}`)
+  }
 }
