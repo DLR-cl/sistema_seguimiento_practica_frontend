@@ -10,5 +10,7 @@
 }
 
 .container-review {
-    max-width: 25rem;
+    max-width: 35rem;
+    width: 32rem;
+    margin-right: 2rem;
 }
