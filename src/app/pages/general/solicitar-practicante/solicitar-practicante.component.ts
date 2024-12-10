@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class SolicitarPracticanteComponent {
 
   private _router = inject(Router);
-
+  correo:string = "ici@gestion.uta.cl";
   toHome(){
     this._router.navigate(['home']);
   }
