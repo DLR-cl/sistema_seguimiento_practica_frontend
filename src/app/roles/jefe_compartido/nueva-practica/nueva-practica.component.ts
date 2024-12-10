@@ -93,9 +93,13 @@ export class NuevaPracticaComponent implements OnInit{
 
   submitModal() {
     if (this.modalType === 'empresa') {
+      //agregar manejo de errores a los subscribe
       this.servicioPracticas.crearEmpresa(this.formEmpresa.value).subscribe(result => {
         this.obtenerEmpresas()
         console.log(result)
+        this.closeModal();
+        this.formSupervisor.reset()
+        alert('creado con exito')
       })
       this.formEmpresa.reset()
     } else if (this.modalType === 'supervisor') {
@@ -107,8 +111,10 @@ export class NuevaPracticaComponent implements OnInit{
       this.servicioPracticas.crearSupervisor(supervisor).subscribe(result => {
         this.obtenerEmpresas()
         console.log(result)
+        this.closeModal();
+        this.formSupervisor.reset()
+        alert('creado con exito')
       })
-      this.formSupervisor.reset()
     } else if (this.modalType === 'alumno') {
       const alumno : nuevoAlumno = {
         ...this.formAlumno.value,
@@ -118,10 +124,11 @@ export class NuevaPracticaComponent implements OnInit{
       this.servicioPracticas.crearAlumno(alumno).subscribe(result => {
         this.obtenerAlumnos()
         console.log(result)
+        this.closeModal();
+        this.formAlumno.reset()
+        alert('creado con exito')
       })
-      this.formAlumno.reset()
     }
-    this.closeModal(); // Cierra el modal después de guardar
   }
 
   siguientePaso() {
@@ -147,6 +154,9 @@ export class NuevaPracticaComponent implements OnInit{
       console.log(practica);
       this.servicioPracticas.crearPractica(practica).subscribe(result =>{
         console.log(result)
+        alert('Práctica generada con exito 👍')
+        this.formPractica.reset()
+        this.pasoActual = 1
       })
     }
   }

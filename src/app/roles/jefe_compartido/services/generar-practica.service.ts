@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { enviroment } from '../../../environment/environment';
 
 export interface nuevaPractica {
   id_empresa: number;
@@ -87,33 +88,33 @@ export class GenerarPracticaService {
     private http: HttpClient,
   ) { }
 
-  private url_practicas = 'http://localhost:3000/practicas';
-  private url_empresas = 'http://localhost:3000/empresas';
-  private url_supervisor = 'http://localhost:3000/jefe-alumno';
-  private url_alumnos = 'http://localhost:3000/alumno-practica';
+  // private url_practicas = 'http://localhost:3000/practicas';
+  // private url_empresas = 'http://localhost:3000/empresas';
+  // private url_supervisor = 'http://localhost:3000/jefe-alumno';
+  // private url_alumnos = 'http://localhost:3000/alumno-practica';
 
   // PENDIENTE
   public crearPractica(datosPractica: nuevaPractica){
-    return this.http.post<any>(`${this.url_practicas}/generar`, datosPractica)
+    return this.http.post<any>(`${enviroment.API_URL}/practicas`, datosPractica)
   }
 
   public crearEmpresa(datosEmpresa: nuevaEmpresa){
-    return this.http.post<any>(`${this.url_empresas}/registrar-empresa`, datosEmpresa)
+    return this.http.post<any>(`${enviroment.API_URL}/empresas`, datosEmpresa)
   }
 
   public crearSupervisor(datosSupervisor: nuevoSupervisor){
-    return this.http.post<any>(`${this.url_supervisor}/registrar`, datosSupervisor)
+    return this.http.post<any>(`${enviroment.API_URL}/jefe-alumno`, datosSupervisor)
   }
 
   public crearAlumno(datosAlumno: nuevoAlumno){
-    return this.http.post<any>(`${this.url_alumnos}/registro`, datosAlumno)
+    return this.http.post<any>(`${enviroment.API_URL}/alumno-practica/registro`, datosAlumno)
   }
 
   public obtenerEmpresas(){
-    return this.http.get<empresa[]>(`${this.url_empresas}`)
+    return this.http.get<empresa[]>(`${enviroment.API_URL}/empresas`)
   }
 
   public obtenerAlumnos(){
-    return this.http.get<alumno[]>(`${this.url_alumnos}`)
+    return this.http.get<alumno[]>(`${enviroment.API_URL}/alumno-practica`)
   }
 }

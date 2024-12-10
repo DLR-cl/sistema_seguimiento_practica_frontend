@@ -103,7 +103,8 @@
                 placeholder="{{ formPractica.get('id_empresa')?.value ? 'Seleccione supervisor' : 'Seleccione primero una empresa' }}"
                 formControlName="id_supervisor"
                 [disabled]="!formPractica.get('id_empresa')?.value"
-                class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-1/4">
+                class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-1/4"
+                emptyMessage="No hay supervisores que mostrar">
               </p-dropdown>
             </div>
           

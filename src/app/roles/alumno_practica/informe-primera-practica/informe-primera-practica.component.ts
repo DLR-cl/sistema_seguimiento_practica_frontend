@@ -9,8 +9,11 @@ import { DialogModule } from 'primeng/dialog';
 import { PreguntasInformeService } from '../../jefe_compartido/services/preguntas-informe.service';
 import { createInforme, ListaRespuestas, Respuesta, RespuestasInformeService } from '../services/respuestas-informe.service';
 import { AsignaturaBack, AsignaturasService, Semestre } from '../services/asignaturas.service';
-
-
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ButtonModule } from 'primeng/button';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { FileUploadModule } from 'primeng/fileupload';
 
 interface Pregunta{
   id_pregunta: number,
@@ -28,7 +31,7 @@ interface Asignatura{
 @Component({
   selector: 'app-informe-primera-practica',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, NgxPaginationModule, FormsModule, DialogModule],
+  imports: [CommonModule, HeaderComponent, NgxPaginationModule, FormsModule, DialogModule, RadioButtonModule, ButtonModule, InputTextareaModule, InputNumberModule, FileUploadModule],
   templateUrl: './informe-primera-practica.component.html',
   styleUrl: './informe-primera-practica.component.css'
 })
@@ -59,7 +62,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   idAlumno!: number
   idPractica!: number
   idInforme!: number
-  
+
   asignaturasFPCeleste: string[] = ['ME-167', 'CC-802', 'ME-260', 'ME-263', 'ME-445', 'ME-264', 'ME-266']
   semestres: Semestre[] = []; 
   asignaturas_seleccionadas: Asignatura[] = [];  
@@ -253,6 +256,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
       this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
         console.log(resultRespuestas)
         this.datos_listo = !this.datos_listo;
+        alert('Respuestas registradas con exito')
       })
     })
   }
@@ -321,18 +325,20 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     
     this.respuestasService.enviarInforme(formData).subscribe(resultInforme =>{
       console.log(resultInforme)
+      alert('Informe subido con exito')
       this.goTofin()
     });
   }
 
   public existeRespuesta(){
-    this.respuestasService.existeRespuesta(this.idPractica).subscribe(result => {
+    this.respuestasService.existeRespuesta(this.idPractica).subscribe((result: any) => {
       if(JSON. stringify(result) != '{}'){
         this.datos_listo = true;
+        this.idInforme = result.id_informe
       } else {
         this.datos_listo = false
       }
     })
   }
-  
+
 }
