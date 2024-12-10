@@ -5,94 +5,87 @@
         <div class="container max-w-screen-lg p-10 bg-white rounded-lg shadow-lg">
             <div *ngIf="!datos_listo">
                 <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">Encuesta de Satisfacción de la Experiencia de Práctica</h1>
-                <p class="text-center text-gray-600 mb-10">Por favor, responda las preguntas
-                    reflexionando sobre tu desempeño, aprendizaje y satisfacción durante tu periodo de práctica profesional, con el objetivo de mejorar futuras experiencias formativas</p>
-        
+                <p class="text-center text-gray-600 mb-10">
+                    Por favor, responda las preguntas reflexionando sobre tu desempeño, aprendizaje y satisfacción durante tu periodo de práctica profesional, con el objetivo de mejorar futuras experiencias formativas.
+                </p>
+
                 <div class="preguntas-container min-h-[450px] mb-6">
-                    <div *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index"
-                        class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm">
+                    <div *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index" class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm">
                         <p class="text-lg font-semibold text-gray-700">{{ preg.enunciado_pregunta }}</p>
-                    
+
+                        <!-- Pregunta Cerrada -->
                         <div *ngIf="preg.tipo_pregunta == 'CERRADA'" class="respuestas mt-4 space-y-3">
-                        <label class="flex items-center" *ngFor="let value of [1, 2, 3, 4, 5]">
-                            <input type="radio" [name]="'experiencia_' + (i + page * preguntas_paginas)" [value]="value"
-                            [(ngModel)]="respuestasAlumno[i]!.puntaje"
-                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: value })"
-                            class="form-radio h-4 w-4 text-blue-600">
-                            <span class="ml-3 text-gray-600">{{ value }} - {{ getOptionText(value) }} </span>
-                        </label>
+                            <div *ngFor="let value of [1, 2, 3, 4, 5]" class="flex items-center">
+                                <p-radioButton [inputId]="'opt' + value" [name]="'experiencia_' + (i + page * preguntas_paginas)" [value]="value" [(ngModel)]="respuestasAlumno[i]!.puntaje" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: value })">
+                                </p-radioButton>
+                                <label [for]="'opt' + value" class="ml-2 text-gray-600 text-sm cursor-pointer">{{ value }} - {{ getOptionText(value) }}</label>
+                            </div>
                         </div>
-                        
+
+                        <!-- Pregunta Abierta -->
                         <div *ngIf="preg.tipo_pregunta == 'ABIERTA'" class="respuestas mt-4 space-y-3">
-                        <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Tu respuesta</label>
-                        <textarea id="message" rows="4" [(ngModel)]="respuestasAlumno[i]!.texto"
-                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, texto: $event })"
-                            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:placeholder-gray-400 dark:text-black resize-none"
-                            placeholder="Deja tu respuesta aquí"></textarea>
+                            <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Tu respuesta</label>
+                            <textarea pInputTextarea id="message" [(ngModel)]="respuestasAlumno[i]!.texto" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, texto: $event })" rows="4" autoResize="true" placeholder="Deja tu respuesta aquí" class="w-full text-sm">
+                            </textarea>
                         </div>
-                    
+
+                        <!-- Pregunta Evaluativa -->
                         <div *ngIf="preg.tipo_pregunta == 'EVALUATIVA'" class="respuestas mt-4 space-y-3">
-                        <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Tu respuesta</label>
-                        <label for="number-input"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-black">Califica</label>
-                        <input type="number" id="number-input" aria-describedby="helper-text-explanation" [(ngModel)]="respuestasAlumno[i]!.puntaje"
-                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: $event })"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 resize-none"
-                            placeholder="7.0" required />
+                            <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900">Califica</label>
+                            <p-inputNumber
+                                id="number-input"
+                                [(ngModel)]="respuestasAlumno[i]!.puntaje"
+                                (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: $event })"
+                                [min]="1"
+                                [max]="7"
+                                [mode]="'decimal'"
+                                [step]="0.1"
+                                [locale]="'en-US'"
+                                [showButtons]="true"
+                                [minFractionDigits]="0"
+                                [maxFractionDigits]="1"
+                                placeholder="7.0"
+                                [incrementButtonClass]="'bg-gray-200 text-gray-600 w-6 border-0 text-xs hover:bg-gray-300 rounded-t-sm'"
+                                [decrementButtonClass]="'bg-gray-200 text-gray-600 w-6 border-0 text-xs hover:bg-gray-300 rounded-b-sm'"
+                            ></p-inputNumber>
                         </div>
-                    
+
+                        <!-- Pregunta Desarrollo Profesional -->
                         <div *ngIf="preg.tipo_pregunta == 'DESARROLLO_PROFESIONAL'" class="respuestas mt-4 space-y-3">
-                        <!-- Mostrar las asignaturas seleccionadas -->
-                        <div *ngIf="asignaturas_seleccionadas.length > 0" class="my-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
-                            <h3 class="text-md font-semibold text-blue-600 mb-4">Asignaturas seleccionadas:</h3>
-                            <ul class="list-disc pl-6 space-y-2">
-                              <li *ngFor="let asignatura of asignaturas_seleccionadas" class="text-sm text-gray-700 bg-blue-200 p-2 rounded shadow-md mb-3">
-                                <span class="font-semibold text-gray-700">{{ asignatura.nombre }}</span> 
-                                ({{ asignatura.codigo }})
-                              </li>
-                            </ul>
-                          </div>
-                        
-                          <!-- Si no hay asignaturas seleccionadas, mostrar mensaje -->
-                          <div *ngIf="asignaturas_seleccionadas.length === 0" class="my-4 bg-white rounded-lg shadow-lg p-4">
-                            No se han seleccionado asignaturas aún.
-                          </div>
+                            <div *ngIf="asignaturas_seleccionadas.length > 0" class="my-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
+                                <h3 class="text-md font-semibold text-blue-600 mb-4">Asignaturas seleccionadas:</h3>
+                                <ul class="list-disc pl-6 space-y-2">
+                                    <li *ngFor="let asignatura of asignaturas_seleccionadas" class="text-sm text-gray-700 bg-blue-200 p-2 rounded shadow-md mb-3">
+                                        <span class="font-semibold text-gray-700">{{ asignatura.nombre }}</span> ({{ asignatura.codigo }})
+                                    </li>
+                                </ul>
+                            </div>
+                            <div *ngIf="asignaturas_seleccionadas.length === 0" class="my-4 bg-white rounded-lg shadow-lg p-4">
+                                No se han seleccionado asignaturas aún.
+                            </div>
                             <button type="button"
                             class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
                             (click)="mostrarDialogo()">Seleccionar asignaturas
-                            </button>
+                            </button>                        
                         </div>
                     </div>
                 </div>
-                      
-        
-                <!-- Controles de paginación -->
+
                 <div class="nav-buttons text-center mb-4">
-                    <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente"
-                        class="controles_navegacion"></pagination-controls>
+                    <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente" class="controles_navegacion"></pagination-controls>
                 </div>
-                
-                  <!-- Botón de subir informe en la última página -->
+
                 <div class="text-center" *ngIf="page === preguntas_len">
-                    <button
-                        class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
-                        (click)="changeForm()">
-                        Subir informe
-                    </button>
-                    <!-- <button
-                        class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
-                        (click)="datos()">
-                        Mostrar datos
-                    </button> -->
+                    <button pButton label="Guardar respuestas" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2" (click)="changeForm()"></button>
                 </div>
             </div>
-        
+
             <div *ngIf="datos_listo">
                 <div class="text-center">
                     <h2 class="text-3xl font-bold text-blue-700 mb-2">Sube tu Informe de Práctica Profesional</h2>
                     <p class="text-gray-600">Por favor, asegúrate de que el archivo esté en formato PDF y cumpla con los requisitos especificados.</p>
                 </div>
-            
+
                 <div class="flex items-center justify-center w-full mt-8">
                     <div class="flex flex-col items-center justify-center w-full max-w-lg p-6 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-50 shadow-md"
                          (drop)="onDrop($event)"
