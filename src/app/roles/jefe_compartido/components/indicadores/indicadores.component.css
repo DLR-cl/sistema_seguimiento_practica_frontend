@@ -1,14 +1,14 @@
 .container-indicadores {
     display: grid;
     grid-template-columns: repeat(3, minmax(200px, 1fr));
-    min-height: 33rem;
-    width: 75rem;
+    min-height: 28rem;
+    width: 55rem;
     gap: 1.5rem; /* Espaciado entre gráficos */
 }
 .container-chart-doughnots {
-    min-height: 37.85rem;
+    min-height: 34.46rem;
     margin-left: 9rem;
-    width: 80rem;
+    width: 60rem;
     padding: 1rem;
     background-color: white;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
