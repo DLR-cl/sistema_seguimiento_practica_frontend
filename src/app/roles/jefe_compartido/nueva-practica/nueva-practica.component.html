@@ -212,6 +212,9 @@
                 Crear práctica
             </button>
         </div>
+        <div *ngIf="errorMessage" class="text-red-500 text-center mt-4">
+            {{ errorMessage }}
+        </div>
     </form>
 
     <p-dialog 

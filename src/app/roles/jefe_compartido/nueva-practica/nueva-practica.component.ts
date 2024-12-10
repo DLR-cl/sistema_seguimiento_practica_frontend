@@ -20,6 +20,7 @@ import { CalendarModule } from 'primeng/calendar';
 export class NuevaPracticaComponent implements OnInit{
 
   private servicioPracticas= inject(GenerarPracticaService);
+  errorMessage?:string | null = null;
 
   ngOnInit(): void {
     this.obtenerEmpresas()
@@ -127,12 +128,14 @@ export class NuevaPracticaComponent implements OnInit{
   siguientePaso() {
     if (this.pasoActual < 4) {
       this.pasoActual++;
+      this.errorMessage = null;
     }
   }
 
   pasoAnterior() {
     if (this.pasoActual > 1) {
       this.pasoActual--;
+      this.errorMessage = null;
     }
   }
 
@@ -145,9 +148,16 @@ export class NuevaPracticaComponent implements OnInit{
       practica.fecha_inicio = new Date(practica.fecha_inicio);
       practica.fecha_termino = new Date(practica.fecha_termino);
       console.log(practica);
-      this.servicioPracticas.crearPractica(practica).subscribe(result =>{
-        console.log(result)
-      })
+      this.servicioPracticas.crearPractica(practica).subscribe(
+        {
+          next: (result: any) =>{
+            console.log(result)
+          },
+          error: (error: any) => {
+            this.errorMessage = error.message;
+          }    
+        }
+      )
     }
   }
 

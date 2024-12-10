@@ -38,4 +38,7 @@ export class HeaderComponent {
   goToinformeConfidencial(){
     this.router.navigate(['preguntas/confidencial'])
   }
+  public goToInfoAcademicos(){
+    this.router.navigate(['lista-academicos'])
+  }
 }

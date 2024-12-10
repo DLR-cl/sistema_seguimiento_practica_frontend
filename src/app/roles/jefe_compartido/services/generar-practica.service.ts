@@ -94,7 +94,7 @@ export class GenerarPracticaService {
 
   // PENDIENTE
   public crearPractica(datosPractica: nuevaPractica){
-    return this.http.post<any>(`${this.url_practicas}/generar`, datosPractica)
+    return this.http.post<any>(`${this.url_practicas}`, datosPractica)
   }
 
   public crearEmpresa(datosEmpresa: nuevaEmpresa){

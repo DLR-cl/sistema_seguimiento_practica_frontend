@@ -20,6 +20,7 @@ import { EstadoPracticaComponent } from './roles/alumno_practica/estado-practica
 import { InformePrimeraPracticaAlumnoComponent } from './roles/alumno_practica/informe-primera-practica/informe-primera-practica.component';
 import { NotFoundComponent } from './pages/general/not-found/not-found.component';
 import { TipoUsuario } from './enum/enumerables.enum';
+import { InfoAcademicosComponent } from './roles/jefe_compartido/pages/info-academicos/info-academicos.component';
 
 export const routes: Routes = [
     {
@@ -34,6 +35,10 @@ export const routes: Routes = [
         path: 'home-administracion', component: HomeAdministracionComponent,
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]
     },
+    {
+        path: 'lista-academicos', component: InfoAcademicosComponent,
+    }
+    ,
     {
         path: 'nueva-practica', component: NuevaPracticaComponent,
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]

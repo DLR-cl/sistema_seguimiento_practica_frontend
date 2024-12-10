@@ -2,11 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DashboardService } from '../../services/dashboard.service';
 import { CantidadAlumnosEnPractica } from '../../interface/alumnosPractica.interface';
 import { ChartModule } from 'primeng/chart';
+import { routes } from '../../../../app.routes';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-resumen-data',
   standalone: true,
-  imports: [ChartModule],
+  imports: [ChartModule, RouterModule],
   templateUrl: './resumen-data.component.html',
   styleUrl: './resumen-data.component.css'
 })
@@ -15,7 +17,7 @@ export class ResumenDataComponent implements OnInit {
   private readonly _dashboardService = inject(DashboardService);
   basicData?:any;
   basicOptions?:any;
-
+  private readonly _router = inject(Router);
   alumnos_en_practica?: CantidadAlumnosEnPractica;
 
   ngOnInit(): void {
@@ -77,4 +79,6 @@ export class ResumenDataComponent implements OnInit {
       }
     )
   }
+
+
 }
