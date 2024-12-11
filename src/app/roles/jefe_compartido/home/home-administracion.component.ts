@@ -7,10 +7,11 @@ import { IndicadoresComponent } from "../components/indicadores/indicadores.comp
 import { AuthService } from '../../../auth/services/auth.service';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
 import { PerfilDataComponent } from "../../academico/components/perfil-data/perfil-data.component";
+import { TablaFuncionesComponent } from "../../academico/components/tabla-funciones/tabla-funciones.component";
 @Component({
   selector: 'app-home-administracion',
   standalone: true,
-  imports: [HeaderComponent, DashboardComponent, ResultadoPracticaComponent, ResumenDataComponent, IndicadoresComponent, PerfilDataComponent],
+  imports: [HeaderComponent, DashboardComponent, ResultadoPracticaComponent, ResumenDataComponent, IndicadoresComponent, PerfilDataComponent, TablaFuncionesComponent],
   templateUrl: './home-administracion.component.html',
   styleUrl: './home-administracion.component.css'
 })
