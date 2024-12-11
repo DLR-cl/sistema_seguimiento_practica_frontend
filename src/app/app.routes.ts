@@ -21,6 +21,7 @@ import { InformePrimeraPracticaAlumnoComponent } from './roles/alumno_practica/i
 import { NotFoundComponent } from './pages/general/not-found/not-found.component';
 import { TipoUsuario } from './enum/enumerables.enum';
 import { InfoAcademicosComponent } from './roles/jefe_compartido/pages/info-academicos/info-academicos.component';
+import { practicasGuard } from './shared/guards/practicas.guard';
 
 export const routes: Routes = [
     {
@@ -44,10 +45,9 @@ export const routes: Routes = [
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]
 
     },
-    {
-        path: 'preguntas/:tipo', component: PreguntasInformeComponent,
-        // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]
-
+    {       // RUTA EN CONSTRUCION --------------- RUTA EN CONSTRUCCION
+        path: 'preguntas/:tipo', component: PreguntasInformeComponent, 
+        // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])] 
     },
     {
         path: 'home', component: HomeComponent
@@ -77,7 +77,7 @@ export const routes: Routes = [
     },
     {
         path: 'ver-datos-jefe', component: VerDatosJefeComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR]),]
     },
     {
         path: 'agradecimientos', component: FinInformeJefeEmpleadorComponent,
@@ -92,12 +92,12 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA])]
     },
     {
-        path: 'estado-practica', component: EstadoPracticaComponent,
+        path: 'estado-practica/:idAlumno', component: EstadoPracticaComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA])]
     },
     {
         path: 'informe-practica-alumno/:idAlumno/:idPractica', component: InformePrimeraPracticaAlumnoComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA]), practicasGuard]
     },
     {
         path: '**', component: NotFoundComponent

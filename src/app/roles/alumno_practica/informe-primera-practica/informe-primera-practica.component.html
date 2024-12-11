@@ -30,7 +30,7 @@
                         </div>
 
                         <!-- Pregunta Evaluativa -->
-                        <div *ngIf="preg.tipo_pregunta == 'EVALUATIVA'" class="respuestas mt-4 space-y-3">
+                        <div *ngIf="preg.tipo_pregunta == 'EVALUATIVA'" class="mt-4 space-y-3">
                             <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900">Califica</label>
                             <p-inputNumber
                                 id="number-input"
@@ -45,6 +45,7 @@
                                 [minFractionDigits]="0"
                                 [maxFractionDigits]="1"
                                 placeholder="7.0"
+                                inputStyleClass="px-2 py-1"
                                 [incrementButtonClass]="'bg-gray-200 text-gray-600 w-6 border-0 text-xs hover:bg-gray-300 rounded-t-sm'"
                                 [decrementButtonClass]="'bg-gray-200 text-gray-600 w-6 border-0 text-xs hover:bg-gray-300 rounded-b-sm'"
                             ></p-inputNumber>
@@ -116,11 +117,11 @@
         
                 <div class="flex justify-center space-x-5 mt-10 max-w-lg w-full mx-auto">
                     <!-- Botón de volver al cuestionario -->
-                    <button
+                    <!-- <button
                         class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
                         (click)="volverCuestionario()"> cuestionario
                     </button>
-            
+             -->
                     <!-- Botón de enviar informe -->
                     <button
                         class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"

@@ -46,7 +46,7 @@ export class HomeAlumnoComponent implements OnInit{
   }
 
   public goToEstado(){
-    this._router.navigate(['estado-practica']);
+    this._router.navigate(['estado-practica/'+this.dataAlumno.id_user]);
   }
 
   public goToInforme(){

@@ -3,7 +3,8 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { HeaderJefeEmpleadorComponent } from "../components/header-jefe-empleador/header-jefe-empleador.component";
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
 
 interface Pregunta{
   enunciado:string,
@@ -13,7 +14,7 @@ interface Pregunta{
 @Component({
   selector: 'app-informe-primera-practica',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, HeaderJefeEmpleadorComponent, FormsModule],
+  imports: [CommonModule, NgxPaginationModule, HeaderJefeEmpleadorComponent, FormsModule, ReactiveFormsModule, CalendarModule],
   templateUrl: './informe-primera-practica.component.html',
   styleUrl: './informe-primera-practica.component.css'
 })
@@ -66,8 +67,25 @@ export class InformePrimeraPracticaComponent {
     }
   }
   
+  formularioDatos: FormGroup = new FormGroup({
+    fechaInicio: new FormControl (null, Validators.required,),
+    fechaTermino: new FormControl (null, Validators.required),
+    horasSemanales: new FormControl (null, [Validators.required]), 
+    horasRegulares:  new FormControl (null, [Validators.required]),
+    horasExtraordinarias: new FormControl (null, [Validators.required]),
+    horasInasistencia: new FormControl (null, [Validators.required]),
+  });
 
   respuestas: { [key: number]: number} = {};
+
+
+  onSubmit(): void {
+    if (this.formularioDatos.valid) {
+      console.log(this.formularioDatos.value);
+    } else {
+      console.log("Formulario inválido");
+    }
+  }
 
   preguntas_paginas = 3;
   preguntas_len = Math.ceil(this.preguntas.length / this.preguntas_paginas);
@@ -77,6 +95,13 @@ export class InformePrimeraPracticaComponent {
   }
 
   changeForm(){
-    this.datos_listo = true;
+    if (this.formularioDatos.valid) {
+      console.log(this.formularioDatos.value);
+      this.datos_listo = true;
+      console.log(this.respuestas)
+    } else {
+      console.log(this.formularioDatos.value);
+      alert("Formulario inválido");
+    }
   }
 }
