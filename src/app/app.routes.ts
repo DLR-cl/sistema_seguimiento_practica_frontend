@@ -22,6 +22,7 @@ import { NotFoundComponent } from './pages/general/not-found/not-found.component
 import { TipoUsuario } from './enum/enumerables.enum';
 import { InfoAcademicosComponent } from './roles/jefe_compartido/pages/info-academicos/info-academicos.component';
 import { practicasGuard } from './shared/guards/practicas.guard';
+import { AcademicoComponent } from './roles/academico/academico.component';
 
 export const routes: Routes = [
     {
@@ -36,6 +37,10 @@ export const routes: Routes = [
         path: 'home-administracion', component: HomeAdministracionComponent,
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]
     },
+    {
+        path: 'home-academicos', component: AcademicoComponent,
+    }
+    ,
     {
         path: 'lista-academicos', component: InfoAcademicosComponent,
     }

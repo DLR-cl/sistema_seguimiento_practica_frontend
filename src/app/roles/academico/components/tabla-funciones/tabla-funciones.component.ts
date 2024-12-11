@@ -3,6 +3,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DataAccessService } from '../../services/data-access.service';
 import { InfoInformes } from '../../interface/info-informes.interface';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
+import { PayloadInterface } from '../../../../shared/interface/payload.interface';
+import { Nullable } from 'primeng/ts-helpers';
 
 @Component({
   selector: 'app-tabla-funciones',
@@ -18,23 +20,28 @@ export class TablaFuncionesComponent implements OnInit {
   private readonly _dataUserFromTokenService = inject(AuthStateService);
 
   data?:InfoInformes[];
-  dataUser?:any;
+  dataUser?:PayloadInterface | null;
   ngOnInit(): void {
     this.toDataUser()
-    this.getInfoInformes();
+    if(this.dataUser){
+      this.getInfoInformes(this.dataUser.id_usuario);
+    }
       }
 
-  private getInfoInformes(){
-    const dataSet = this._dataAccesssService.getInformacionInformes(this.dataUser?.id_usuario).subscribe(
+  private getInfoInformes(id_user: number){
+    console.log(this.dataUser?.id_usuario)
+    const dataSet = this._dataAccesssService.getInformacionInformes(id_user).subscribe(
       {
         next:  (r) => {
+          console.log(r)
           this.data = r;
+          console.log(this.data, 'LISTA INFORMES')
+          if(this.data?.length != 0 && this.data !== undefined){
+            this.asignado = true;
+          }
         },
       }
     )
-    if(this.data?.length != 0){
-      this.asignado = true;
-    }
   }
 
   private toDataUser(){

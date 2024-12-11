@@ -7,7 +7,7 @@
             <h2 class="text-4xl opacity-60">
                 Bienvenido
                 <span class="text-2xl">
-                    Francisca Salvia
+                    {{dataUser?.nombre}}
                 </span>
             </h2>
             <small class="opacity-50">Academico</small>
@@ -15,15 +15,15 @@
 
         <div class="estado mt-1 h-[8rem] grid grid-cols-2 p-4 divide-x-2">
             <div class="text-center p-2">
-                <p class="text-6xl">4</p>
+                <p class="text-6xl">{{informesPendientes?.cantidad_informes_alumno}}</p>
                 <span class="opacity-50">
-                    Informes Revisados
+                    Informes de Alumnos Pendientes
                 </span>
             </div>
             <div class="text-center p-2">
-                <p class="text-6xl">4</p>
+                <p class="text-6xl">{{informesPendientes?.cantidad_informes_confidenciales}}</p>
                 <span class="opacity-50">
-                    Informes Pendientes
+                    Informes Confidenciales Pendientes
                 </span>
             </div>
         </div>
@@ -50,93 +50,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
+                        <tr 
+                        *ngFor="let informe of infoInformes"
+                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <th *ngIf="this.cantidadDiasSobrantes(informe.fin_revision) < 3"  scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple MacBook Pro 17"
+                                {{informe.nombre_alumno}}
                             </th>
-                            <td class="px-6 py-4">
-                                Silver
+                            <td *ngIf="this.cantidadDiasSobrantes(informe.fin_revision) < 3" class="px-6 py-4">
+                                {{informe.dias_restantes}}
                             </td>
-                            <td class="px-6 py-4">
-                                Silver
+                            <td *ngIf="this.cantidadDiasSobrantes(informe.fin_revision) < 3" class="px-6 py-4">
+                                <button>revisar</button>
                             </td>
 
                         </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
 
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-
-                        </tr>
-                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-                            <td class="px-6 py-4">
-                                White
-                            </td>
-
-                        </tr>
-                        <tr class="bg-white dark:bg-gray-800">
-                            <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Magic Mouse 2
-                            </th>
-                            <td class="px-6 py-4">
-                                Black
-                            </td>
-                        </tr>
                     </tbody>
                 </table>
             </div>

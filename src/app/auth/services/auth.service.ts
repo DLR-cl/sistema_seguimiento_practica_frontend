@@ -64,6 +64,9 @@ export class AuthService {
         case TipoUsuario.SECRETARIA:
           this._router.navigate(['home-secretaria']);
           break;
+        case TipoUsuario.ACADEMICO:
+          this._router.navigate(['home-academicos']);
+          break;
         default:
           this._router.navigate(['home']);
       }
