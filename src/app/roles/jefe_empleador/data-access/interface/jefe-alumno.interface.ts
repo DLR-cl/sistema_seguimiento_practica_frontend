@@ -1,11 +1,10 @@
-import { Tipo_usuario } from "../../../../enum/tipo-usuario.enum";
-import { PayloadInterface } from "../../../../shared/interface/payload.interface";
+import { TipoUsuario } from "../../../../enum/enumerables.enum";
 
 export interface JefeAlumnoInterface {
     id_usuario: number;
     correo: string;
     nombre: string;
     rut: string;
-    tipo_usuario: Tipo_usuario;
+    tipo_usuario: TipoUsuario;
     cargo: string;
 }

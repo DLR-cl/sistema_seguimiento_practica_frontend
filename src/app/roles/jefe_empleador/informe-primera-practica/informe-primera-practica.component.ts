@@ -3,34 +3,59 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { HeaderJefeEmpleadorComponent } from "../components/header-jefe-empleador/header-jefe-empleador.component";
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CalendarModule } from 'primeng/calendar';
+
+interface Pregunta{
+  enunciado:string,
+  tipo: string,
+}
+
 @Component({
   selector: 'app-informe-primera-practica',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, HeaderJefeEmpleadorComponent, FormsModule],
+  imports: [CommonModule, NgxPaginationModule, HeaderJefeEmpleadorComponent, FormsModule, ReactiveFormsModule, CalendarModule],
   templateUrl: './informe-primera-practica.component.html',
   styleUrl: './informe-primera-practica.component.css'
 })
+
+
 export class InformePrimeraPracticaComponent {
 
   private readonly _router = inject(Router);
-
+  public datos_listo = false;
   public page: number=1;
-  preguntas= [
-    "El practicante demostró conocimiento técnico adecuado para las tareas asignadas.",
-    "El practicante realizó su trabajo con precisión y atención al detalle.",
-    "El practicante entregó las tareas asignadas en el tiempo acordado.",
-    "El practicante mostró habilidades efectivas para resolver problemas de manera autónoma.",
-    "El practicante se adaptó rápidamente a las normas y procedimientos del departamento.",
-    "El practicante colaboró de manera efectiva con otros miembros del equipo.",
-    "El practicante tomó la iniciativa para proponer soluciones o mejoras en su trabajo.",
-    "El practicante asumió la responsabilidad de sus tareas y resultados.",
-    "El practicante se comunicó de manera clara y efectiva con sus supervisores y colegas.",
-    "El practicante mostró una actitud positiva y disposición para aprender.",
-    "El practicante organizó y priorizó sus tareas de manera eficiente.",
-    "El practicante cumplió con las normas de seguridad establecidas en la empresa.",
-    "El practicante mostró capacidad para aprender y aplicar nuevos conocimientos rápidamente."
+  preguntas: Pregunta[]= [
+    {
+      enunciado: "El practicante demostró conocimiento técnico adecuado para las tareas asignadas.",
+      tipo: "Cerrada",
+    },
+    {
+      enunciado: "El practicante realizó su trabajo con precisión y atención al detalle.",
+      tipo: "Cerrada"
+    },
+    {
+      enunciado: "El practicante entregó las tareas asignadas en el tiempo acordado.",
+      tipo: "Cerrada",
+    },
+    {
+      enunciado: "El practicante mostró habilidades efectivas para resolver problemas de manera autónoma.",
+      tipo: "Cerrada",
+    },
+    {
+      enunciado: "¿Cómo describiría el trabajo realizado por el practicante?",
+      tipo: "Abierta",
+    },
+    {
+      enunciado: "¿Cuáles son los aspectos a mejorar?",
+      tipo: "Abierta",
+    },
+    {
+      enunciado: "¿Qué nota le evaluaría al alumno? (esto no afecta a la nota final del alumno)",
+      tipo: "Evaluativa",
+    },
   ]
+
   getOptionText(value: number): string {
     switch(value) {
       case 1: return 'Muy en desacuerdo';
@@ -42,13 +67,41 @@ export class InformePrimeraPracticaComponent {
     }
   }
   
+  formularioDatos: FormGroup = new FormGroup({
+    fechaInicio: new FormControl (null, Validators.required,),
+    fechaTermino: new FormControl (null, Validators.required),
+    horasSemanales: new FormControl (null, [Validators.required]), 
+    horasRegulares:  new FormControl (null, [Validators.required]),
+    horasExtraordinarias: new FormControl (null, [Validators.required]),
+    horasInasistencia: new FormControl (null, [Validators.required]),
+  });
 
   respuestas: { [key: number]: number} = {};
+
+
+  onSubmit(): void {
+    if (this.formularioDatos.valid) {
+      console.log(this.formularioDatos.value);
+    } else {
+      console.log("Formulario inválido");
+    }
+  }
 
   preguntas_paginas = 3;
   preguntas_len = Math.ceil(this.preguntas.length / this.preguntas_paginas);
 
   goTofin(){
     this._router.navigate(['agradecimientos'])
+  }
+
+  changeForm(){
+    if (this.formularioDatos.valid) {
+      console.log(this.formularioDatos.value);
+      this.datos_listo = true;
+      console.log(this.respuestas)
+    } else {
+      console.log(this.formularioDatos.value);
+      alert("Formulario inválido");
+    }
   }
 }

@@ -25,13 +25,11 @@ export class HomeAlumnoComponent implements OnInit{
   
   dataAlumno: any;
   
-  // Método para establecer la práctica seleccionada
-
-
   ngOnInit(): void {
     this._alumnoService.getAlumnoPracticante().subscribe({
       next: (data) => {
         this.dataAlumno = data;
+        console.log(this.dataAlumno)
       },
       error: (error) => {
         console.error('Error al obtener la data', error);
@@ -43,15 +41,19 @@ export class HomeAlumnoComponent implements OnInit{
     )
   }
 
-  private getData(){
-    this.dataAlumno 
+  public informeEnEspera(): boolean {
+    return this.dataAlumno?.practica?.some((practica:any) => practica.estado == 'ESPERA_INFORME_ALUMNO') || false;
   }
+
   public goToEstado(){
-    this._router.navigate(['estado-practica']);
+    this._router.navigate(['estado-practica/'+this.dataAlumno.id_user]);
   }
 
   public goToInforme(){
-    this._router.navigate(['informe-practica-alumno']);
+    const idPractica = this.dataAlumno.practica.find((practica: any) => practica.estado === "ESPERA_INFORME_ALUMNO")?.id_practica;
+
+    console.log(idPractica)
+    this._router.navigate(['informe-practica-alumno/'+this.dataAlumno.id_user+'/'+idPractica!]);
   }
 
   public signOut(){

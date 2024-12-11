@@ -2,6 +2,7 @@ import { inject, Injectable } from "@angular/core";
 import { JefeEmpleadorService } from "../data-access/jefe-empleador.service";
 import { JefeAlumnoInterface } from "../data-access/interface/jefe-alumno.interface";
 import { BehaviorSubject, Observable } from "rxjs";
+import { jwtDecode } from "jwt-decode";
 
 @Injectable({
     providedIn: 'root',
@@ -29,5 +30,14 @@ export class DataJefeAlumnoService {
                 this.jefeAlumnoSubject.next(null);
             }
         )
+    }
+
+    public getUserId(): number | null {
+        let token = localStorage.getItem('session')
+        if (token) {
+            const decodedToken: any = jwtDecode(token); // Decodifica el token
+            return decodedToken.id_usuario; // Devuelve solo el id_usuario
+          }
+        return null;
     }
 }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { DataJefeAlumnoService } from '../../services/data-jefe-alumno.service';
 import { JefeAlumnoInterface } from '../../data-access/interface/jefe-alumno.interface';
+import { NgOptimizedImage } from '@angular/common'
 
 @Component({
   selector: 'app-home-jefe-empleador',

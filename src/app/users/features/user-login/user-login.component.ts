@@ -1,9 +1,10 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginForm } from './interface/login-form';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { ImagePreloaderService } from '../../../core/services/image-preloader.service';
 
 @Component({
   selector: 'app-user-login',
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './user-login.component.html',
   styleUrl: './user-login.component.css'
 })
-export class UserLoginComponent {
+export class UserLoginComponent implements OnInit{
 
   constructor(
     private router: Router,
@@ -21,8 +22,29 @@ export class UserLoginComponent {
   ){
   }
 
+  private imagePreloaderService= inject(ImagePreloaderService);
+
+  ngOnInit(): void {
+    this.imagePreloaderService.preloadImages(this.imageUrls).subscribe((cache) => {
+      if (cache) {
+        this.imageCache = cache;
+        setTimeout(() => {
+          this.imagesLoaded = true;
+        }, 500);
+        this.backgroundImage = this.imageUrls[0];
+      }
+    });
+  }
+
+  imageUrls =[
+    'departamento_ici/departamento_entrada_ici.webp',
+  ]
   showPassword: boolean = false;
   errorMessage: string | null = null;
+  backgroundImage: string = '';
+  imageCache: Map<string, HTMLImageElement> = new Map();
+  imagesLoaded: boolean = false;
+
 
   loginForm = this._formBuilder.group({
     email: this._formBuilder.nonNullable.control('', [
@@ -46,10 +68,16 @@ export class UserLoginComponent {
       next: (response: any) => {},
       error: (error: any) => {
         this.errorMessage = error.message;
+        console.log(this.errorMessage)
       },
     });
     ;
     
+  }
+
+  getBackgroundImage(): string {
+    const img = this.imageCache.get(this.backgroundImage);
+    return img ? `url(${img.src})` : '';
   }
 
 } 

@@ -1,9 +1,9 @@
 import { inject, Injectable } from "@angular/core";
 import { StorageService } from "./storage.service";
 import { Session } from "./interface/session.interface";
-import { Tipo_usuario } from "../../enum/tipo-usuario.enum";
 import { PayloadInterface } from "../interface/payload.interface";
 import * as jwt_decode from "jwt-decode";
+import { TipoUsuario } from "../../enum/enumerables.enum";
 
 @Injectable({
     providedIn: 'root'
@@ -27,7 +27,7 @@ export class AuthStateService {
         }
     }
 
-    public getRole(): Tipo_usuario | null {
+    public getRole(): TipoUsuario | null {
         const session = this.getSession();
         if(session){
             const decodedToken: PayloadInterface = jwt_decode.jwtDecode(session.access_token);
