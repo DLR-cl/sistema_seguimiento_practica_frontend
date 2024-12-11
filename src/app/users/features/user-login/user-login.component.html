@@ -64,6 +64,7 @@
                 <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)" class="text-red-500 text-sm mt-1">
                     La contraseña es obligatoria.
                 </div>
+
             </div>
 
             <!-- Forgot Password Link -->
@@ -76,7 +77,9 @@
                 class="bg-red-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full transition duration-200 ease-in-out"
                 [disabled]="loginForm.invalid">Iniciar Sesión</button>
         </form>
-        
+        <div *ngIf="errorMessage" class="text-red-500 text-center mt-4">
+            {{ errorMessage }}
+        </div>
 
     </div>
 </div>

@@ -27,58 +27,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr *ngFor="let informes of data" 
+                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Alberto Rojas
+                            {{informes.nombre_alumno}}
                         </th>
                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Práctica 1
+                            {{informes.tipo_practica}}
                         </th>
                         <td class="px-6 py-4  text-gray-900 whitespace-nowrap dark:text-white">
-                            3
+                            {{ this.cantidadDiasSobrantes(informes.fin_revision)}}
                         </td>
                         <td class="px-6 py-4  text-gray-900 whitespace-nowrap dark:text-white">
-                            Revisado
+                            {{informes.estado_informe}}
                         </td>
                         <td class="px-6 py-4">
                             <button class="bottom-2"> revisar </button>
                         </td>
                     </tr>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Alberto Rojas
-                        </th>
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Práctica 1
-                        </th>
-                        <td class="px-6 py-4  text-gray-900 whitespace-nowrap dark:text-white">
-                            3
-                        </td>
-                        <td class="px-6 py-4  text-gray-900 whitespace-nowrap dark:text-white">
-                            Revisado
-                        </td>
-                        <td class="px-6 py-4">
-                            <button class="bottom-2"> revisar </button>
-                        </td>
-                    </tr>
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Alberto Rojas
-                        </th>
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Práctica 1
-                        </th>
-                        <td class="px-6 py-4  text-gray-900 whitespace-nowrap dark:text-white">
-                            3
-                        </td>
-                        <td class="px-6 py-4  text-gray-900 whitespace-nowrap dark:text-white">
-                            Revisado
-                        </td>
-                        <td class="px-6 py-4">
-                            <button class="bottom-2"> revisar </button>
-                        </td>
-                    </tr>
-
                 </tbody>
             </table>
         </div>
