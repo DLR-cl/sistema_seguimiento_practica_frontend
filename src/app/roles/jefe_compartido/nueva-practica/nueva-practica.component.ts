@@ -34,7 +34,7 @@ export class NuevaPracticaComponent implements OnInit{
 
   tipoPracticas: any = [{tipo: "PRACTICA_UNO", titulo:'Práctica profesional I'},{tipo:"PRACTICA_DOS", titulo:"Práctica profesional II"}]
 
-  modalidades: any = [{tipo: "PRESENCIAL", titulo: "Presencial"},{tipo: "SEMIPRESENCIAL", titulo: "Semipresencial"}, {tipo: "REMOTO", titulo: "Remoto"}]
+  modalidades: any = [{tipo: "PRESENCIAL", titulo: "Presencial"},{tipo: "SEMI_PRESENCIAL", titulo: "Semipresencial"}, {tipo: "REMOTO", titulo: "Remoto"}]
   
   supervisoresFiltrados: jefeSupervisor[] = [];
 

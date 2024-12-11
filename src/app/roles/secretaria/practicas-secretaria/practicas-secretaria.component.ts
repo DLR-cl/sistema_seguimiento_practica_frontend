@@ -34,7 +34,8 @@ export class PracticasSecretariaComponent implements OnInit {
     REVISION_INFORME_ALUMNO: 'Revisión Informe Alumno',
     REVISION_GENERAL: 'Revisión General',
     ESPERA_INFORME_ALUMNO: 'Espera Informe Alumno',
-    CURSANDO: 'Cursando'
+    CURSANDO: 'Cursando',
+    ESPERA_INFORME_CONFIDENCIAL: 'Espera Informe Confidencial'
   };
 
   textoModalidad: Record<string, string> = {
