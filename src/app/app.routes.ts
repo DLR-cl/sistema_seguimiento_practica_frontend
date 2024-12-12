@@ -22,6 +22,7 @@ import { NotFoundComponent } from './pages/general/not-found/not-found.component
 import { TipoUsuario } from './enum/enumerables.enum';
 import { InfoAcademicosComponent } from './roles/jefe_compartido/pages/info-academicos/info-academicos.component';
 import { practicasGuard } from './shared/guards/practicas.guard';
+import { DashboardComponent } from './roles/jefe_empleador/components/dashboard/dashboard.component';
 
 export const routes: Routes = [
     {
@@ -64,7 +65,7 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA])]
     },
     {
-        path: 'home-jefe-alumno', component: HomeJefeEmpleadorComponent,
+        path: 'home-jefe-alumno', component: DashboardComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
     },
     {
