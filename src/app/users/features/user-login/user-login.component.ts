@@ -68,6 +68,7 @@ export class UserLoginComponent implements OnInit{
       next: (response: any) => {},
       error: (error: any) => {
         this.errorMessage = error.message;
+        console.log(this.errorMessage)
       },
     });
     ;

@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../jefe_compartido/header-jefes/header.component";
+import { DataAccessService } from './services/data-access.service';
+import { map } from 'rxjs';
+import { InfoInformes } from './interface/info-informes.interface';
 
 @Component({
   selector: 'app-academico',
@@ -8,6 +11,8 @@ import { HeaderComponent } from "../jefe_compartido/header-jefes/header.componen
   templateUrl: './academico.component.html',
   styleUrl: './academico.component.css'
 })
-export class AcademicoComponent {
+export class AcademicoComponent{
+
 
 }
+
