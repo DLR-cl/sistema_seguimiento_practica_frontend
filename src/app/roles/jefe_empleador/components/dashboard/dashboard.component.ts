@@ -11,7 +11,7 @@ import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.co
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, ChartModule, HeaderJefeEmpleadorComponent, ListboxModule, ButtonModule],
+  imports: [CommonModule, FormsModule, TableModule, ChartModule, HeaderJefeEmpleadorComponent, ListboxModule, ButtonModule, HeaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
