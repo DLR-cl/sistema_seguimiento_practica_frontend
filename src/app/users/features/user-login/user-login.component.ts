@@ -56,23 +56,29 @@ export class UserLoginComponent implements OnInit{
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
-  submit(){
-    if(this.loginForm.invalid){
+  submit() {
+    if (this.loginForm.invalid) {
       this.errorMessage = 'Ingrese los datos requeridos';
       return;
     }
-
-    const {email, password} = this.loginForm.getRawValue();
-
-    this._authService.logIn(email, password).subscribe({
-      next: (response: any) => {},
+  
+    const { email, password } = this.loginForm.getRawValue();
+  
+    this._authService.logIn(email!, password!).subscribe({
+      next: (response: any) => {
+        if (response.primerInicioSesion) {
+          // Si es el primer inicio, redirigir al cambio de contraseña
+          this.router.navigate(['/change-password']);
+        } else {
+          // De lo contrario, redirigir según el rol
+          this._authService.redirectUserByRol();
+        }
+      },
       error: (error: any) => {
         this.errorMessage = error.message;
-        console.log(this.errorMessage)
+        console.error('Error en el inicio de sesión:', error);
       },
     });
-    ;
-    
   }
 
   getBackgroundImage(): string {

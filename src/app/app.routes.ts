@@ -23,11 +23,17 @@ import { TipoUsuario } from './enum/enumerables.enum';
 import { InfoAcademicosComponent } from './roles/jefe_compartido/pages/info-academicos/info-academicos.component';
 import { practicasGuard } from './shared/guards/practicas.guard';
 import { AcademicoComponent } from './roles/academico/academico.component';
+import { ChangePasswordComponent } from './pages/general/change-password/change-password.component';
 
 export const routes: Routes = [
     {
         path: '', component: HomeComponent,
         canActivate: [publicGuard()]
+    },
+    {
+        path:'change-password', loadComponent: () => import('./pages/general/change-password/change-password.component').then(
+            (m) => m.ChangePasswordComponent
+        )
     },
     {
         path: 'login', component: UserLoginComponent,
