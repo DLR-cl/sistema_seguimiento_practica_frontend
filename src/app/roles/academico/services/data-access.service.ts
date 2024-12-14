@@ -35,10 +35,10 @@ export class DataAccessService {
     )
   }
   public getInformesCriticos(id_usuario: number){
-    return this._http.get<CantidadInformesPendientes>(`${enviroment.API_URL}/dashboard/informes-criticos/${id_usuario}`).pipe(
+    return this._http.get<InfoInformes[]>(`${enviroment.API_URL}/dashboard/informes-criticos/${id_usuario}`).pipe(
       map(
         (response) => {
-          return response as CantidadInformesPendientes;
+          return response as InfoInformes[];
         }
       )
     )
