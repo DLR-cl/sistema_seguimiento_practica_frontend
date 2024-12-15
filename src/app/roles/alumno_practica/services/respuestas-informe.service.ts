@@ -28,10 +28,6 @@ export class RespuestasInformeService {
     private http: HttpClient,
   ) { }
 
-  public crearInformeAlumno(informe: createInforme){
-    return this.http.post<any>(`${enviroment.API_URL}/informe-alumno`, informe)
-  }
-
   public asociarRespuestas(respuestas: ListaRespuestas){
     return this.http.post<any>(`${enviroment.API_URL}/respuestas-informe-alumno`, respuestas)
   }

@@ -73,7 +73,7 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
     },
     {
-        path: 'jefe_alumno/formulario_primer_practica', component: InformePrimeraPracticaComponent,
+        path: 'jefe_alumno/formulario_primer_practica/:idInforme', component: InformePrimeraPracticaComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
     },
     {
@@ -97,7 +97,7 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA])]
     },
     {
-        path: 'informe-practica-alumno/:idAlumno/:idPractica', component: InformePrimeraPracticaAlumnoComponent,
+        path: 'informe-practica-alumno/:idAlumno/:idPractica/:idInforme', component: InformePrimeraPracticaAlumnoComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA]), practicasGuard]
     },
     {

@@ -42,7 +42,7 @@ export class HomeAlumnoComponent implements OnInit{
   }
 
   public informeEnEspera(): boolean {
-    return this.dataAlumno?.practica?.some((practica:any) => practica.estado == 'ESPERA_INFORME_ALUMNO') || false;
+    return this.dataAlumno?.practica?.some((practica:any) => practica.estado == 'ESPERA_INFORMES') || false;
   }
 
   public goToEstado(){
@@ -50,10 +50,11 @@ export class HomeAlumnoComponent implements OnInit{
   }
 
   public goToInforme(){
-    const idPractica = this.dataAlumno.practica.find((practica: any) => practica.estado === "ESPERA_INFORME_ALUMNO")?.id_practica;
+    const idPractica = this.dataAlumno.practica.find((practica: any) => practica.estado === "ESPERA_INFORMES")?.id_practica;
+    const idInforme = this.dataAlumno.informe.find((informe:any) => informe.estado === 'ESPERA')?.id_informe
 
     console.log(idPractica)
-    this._router.navigate(['informe-practica-alumno/'+this.dataAlumno.id_user+'/'+idPractica!]);
+    this._router.navigate(['informe-practica-alumno/'+this.dataAlumno.id_user+'/'+idPractica!+'/'+idInforme!]);
   }
 
   public signOut(){
