@@ -66,20 +66,18 @@ export class UserLoginComponent implements OnInit{
   
     this._authService.logIn(email!, password!).subscribe({
       next: (response: any) => {
+        console.log('Login exitoso:', response);
         if (response.primerInicioSesion) {
-          // Si es el primer inicio, redirigir al cambio de contraseña
-          this.router.navigate(['/change-password']);
-        } else {
-          // De lo contrario, redirigir según el rol
-          this._authService.redirectUserByRol();
+          this.router.navigate(['/change-password']); // Sólo redirigir al cambio de contraseña
         }
       },
       error: (error: any) => {
-        this.errorMessage = error.message;
+        this.errorMessage = error.error?.message || 'Error en el inicio de sesión.';
         console.error('Error en el inicio de sesión:', error);
       },
     });
   }
+  
 
   getBackgroundImage(): string {
     const img = this.imageCache.get(this.backgroundImage);

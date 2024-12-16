@@ -25,19 +25,16 @@ export class AuthService {
       tap((response) => console.log(response))
     );
   }
-
-  logIn(correo: string, password: string): Observable<any>{
-    return this._http
-    .post<any>(`${enviroment.API_URL}/auth/login`, {correo, password})
-    .pipe(
-      tap( (response) => {
-        this._storage.set('session', JSON.stringify(response));
-        this.redirectUserByRol();
-      },
-      
-      )
+  logIn(correo: string, password: string): Observable<any> {
+    return this._http.post<any>(`${enviroment.API_URL}/auth/login`, { correo, password }).pipe(
+      tap((response) => {
+        console.log('Respuesta del login:', response); // Depuración
+        this._storage.set('session', JSON.stringify(response)); // Almacena el token completo
+        this.redirectUserByRol(); // Delegar redirección
+      })
     );
   }
+  
 
   private setToken(token: string): void {
     localStorage.setItem(this.tokenKey, token)
@@ -46,12 +43,13 @@ export class AuthService {
   private getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
   }
-
-  public redirectUserByRol(){
-    const session = this._authService.getSession()
-    if(session){
+  public redirectUserByRol() {
+    const session = this._authService.getSession();
+    if (session) {
       const userRole = this._authService.getRole();
-      switch(userRole){
+      console.log('Redirigiendo usuario con rol:', userRole); // Depuración
+  
+      switch (userRole) {
         case TipoUsuario.JEFE_EMPLEADOR:
           this._router.navigate(['home-jefe-alumno']);
           break;
@@ -68,10 +66,15 @@ export class AuthService {
           this._router.navigate(['home-academicos']);
           break;
         default:
+          console.warn('Rol desconocido, redirigiendo a home');
           this._router.navigate(['home']);
       }
+    } else {
+      console.warn('Sesión no encontrada, redirigiendo al login');
+      this._router.navigate(['/login']);
     }
   }
+  
   isAuthenticated(): boolean {
     const token = this.getToken();
     if(!token){
