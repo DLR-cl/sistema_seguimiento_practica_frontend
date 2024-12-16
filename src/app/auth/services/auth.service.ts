@@ -172,5 +172,21 @@ export class AuthService {
       });
     });
   }
+  public isTokenExpired(): boolean {
+    const session = this._storage.get<{ access_token: string }>('session');
+    if (!session || !session.access_token) {
+      console.warn('No se encontró un token en la sesión');
+      return true; // Consideramos que está vencido si no hay token
+    }
   
+    try {
+      const decodedToken: any = jwt_decode.jwtDecode(session.access_token);
+      const currentTime = Math.floor(Date.now() / 1000); // Tiempo actual en segundos
+      console.log('Tiempo actual:', currentTime, 'Expiración del token:', decodedToken.exp);
+      return decodedToken.exp < currentTime; // Retorna true si está vencido
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return true; // Si no se puede decodificar, consideramos que está vencido
+    }
+  }
 }
