@@ -31,8 +31,8 @@ export const publicGuard = (): CanActivateFn => {
         const session = authState.getSession();
         console.log(session);
         // hay que redigir dependiendo del rol que tengan.
-        if(session){
-            console.log('hola')
+        if(session) {
+            console.log('hola');
             authService.redirectUserByRol();
             return false;
         }

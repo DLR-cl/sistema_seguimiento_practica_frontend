@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
 import { CantidadInformesPendientes, InfoInformes } from '../interface/info-informes.interface';
@@ -9,15 +9,24 @@ import { CantidadInformesPendientes, InfoInformes } from '../interface/info-info
 export class DataAccessService {
   constructor(private readonly _http: HttpClient) {}
 
-  public getInformacionInformes() {
-    return this._http.get<InfoInformes[]>(`${enviroment.API_URL}/dashboard/info-informes`);
+  public getInformacionInformes(token: string) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`, // Adjunta el token al encabezado
+    });
+    return this._http.get<InfoInformes[]>(`${enviroment.API_URL}/dashboard/info-informes`, { headers });
   }
 
-  public getCantidadInformesPendientes() {
-    return this._http.get<CantidadInformesPendientes>(`${enviroment.API_URL}/dashboard/pendientes-informes`);
+  public getCantidadInformesPendientes(token: string) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this._http.get<CantidadInformesPendientes>(`${enviroment.API_URL}/dashboard/pendientes-informes`, { headers });
   }
 
-  public getInformesCriticos() {
-    return this._http.get<InfoInformes[]>(`${enviroment.API_URL}/dashboard/informes-criticos`);
+  public getInformesCriticos(token: string) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this._http.get<InfoInformes[]>(`${enviroment.API_URL}/dashboard/informes-criticos`, { headers });
   }
 }

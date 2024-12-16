@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable} from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { enviroment } from '../../environment/environment';
 import { RegisterDto } from '../dto/register.dto';
@@ -8,47 +8,103 @@ import { Router } from '@angular/router';
 import { StorageService } from '../../shared/data-access/storage.service';
 import { AuthStateService } from '../../shared/data-access/auth-state.service';
 import { TipoUsuario } from '../../enum/enumerables.enum';
+import * as jwt_decode from 'jwt-decode';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  private tokenKey = 'accessToken'; // Clave para almacenar el token
+  private decodedTokenSubject = new BehaviorSubject<any>(null); // Observa el token decodificado
 
-  private tokenKey = '';
   private _http = inject(HttpClient);
   private _storage = inject(StorageService);
   private _authService = inject(AuthStateService);
   private _router = inject(Router);
 
-  signUp(register: RegisterDto): Observable<any>{
-    return this._http.post(`${enviroment.API_URL}/auth/register`, {register}).pipe(
-      tap((response) => console.log(response))
+  constructor() {
+    this.initializeToken(); // Inicializa el token al cargar el servicio
+  }
+
+  // Inicializa el token decodificado
+  private initializeToken(): void {
+    const token = this.getDecodedToken();
+    console.log('Inicializando el token decodificado:', token); // Debugging
+    this.decodedTokenSubject.next(token);
+  }
+  
+  // Retorna el token decodificado como observable
+  public getDecodedTokenObservable(): Observable<any> {
+    return this.decodedTokenSubject.asObservable();
+  }
+
+  // Actualiza manualmente el token decodificado
+  public refreshDecodedToken(): void {
+    const token = this.getDecodedToken();
+    this.decodedTokenSubject.next(token);
+  }
+
+  // Decodifica el token desde el almacenamiento
+  public getDecodedToken(): any {
+    // Obtiene la sesión ya parseada desde el almacenamiento local
+    const session = this._storage.get<{ message: string; access_token: string; primerInicioSesion: boolean }>('session');
+    console.log(session, "session desde authService"); // Debugging
+  
+    if (!session || !session.access_token) {
+      console.warn('La sesión no es válida o el token no está disponible');
+      return null;
+    }
+  
+    try {
+      const token = session.access_token; // Obtiene el token directamente
+      console.log('Token bruto:', token); // Debugging
+  
+      // Decodifica y retorna el token
+      const decodedToken = jwt_decode.jwtDecode(token); // Usa jwt_decode directamente
+      console.log('Token decodificado desde authService:', decodedToken);
+      return decodedToken;
+    } catch (error) {
+      console.error('Error al decodificar el token:', error);
+      return null;
+    }
+  }
+  
+  
+
+  // Realiza el registro de usuario
+  signUp(register: RegisterDto): Observable<any> {
+    return this._http.post(`${enviroment.API_URL}/auth/register`, { register }).pipe(
+      tap((response) => console.log('Registro exitoso:', response))
     );
   }
+
   logIn(correo: string, password: string): Observable<any> {
     return this._http.post<any>(`${enviroment.API_URL}/auth/login`, { correo, password }).pipe(
       tap((response) => {
-        console.log('Respuesta del login:', response); // Depuración
-        this._storage.set('session', JSON.stringify(response)); // Almacena el token completo
-        this.redirectUserByRol(); // Delegar redirección
+        console.log('Respuesta del login:', response); // Verifica el contenido del response
+  
+        // Intenta guardar la sesión en el almacenamiento
+        try {
+          this._storage.set('session', response); // Guarda la respuesta directamente
+          console.log('Sesión almacenada en localStorage:', this._storage.get('session'));
+        } catch (error) {
+          console.error('Error al guardar la sesión en localStorage:', error);
+        }
+  
+        // Actualiza el token decodificado y redirige
+        this.refreshDecodedToken();
+        this.redirectUserByRol();
       })
     );
   }
   
-
-  private setToken(token: string): void {
-    localStorage.setItem(this.tokenKey, token)
-  }
-
-  private getToken(): string | null {
-    return localStorage.getItem(this.tokenKey);
-  }
-  public redirectUserByRol() {
+  // Redirige al usuario según su rol
+  public redirectUserByRol(): void {
     const session = this._authService.getSession();
     if (session) {
       const userRole = this._authService.getRole();
       console.log('Redirigiendo usuario con rol:', userRole); // Depuración
-  
+
       switch (userRole) {
         case TipoUsuario.JEFE_EMPLEADOR:
           this._router.navigate(['home-jefe-alumno']);
@@ -74,22 +130,47 @@ export class AuthService {
       this._router.navigate(['/login']);
     }
   }
-  
+
+  // Verifica si el usuario está autenticado
   isAuthenticated(): boolean {
     const token = this.getToken();
-    if(!token){
+    if (!token) {
       return false;
     }
 
     const payload = JSON.parse(atob(token.split('.')[1]));
-    const exp = payload.exp * 1000
+    const exp = payload.exp * 1000;
     return Date.now() < exp;
-  };
+  }
 
-  // 1:24:59
-  logout(): void{
+  // Elimina la sesión del usuario
+  logout(): void {
     localStorage.removeItem(this.tokenKey);
-    this._authService.signOut()
+    this._storage.remove('session');
+    this.decodedTokenSubject.next(null); // Resetea el token decodificado
+    this._authService.signOut();
     this._router.navigate(['/login']);
   }
+
+  // Almacena el token en el almacenamiento local
+  private setToken(token: string): void {
+    localStorage.setItem(this.tokenKey, token);
+  }
+
+  // Obtiene el token desde el almacenamiento local
+  private getToken(): string | null {
+    return localStorage.getItem(this.tokenKey);
+  }
+
+  public waitForToken(): Promise<any> {
+    return new Promise((resolve) => {
+      const subscription = this.decodedTokenSubject.subscribe((token) => {
+        if (token) {
+          resolve(token);
+          subscription.unsubscribe();
+        }
+      });
+    });
+  }
+  
 }
