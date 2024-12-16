@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HeaderComponent } from "../components/header/header.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -14,11 +13,12 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileUploadModule } from 'primeng/fileupload';
+import { TipoPractica, TipoPregunta } from '../../../enum/enumerables.enum';
 
 interface Pregunta{
   id_pregunta: number,
   enunciado_pregunta:string,
-  tipo_pregunta: string,
+  tipo_pregunta: TipoPregunta,
 }
 
 interface Asignatura{
@@ -49,11 +49,13 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     this.obtenerAsignaturas()
     this.idAlumno = Number(this.route.snapshot.paramMap.get('idAlumno'))!;
     this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
+    this.idInforme = Number(this.route.snapshot.paramMap.get('idInforme'))!;
     this.existeRespuesta()
   }
 
   private readonly _router = inject(Router);
   datos_listo = false;
+  dataAlumno: any
   page: number = 1;
   preguntas: Pregunta[]= []
   preguntas_paginas = 3;
@@ -68,14 +70,15 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   asignaturas_seleccionadas: Asignatura[] = [];  
   asignaturas_seleccionadasRespaldo: Asignatura[] = [];  
 
-  
-  
-  respuestas: { [key: number]: number} = {};
   respuestasAlumno: Respuesta[] = []  
-  
   
   uploadedFile: File | null = null;
   errorMessage: string = '';
+
+  public recibirDatos(datos: string) {
+    this.dataAlumno = datos;
+    console.log('Datos recibidos del hijo:', datos);
+  }
 
   public obtenerAsignaturas() {
     this.asignaturasService.obtenerAsignaturas().subscribe((result: AsignaturaBack[]) => {
@@ -234,19 +237,10 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   changeForm(){
-    const nuevoInforme: createInforme = {
-      id_alumno: this.idAlumno,
-      id_practica: this.idPractica
-    }
-
     console.log(this.respuestasAlumno)
-
-    this.respuestasService.crearInformeAlumno(nuevoInforme).subscribe(result =>{
-      console.log(result)
-      this.idInforme = result.id_informe
       this.respuestasAlumno = this.respuestasAlumno.map(respuesta => ({
         ...respuesta,
-        id_informe: result.id_informe
+        id_informe: this.idInforme
       }));
 
       const asociarRespuestas: ListaRespuestas = {
@@ -258,7 +252,6 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
         this.datos_listo = !this.datos_listo;
         alert('Respuestas registradas con exito')
       })
-    })
   }
 
   getOptionText(value: number): string {
@@ -317,7 +310,10 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   enviarInforme(){
     const formData: FormData = new FormData()
     
-    formData.append('id', ''+this.idInforme)
+    formData.append('id_informe', ''+this.idInforme)
+    formData.append('nombre_alumno', this.dataAlumno.nombre)
+    formData.append('id_alumno', ''+this.idAlumno)
+    formData.append('tipo_practica', TipoPractica.PRACTICA_UNO)
     formData.append('file', this.uploadedFile!)
     formData.forEach((value, key) => {
       console.log(`${key}:`, value);

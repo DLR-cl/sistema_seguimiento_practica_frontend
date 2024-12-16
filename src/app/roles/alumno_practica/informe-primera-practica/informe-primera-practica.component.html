@@ -1,4 +1,4 @@
-<app-header></app-header>
+<app-header (data)="recibirDatos($event)"></app-header>
 
 <div class="bg-gray-50 min-h-screen">
     <div class="bg-gray-50 py-12 flex items-center justify-center">
@@ -16,16 +16,16 @@
                         <!-- Pregunta Cerrada -->
                         <div *ngIf="preg.tipo_pregunta == 'CERRADA'" class="respuestas mt-4 space-y-3">
                             <div *ngFor="let value of [1, 2, 3, 4, 5]" class="flex items-center">
-                                <p-radioButton [inputId]="'opt' + value" [name]="'experiencia_' + (i + page * preguntas_paginas)" [value]="value" [(ngModel)]="respuestasAlumno[i]!.puntaje" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: value })">
+                                <p-radioButton [inputId]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" [name]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" [value]="value" [(ngModel)]="respuestasAlumno[i + (page-1) * preguntas_paginas]!.puntaje" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: value })">
                                 </p-radioButton>
-                                <label [for]="'opt' + value" class="ml-2 text-gray-600 text-sm cursor-pointer">{{ value }} - {{ getOptionText(value) }}</label>
+                                <label [for]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" class="ml-2 text-gray-600 text-sm cursor-pointer">{{ value }} - {{ getOptionText(value) }}</label>
                             </div>
                         </div>
 
                         <!-- Pregunta Abierta -->
                         <div *ngIf="preg.tipo_pregunta == 'ABIERTA'" class="respuestas mt-4 space-y-3">
                             <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Tu respuesta</label>
-                            <textarea pInputTextarea id="message" [(ngModel)]="respuestasAlumno[i]!.texto" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, texto: $event })" rows="4" autoResize="true" placeholder="Deja tu respuesta aquí" class="w-full text-sm">
+                            <textarea pInputTextarea id="message" [(ngModel)]="respuestasAlumno[i + (page-1) * preguntas_paginas]!.texto" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, texto: $event })" rows="4" autoResize="true" placeholder="Deja tu respuesta aquí" class="w-full text-sm">
                             </textarea>
                         </div>
 
@@ -34,7 +34,7 @@
                             <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900">Califica</label>
                             <p-inputNumber
                                 id="number-input"
-                                [(ngModel)]="respuestasAlumno[i]!.puntaje"
+                                [(ngModel)]="respuestasAlumno[i + (page-1) * preguntas_paginas]!.puntaje"
                                 (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: $event })"
                                 [min]="1"
                                 [max]="7"

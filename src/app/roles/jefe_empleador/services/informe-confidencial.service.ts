@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { enviroment } from '../../../environment/environment';
 
 export interface listaInformes{
   informes_data: datosInforme[]
@@ -25,7 +26,18 @@ export class InformeConfidencialService {
   private url_informes = 'http://localhost:3000/jefe-alumno';
 
   public obtenerInformes(idSupervisor: number){
-    console.log(idSupervisor, "SERVICIo")
     return this.http.get<listaInformes>(`${this.url_informes}/${idSupervisor}/lista-informes`)
+  }
+  
+  public obtenerDestallesInformes(idSupervisor: number){
+    return this.http.get<any>(`${enviroment.API_URL}/dashboard/informes-supervisor/${idSupervisor}`)    
+  }
+
+  public obtenerDatosEmpresa(){
+    return this.http.get<any>(`${enviroment.API_URL}/empresas`)
+  }
+  
+  public obtenerAlumnosAsignados(idSupervisor: number){
+    return this.http.get<any>(`${enviroment.API_URL}/dashboard/cantidad-alumnos-asignados/${idSupervisor}`)
   }
 }
