@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HeaderComponent } from "../components/header/header.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -14,7 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FileUploadModule } from 'primeng/fileupload';
-import { TipoPregunta } from '../../../enum/enumerables.enum';
+import { TipoPractica, TipoPregunta } from '../../../enum/enumerables.enum';
 
 interface Pregunta{
   id_pregunta: number,
@@ -56,6 +55,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
 
   private readonly _router = inject(Router);
   datos_listo = false;
+  dataAlumno: any
   page: number = 1;
   preguntas: Pregunta[]= []
   preguntas_paginas = 3;
@@ -74,6 +74,11 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   
   uploadedFile: File | null = null;
   errorMessage: string = '';
+
+  public recibirDatos(datos: string) {
+    this.dataAlumno = datos;
+    console.log('Datos recibidos del hijo:', datos);
+  }
 
   public obtenerAsignaturas() {
     this.asignaturasService.obtenerAsignaturas().subscribe((result: AsignaturaBack[]) => {
@@ -305,7 +310,10 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   enviarInforme(){
     const formData: FormData = new FormData()
     
-    formData.append('id', ''+this.idInforme)
+    formData.append('id_informe', ''+this.idInforme)
+    formData.append('nombre_alumno', this.dataAlumno.nombre)
+    formData.append('id_alumno', ''+this.idAlumno)
+    formData.append('tipo_practica', TipoPractica.PRACTICA_UNO)
     formData.append('file', this.uploadedFile!)
     formData.forEach((value, key) => {
       console.log(`${key}:`, value);

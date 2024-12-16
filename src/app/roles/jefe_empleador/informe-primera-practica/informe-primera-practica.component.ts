@@ -6,7 +6,7 @@ import { HeaderJefeEmpleadorComponent } from "../components/header-jefe-empleado
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { Respuesta, RespuestasInformeService } from '../../alumno_practica/services/respuestas-informe.service';
+import { Respuesta, respuestaInformeConfidencial, RespuestasInformeService } from '../../alumno_practica/services/respuestas-informe.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
@@ -89,7 +89,7 @@ export class InformePrimeraPracticaComponent implements OnInit{
   preguntas_paginas: number = 3;
   preguntas_len! :number
   
-  respuestasSupervisor: Respuesta[] = [] 
+  respuestasSupervisor: respuestaInformeConfidencial[] = [] 
 
   getOptionText(value: number): string {
     switch(value) {
@@ -115,7 +115,7 @@ export class InformePrimeraPracticaComponent implements OnInit{
   idInforme!: number
 
 
-  public actualizarRespuesta(preguntaId: number, respuesta: Respuesta) {
+  public actualizarRespuesta(preguntaId: number, respuesta: respuestaInformeConfidencial) {
     const index = this.respuestasSupervisor.findIndex(r => r.id_pregunta === preguntaId);
     if (index !== -1) {
       this.respuestasSupervisor[index] = respuesta; // actualiza la respuesta si existe
@@ -131,14 +131,15 @@ export class InformePrimeraPracticaComponent implements OnInit{
       this.preguntas = result.map((pregunta:any) => pregunta.pregunta)
       this.preguntas_len = Math.ceil(result.length / this.preguntas_paginas)
       this.respuestasSupervisor = this.preguntas.map(preg => {
-        let respuesta: Respuesta = {
-          id_pregunta: preg.id_pregunta
+        let respuesta: respuestaInformeConfidencial = {
+          id_pregunta: preg.id_pregunta,
+          id_informe: this.idInforme
         };       
         if (preg.tipo_pregunta === 'ABIERTA') {
-          respuesta.texto = '';
+          respuesta.respuesta_texto = '';
         }    
         if (preg.tipo_pregunta === 'EVALUATIVA' || preg.tipo_pregunta === 'CERRADA') {
-          respuesta.puntaje = 0;
+          respuesta.puntos = 0;
         }
         return respuesta;
       });
@@ -164,6 +165,16 @@ export class InformePrimeraPracticaComponent implements OnInit{
   enviarRespuesta(){
     console.log(this.formularioDatos.value)
     console.log(this.respuestasSupervisor)
+    this.respuestasService.registrarRespuestasConfidencial(this.respuestasSupervisor).subscribe({
+      next: result =>{
+        console.log(result)
+
+        alert('Respuestas registradas correctamente')
+      },
+      error: error =>{
+        console.log(error)
+      }
+    })
     this.goTofin()
   }
 }

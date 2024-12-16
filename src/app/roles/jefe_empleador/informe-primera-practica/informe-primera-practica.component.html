@@ -91,8 +91,8 @@
                                 [inputId]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" 
                                 [name]="'experiencia_' + (i + (page-1) * preguntas_paginas)" 
                                 [value]="value" 
-                                [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntaje" 
-                                (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntaje })">
+                                [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntos" 
+                                (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, puntos: respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntos })">
                             </p-radioButton>
                             <label 
                                 [for]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" 
@@ -105,7 +105,7 @@
                     <!-- Pregunta Abierta -->
                     <div *ngIf="preg.tipo_pregunta == 'ABIERTA'" class="respuestas mt-4 space-y-3">
                         <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Tu respuesta</label>
-                        <textarea pInputTextarea id="message" [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.texto" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, texto: $event })" rows="4" autoResize="true" placeholder="Deja tu respuesta aquí" class="w-full text-sm">
+                        <textarea pInputTextarea id="message" [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.respuesta_texto" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, {id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: $event })" rows="4" autoResize="true" placeholder="Deja tu respuesta aquí" class="w-full text-sm">
                         </textarea>
                     </div>
 
@@ -114,8 +114,8 @@
                         <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900">Califica</label>
                         <p-inputNumber
                             id="number-input"
-                            [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntaje"
-                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: $event })"
+                            [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntos"
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, puntos: $event })"
                             [min]="1"
                             [max]="7"
                             [mode]="'decimal'"

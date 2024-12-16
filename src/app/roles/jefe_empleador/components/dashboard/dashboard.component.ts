@@ -35,11 +35,12 @@ export class DashboardComponent implements OnInit {
     this._jefeDataService.getData().subscribe({
       next: data =>{
         this.dataJefe = data;
-        if (this.dataJefe?.id_usuario && this.dataJefe.id_empresa) {
+        console.log(this.dataJefe)
+        if (this.dataJefe?.id_jefe && this.dataJefe.id_empresa) {
           console.log(this.dataJefe)
-          this.obtenerPracticas(this.dataJefe.id_usuario);
+          this.obtenerPracticas(this.dataJefe.id_jefe);
           this.obtenerEmpresa(this.dataJefe.id_empresa);
-          this.obtenerAlumnosAsignados(this.dataJefe.id_usuario)
+          this.obtenerAlumnosAsignados(this.dataJefe.id_jefe)
         }
       },
       error: error =>{

@@ -19,6 +19,13 @@ export interface Respuesta{
   asignaturas?: string[];
 }
 
+export interface respuestaInformeConfidencial {
+  id_informe: number;
+  id_pregunta: number;
+  respuesta_texto?: string;
+  puntos?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +40,7 @@ export class RespuestasInformeService {
   }
 
   public enviarInforme(formData: FormData){
-    return this.http.post<any>(`${enviroment.API_URL}/informe-alumno/upload`, formData)
+    return this.http.post<any>(`${enviroment.API_URL}/informe-alumno/subir-informe`, formData)
   }
 
   public obtenerArchivo(idInforme: number){
@@ -44,5 +51,9 @@ export class RespuestasInformeService {
 
   public existeRespuesta(idPractica: number){
     return this.http.get(`${enviroment.API_URL}/informe-alumno/existeRespuesta/${idPractica}`)
+  }
+
+  public registrarRespuestasConfidencial(respuestas: respuestaInformeConfidencial[]){
+    return this.http.post<any>(`${enviroment.API_URL}/respuesta-informe-confidencial`, respuestas)
   }
 }
