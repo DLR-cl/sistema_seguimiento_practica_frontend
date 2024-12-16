@@ -22,12 +22,22 @@ import { NotFoundComponent } from './pages/general/not-found/not-found.component
 import { TipoUsuario } from './enum/enumerables.enum';
 import { InfoAcademicosComponent } from './roles/jefe_compartido/pages/info-academicos/info-academicos.component';
 import { practicasGuard } from './shared/guards/practicas.guard';
+
+import { AcademicoComponent } from './roles/academico/academico.component';
+import { ChangePasswordComponent } from './pages/general/change-password/change-password.component';
+
 import { DashboardComponent } from './roles/jefe_empleador/components/dashboard/dashboard.component';
+
 
 export const routes: Routes = [
     {
         path: '', component: HomeComponent,
         canActivate: [publicGuard()]
+    },
+    {
+        path:'change-password', loadComponent: () => import('./pages/general/change-password/change-password.component').then(
+            (m) => m.ChangePasswordComponent
+        )
     },
     {
         path: 'login', component: UserLoginComponent,
@@ -37,6 +47,10 @@ export const routes: Routes = [
         path: 'home-administracion', component: HomeAdministracionComponent,
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]
     },
+    {
+        path: 'home-academicos', component: AcademicoComponent,
+    }
+    ,
     {
         path: 'lista-academicos', component: InfoAcademicosComponent,
     }

@@ -2,47 +2,48 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { DataAccessService } from '../../services/data-access.service';
 import { InfoInformes } from '../../interface/info-informes.interface';
-import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
+import { AuthService } from '../../../../auth/services/auth.service';
+
 
 @Component({
   selector: 'app-tabla-funciones',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './tabla-funciones.component.html',
-  styleUrl: './tabla-funciones.component.css'
+  styleUrls: ['./tabla-funciones.component.css'], // Corregido a styleUrls
 })
 export class TablaFuncionesComponent implements OnInit {
-  asignado:boolean = false;
+  asignado: boolean = false;
 
-  private readonly _dataAccesssService = inject(DataAccessService);
-  private readonly _dataUserFromTokenService = inject(AuthStateService);
+  private readonly _dataAccessService = inject(DataAccessService);
+  private readonly _authService = inject(AuthService);
 
-  data?:InfoInformes[];
-  dataUser?:any;
+  data?: InfoInformes[];
+  decodedToken: any;
+
   ngOnInit(): void {
-    this.toDataUser()
+    // Obtén el token decodificado
+    this.decodedToken = this._authService.getDecodedToken();
+    console.log('Token decodificado em tabla:', this.decodedToken);
+
+    // Llama al método para obtener informes
     this.getInfoInformes();
-      }
-
-  private getInfoInformes(){
-    const dataSet = this._dataAccesssService.getInformacionInformes(this.dataUser?.id_usuario).subscribe(
-      {
-        next:  (r) => {
-          this.data = r;
-        },
-      }
-    )
-    if(this.data?.length != 0){
-      this.asignado = true;
-    }
   }
 
-  private toDataUser(){
-    this.dataUser = this._dataUserFromTokenService.getData();
+  private getInfoInformes() {
+    const token = this.decodedToken?.access_token; // Opcionalmente puedes validar el token aquí
+    this._dataAccessService.getInformacionInformes(token).subscribe({
+      next: (r) => {
+        this.data = r;
+        this.asignado = this.data?.length > 0;
+      },
+      error: (err) =>
+        console.error('Error al obtener información de informes:', err),
+    });
   }
 
-  public cantidadDiasSobrantes(fecha: Date){
-    const cant = new Date(fecha).getDate() -  new Date().getDate();
+  public cantidadDiasSobrantes(fecha: Date) {
+    const cant = new Date(fecha).getDate() - new Date().getDate();
     return cant;
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../components/header/header.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PracticasAlumnoService } from '../services/practicas-alumno.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,35 +10,47 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [HeaderComponent, CommonModule, FormsModule],
   templateUrl: './estado-practica.component.html',
-  styleUrl: './estado-practica.component.css'
+  styleUrls: ['./estado-practica.component.css'] // Cambiado a styleUrls para corregir un typo
 })
 export class EstadoPracticaComponent implements OnInit {
+  idAlumno!: number;
+  practicas: any[] = []; // Inicializa como un arreglo vacío
+  practicaSeleccionada: any = null; // Inicializa como null para evitar errores
+  pasoActual = 1;
 
   constructor(
     private route: ActivatedRoute,
-    private practicasService: PracticasAlumnoService
-  ){}
+    private practicasService: PracticasAlumnoService,
+    private router: Router // Agregado para manejar redirecciones si es necesario
+  ) {}
 
   ngOnInit(): void {
-    this.idAlumno = Number(this.route.snapshot.paramMap.get('idAlumno'))!;    
-    this.obtenerPracticasAlumno()
+    const idAlumnoParam = this.route.snapshot.paramMap.get('idAlumno');
+    if (!idAlumnoParam || isNaN(Number(idAlumnoParam))) {
+      console.error('ID de alumno no válido o no proporcionado');
+      this.router.navigate(['/home-alumno']); // Redirige si el ID es inválido
+      return;
+    }
+
+    this.idAlumno = Number(idAlumnoParam);
+    console.log('ID del alumno obtenido:', this.idAlumno);
+
+    this.obtenerPracticasAlumno();
   }
 
-  idAlumno!: number
-  practicas: any
-  practicaSeleccionada: any;
-
-  pasoActual = 1;
-
-  public obtenerPracticasAlumno(){
+  public obtenerPracticasAlumno(): void {
     this.practicasService.obtenerPracticasAlumno(this.idAlumno).subscribe({
-      next: result =>{
-        this.practicas = result
-        console.log(this.practicas)
+      next: (result) => {
+        if (result && Array.isArray(result)) {
+          this.practicas = result;
+          console.log('Prácticas obtenidas:', this.practicas);
+        } else {
+          console.warn('Respuesta inesperada al obtener las prácticas:', result);
+        }
       },
-      error: error =>{
-        console.log('error')
+      error: (error) => {
+        console.error('Error al obtener las prácticas del alumno:', error);
       }
-    })
+    });
   }
 }

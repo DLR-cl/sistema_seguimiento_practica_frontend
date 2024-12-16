@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { HeaderComponent } from "../components/header/header.component"
 import { CommonModule } from '@angular/common';
+import { AuthStateService } from '../../../shared/data-access/auth-state.service';
 
 @Component({
   selector: 'app-home-alumno',
@@ -21,32 +22,44 @@ export class HomeAlumnoComponent implements OnInit{
 
   private readonly _alumnoService = inject(AlumnoService);
   private readonly _router = inject(Router);
-  private readonly _authService = inject(AuthService);
+  private readonly _authServiceState = inject(AuthStateService);
+  private readonly _authService = inject(AuthService)
   
   dataAlumno: any;
-  
   ngOnInit(): void {
+    const decodedToken = this._authServiceState.getData();
+    console.log(decodedToken, "token decodificado")
+    if (decodedToken) {
+      this.dataAlumno = {
+        ...this.dataAlumno,
+        id: decodedToken.id_usuario,
+      };
+      console.log('ID del usuario obtenido del token:', this.dataAlumno.id_usuario);
+    }
+  
     this._alumnoService.getAlumnoPracticante().subscribe({
       next: (data) => {
-        this.dataAlumno = data;
-        console.log(this.dataAlumno)
+        this.dataAlumno = { ...data, id_user: this.dataAlumno.id_user }; // Combina datos de la API y token
+        console.log('Datos del alumno:', this.dataAlumno);
       },
       error: (error) => {
-        console.error('Error al obtener la data', error);
+        console.error('Error al obtener la data del alumno:', error);
       },
       complete: () => {
-        console.log('Obtención de datos ccorrecta');
+        console.log('Obtención de datos completa');
       }
-    }
-    )
+    });
   }
+  
+  
 
   public informeEnEspera(): boolean {
     return this.dataAlumno?.practica?.some((practica:any) => practica.estado == 'ESPERA_INFORMES') || false;
   }
 
   public goToEstado(){
-    this._router.navigate(['estado-practica/'+this.dataAlumno.id_user]);
+    console.log(this.dataAlumno.id_usuario, "yendo a estado practica");
+    this._router.navigate(['estado-practica/'+this.dataAlumno.id_usuario]);
   }
 
   public goToInforme(){
@@ -54,7 +67,8 @@ export class HomeAlumnoComponent implements OnInit{
     const idInforme = this.dataAlumno.informe.find((informe:any) => informe.estado === 'ESPERA')?.id_informe
 
     console.log(idPractica)
-    this._router.navigate(['informe-practica-alumno/'+this.dataAlumno.id_user+'/'+idPractica!+'/'+idInforme!]);
+    this._router.navigate(['informe-practica-alumno/'+this.dataAlumno.id_usuario+'/'+idPractica!]);
+
   }
 
   public signOut(){
