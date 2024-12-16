@@ -29,12 +29,14 @@ export class AuthStateService {
 
     public getRole(): TipoUsuario | null {
         const session = this.getSession();
-        if(session){
-            const decodedToken: PayloadInterface = jwt_decode.jwtDecode(session.access_token);
-            return decodedToken.tipo_usuario;
+        if (session) {
+          const decodedToken: any = jwt_decode.jwtDecode(session.access_token);
+          console.log('Rol del token decodificado:', decodedToken.rol); // Depuración
+          return decodedToken.rol;
         }
         return null;
-    }
+      }
+      
 
     public getData(): PayloadInterface | null{
         const session = this.getSession();

@@ -15,6 +15,7 @@ export class AlumnoService {
 
     public getAlumnoPracticante(): Observable<AlumnoInterface>{
         const id_usuario = this.getData();
+        
         return this._http.get<AlumnoInterface>(`${enviroment.API_URL}/alumno-practica/`+id_usuario).pipe(
             map(
                 (response) => {
@@ -29,7 +30,7 @@ export class AlumnoService {
     private getData(): number | null {
         const data = this._authStateService.getData();
         if(data){
-            return data.id_usuario;
+            return data.id_usuario
         }
         return null;
     }

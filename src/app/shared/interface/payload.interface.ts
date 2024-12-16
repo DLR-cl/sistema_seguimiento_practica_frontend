@@ -5,5 +5,5 @@ export interface PayloadInterface {
     correo: string;
     nombre: string;
     rut: string;
-    tipo_usuario: TipoUsuario;
+    rol: TipoUsuario;
 }

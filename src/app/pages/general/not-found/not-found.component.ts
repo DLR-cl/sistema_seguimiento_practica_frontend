@@ -15,34 +15,44 @@ export class NotFoundComponent {
   private _autStateService = inject(AuthStateService);
   private _router = inject(Router);
 
-  backToHome(){
-    this.redirectUserByRol(this._autStateService.getRole())
-
-
-
+  backToHome() {
+    const role = this._autStateService.getRole();
+    console.log('Rol obtenido en backToHome:', role);
+    this.redirectUserByRol(role);
   }
+  
 
-  private redirectUserByRol(rol: TipoUsuario | null){
+  private redirectUserByRol(rol: TipoUsuario | null) {
+    if (!rol) {
+      console.warn('Rol no encontrado, redirigiendo al home genérico');
+      this._router.navigate(['home']);
+      return;
+    }
+  
     const session = this._autStateService.getSession();
-    if(session){
-      switch(rol){
+    if (session) {
+      switch (rol) {
         case TipoUsuario.JEFE_EMPLEADOR:
-        this._router.navigate(['home-jefe-alumno']);
-        break;
+          this._router.navigate(['home-jefe-alumno']);
+          break;
         case TipoUsuario.ALUMNO_PRACTICA:
+          console.log("llevando al home-alumno")
           this._router.navigate(['home-alumno']);
-        break;
+          break;
         case TipoUsuario.JEFE_DEPARTAMENTO:
           this._router.navigate(['home-administracion']);
           break;
-          case TipoUsuario.SECRETARIA:
-            this._router.navigate(['home-secretaria']);
-            break;
-            default:
-              this._router.navigate(['home']);
-            }
-    }else{
+        case TipoUsuario.SECRETARIA:
+          this._router.navigate(['home-secretaria']);
+          break;
+        default:
+          console.warn('Rol desconocido, redirigiendo al home genérico');
+          this._router.navigate(['home']);
+      }
+    } else {
+      console.warn('Sesión no encontrada, redirigiendo al home genérico');
       this._router.navigate(['home']);
     }
   }
+  
 }

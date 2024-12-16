@@ -21,8 +21,9 @@ export const roleGuard = (roles: TipoUsuario[]): CanActivateFn => {
   
         const token = session.access_token;
         const payload: PayloadInterface = jwt_decode.jwtDecode(token);
-
-        if(roles.includes(payload.tipo_usuario)){
+        console.log(payload);
+        console.log(payload.rol);
+        if(roles.includes(payload.rol)){
                 return true;
         }else {
             router.navigate(['/unauthorized']);
