@@ -28,16 +28,18 @@ export class InformeConfidencialService {
   public obtenerInformes(idSupervisor: number){
     return this.http.get<listaInformes>(`${this.url_informes}/${idSupervisor}/lista-informes`)
   }
-  
-  public obtenerDestallesInformes(idSupervisor: number){
-    return this.http.get<any>(`${enviroment.API_URL}/dashboard/informes-supervisor/${idSupervisor}`)    
+  public obtenerDestallesInformes() {
+    return this.http.get<any>(`${enviroment.API_URL}/dashboard/informes-supervisor`);
   }
+  
+  public obtenerAlumnosAsignados() {
+    return this.http.get<any>(`${enviroment.API_URL}/dashboard/cantidad-alumnos-asignados`);
+  }
+  
 
   public obtenerDatosEmpresa(){
     return this.http.get<any>(`${enviroment.API_URL}/empresas`)
   }
   
-  public obtenerAlumnosAsignados(idSupervisor: number){
-    return this.http.get<any>(`${enviroment.API_URL}/dashboard/cantidad-alumnos-asignados/${idSupervisor}`)
-  }
+
 }
