@@ -21,7 +21,7 @@
     <div class="hidden lg:flex lg:gap-x-12">
       <!-- Menú solo para Jefe de Carrera y Jefe de Departamento -->
       <div
-        *ngIf="dataUser?.tipo_usuario == tipoJefeCarrera || dataUser?.tipo_usuario == tipoJefeDepartamento"
+        *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento"
         class="relative">
         <button
           type="button"
@@ -47,7 +47,7 @@
       </div>
 
       <!-- Opciones comunes -->
-      <a *ngIf="dataUser?.tipo_usuario !== tipoAcademico" href="#" class="text-sm font-semibold leading-6 text-gray-900">Lista Académicos</a>
+      <a *ngIf="dataUser?.rol !== tipoAcademico && dataUser?.rol !== tipoSupervisor" href="#" class="text-sm font-semibold leading-6 text-gray-900">Lista Académicos</a>
       <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Guía Usuario</a>
       <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Objetivos</a>
     </div>

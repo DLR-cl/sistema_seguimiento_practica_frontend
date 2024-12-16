@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   tipoJefeCarrera = TipoUsuario.JEFE_CARRERA;
   tipoJefeDepartamento = TipoUsuario.JEFE_DEPARTAMENTO;
   tipoAcademico = TipoUsuario.ACADEMICO;
+  tipoSupervisor = TipoUsuario.JEFE_EMPLEADOR;
 
   constructor(private router: Router) {}
 
