@@ -138,8 +138,11 @@ export class InformePrimeraPracticaComponent implements OnInit{
         if (preg.tipo_pregunta === 'ABIERTA') {
           respuesta.respuesta_texto = '';
         }    
-        if (preg.tipo_pregunta === 'EVALUATIVA' || preg.tipo_pregunta === 'CERRADA') {
+        if (preg.tipo_pregunta === 'CERRADA') {
           respuesta.puntos = 0;
+        }
+        if (preg.tipo_pregunta === 'EVALUATIVA'){
+          respuesta.nota = 0;
         }
         return respuesta;
       });

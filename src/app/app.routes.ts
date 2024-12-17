@@ -27,6 +27,9 @@ import { AcademicoComponent } from './roles/academico/academico.component';
 import { ChangePasswordComponent } from './pages/general/change-password/change-password.component';
 
 import { DashboardComponent } from './roles/jefe_empleador/components/dashboard/dashboard.component';
+
+import { DetallesInformesComponent } from './roles/academico/components/detalles-informes/detalles-informes.component';
+
 import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component';
 
 
@@ -50,12 +53,13 @@ export const routes: Routes = [
     },
     {
         path: 'home-academicos', component: AcademicoComponent,
-    }
-    ,
+    },
     {
         path: 'lista-academicos', component: InfoAcademicosComponent,
-    }
-    ,
+    },
+    {
+        path: 'revision-informe/:idPractica', component: DetallesInformesComponent,
+    },
     {
         path: 'nueva-practica', component: NuevaPracticaComponent,
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]

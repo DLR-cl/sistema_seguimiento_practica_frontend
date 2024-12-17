@@ -17,6 +17,7 @@ export interface Respuesta{
   texto?: string;
   puntaje?: number;
   asignaturas?: string[];
+  nota?: number
 }
 
 export interface respuestaInformeConfidencial {
@@ -24,6 +25,7 @@ export interface respuestaInformeConfidencial {
   id_pregunta: number;
   respuesta_texto?: string;
   puntos?: number;
+  nota?: number;
 }
 
 @Injectable({

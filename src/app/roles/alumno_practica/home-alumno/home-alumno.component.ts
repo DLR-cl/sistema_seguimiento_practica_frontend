@@ -67,7 +67,8 @@ export class HomeAlumnoComponent implements OnInit{
     const idInforme = this.dataAlumno.informe.find((informe:any) => informe.estado === 'ESPERA')?.id_informe
 
     console.log(idPractica)
-    this._router.navigate(['informe-practica-alumno/'+this.dataAlumno.id_usuario+'/'+idPractica!]);
+    console.log()
+    this._router.navigate(['informe-practica-alumno/'+this.dataAlumno.id_usuario+'/'+idPractica!+'/'+idInforme]);
 
   }
 

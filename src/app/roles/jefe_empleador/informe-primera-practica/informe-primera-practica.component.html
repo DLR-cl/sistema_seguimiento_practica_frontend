@@ -114,8 +114,8 @@
                         <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900">Califica</label>
                         <p-inputNumber
                             id="number-input"
-                            [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntos"
-                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, puntos: $event })"
+                            [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.nota"
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, nota: $event })"
                             [min]="1"
                             [max]="7"
                             [mode]="'decimal'"

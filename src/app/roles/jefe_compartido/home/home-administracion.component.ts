@@ -18,18 +18,7 @@ import { TableModule } from 'primeng/table';
   templateUrl: './home-administracion.component.html',
   styleUrl: './home-administracion.component.css'
 })
-export class HomeAdministracionComponent implements OnInit{
-
-  nombre?:string;
-  private dataUser?:any;
-  private readonly _authService = inject(AuthStateService);
-  ngOnInit(): void {
-    this.dataUser = this._authService.getData();
-    this.nombre = this.dataUser.nombre;
-    console.log(this.dataUser);
-  }
-
-
+export class HomeAdministracionComponent{
 
   // Datos para los resúmenes
   alumnos_en_practica = {

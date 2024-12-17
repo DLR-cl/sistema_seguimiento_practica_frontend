@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AlumnosEnPracticaCardComponent } from "../alumnos-en-practica-card/alumnos-en-practica-card.component";
 import { AlumnosSinInformeCardComponent } from "../alumnos-sin-informe-card/alumnos-sin-informe-card.component";
 import { DocentesSinInformesCardComponent } from "../docentes-sin-informes-card/docentes-sin-informes-card.component";
@@ -9,6 +9,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { AuthStateService } from '../../../shared/data-access/auth-state.service';
+import { DashboardService, estadisticasPractica } from '../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +19,134 @@ import { ButtonModule } from 'primeng/button';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit{
+
+  constructor(
+    private authService: AuthStateService,
+    private dashboardService: DashboardService
+  ){}
+
+  nombre?:string;
+  dataUser?:any;
+
+  ngOnInit(): void {
+    this.dataUser = this.authService.getData();
+    this.nombre = this.dataUser.nombre;
+    console.log(this.dataUser);
+    this.getEstadisticasPracticas()
+    this.getAprobacionPracticas()
+    this.getAlumnosActivosPracticas()
+  }
+
+  public getEstadisticasPracticas(){
+    this.dashboardService.getEstadisticasPracticas().subscribe({
+      next: result => {
+        this.estadisticasPractica = result
+        this.estadisticasPractica.total_asignados = 30
+        console.log(result)
+
+
+        const totalAsignados = this.estadisticasPractica.total_asignados; // Ejemplo: 25
+        const maxInformes = this.estadisticasPractica.max_informes; // Ejemplo: 20
+
+        // Calcular el porcentaje de carga académica
+        const porcentajeCargaAcademica = (totalAsignados / maxInformes) * 100;
+
+        // Calcular el porcentaje restante
+        let porcentajeRestante = 100 - porcentajeCargaAcademica;
+        if (porcentajeRestante < 0) {
+          porcentajeRestante = 0; // No mostrar un valor negativo
+        }
+
+        // Crear el gráfico
+        this.academicosCargaLaboralElevadaChartData = {
+          labels: ['Carga académica', 'Restante'],
+          datasets: [
+            {
+              data: [
+                // Mostrar el porcentaje real de carga
+                porcentajeCargaAcademica, 
+                // Mostrar el porcentaje restante solo si es mayor que 0
+                porcentajeRestante > 0 ? porcentajeRestante : 0
+              ],
+              backgroundColor: ['#1565c0', '#42aaff'], // Color de la carga y el restante
+            }
+          ]
+        };
+      },
+      error: error =>{
+        console.log(error)
+      }
+    })
+  }
+  
+  public getAprobacionPracticas(){
+    this.dashboardService.getAprobacionPracticas().subscribe({
+      next: result => {
+        console.log(result)
+        const primerPractica = result.primerPractica;
+        const aprobadosI = primerPractica
+          .filter((practica: any) => practica.estado === 'APROBADOS')
+          .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+        const total = primerPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+        const aprobadosPorcentajeI = total > 0 ? (aprobadosI / total) * 100 : 0;
+        const reprobadosPorcentajeI = 100 - aprobadosPorcentajeI;
+
+        this.practicaIChartData = {
+          labels: ['Aprobados', 'Reprobados'],
+          datasets: [
+            {
+              data: [aprobadosPorcentajeI.toFixed(2), reprobadosPorcentajeI.toFixed(2)],
+              backgroundColor: ['#1565c0', '#42aaff'],
+            }
+          ]
+        };
+
+        const segundaPractica = result.segundaPractica;
+        const aprobadosII = segundaPractica
+          .filter((practica: any) => practica.estado === 'APROBADOS')
+          .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+        const totalII = segundaPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+        const aprobadosPorcentajeII = totalII > 0 ? (aprobadosII / totalII) * 100 : 0;
+        const reprobadosPorcentajeII = 100 - aprobadosPorcentajeII;
+
+        this.practicaIIChartData = {
+          labels: ['Aprobados', 'Reprobados'],
+          datasets: [
+            {
+              data: [aprobadosPorcentajeII.toFixed(2), reprobadosPorcentajeII.toFixed(2)],
+              backgroundColor: ['#1565c0', '#42aaff'],
+            }
+          ]
+        };
+      },
+      error: error =>{
+        console.log(error)
+      }
+    })
+  }
+
+  public getAlumnosActivosPracticas(){
+    this.dashboardService.getAlumnosActivosPracticas().subscribe({
+      next: result => {
+        this.cantidadEstudiantesTipoPracticaChartData = {
+          labels: ['Práctica 1', 'Práctica 2'],
+          datasets: [
+            {
+              data: [result.find((practica:any) => practica.tipo_practica == "PRACTICA_UNO").cantidad_estudiantes, result.find((practica:any) => practica.tipo_practica == "PRACTICA_DOS").cantidad_estudiantes],
+              backgroundColor: ['#1565c0', '#42aaff'],
+            }
+          ]
+        };
+        console.log(result)
+      },
+      error: error =>{
+        console.log(error)
+      }
+    })
+  }
+
+  estadisticasPractica!: estadisticasPractica
   // Definimos las variables para la cantidad de estudiantes en práctica y carga docente.
   cantidadEstudiantesPractica: number = 120; // Ajusta con tus datos reales
   estudiantesSinCalificar: number = 15; // Número de estudiantes sin calificar, ajusta según tus datos
@@ -44,15 +173,7 @@ export class DashboardComponent {
   selectedInforme: any;
 
   // **Gráfico de Cantidad Estudiantes por Práctica** (No cambia a porcentaje)
-  cantidadEstudiantesTipoPracticaChartData = {
-    labels: ['Práctica 1', 'Práctica 2'],
-    datasets: [
-      {
-        data: [100, 80], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
-  };
+  cantidadEstudiantesTipoPracticaChartData: any
 
   cantidadEstudiantesTipoPracticaChartOptions = {
     responsive: true,
@@ -68,15 +189,7 @@ export class DashboardComponent {
   };
 
   // **Gráfico de Práctica I** (Convertido a porcentaje)
-  practicaIChartData = {
-    labels: ['Aprobados', 'Reprobados'],
-    datasets: [
-      {
-        data: [85, 15], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
-  };
+  practicaIChartData: any
 
   practicaIChartOptions = {
     responsive: true,
@@ -96,15 +209,7 @@ export class DashboardComponent {
   };
 
   // **Gráfico de Práctica II** (Convertido a porcentaje)
-  practicaIIChartData = {
-    labels: ['Aprobados', 'Reprobados'],
-    datasets: [
-      {
-        data: [75, 25], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
-  };
+  practicaIIChartData:any
 
   practicaIIChartOptions = {
     responsive: true,
@@ -153,7 +258,7 @@ export class DashboardComponent {
 
   // **Gráfico de Carga Laboral Académica** (Convertido a porcentaje)
   academicosCargaLaboralElevadaChartData = {
-    labels: ['Carga Alta', 'Carga Baja'],
+    labels: ['Porcentaje de carga', 'Porcentaje restante'],
     datasets: [
       {
         data: [30, 70], // Datos ajustados

@@ -9,13 +9,12 @@ import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.co
 import { JefeAlumnoInterface } from '../../data-access/interface/jefe-alumno.interface';
 import { DataJefeAlumnoService } from '../../services/data-jefe-alumno.service';
 import { InformeConfidencialService } from '../../services/informe-confidencial.service';
-import { HeaderJefeEmpleadorComponent } from "../header-jefe-empleador/header-jefe-empleador.component";
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, ChartModule, ListboxModule, ButtonModule, HeaderComponent, HeaderJefeEmpleadorComponent],
+  imports: [CommonModule, FormsModule, TableModule, ChartModule, ListboxModule, ButtonModule, HeaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -90,7 +89,9 @@ export class DashboardComponent implements OnInit {
   obtenerAlumnosAsignados() {
     this.informeConfidencialService.obtenerAlumnosAsignados().subscribe({
       next: result => {
-        this.alumnosAsignados = result.cant_alumnos;
+        console.log(result)
+        this.alumnosAsignados = result.cantAlumnosAsignados;
+        this.totalInformes = result.cantidadTotalInformes
       },
       error: error => {
         console.error('Error obteniendo alumnos asignados', error);
