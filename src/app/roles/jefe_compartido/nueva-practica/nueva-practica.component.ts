@@ -217,6 +217,7 @@ export class NuevaPracticaComponent implements OnInit{
   modalAlumno: boolean = false;
   rutControl = new FormControl(''); // Control Reactivo del RUT
   alumno: any = null; // Datos del alumno encontrado
+  mensajeExito: string = ''; // Mensaje de éxito
   alumnoNoEncontrado = false; // Estado si no se encuentra el alumno
   openModalAlumno(){
     this.modalAlumno = true;
@@ -237,9 +238,19 @@ export class NuevaPracticaComponent implements OnInit{
       }
       const createALumno = this.servicioPracticas.crearAlumno(crear).subscribe(
         (res) => {
-          console.log(res)
+          console.log('Alumno creado:', res);
+          this.alumnos.push(res)
+          this.rutControl .reset()
+          this.mensajeExito = 'El alumno ha sido creado con éxito.';
+          this.alumno = null; // Limpiar alumno seleccionado
+          this.mensajeExito = '';
+        },
+        (err) => {
+          console.error('Error al crear el alumno:', err);
         }
       );
+
+      this.obtenerAlumnos()
     }
   }
 }
