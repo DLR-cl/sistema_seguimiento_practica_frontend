@@ -125,6 +125,7 @@ export class DashboardComponent implements OnInit{
       }
     })
   }
+
   public getAlumnosActivosPracticas() {
     this.dashboardService.getAlumnosActivosPracticas().subscribe({
       next: (result) => {
