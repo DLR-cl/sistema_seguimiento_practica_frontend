@@ -9,7 +9,7 @@ import { enviroment } from '../../../environment/environment';
   standalone: true,
   templateUrl: './cargar-usuarios-nomina.component.html',
   styleUrl: './cargar-usuarios-nomina.component.css',
-  imports: [JsonPipe, CommonModule, HeaderComponent]
+  imports: [CommonModule, HeaderComponent]
 })
 export class CargarUsuariosNominaComponent {
   selectedFile: File | null = null;
