@@ -27,6 +27,7 @@ import { AcademicoComponent } from './roles/academico/academico.component';
 import { ChangePasswordComponent } from './pages/general/change-password/change-password.component';
 
 import { DashboardComponent } from './roles/jefe_empleador/components/dashboard/dashboard.component';
+import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component';
 
 
 export const routes: Routes = [
@@ -65,7 +66,12 @@ export const routes: Routes = [
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])] 
     },
     {
-        path: 'home', component: HomeComponent
+        path: 'home', component: HomeComponent,
+        canActivate: [publicGuard()]
+    },
+    {
+        path: 'cargar-alumnos-nomina', component: CargarUsuariosNominaComponent,
+        canActivate: [privateGuard()]
     },
     {
         path: 'solicitar-practicante', component: SolicitarPracticanteComponent,
