@@ -23,6 +23,7 @@ export class DataJefeAlumnoService {
     private loadData(): void {
         this._jefeEmpleadorService.getJefeEmpleador().subscribe(
             (data) => {
+                console.log(data)
                 this.jefeAlumnoSubject.next(data);
             },
             (error) => {

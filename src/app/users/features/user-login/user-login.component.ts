@@ -20,28 +20,14 @@ export class UserLoginComponent implements OnInit {
     private readonly _authService: AuthService
   ) {}
 
-  private imagePreloaderService = inject(ImagePreloaderService);
-
   ngOnInit(): void {
-    this.imagePreloaderService.preloadImages(this.imageUrls).subscribe((cache) => {
-      if (cache) {
-        this.imageCache = cache;
-        setTimeout(() => {
-          this.imagesLoaded = true;
-        }, 500);
-        this.backgroundImage = this.imageUrls[0];
-      }
-    });
   }
 
-  imageUrls = [
-    'departamento_ici/departamento_entrada_ici.webp',
-  ];
+  imagenFondo: string = '/departamento_ici/transicion_5.webp';
   showPassword: boolean = false;
   errorMessage: string | null = null;
   backgroundImage: string = '';
-  imageCache: Map<string, HTMLImageElement> = new Map();
-  imagesLoaded: boolean = false;
+
 
   loginForm = this._formBuilder.group({
     email: this._formBuilder.nonNullable.control('', [
@@ -86,9 +72,7 @@ export class UserLoginComponent implements OnInit {
     });
   }
   
-
-  getBackgroundImage(): string {
-    const img = this.imageCache.get(this.backgroundImage);
-    return img ? `url(${img.src})` : '';
+  goToHome() {
+    this.router.navigate(['/home']);  // Cambia 'home' por la ruta adecuada si es necesario
   }
 }

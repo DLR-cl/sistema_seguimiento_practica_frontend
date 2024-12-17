@@ -31,11 +31,11 @@ export class PracticasSecretariaComponent implements OnInit {
   copiaPractica!: PracticaInfo | null;
 
   textoEstado: Record<string, string> = {
-    REVISION_INFORME_ALUMNO: 'Revisión Informe Alumno',
-    REVISION_GENERAL: 'Revisión General',
-    ESPERA_INFORME_ALUMNO: 'Espera Informe Alumno',
-    CURSANDO: 'Cursando',
-    ESPERA_INFORME_CONFIDENCIAL: 'Espera Informe Confidencial'
+    ENVIADA: 'Enviado',
+    REVISION: 'Revisión',
+    CORRECCION: 'Corrección',
+    ESPERA: 'Espera',
+    APROBADA: 'Aprobada'
   };
 
   textoModalidad: Record<string, string> = {
@@ -112,6 +112,7 @@ export class PracticasSecretariaComponent implements OnInit {
 
   public getPracticas(){
     this._asignacionService.getPracticas().subscribe(result =>{
+      console.log(result)
       this.practicasBackend = result
       if(this.modalDetalles){
         this.practicaSeleccionada = result.find(practica => practica.id_practica == this.practicaSeleccionada?.id_practica)!

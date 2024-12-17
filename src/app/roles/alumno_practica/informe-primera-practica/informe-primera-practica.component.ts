@@ -178,8 +178,11 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
         if (preg.tipo_pregunta === 'ABIERTA') {
           respuesta.texto = '';
         }    
-        if (preg.tipo_pregunta === 'EVALUATIVA' || preg.tipo_pregunta === 'CERRADA') {
+        if (preg.tipo_pregunta === 'CERRADA') {
           respuesta.puntaje = 0;
+        }
+        if (preg.tipo_pregunta === 'EVALUATIVA'){
+          respuesta.nota = 0
         }
         return respuesta;
       });
@@ -246,6 +249,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
       const asociarRespuestas: ListaRespuestas = {
         respuestas: this.respuestasAlumno
       }
+      console.log(asociarRespuestas)
 
       this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
         console.log(resultRespuestas)
@@ -327,10 +331,10 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   public existeRespuesta(){
-    this.respuestasService.existeRespuesta(this.idPractica).subscribe((result: any) => {
-      if(JSON. stringify(result) != '{}'){
+    this.respuestasService.existeRespuesta(this.idInforme).subscribe((result: any) => {
+      console.log(result)
+      if(result.existeRespuesta || result.correcion){
         this.datos_listo = true;
-        this.idInforme = result.id_informe
       } else {
         this.datos_listo = false
       }

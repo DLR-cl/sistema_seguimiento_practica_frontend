@@ -23,6 +23,8 @@ export class ChangePasswordComponent {
   errorMessage = '';
   successMessage = '';
 
+  imagenFondo: string = '/departamento_ici/transicion_6.webp';
+
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
     this.changePasswordForm = this.fb.group({
       oldPassword: ['', Validators.required],

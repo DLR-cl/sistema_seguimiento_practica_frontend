@@ -34,6 +34,7 @@ export class TablaFuncionesComponent implements OnInit {
     const token = this.decodedToken?.access_token; // Opcionalmente puedes validar el token aquí
     this._dataAccessService.getInformacionInformes(token).subscribe({
       next: (r) => {
+        console.log(r)
         this.data = r;
         this.asignado = this.data?.length > 0;
       },
