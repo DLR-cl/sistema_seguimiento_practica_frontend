@@ -56,7 +56,7 @@ export class HomeAlumnoComponent implements OnInit{
   
 
   public informeEnEspera(): boolean {
-    return this.dataAlumno?.informe?.some((informe:any) => informe.estado == 'ESPERA') || false;
+    return this.dataAlumno?.informe?.some((informe:any) => informe.estado == 'ESPERA' || informe.estado == 'CORRECCION') || false;
   }
 
   public goToEstado(){
@@ -66,7 +66,7 @@ export class HomeAlumnoComponent implements OnInit{
 
   public goToInforme(){
     const idPractica = this.dataAlumno.practica.find((practica: any) => practica.estado === "ESPERA_INFORMES")?.id_practica;
-    const idInforme = this.dataAlumno.informe.find((informe:any) => informe.estado === 'ESPERA')?.id_informe
+    const idInforme = this.dataAlumno.informe.find((informe:any) => informe.estado === 'ESPERA' || informe.estado === 'CORRECCION')?.id_informe
 
     console.log(idPractica)
     console.log()

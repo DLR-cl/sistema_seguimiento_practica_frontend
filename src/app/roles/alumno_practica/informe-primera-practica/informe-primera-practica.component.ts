@@ -54,7 +54,8 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   private readonly _router = inject(Router);
-  datos_listo = false;
+  datos_listo: boolean = false;
+  correccion: boolean = false;
   dataAlumno: any
   page: number = 1;
   preguntas: Pregunta[]= []
@@ -334,6 +335,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
       console.log(result)
       if(result.existeRespuesta || result.correcion){
         this.datos_listo = true;
+        this.correccion = true;
       } else {
         this.datos_listo = false
       }

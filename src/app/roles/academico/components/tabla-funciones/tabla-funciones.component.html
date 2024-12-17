@@ -1,27 +1,27 @@
-<div
-    class="p-3 w-full max-w-full sm:max-w-[75rem] min-h-[20rem] h-auto sm:h-[40rem] shadow-lg rounded-lg mt-[2rem] bg-white z-10">
+<div class="p-6 w-full max-w-full sm:max-w-[75rem] min-h-[20rem] h-auto sm:h-[40rem] shadow-xl rounded-2xl mt-8 bg-white z-10 transition-all duration-300">
 
-    <div class="p-4">
-        <div *ngIf="asignado" class="overflow-x-auto rounded-[.2rem] pt-2">
-            <h2 class="text-lg sm:text-2xl font-bold text-gray-800">Listado Informes asignados</h2>
-            <table class="w-full text-sm text-left text-gray-800 bg-white rounded-lg border border-gray-200">
+    <!-- Sección con informes asignados -->
+    <div class="p-6">
+        <div *ngIf="asignado" class="overflow-x-auto rounded-2xlshadow-md">
+            <h2 class="text-lg sm:text-2xl font-semibold text-gray-900 mb-6">Listado de Informes Asignados</h2>
+            <table class="w-full text-sm text-left text-gray-800 bg-white rounded-lg border border-gray-200 shadow-sm">
                 <thead class="text-xs uppercase bg-gray-100 text-gray-700">
                     <tr>
-                        <th class="px-2 sm:px-6 py-3">Alumno</th>
-                        <th class="px-2 sm:px-6 py-3">Práctica</th>
-                        <th class="px-2 sm:px-6 py-3">Días Restantes</th>
-                        <th class="px-2 sm:px-6 py-3">Estado</th>
-                        <th class="px-2 sm:px-6 py-3">Acción</th>
+                        <th class="px-4 py-3">Alumno</th>
+                        <th class="px-4 py-3">Práctica</th>
+                        <th class="px-4 py-3">Días Restantes</th>
+                        <th class="px-4 py-3">Estado</th>
+                        <th class="px-4 py-3">Acción</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let informes of data" class="bg-white border-b hover:bg-gray-50">
-                        <th class="px-2 sm:px-6 py-4 font-medium text-gray-900">{{informes.nombre_alumno}}</th>
-                        <td class="px-2 sm:px-6 py-4">{{informes.tipo_practica}}</td>
-                        <td class="px-2 sm:px-6 py-4">{{informes.dias_para_revision}}</td>
-                        <td class="px-2 sm:px-6 py-4">{{informes.estado_informe}}</td>
-                        <td class="px-2 sm:px-6 py-4">
-                            <button class="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                    <tr *ngFor="let informes of data" class="bg-white border-b hover:bg-gray-50 transition-all duration-300">
+                        <th class="px-4 py-4 font-medium text-gray-900">{{informes.nombre_alumno}}</th>
+                        <td class="px-4 py-4 text-gray-700">{{informes.tipo_practica}}</td>
+                        <td class="px-4 py-4 text-gray-600">{{informes.dias_para_revision}}</td>
+                        <td class="px-4 py-4 text-gray-600">{{informes.estado_informe}}</td>
+                        <td class="px-4 py-4">
+                            <button class="py-2 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200">
                                 Revisar
                             </button>
                         </td>
@@ -31,11 +31,13 @@
         </div>
     </div>
 
-    <div *ngIf="!asignado" class="flex justify-center items-center h-[20rem] sm:h-[30rem] bg-white rounded-lg">
+    <!-- Sección si no hay informes asignados -->
+    <div *ngIf="!asignado" class="flex justify-center items-center h-[20rem] sm:h-[30rem] bg-gradient-to-r from-blue-50 to-white rounded-2xl shadow-lg">
         <div class="text-center">
-            <img src="departamento_ici/8878488.svg" alt="imagen_relajese" loading="lazy" class="w-20 sm:w-32">
-            <h1 class="mt-6 text-xl sm:text-2xl font-bold text-gray-900">Relájese</h1>
-            <p class="mt-4 text-gray-500">Actualmente no tiene Informes asignados.</p>
+            <img src="departamento_ici/8878488.svg" alt="imagen_relajese" loading="lazy" class="w-24 sm:w-40 mx-auto mb-6">
+            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Relájese</h1>
+            <p class="mt-4 text-gray-500">Actualmente no tiene informes asignados.</p>
         </div>
     </div>
+
 </div>
