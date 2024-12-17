@@ -1,0 +1,11 @@
+input[type="file"] {
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    transition: background-color 0.2s ease-in-out;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #38a169; /* Verde más oscuro al pasar el mouse */
+}

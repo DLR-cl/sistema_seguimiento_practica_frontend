@@ -32,7 +32,7 @@ export const combinedInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, ne
                 // Error del lado del servidor
                 switch (error.status) {
                     case 401: // No autorizado
-                        errorMessage = "No autorizado. Por favor, inicie sesión.";
+                        errorMessage = error.error.message;
                         authState.signOut(); // Cerrar sesión
                         router.navigate(['/login']); // Redirigir al login
                         break;
