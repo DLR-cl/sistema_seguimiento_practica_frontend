@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit{
         // Crear el gráfico
         this.academicosCargaLaboralElevadaChartData = {
           labels: ['Carga académica', 'Restante'],
-          datasets: [
+          datasets: [ 
             {
               data: [
                 // Mostrar el porcentaje real de carga
