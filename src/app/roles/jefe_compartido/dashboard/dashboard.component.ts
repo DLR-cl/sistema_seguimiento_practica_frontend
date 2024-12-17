@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
-import { DashboardService, estadisticasPractica } from '../services/dashboard.service';
+import { DashboardService, detallePractica, estadisticasPractica } from '../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,23 +23,21 @@ export class DashboardComponent implements OnInit{
     private dashboardService: DashboardService
   ){}
 
-  nombre?:string;
-  dataUser?:any;
+  dataUser!:any;
 
   ngOnInit(): void {
     this.dataUser = this.authService.getData();
-    this.nombre = this.dataUser.nombre;
-    console.log(this.dataUser);
     this.getEstadisticasPracticas()
     this.getAprobacionPracticas()
     this.getAlumnosActivosPracticas()
+    this.getDetallesPractica()
+    this.getPracticasMeses()
   }
 
   public getEstadisticasPracticas(){
     this.dashboardService.getEstadisticasPracticas().subscribe({
       next: result => {
         this.estadisticasPractica = result
-        this.estadisticasPractica.total_asignados = 30
         console.log(result)
 
 
@@ -82,40 +80,45 @@ export class DashboardComponent implements OnInit{
       next: result => {
         console.log(result)
         const primerPractica = result.primerPractica;
-        const aprobadosI = primerPractica
-          .filter((practica: any) => practica.estado === 'APROBADOS')
-          .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
-        const total = primerPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
-        const aprobadosPorcentajeI = total > 0 ? (aprobadosI / total) * 100 : 0;
-        const reprobadosPorcentajeI = 100 - aprobadosPorcentajeI;
+        if(primerPractica.length != 0){
+          const aprobadosI = primerPractica
+            .filter((practica: any) => practica.estado === 'APROBADOS')
+            .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+          const total = primerPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+          const aprobadosPorcentajeI = total > 0 ? (aprobadosI / total) * 100 : 0;
+          const reprobadosPorcentajeI = 100 - aprobadosPorcentajeI;
 
-        this.practicaIChartData = {
-          labels: ['Aprobados', 'Reprobados'],
-          datasets: [
-            {
-              data: [aprobadosPorcentajeI.toFixed(2), reprobadosPorcentajeI.toFixed(2)],
-              backgroundColor: ['#1565c0', '#42aaff'],
-            }
-          ]
-        };
+          this.practicaIChartData = {
+            labels: ['Aprobados', 'Reprobados'],
+            datasets: [
+              {
+                data: [aprobadosPorcentajeI.toFixed(2), reprobadosPorcentajeI.toFixed(2)],
+                backgroundColor: ['#1565c0', '#42aaff'],
+              }
+            ]
+          };
+        }
+        
 
         const segundaPractica = result.segundaPractica;
-        const aprobadosII = segundaPractica
-          .filter((practica: any) => practica.estado === 'APROBADOS')
-          .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
-        const totalII = segundaPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
-        const aprobadosPorcentajeII = totalII > 0 ? (aprobadosII / totalII) * 100 : 0;
-        const reprobadosPorcentajeII = 100 - aprobadosPorcentajeII;
+        if(segundaPractica.length != 0){
+          const aprobadosII = segundaPractica
+            .filter((practica: any) => practica.estado === 'APROBADOS')
+            .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+          const totalII = segundaPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+          const aprobadosPorcentajeII = totalII > 0 ? (aprobadosII / totalII) * 100 : 0;
+          const reprobadosPorcentajeII = 100 - aprobadosPorcentajeII;
 
-        this.practicaIIChartData = {
-          labels: ['Aprobados', 'Reprobados'],
-          datasets: [
-            {
-              data: [aprobadosPorcentajeII.toFixed(2), reprobadosPorcentajeII.toFixed(2)],
-              backgroundColor: ['#1565c0', '#42aaff'],
-            }
-          ]
-        };
+          this.practicaIIChartData = {
+            labels: ['Aprobados', 'Reprobados'],
+            datasets: [
+              {
+                data: [aprobadosPorcentajeII.toFixed(2), reprobadosPorcentajeII.toFixed(2)],
+                backgroundColor: ['#1565c0', '#42aaff'],
+              }
+            ]
+          };
+        } 
       },
       error: error =>{
         console.log(error)
@@ -143,21 +146,84 @@ export class DashboardComponent implements OnInit{
     })
   }
 
+  public getDetallesPractica(){
+    this.dashboardService.getDetallesPracticas().subscribe({
+      next: result => {
+        console.log(result)
+        this.detallesPractica = result
+      }
+    })
+  }
+
+  public getPracticasMeses() {
+    this.dashboardService.getPracticasMeses(this.periodoSeleccionado).subscribe({
+        next: (result) => {
+          console.log(result)
+          // Define un tipo más flexible para permitir índices dinámicos
+          const practicasPorMes: { [mes: string]: { [key: string]: number } } = {};
+
+          // Organizar los datos recibidos
+          result.forEach((practica) => {
+              const mes = this.translateMonth(practica.mes_inicio);
+              if (!practicasPorMes[mes]) {
+                  practicasPorMes[mes] = {}; // Inicializa el mes si no existe
+              }
+              practicasPorMes[mes][practica.tipo_practica] = practica.total_practicas;
+          });
+
+          // Extraer los datos para el gráfico
+          const labels = Object.keys(practicasPorMes); // Meses dinámicos
+          const dataPracticaUno = labels.map((mes) => practicasPorMes[mes]['PRACTICA_UNO'] || 0);
+          const dataPracticaDos = labels.map((mes) => practicasPorMes[mes]['PRACTICA_DOS'] || 0);
+
+          // Configurar los datos del gráfico
+          this.mesChartData = {
+              labels,
+              datasets: [
+                  {
+                      label: 'Práctica Uno',
+                      data: dataPracticaUno,
+                      backgroundColor: '#1E88E5',
+                      borderColor: '#1565C0',
+                      borderWidth: 1,
+                  },
+                  {
+                      label: 'Práctica Dos',
+                      data: dataPracticaDos,
+                      backgroundColor: '#FF6384',
+                      borderColor: '#C2185B',
+                      borderWidth: 1,
+                  },
+              ],
+          };
+        },
+    });
+  }
+
+  // Método para traducir los nombres de los meses del backend al español
+  private translateMonth(month: string): string {
+    const monthsMap: { [key: string]: string } = {
+        January: 'Enero',
+        February: 'Febrero',
+        March: 'Marzo',
+        April: 'Abril',
+        May: 'Mayo',
+        June: 'Junio',
+        July: 'Julio',
+        August: 'Agosto',
+        September: 'Septiembre',
+        October: 'Octubre',
+        November: 'Noviembre',
+        December: 'Diciembre',
+    };
+    return monthsMap[month] || month;
+  } 
+
   estadisticasPractica!: estadisticasPractica
-  // Definimos las variables para la cantidad de estudiantes en práctica y carga docente.
-  cantidadEstudiantesPractica: number = 120; // Ajusta con tus datos reales
-  estudiantesSinCalificar: number = 15; // Número de estudiantes sin calificar, ajusta según tus datos
+  
+  detallesPractica!: detallePractica[]
 
-  // Datos de los docentes con los informes
-  cargaDocenteData = [
-    { docente: 'Juan Pérez', informes: 15 },
-    { docente: 'Ana González', informes: 12 },
-    { docente: 'Carlos López', informes: 11 },
-    { docente: 'María Ruiz', informes: 9 },
-  ];
-
-  // Datos de carga docente (profesores con más de 10 informes)
-  cargaDocente: number = this.cargaDocenteData.filter(docente => docente.informes >= 10).length;
+  periodoSeleccionado: number = 2024
 
   detalleInformes: any[] = [
     { alumno: 'Juan Pérez', nombre: 'Práctica I', estado: 'Finalizado' },
@@ -185,7 +251,7 @@ export class DashboardComponent implements OnInit{
     cutout: '70%'
   };
 
-  // **Gráfico de Práctica I** (Convertido a porcentaje)
+  // **Gráfico de Práctica I**
   practicaIChartData: any
 
   practicaIChartOptions = {
@@ -254,15 +320,7 @@ export class DashboardComponent implements OnInit{
   };
 
   // **Gráfico de Carga Laboral Académica** (Convertido a porcentaje)
-  academicosCargaLaboralElevadaChartData = {
-    labels: ['Porcentaje de carga', 'Porcentaje restante'],
-    datasets: [
-      {
-        data: [30, 70], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
-  };
+  academicosCargaLaboralElevadaChartData: any
 
   academicosCargaLaboralElevadaChartOptions = {
     responsive: true,
@@ -299,10 +357,18 @@ export class DashboardComponent implements OnInit{
     responsive: true,
     maintainAspectRatio: false,
     scales: {
-      x: { beginAtZero: true },
-      y: { beginAtZero: true, ticks: { stepSize: 2 } },
+        x: {
+            beginAtZero: true,
+            stacked: true, // Apilar en el eje X
+        },
+        y: {
+            beginAtZero: true,
+            stacked: true, // Apilar en el eje Y
+            ticks: { stepSize: 2 }, // Intervalos del eje Y
+        },
     },
-  };
+};
+
 
   // Función para ver detalles de informes
   verInforme(informe: any) {

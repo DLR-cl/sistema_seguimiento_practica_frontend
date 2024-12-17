@@ -20,6 +20,8 @@ export class HomeAlumnoComponent implements OnInit{
     { id: 2, nombre: 'Práctica Profesional 2' }
   ];
 
+  imagenFondo: string = "/departamento_ici/transicion_5.webp"
+
   private readonly _alumnoService = inject(AlumnoService);
   private readonly _router = inject(Router);
   private readonly _authServiceState = inject(AuthStateService);
@@ -54,7 +56,7 @@ export class HomeAlumnoComponent implements OnInit{
   
 
   public informeEnEspera(): boolean {
-    return this.dataAlumno?.practica?.some((practica:any) => practica.estado == 'ESPERA_INFORMES') || false;
+    return this.dataAlumno?.informe?.some((informe:any) => informe.estado == 'ESPERA') || false;
   }
 
   public goToEstado(){
