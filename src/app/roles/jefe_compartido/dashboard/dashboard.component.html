@@ -8,53 +8,43 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <!-- Columna Izquierda -->
         <div class="col-span-1 space-y-6">
-            <!-- Nueva Tabla con Estadísticas -->
-            <div class="bg-white shadow rounded p-6">
-                <h2 class="text-lg font-semibold text-gray-700 mb-6">Estadísticas de Prácticas</h2>
-                <table class="min-w-full table-auto border-collapse">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="py-3 px-6 text-left text-gray-600">Cantidad</th>
-                            <th class="py-3 px-6 text-left text-gray-600">Categoría</th>
+            <!-- Nueva Tabla Mejorada con Estadísticas -->
+            <div class="bg-white shadow-xl rounded-lg p-8">
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Estadísticas de Prácticas</h2>
+                <table class="min-w-full table-auto border-collapse rounded-md overflow-hidden">
+                    <thead class="bg-blue-500 text-white">
+                        <tr>
+                            <th class="py-4 px-6 text-left">Cantidad</th>
+                            <th class="py-4 px-6 text-left">Categoría</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-gray-700">
                         <!-- Cantidad de Estudiantes en Práctica -->
-                        <tr class="border-b border-t hover:bg-gray-50">
-                            <td class="py-3 text-center border-r px-6 text-gray-600">{{ estadisticasPractica.estudiantes_practica }}</td>
-                            <td class="py-3 px-6 text-gray-700 font-medium">Estudiantes en Práctica</td>
+                        <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
+                            <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.estudiantes_practica }}</td>
+                            <td class="py-4 px-6 font-medium">Estudiantes en Práctica</td>
                         </tr>
                         <!-- Cantidad de Estudiantes en Revisión -->
-                        <tr class="border-b border-t hover:bg-gray-50">
-                            <td class="py-3 text-center border-r px-6 text-gray-600">{{ estadisticasPractica.estudiantes_revision }}</td>
-                            <td class="py-3 px-6 text-gray-700 font-medium">Estudiantes en Revisión</td>
+                        <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
+                            <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.estudiantes_revision }}</td>
+                            <td class="py-4 px-6 font-medium">Estudiantes en Revisión</td>
                         </tr>
                         <!-- Cantidad de Informes Asignados -->
-                        <tr class="border-b border-t hover:bg-gray-50">
-                            <td class="py-3 text-center border-r px-6 text-gray-600">{{ estadisticasPractica.total_asignados }}</td>
-                            <td class="py-3 px-6 text-gray-700 font-medium">Informes Asignados</td>
+                        <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
+                            <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.total_asignados }}</td>
+                            <td class="py-4 px-6 font-medium">Informes Asignados</td>
                         </tr>
                         <!-- Estudiantes sin Calificar -->
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="py-3 text-center border-r px-6 text-gray-600">{{ estadisticasPractica.informes_sin_enviar }}</td>
-                            <td class="py-3 px-6 text-gray-700 font-medium">Estudiantes sin Calificar</td>
+                        <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
+                            <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.informes_sin_enviar }}</td>
+                            <td class="py-4 px-6 font-medium">Estudiantes sin Calificar</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
-            <!-- Gráfico de Barras: Cantidad de Prácticas por Mes -->
-            <div class="bg-white shadow rounded p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4">Prácticas por Mes</h2>
-                <p-chart 
-                    [data]="mesChartData" 
-                    [options]="mesChartOptions" 
-                    [type]="'bar'"
-                    height="300px">
-                </p-chart>
-            </div>
-
         </div>
+        
+        
 
         <!-- Estadísticas, Gráficos y Detalles -->
         <div class="col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -199,8 +189,19 @@
                 </p-chart>
             </div>
 
+             <!-- Gráfico de Barras: Cantidad de Prácticas por Mes -->
+             <div class="col-span-2 bg-white shadow rounded p-4">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4">Prácticas por Mes</h2>
+                <p-chart 
+                    [data]="mesChartData" 
+                    [options]="mesChartOptions" 
+                    [type]="'bar'"
+                    height="300px">
+                </p-chart>
+            </div>
+
             <!-- Gráfico de Carga Laboral Elevada -->
-            <div class="col-span-1 bg-white shadow rounded p-4">
+            <!-- <div class="col-span-1 bg-white shadow rounded p-4">
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Carga Docente</h2>
                 <p-chart
                     [data]="academicosCargaLaboralElevadaChartData"
@@ -208,7 +209,7 @@
                     [type]="'doughnut'"
                     height="230px">
                 </p-chart>
-            </div>
+            </div> -->
 
 
             <!-- Tabla de Detalles de Informes -->
@@ -220,7 +221,7 @@
                             <th>Alumno</th>
                             <th>Práctica</th>
                             <th>Estado</th>
-                            <th>Informe</th>
+                            <th>Accion</th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-practica>

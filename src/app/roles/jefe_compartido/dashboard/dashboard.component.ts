@@ -54,20 +54,20 @@ export class DashboardComponent implements OnInit{
         }
 
         // Crear el gráfico
-        this.academicosCargaLaboralElevadaChartData = {
-          labels: ['Carga académica', 'Restante'],
-          datasets: [ 
-            {
-              data: [
-                // Mostrar el porcentaje real de carga
-                porcentajeCargaAcademica, 
-                // Mostrar el porcentaje restante solo si es mayor que 0
-                porcentajeRestante > 0 ? porcentajeRestante : 0
-              ],
-              backgroundColor: ['#1565c0', '#42aaff'], // Color de la carga y el restante
-            }
-          ]
-        };
+        // this.academicosCargaLaboralElevadaChartData = {
+        //   labels: ['Carga académica', 'Restante'],
+        //   datasets: [
+        //     {
+        //       data: [
+        //         // Mostrar el porcentaje real de carga
+        //         porcentajeCargaAcademica, 
+        //         // Mostrar el porcentaje restante solo si es mayor que 0
+        //         porcentajeRestante > 0 ? porcentajeRestante : 0
+        //       ],
+        //       backgroundColor: ['#1565c0', '#42aaff'], // Color de la carga y el restante
+        //     }
+        //   ]
+        // };
       },
       error: error =>{
         console.log(error)
@@ -167,44 +167,51 @@ export class DashboardComponent implements OnInit{
   public getPracticasMeses() {
     this.dashboardService.getPracticasMeses(this.periodoSeleccionado).subscribe({
         next: (result) => {
-          console.log(result)
-          // Define un tipo más flexible para permitir índices dinámicos
-          const practicasPorMes: { [mes: string]: { [key: string]: number } } = {};
+            console.log(result);
 
-          // Organizar los datos recibidos
-          result.forEach((practica) => {
-              const mes = this.translateMonth(practica.mes_inicio);
-              if (!practicasPorMes[mes]) {
-                  practicasPorMes[mes] = {}; // Inicializa el mes si no existe
-              }
-              practicasPorMes[mes][practica.tipo_practica] = practica.total_practicas;
-          });
+            // Define un tipo más flexible para permitir índices dinámicos
+            const practicasPorMes: { [mes: string]: { [key: string]: number } } = {};
 
-          // Extraer los datos para el gráfico
-          const labels = Object.keys(practicasPorMes); // Meses dinámicos
-          const dataPracticaUno = labels.map((mes) => practicasPorMes[mes]['PRACTICA_UNO'] || 0);
-          const dataPracticaDos = labels.map((mes) => practicasPorMes[mes]['PRACTICA_DOS'] || 0);
+            // Organizar los datos recibidos
+            result.forEach((practica) => {
+                const mes = this.translateMonth(practica.mes_inicio);
+                if (!practicasPorMes[mes]) {
+                    practicasPorMes[mes] = {}; // Inicializa el mes si no existe
+                }
+                practicasPorMes[mes][practica.tipo_practica] = practica.total_practicas;
+            });
 
-          // Configurar los datos del gráfico
-          this.mesChartData = {
-              labels,
-              datasets: [
-                  {
-                      label: 'Práctica Uno',
-                      data: dataPracticaUno,
-                      backgroundColor: '#1E88E5',
-                      borderColor: '#1565C0',
-                      borderWidth: 1,
-                  },
-                  {
-                      label: 'Práctica Dos',
-                      data: dataPracticaDos,
-                      backgroundColor: '#FF6384',
-                      borderColor: '#C2185B',
-                      borderWidth: 1,
-                  },
-              ],
-          };
+            // Definir todos los meses posibles
+            const todosLosMeses = [
+                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ];
+
+            // Extraer los datos para el gráfico asegurando que todos los meses están presentes
+            const labels = todosLosMeses; // Todos los meses del año
+            const dataPracticaUno = labels.map((mes) => practicasPorMes[mes]?.['PRACTICA_UNO'] || 0); // 0 si no existe
+            const dataPracticaDos = labels.map((mes) => practicasPorMes[mes]?.['PRACTICA_DOS'] || 0); // 0 si no existe
+
+            // Configurar los datos del gráfico
+            this.mesChartData = {
+                labels,
+                datasets: [
+                    {
+                        label: 'Práctica Uno',
+                        data: dataPracticaUno,
+                        backgroundColor: '#1E88E5',
+                        borderColor: '#1565C0',
+                        borderWidth: 1,
+                    },
+                    {
+                        label: 'Práctica Dos',
+                        data: dataPracticaDos,
+                        backgroundColor: '#42aaff',
+                        borderColor: '#42aaff',
+                        borderWidth: 1,
+                    },
+                ],
+            };
         },
     });
   }
@@ -233,14 +240,6 @@ export class DashboardComponent implements OnInit{
   detallesPractica!: detallePractica[]
 
   periodoSeleccionado: number = 2024
-
-  detalleInformes: any[] = [
-    { alumno: 'Juan Pérez', nombre: 'Práctica I', estado: 'Finalizado' },
-    { alumno: 'Ana González', nombre: 'Práctica II', estado: 'Cursando' },
-    { alumno: 'Carlos López', nombre: 'Práctica I', estado: 'Finalizado' },
-    { alumno: 'María Ruiz', nombre: 'Práctica II', estado: 'Cursando' },
-    { alumno: 'José Díaz', nombre: 'Práctica I', estado: 'Finalizado' }
-  ];
 
   selectedInforme: any;
 
@@ -329,24 +328,24 @@ export class DashboardComponent implements OnInit{
   };
 
   // **Gráfico de Carga Laboral Académica** (Convertido a porcentaje)
-  academicosCargaLaboralElevadaChartData: any
+  // academicosCargaLaboralElevadaChartData: any
 
-  academicosCargaLaboralElevadaChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: any) => {
-            const total = 100; // Total de la categoría (100%)
-            const percentage = (tooltipItem.raw / total) * 100;
-            return `${percentage.toFixed(1)}% Académicos`;
-          }
-        }
-      }
-    },
-    cutout: '70%'
-  };
+  // academicosCargaLaboralElevadaChartOptions = {
+  //   responsive: true,
+  //   plugins: {
+  //     legend: { position: 'top' },
+  //     tooltip: {
+  //       callbacks: {
+  //         label: (tooltipItem: any) => {
+  //           const total = 100; // Total de la categoría (100%)
+  //           const percentage = (tooltipItem.raw / total) * 100;
+  //           return `${percentage.toFixed(1)}% Académicos`;
+  //         }
+  //       }
+  //     }
+  //   },
+  //   cutout: '70%'
+  // };
 
   // **Gráfico de Prácticas Supervisadas por Mes** (No cambia a porcentaje)
   mesChartData = {

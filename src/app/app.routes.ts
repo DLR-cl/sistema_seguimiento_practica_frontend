@@ -54,15 +54,20 @@ export const routes: Routes = [
     },
     {
         path: 'home-academicos', component: AcademicoComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.ACADEMICO])]
     },
     {
-        path: 'lista-academicos', component: InfoAcademicosComponent,
+        path: 'lista-academicos', component: InfoAcademicosComponent, 
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO])]
     },
     {
         path: 'lista-secretarias', component: InfoSecretariaComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO])]
+
     },
     {
         path: 'revision-informe/:idPractica', component: DetallesInformesComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.ACADEMICO])]
     },
     {
         path: 'nueva-practica', component: NuevaPracticaComponent,
