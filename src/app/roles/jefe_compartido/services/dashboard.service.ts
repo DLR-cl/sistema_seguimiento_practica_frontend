@@ -4,6 +4,14 @@ import { enviroment } from "../../../environment/environment";
 import { CantidadAlumnosEnPractica } from "../interface/alumnosPractica.interface";
 import { map } from "rxjs";
 
+export interface estadisticasPractica{
+    estudiantes_practica: number,
+    estudiantes_revision: number,
+    informes_sin_enviar: number,
+    total_asignados: number,
+    max_informes: number
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -20,5 +28,17 @@ export class DashboardService {
                 }
             )
         )
+    }
+
+    public getEstadisticasPracticas(){
+        return this._http.get<any>(`${enviroment.API_URL}/dashboard/estadistica-practicas-dashboard-jefe-carrera`)   
+    }
+
+    public getAprobacionPracticas(){
+        return this._http.get<any>(`${enviroment.API_URL}/dashboard/aprobacion-practicas`)   
+    }
+    
+    public getAlumnosActivosPracticas(){
+        return this._http.get<any>(`${enviroment.API_URL}/dashboard/alumnos-activos-practica`)   
     }
 }
