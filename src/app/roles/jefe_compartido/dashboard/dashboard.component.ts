@@ -126,25 +126,34 @@ export class DashboardComponent implements OnInit{
     })
   }
 
-  public getAlumnosActivosPracticas(){
+  public getAlumnosActivosPracticas() {
     this.dashboardService.getAlumnosActivosPracticas().subscribe({
-      next: result => {
+      next: (result) => {
+        console.log(result, "hola soy ese grafico");
+  
+        // Buscar prácticas y asignar 0 si no existen
+        const practicaUno = result.find((practica: any) => practica.tipo_practica === "PRACTICA_UNO")?.cantidad_estudiantes || 0;
+        const practicaDos = result.find((practica: any) => practica.tipo_practica === "PRACTICA_DOS")?.cantidad_estudiantes || 0;
+  
+        // Configuración del gráfico
         this.cantidadEstudiantesTipoPracticaChartData = {
           labels: ['Práctica 1', 'Práctica 2'],
           datasets: [
             {
-              data: [result.find((practica:any) => practica.tipo_practica == "PRACTICA_UNO").cantidad_estudiantes, result.find((practica:any) => practica.tipo_practica == "PRACTICA_DOS").cantidad_estudiantes],
+              data: [practicaUno, practicaDos],
               backgroundColor: ['#1565c0', '#42aaff'],
             }
           ]
         };
-        console.log(result)
+  
+        console.log(result);
       },
-      error: error =>{
-        console.log(error)
+      error: (error) => {
+        console.log(error);
       }
-    })
+    });
   }
+  
 
   public getDetallesPractica(){
     this.dashboardService.getDetallesPracticas().subscribe({
