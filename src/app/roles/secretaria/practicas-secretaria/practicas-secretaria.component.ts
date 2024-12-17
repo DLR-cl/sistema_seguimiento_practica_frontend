@@ -30,13 +30,22 @@ export class PracticasSecretariaComponent implements OnInit {
   practicaSeleccionada!: PracticaInfo | null;
   copiaPractica!: PracticaInfo | null;
 
-  textoEstado: Record<string, string> = {
+  textoEstadoInforme: Record<string, string> = {
     ENVIADA: 'Enviado',
     REVISION: 'Revisión',
     CORRECCION: 'Corrección',
     ESPERA: 'Espera',
     APROBADA: 'Aprobada'
   };
+
+  
+  textoEstadoPractica: Record<string, string> = {
+    CURSANDO: 'Cursando',
+    REVISION_GENERAL: 'Revisión General',
+    ESPERA_INFORMES: 'Espera Informes',
+    FINALIZADA: 'Finalizada',
+  };
+
 
   textoModalidad: Record<string, string> = {
     PRESENCIAL: 'Presencial',

@@ -21,6 +21,8 @@ export class HomeSecretariaComponent {
 
   public dataSecretaria!: Secretaria | null;
 
+  imagenFondo: string = "/departamento_ici/transicion_6.webp"
+
   ngOnInit(): void {
     this._secretariaDataService.getDataSecretaria().subscribe(
       (data) => {
