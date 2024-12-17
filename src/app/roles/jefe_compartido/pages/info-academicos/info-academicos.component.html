@@ -1,42 +1,90 @@
 <app-header></app-header>
 
-<div class="relative overflow-x-auto max-w-7xl mx-auto  bg-white shadow-lg rounded-lg ">
+<div class="relative overflow-x-auto max-w-7xl mx-auto bg-white shadow-lg rounded-lg">
+    <!-- Sección para Crear Académico -->
+    <div class="p-6 border-b border-gray-200">
+      <h2 class="text-2xl font-semibold text-gray-700 mb-4">Crear Académico</h2>
+      <form (ngSubmit)="crearAcademico()" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Campo Nombre -->
+        <div>
+          <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+          <input
+            id="nombre"
+            type="text"
+            [(ngModel)]="nuevoAcademico.nombre"
+            name="nombre"
+            class="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+            placeholder="Ingrese el nombre"
+            required
+          />
+        </div>
+  
+        <!-- Campo Correo -->
+        <div>
+          <label for="correo" class="block text-sm font-medium text-gray-700">Correo</label>
+          <input
+            id="correo"
+            type="email"
+            [(ngModel)]="nuevoAcademico.correo"
+            name="correo"
+            class="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+            placeholder="Ingrese el correo"
+            required
+          />
+        </div>
+  
+        <!-- Campo Rut -->
+        <div>
+          <label for="rut" class="block text-sm font-medium text-gray-700">Rut</label>
+          <input
+            id="rut"
+            type="text"
+            [(ngModel)]="nuevoAcademico.rut"
+            name="rut"
+            class="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+            placeholder="Ingrese el rut"
+            required
+          />
+        </div>
+  
+        <!-- Botón Enviar -->
+        <div class="md:col-span-3 text-right">
+          <button
+            type="submit"
+            class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          >
+            Crear Académico
+          </button>
+        </div>
+      </form>
+    </div>
+  
+    <!-- Tabla de Académicos -->
     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    Nombre
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Correo
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Rut
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Ver Estado
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr 
-                *ngFor="let academico of academicosData"
-                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    {{ academico.nombre }}
-                </th>
-                <td class="px-6 py-4">
-                    {{ academico.correo }}
-                </td>
-                <td class="px-6 py-4">
-                    {{ academico.rut }}
-                </td>
-                <td class="px-6 py-4">
-                    <button class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                        Estado
-                      </button>
-                </td>
-            </tr>
-        </tbody>
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="px-6 py-3">Nombre</th>
+          <th scope="col" class="px-6 py-3">Correo</th>
+          <th scope="col" class="px-6 py-3">Rut</th>
+          <th scope="col" class="px-6 py-3">Ver Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let academico of academicosData" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+            {{ academico.nombre }}
+          </th>
+          <td class="px-6 py-4">{{ academico.correo }}</td>
+          <td class="px-6 py-4">{{ academico.rut }}</td>
+          <td class="px-6 py-4">
+            <button
+              class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded"
+            >
+              Estado
+            </button>
+          </td>
+        </tr>
+      </tbody>
     </table>
-</div>
+  </div>
+  

@@ -24,7 +24,6 @@ export class TablaFuncionesComponent implements OnInit {
   ngOnInit(): void {
     // Obtén el token decodificado
     this.decodedToken = this._authService.getDecodedToken();
-    console.log('Token decodificado em tabla:', this.decodedToken);
 
     // Llama al método para obtener informes
     this.getInfoInformes();
@@ -34,7 +33,6 @@ export class TablaFuncionesComponent implements OnInit {
     const token = this.decodedToken?.access_token; // Opcionalmente puedes validar el token aquí
     this._dataAccessService.getInformacionInformes(token).subscribe({
       next: (r) => {
-        console.log(r)
         this.data = r;
         this.asignado = this.data?.length > 0;
       },
