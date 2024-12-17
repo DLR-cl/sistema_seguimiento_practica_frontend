@@ -1,7 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AlumnosEnPracticaCardComponent } from "../alumnos-en-practica-card/alumnos-en-practica-card.component";
-import { AlumnosSinInformeCardComponent } from "../alumnos-sin-informe-card/alumnos-sin-informe-card.component";
-import { DocentesSinInformesCardComponent } from "../docentes-sin-informes-card/docentes-sin-informes-card.component";
 import { HeaderComponent } from "../header-jefes/header.component";
 import { ListboxModule } from 'primeng/listbox';
 import { ChartModule } from 'primeng/chart';
@@ -15,7 +12,7 @@ import { DashboardService, estadisticasPractica } from '../services/dashboard.se
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [AlumnosEnPracticaCardComponent, AlumnosSinInformeCardComponent, DocentesSinInformesCardComponent, CommonModule, FormsModule, HeaderComponent, ListboxModule, ChartModule, TableModule, ButtonModule],
+  imports: [CommonModule, FormsModule, ListboxModule, ChartModule, TableModule, ButtonModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })

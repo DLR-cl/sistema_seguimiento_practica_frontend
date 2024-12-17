@@ -10,9 +10,7 @@ export class StorageService {
 
   // Obtiene un valor desde el almacenamiento
   get<T>(tokenKey: string): { message: string, access_token: string, primerInicioSesion: boolean} | null {
-    console.log(`Obteniendo valor para la clave '${tokenKey}'`);
     const value = this._storage.getItem(tokenKey);
-    console.log('Valor bruto:', value);
   
     if (!value) return null;
   
@@ -28,7 +26,6 @@ export class StorageService {
     try {
       const serializedValue = JSON.stringify(value);
       this._storage.setItem(tokenKey, serializedValue);
-      console.log(`Valor almacenado para '${tokenKey}':`, serializedValue); // Debugging
     } catch (error) {
       console.error(`Error al guardar el valor para la clave '${tokenKey}':`, error);
     }

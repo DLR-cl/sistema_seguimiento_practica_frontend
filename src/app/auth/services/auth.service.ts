@@ -29,7 +29,6 @@ export class AuthService {
   // Inicializa el token decodificado
   private initializeToken(): void {
     const token = this.getDecodedToken();
-    console.log('Inicializando el token decodificado:', token); // Debugging
     this.decodedTokenSubject.next(token);
   }
   
@@ -48,7 +47,6 @@ export class AuthService {
   public getDecodedToken(): any {
     // Obtiene la sesión ya parseada desde el almacenamiento local
     const session = this._storage.get<{ message: string; access_token: string; primerInicioSesion: boolean }>('session');
-    console.log(session, "session desde authService"); // Debugging
   
     if (!session || !session.access_token) {
       console.warn('La sesión no es válida o el token no está disponible');
@@ -57,11 +55,9 @@ export class AuthService {
   
     try {
       const token = session.access_token; // Obtiene el token directamente
-      console.log('Token bruto:', token); // Debugging
   
       // Decodifica y retorna el token
       const decodedToken = jwt_decode.jwtDecode(token); // Usa jwt_decode directamente
-      console.log('Token decodificado desde authService:', decodedToken);
       return decodedToken;
     } catch (error) {
       console.error('Error al decodificar el token:', error);
@@ -81,12 +77,10 @@ export class AuthService {
   logIn(correo: string, password: string): Observable<any> {
     return this._http.post<any>(`${enviroment.API_URL}/auth/login`, { correo, password }).pipe(
       tap((response) => {
-        console.log('Respuesta del login:', response); // Verifica el contenido del response
   
         // Intenta guardar la sesión en el almacenamiento
         try {
           this._storage.set('session', response); // Guarda la respuesta directamente
-          console.log('Sesión almacenada en localStorage:', this._storage.get('session'));
         } catch (error) {
           console.error('Error al guardar la sesión en localStorage:', error);
         }
@@ -103,7 +97,6 @@ export class AuthService {
     const session = this._authService.getSession();
     if (session) {
       const userRole = this._authService.getRole();
-      console.log('Redirigiendo usuario con rol:', userRole); // Depuración
 
       switch (userRole) {
         case TipoUsuario.JEFE_EMPLEADOR:

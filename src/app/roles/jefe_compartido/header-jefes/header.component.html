@@ -47,14 +47,14 @@
       </div>
 
       <!-- Opciones comunes -->
-      <a *ngIf="dataUser?.rol !== tipoAcademico && dataUser?.rol !== tipoSupervisor" href="#" class="text-sm font-semibold leading-6 text-gray-900">Lista Académicos</a>
+      <a *ngIf="dataUser?.rol !== tipoAcademico && dataUser?.rol !== tipoSupervisor" (click)="goToInfoAcademicos()" class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Lista Académicos</a>
       <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Guía Usuario</a>
       <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Objetivos</a>
     </div>
 
     <!-- Login / Logout -->
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-      <a *ngIf="!dataUser" href="#" class="text-sm font-semibold leading-6 text-gray-900">Iniciar Sesión <span aria-hidden="true">&rarr;</span></a>
+      <a *ngIf="!dataUser" href="#" class="text-sm font-semibold leading-6s text-gray-900">Iniciar Sesión <span aria-hidden="true">&rarr;</span></a>
       <a *ngIf="dataUser" (click)="closeSession()" class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">Cerrar Sesión <span aria-hidden="true">&rarr;</span></a>
     </div>
   </nav>
