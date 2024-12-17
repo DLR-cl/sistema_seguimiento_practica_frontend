@@ -5,12 +5,13 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Practicas } from '../../../secretaria/dto/secretaria-data.dto';
 import { DatosPracticaService } from '../../services/datos-practica.service';
 import { ActivatedRoute } from '@angular/router';
+import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
 
 
 @Component({
   selector: 'app-detalles-informes',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HeaderComponent],
   templateUrl: './detalles-informes.component.html',
   styleUrl: './detalles-informes.component.css'
 })

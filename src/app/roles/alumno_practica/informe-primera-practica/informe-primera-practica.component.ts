@@ -299,15 +299,8 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
 
   enviarInforme(){
     console.log(this.respuestasAlumno)
-    this.respuestasAlumno = this.respuestasAlumno.map(respuesta => ({
-      ...respuesta,
-      id_informe: this.idInforme
-    }));
 
-    const asociarRespuestas: ListaRespuestas = {
-      respuestas: this.respuestasAlumno
-    }
-    console.log(asociarRespuestas)
+        
     const formData: FormData = new FormData()
     
     formData.append('id_informe', ''+this.idInforme)
@@ -319,13 +312,26 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
       console.log(`${key}:`, value);
     });
     
-    this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
-      console.log(resultRespuestas)
-    })
+
+    if(!this.correccion){
+      this.respuestasAlumno = this.respuestasAlumno.map(respuesta => ({
+      ...respuesta,
+      id_informe: this.idInforme
+      }));
+
+      const asociarRespuestas: ListaRespuestas = {
+        respuestas: this.respuestasAlumno
+      }
+      console.log(asociarRespuestas)
+      
+      this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
+        console.log(resultRespuestas)
+      })
+    }
 
     this.respuestasService.enviarInforme(formData).subscribe(resultInforme =>{
       console.log(resultInforme)
-      alert('Respuestas e Informe subidos con exito')
+      alert('Enviado con exito')
       this.goTofin()
     });
   }

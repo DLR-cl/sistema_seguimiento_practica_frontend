@@ -37,7 +37,7 @@
                         <!-- Estudiantes sin Calificar -->
                         <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
                             <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.informes_sin_enviar }}</td>
-                            <td class="py-4 px-6 font-medium">Estudiantes sin Calificar</td>
+                            <td class="py-4 px-6 font-medium">Informes de alumno sin enviar</td>
                         </tr>
                     </tbody>
                 </table>
@@ -50,7 +50,7 @@
         <div class="col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Gráfico de la Cantidad de Estudiantes por Tipo de Práctica -->
             <div *ngIf="cantidadEstudiantesTipoPracticaChartData" class="col-span-1 bg-white shadow rounded p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes por Tipo de Práctica</h2>
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes Cursando por Tipo de Práctica</h2>
                 <p-chart
                     [data]="cantidadEstudiantesTipoPracticaChartData"
                     [options]="cantidadEstudiantesTipoPracticaChartOptions"

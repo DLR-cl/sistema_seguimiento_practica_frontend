@@ -3,6 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { DataAccessService } from '../../services/data-access.service';
 import { InfoInformes } from '../../interface/info-informes.interface';
 import { AuthService } from '../../../../auth/services/auth.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -14,6 +15,10 @@ import { AuthService } from '../../../../auth/services/auth.service';
 })
 export class TablaFuncionesComponent implements OnInit {
   asignado: boolean = false;
+
+  constructor(
+    private router: Router
+  ){}
 
   private readonly _dataAccessService = inject(DataAccessService);
   private readonly _authService = inject(AuthService);
@@ -33,6 +38,7 @@ export class TablaFuncionesComponent implements OnInit {
     const token = this.decodedToken?.access_token; // Opcionalmente puedes validar el token aquí
     this._dataAccessService.getInformacionInformes(token).subscribe({
       next: (r) => {
+        console.log(r)
         this.data = r;
         this.asignado = this.data?.length > 0;
       },
@@ -44,5 +50,9 @@ export class TablaFuncionesComponent implements OnInit {
   public cantidadDiasSobrantes(fecha: Date) {
     const cant = new Date(fecha).getDate() - new Date().getDate();
     return cant;
+  }
+
+  public revision(idPractica: number){
+    this.router.navigate(['revision-informe/'+idPractica])
   }
 }
