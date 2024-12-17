@@ -238,8 +238,10 @@ export class NuevaPracticaComponent implements OnInit{
       }
       const createALumno = this.servicioPracticas.crearAlumno(crear).subscribe(
         (res) => {
-          console.log('Alumno creado:', res);
-          this.alumnos.push(res)
+          console.log('Alumno c reado:', res);
+          this.alumnos.push(res.data) 
+          this.obtenerAlumnos()
+          console.log(this.alumnos)
           this.rutControl .reset()
           this.mensajeExito = 'El alumno ha sido creado con éxito.';
           this.alumno = null; // Limpiar alumno seleccionado
