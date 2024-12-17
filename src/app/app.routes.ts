@@ -31,6 +31,7 @@ import { DashboardComponent } from './roles/jefe_empleador/components/dashboard/
 import { DetallesInformesComponent } from './roles/academico/components/detalles-informes/detalles-informes.component';
 
 import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component';
+import { InfoSecretariaComponent } from './roles/jefe_compartido/pages/info-secretaria/info-secretaria.component';
 
 
 export const routes: Routes = [
@@ -58,6 +59,9 @@ export const routes: Routes = [
         path: 'lista-academicos', component: InfoAcademicosComponent,
     },
     {
+        path: 'lista-secretarias', component: InfoSecretariaComponent,
+    },
+    {
         path: 'revision-informe/:idPractica', component: DetallesInformesComponent,
     },
     {
@@ -76,6 +80,9 @@ export const routes: Routes = [
     {
         path: 'cargar-alumnos-nomina', component: CargarUsuariosNominaComponent,
         canActivate: [privateGuard()]
+    },
+    {
+        path: 'crear-practica', component: NuevaPracticaComponent,
     },
     {
         path: 'solicitar-practicante', component: SolicitarPracticanteComponent,

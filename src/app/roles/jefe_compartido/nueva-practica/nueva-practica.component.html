@@ -149,9 +149,83 @@
               (click)="openModal('alumno')">
               Nuevo alumno
             </button>
+            <button 
+              class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
+              (click)="openModalAlumno()">
+              Buscar
+            </button>
           </div>
           
-        
+          <div *ngIf="modalAlumno" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+            <div class="bg-white p-8 rounded-2xl shadow-2xl max-w-lg w-full relative animate-fade-in">
+              <!-- Botón Cerrar -->
+              <button
+                (click)="cerrarModal()"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl font-bold"
+                aria-label="Cerrar"
+              >
+                &times;
+              </button>
+          
+              <!-- Encabezado -->
+              <h2 class="text-3xl font-bold text-center text-gray-700 mb-6">Buscar Alumno por RUT</h2>
+          
+              <!-- Campo de búsqueda (Reactivo) -->
+              <div class="flex gap-4 items-center mb-6">
+                <input
+                  type="text"
+                  [formControl]="rutControl"
+                  placeholder="Ingrese el RUT (12345678-k)"
+                  class="flex-1 bg-gray-100 p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  (click)="obtenerDatosAlumno()"
+                  class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+                >
+                  Buscar
+                </button>
+              </div>
+          
+              <!-- Resultados del alumno -->
+              <div *ngIf="alumno" class="space-y-4 text-gray-600 text-lg">
+                <div class="flex justify-between">
+                  <span class="font-semibold">Nombre:</span>
+                  <span>{{ alumno.nombre }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="font-semibold">Correo:</span>
+                  <span>{{ alumno.email }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="font-semibold">RUT:</span>
+                  <span>{{ alumno.rut }}</span>
+                </div>
+              </div>
+          
+              <!-- Mensaje de no encontrado -->
+              <div *ngIf="alumnoNoEncontrado" class="text-red-500 text-center mt-4">
+                Alumno no encontrado. Verifique el RUT ingresado.
+              </div>
+          
+              <!-- Botones de acción -->
+              <div class="flex justify-end gap-4 mt-6">
+                <button
+                  (click)="cerrarModal()"
+                  class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-300"
+                >
+                  Cerrar
+                </button>
+                <button
+                  *ngIf="alumno"
+                  (click)="confirmarAlumno()"
+                  class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300"
+                >
+                  Confirmar Alumno
+                </button>
+              </div>
+            </div>
+          </div>
+          
           <div *ngIf="pasoActual === 4" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8 py-6">
             <h2 class="text-2xl font-semibold my-5">Completar formulario de práctica</h2>
             <p class="text-gray-600">

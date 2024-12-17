@@ -26,6 +26,7 @@ export interface nuevoAlumno {
   nombre: string;
   rut: string;
   tipo_usuario: string;
+  nomina: boolean;
 }
 
 export interface nuevoSupervisor {
@@ -69,6 +70,11 @@ export interface alumno{
   alumno_practica: alumnoPractica;
 }
 
+export interface AlumnoNominaInterface {
+  nombre: string;
+  correo: string;
+  rut: string;
+}
 export interface usuario{
   id_usuario: number;
   password: string;
