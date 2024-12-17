@@ -49,8 +49,9 @@
         <!-- Estadísticas, Gráficos y Detalles -->
         <div class="col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Gráfico de la Cantidad de Estudiantes por Tipo de Práctica -->
-            <div *ngIf="cantidadEstudiantesTipoPracticaChartData && cantidadEstudiantesTipoPracticaChartData.length > 0" class="col-span-1 bg-white shadow rounded p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes por Tipo de Práctica</h2>
+            <div *ngIf="cantidadEstudiantesTipoPracticaChartData.length > 0" class="col-span-1 bg-white shadow rounded p-4">
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes cursando por Tipo de Práctica</h2>
+                
                 <p-chart
                     [data]="cantidadEstudiantesTipoPracticaChartData"
                     [options]="cantidadEstudiantesTipoPracticaChartOptions"
@@ -59,12 +60,12 @@
                 </p-chart>
             </div>
             <div
-            *ngIf="!cantidadEstudiantesTipoPracticaChartData"
+            *ngIf="!(cantidadEstudiantesTipoPracticaChartData.length > 0)"
             class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200"
           >
             <!-- Mensaje -->
             <p class="text-lg text-center font-medium text-gray-700 mb-4">
-              Aún no hay alumnos registrados por práctica
+              Aún no hay alumnos cursando practicas
             </p>
           
             <!-- Ícono -->
