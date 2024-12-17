@@ -37,6 +37,9 @@ export class RespuestasInformeService {
     private http: HttpClient,
   ) { }
 
+  public enviarInformeConfidencial(data: FormData, id_informe: number){
+    return this.http.patch<any>(`${enviroment.API_URL}/informe-confidencial/actualizar-informe/${id_informe}`, data);
+  }
   public asociarRespuestas(respuestas: ListaRespuestas){
     return this.http.post<any>(`${enviroment.API_URL}/respuestas-informe-alumno`, respuestas)
   }
