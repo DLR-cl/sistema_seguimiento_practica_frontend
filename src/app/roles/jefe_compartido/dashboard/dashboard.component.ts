@@ -381,6 +381,6 @@ export class DashboardComponent implements OnInit{
 
   // Función para ver detalles de informes
   verInforme(informe: any) {
-    alert(`Ver informe: ${informe.nombre} de ${informe.alumno}`);
+    alert(`Ver informe: ${informe.nombre_alumno} de ${informe.tipo_practica}`);
   }
 }
