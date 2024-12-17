@@ -44,6 +44,7 @@ export class PracticasSecretariaComponent implements OnInit {
     REVISION_GENERAL: 'Revisión General',
     ESPERA_INFORMES: 'Espera Informes',
     FINALIZADA: 'Finalizada',
+    INFORMES_RECIBIDOS: 'Informes Recibidos'
   };
 
 

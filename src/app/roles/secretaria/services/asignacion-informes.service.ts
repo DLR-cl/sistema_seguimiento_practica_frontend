@@ -25,6 +25,7 @@ export interface PracticaInfo {
   horas_practicas_regulares?: number;
   horas_practicas_extraordinarias?: number;
   total_horas?: number;
+  estado_informe_confidencial?: string;
   horas_inasistencia?: number;
   nota_evaluacion?: number;
   supervisor_nombre?: string;
