@@ -42,12 +42,16 @@
             <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
               <a href="#" class="block font-semibold text-gray-900">Estado de los informes</a>
             </div>
+            <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+              <a (click)="goToCrearPractica()" class="block font-semibold cursor-pointer text-gray-900">Crear Practica</a>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Opciones comunes -->
-      <a *ngIf="dataUser?.rol !== tipoAcademico && dataUser?.rol !== tipoSupervisor" (click)="goToInfoAcademicos()" class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Lista Académicos</a>
+      <a *ngIf="dataUser?.rol !== tipoAcademico && dataUser?.rol !== tipoSupervisor" (click)="goToInfoAcademicos()" class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Academicos</a>
+      <a *ngIf="dataUser?.rol !== tipoAcademico && dataUser?.rol !== tipoSupervisor" (click)="goToInfoSecretarias()" class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Secretarias</a>
       <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Guía Usuario</a>
       <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Objetivos</a>
     </div>

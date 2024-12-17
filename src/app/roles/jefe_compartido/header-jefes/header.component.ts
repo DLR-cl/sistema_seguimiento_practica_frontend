@@ -58,4 +58,11 @@ export class HeaderComponent implements OnInit {
   goToInfoAcademicos() {
     this.router.navigate(['lista-academicos']);
   }
+  goToInfoSecretarias() {
+    this.router.navigate(['lista-secretarias']);
+  }
+
+  goToCrearPractica(){
+    this.router.navigate(['crear-practica'])
+  }
 }

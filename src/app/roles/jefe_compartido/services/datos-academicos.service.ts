@@ -15,7 +15,11 @@ export class DatosAcademicosService {
     }
 
     // Crear un nuevo académico
-    public crearAcademico(nuevoAcademico: { nombre: string; correo: string; rut: string }) {
+    public crearAcademico(nuevoAcademico: { nombre: string; correo: string; rut: string, tipo_usuario:string }) {
         return this._http.post<any>(`${enviroment.API_URL}/academicos`, nuevoAcademico);
+    }
+
+    public getInfoAcademico(id_academico: number){
+        return this._http.get<any>(`${enviroment.API_URL}/academicos/${id_academico}`)
     }
 }
