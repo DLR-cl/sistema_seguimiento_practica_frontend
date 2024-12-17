@@ -135,7 +135,7 @@ export class DashboardComponent implements OnInit{
         const practicaUno = result.find((practica: any) => practica.tipo_practica === "PRACTICA_UNO")?.cantidad_estudiantes || 0;
         const practicaDos = result.find((practica: any) => practica.tipo_practica === "PRACTICA_DOS")?.cantidad_estudiantes || 0;
   
-        // Configuración del gráfico
+        // Configuración del gráfico con valores asegurados
         this.cantidadEstudiantesTipoPracticaChartData = {
           labels: ['Práctica 1', 'Práctica 2'],
           datasets: [
@@ -146,13 +146,25 @@ export class DashboardComponent implements OnInit{
           ]
         };
   
-        console.log(result);
+        console.log(this.cantidadEstudiantesTipoPracticaChartData);
       },
       error: (error) => {
         console.log(error);
+  
+        // En caso de error, asignar datos vacíos
+        this.cantidadEstudiantesTipoPracticaChartData = {
+          labels: ['Práctica 1', 'Práctica 2'],
+          datasets: [
+            {
+              data: [0, 0],
+              backgroundColor: ['#1565c0', '#42aaff'],
+            }
+          ]
+        };
       }
     });
   }
+  
   
 
   public getDetallesPractica(){
@@ -380,6 +392,6 @@ export class DashboardComponent implements OnInit{
 
   // Función para ver detalles de informes
   verInforme(informe: any) {
-    alert(`Ver práctica: ${informe.nombre_alumno} de ${informe.tipo_practica}`);
+    alert(`Ver informe: ${informe.nombre_alumno} de ${informe.tipo_practica}`);
   }
 }
