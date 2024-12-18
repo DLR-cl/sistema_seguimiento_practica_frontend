@@ -3,6 +3,27 @@ import { Injectable } from '@angular/core';
 import { Practicas } from '../../secretaria/dto/secretaria-data.dto';
 import { enviroment } from '../../../environment/environment';
 
+
+export interface Dimension {
+  id_dimension: number;
+  nombre: string;
+  descripcion: string;
+  idDimensionPadre: number;
+}
+
+export interface Pregunta {
+  id_pregunta: number;
+  enunciado_pregunta: string;
+  tipo_pregunta: string;
+  id_dimension: number;
+  dimension: Dimension;
+}
+
+export interface PreguntaEvaluacion {
+  id_pregunta: number;
+  pregunta: Pregunta;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -18,5 +39,13 @@ export class DatosPracticaService {
 
   public obtenerInformeAlumno(idInforme: number){
     return this.http.get<any>(`${enviroment.API_URL}/informe-alumno/ver-informe/${idInforme}`)
+  }
+
+  public obtenerPreguntasEvaluacion(){
+    return this.http.get<any>(`${enviroment.API_URL}/evaluacion-academica/obtener-preguntas-implementadas`)
+  }
+
+  public enviarRevision(revision: any){
+    return this.http.post<any>(`${enviroment.API_URL}/evaluacion-academica`, revision)
   }
 }
