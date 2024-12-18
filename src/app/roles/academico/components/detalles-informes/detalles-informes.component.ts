@@ -48,7 +48,9 @@ export class DetallesInformesComponent implements OnInit{
   ];
   comentario: string = '';
   archivoSeleccionado: File | null = null;
-
+ 
+  paginaActual: number = 0; // Página actual
+  preguntasPorPagina: number = 3; // Número de preguntas por tanda
   // Métodos
   onFileSelected(event: any): void {
     this.archivoSeleccionado = event.target.files[0];
@@ -140,5 +142,40 @@ export class DetallesInformesComponent implements OnInit{
     }
   }
   
-  
+    convertirPuntaje(puntos: number | null): string {
+      switch (puntos) {
+        case 1:
+          return 'Muy en desacuerdo';
+        case 2:
+          return 'En desacuerdo';
+        case 3:
+          return 'Neutral';
+        case 4:
+          return 'De acuerdo';
+        case 5:
+          return 'Muy de acuerdo';
+        default:
+          return 'Sin calificación';
+      }
+    }
+
+  obtenerTandaPreguntas(): any[] {
+    const inicio = this.paginaActual * this.preguntasPorPagina;
+    const fin = inicio + this.preguntasPorPagina;
+    return this.respuestasConfidenciales.slice(inicio, fin);
+  }
+
+  // Navegar a la página anterior
+  paginaAnterior(): void {
+    if (this.paginaActual > 0) {
+      this.paginaActual--;
+    }
+  }
+
+  // Navegar a la siguiente página
+  paginaSiguiente(): void {
+    if ((this.paginaActual + 1) * this.preguntasPorPagina < this.respuestasConfidenciales.length) {
+      this.paginaActual++;
+    }
+  }
 }
