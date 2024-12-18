@@ -38,6 +38,13 @@ export class PracticasSecretariaComponent implements OnInit {
     ESPERA: 'Espera',
     APROBADA: 'Aprobada'
   };
+  textoEstadoInformeConfidencial: Record<string, string> = {
+    ENVIADA: 'Enviado',
+    REVISION: 'Revisión',
+    CORRECCION: 'Corrección',
+    ESPERA: 'Espera',
+    APROBADA: 'Aprobada'
+  };
 
   
   textoEstadoPractica: Record<string, string> = {

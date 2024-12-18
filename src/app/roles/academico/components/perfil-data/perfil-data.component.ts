@@ -1,9 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../../../../auth/services/auth.service';
 import { DataAccessService } from '../../services/data-access.service';
-import { CantidadInformesPendientes, InfoInformes } from '../../interface/info-informes.interface';
+import { CantidadInformesPendientes, InfoInformes, ResumenConteoInformes } from '../../interface/info-informes.interface';
+import { PayloadInterface } from '../../../../shared/interface/payload.interface';
+import { AuthService } from '../../../../auth/services/auth.service';
+import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 
 @Component({
   selector: 'app-perfil-data',
@@ -13,28 +15,37 @@ import { CantidadInformesPendientes, InfoInformes } from '../../interface/info-i
   styleUrls: ['./perfil-data.component.css'], // Cambiado a styleUrls para corregir el typo
 })
 export class PerfilDataComponent implements OnInit {
-  private readonly _authService = inject(AuthService);
   private readonly _accessDataService = inject(DataAccessService);
+  private readonly _authServiceState = inject(AuthStateService);
+
 
   dataUser: any; // Payload decodificado del token
   informesPendientes?: CantidadInformesPendientes;
   infoInformes?: InfoInformes[];
   informesCriticos?: InfoInformes[];
   existenInformes: boolean = false;
+  resumenConteoInformes?:ResumenConteoInformes;
   private subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
-    this._authService.waitForToken().then((decodedToken) => {
-      this.dataUser = decodedToken;
-  
+    const decodedToken = this._authServiceState.getData();
+    if(decodedToken){
+      this.dataUser = {
+        nombre: decodedToken.nombre,
+        correo: decodedToken.nombre,
+        id_usuario: decodedToken.id_usuario,
+        rol: decodedToken.rol
+      }
+    }
       if (this.dataUser) {
         this.getCantidadInformesPendientes();
         this.getDataAboutInformes();
         this.getInformesCriticos();
+        this.getResumenConteoInformes()
       } else {
         console.error('Token sigue siendo nulo después de esperar.');
       }
-    });
+  
   }
   
   ngOnDestroy(): void {
@@ -50,6 +61,18 @@ export class PerfilDataComponent implements OnInit {
     });
   }
 
+  private getResumenConteoInformes(){
+    console.log(this.dataUser.id_usuario )
+    this._accessDataService.getResumenInformes(this.dataUser.id_usuario).subscribe({
+      next: (result: ResumenConteoInformes) => {
+        this.resumenConteoInformes = result;
+        console.log(this.resumenConteoInformes)
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
   private getDataAboutInformes() {
     this._accessDataService.getInformacionInformes(this.dataUser.access_token).subscribe({
       next: (r) => {
