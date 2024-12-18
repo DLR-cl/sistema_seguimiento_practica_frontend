@@ -3,11 +3,12 @@ import { DataSecretariaService } from '../services/data-secretaria.service';
 import { SeguimientoData } from '../dto/secretaria-data.dto';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../../jefe_compartido/header-jefes/header.component";
+import { FormsModule, NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-estado-academicos',
   standalone: true,
-  imports: [CommonModule, HeaderComponent],
+  imports: [CommonModule, HeaderComponent, FormsModule],
   templateUrl: './estado-academicos.component.html',
   styleUrl: './estado-academicos.component.css'
 })
@@ -16,6 +17,7 @@ export class EstadoAcademicosComponent implements OnInit{
   private readonly _datasecretariaService = inject(DataSecretariaService);
 
   // VARIABLES
+  filtroRut: string = ''; // Almacena el RUT para filtrar
   dataSeguimiento: SeguimientoData[] = [];
   paginaActual: number = 0; // Página actual
   elementosPorPagina: number = 5; // Número de elementos por página
@@ -51,11 +53,28 @@ export class EstadoAcademicosComponent implements OnInit{
         return tipo;
     }
   }
+
+  convertirEstadoPractica(tipo: string): string {
+    switch(tipo){
+      case 'REVISION_GENERAL':
+          return 'Revisión';
+      default:
+        return tipo;
+    }
+  }
   obtenerDatosPaginados(): SeguimientoData[] {
+    const datosFiltrados = this.filtroRut
+      ? this.dataSeguimiento.filter((data) =>
+          data.rut_alumno.toLowerCase().includes(this.filtroRut.toLowerCase())
+        )
+      : this.dataSeguimiento;
+  
     const inicio = this.paginaActual * this.elementosPorPagina;
     const fin = inicio + this.elementosPorPagina;
-    return this.dataSeguimiento.slice(inicio, fin);
+  
+    return datosFiltrados.slice(inicio, fin);
   }
+  
 
   // Cambiar a la página anterior
   paginaAnterior(): void {

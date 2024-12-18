@@ -76,7 +76,9 @@ interface InformeConfidencial {
   
   export interface SeguimientoData {
     nombre_alumno:      string;
+    rut_alumno:         string;
     tipo_practica:      string;
+    estado_practica:    string;
     estado_informe:     string;
     nombre_academico:   string;
     correo_academico:   string;
