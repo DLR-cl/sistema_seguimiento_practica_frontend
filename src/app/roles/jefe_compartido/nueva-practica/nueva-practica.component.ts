@@ -3,7 +3,7 @@ import { HeaderComponent } from "../header-jefes/header.component";
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { alumno, AlumnoNominaInterface, empresa, GenerarPracticaService, jefeSupervisor, nuevaPractica, nuevoAlumno, nuevoSupervisor } from '../services/generar-practica.service';
+import { AlumnoNominaInterface, AlumnosDataDto, empresa, GenerarPracticaService, jefeSupervisor, nuevaPractica, nuevoAlumno, nuevoSupervisor } from '../services/generar-practica.service';
 import { DialogModule } from 'primeng/dialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -33,14 +33,14 @@ export class NuevaPracticaComponent implements OnInit{
   }
   
   empresas: empresa[] = [];
-  alumnoSeleccionado!: alumno;
+  alumnoSeleccionado!: AlumnosDataDto;
   tipoPracticas: any = [{tipo: "PRACTICA_UNO", titulo:'Práctica profesional I'},{tipo:"PRACTICA_DOS", titulo:"Práctica profesional II"}]
 
   modalidades: any = [{tipo: "PRESENCIAL", titulo: "Presencial"},{tipo: "SEMI_PRESENCIAL", titulo: "Semipresencial"}, {tipo: "REMOTO", titulo: "Remoto"}]
   
   supervisoresFiltrados: jefeSupervisor[] = [];
 
-  alumnos: alumno[] = [];
+  alumnos: AlumnosDataDto[] = [];
 
   formPractica: FormGroup = new FormGroup({
     id_empresa: new FormControl (null, Validators.required),
@@ -81,8 +81,8 @@ export class NuevaPracticaComponent implements OnInit{
   pasoActual = 1;  
   getNombreAlumnoSeleccionado(): string | null {
     const idAlumno = this.formPractica.get('id_alumno')?.value;
-    const alumno = this.alumnos.find(alumno => alumno.id_usuario === idAlumno);
-    return alumno ? alumno.nombre : null;
+    const alumno = this.alumnos.find(alumno => alumno.id_user === idAlumno);
+    return alumno ? alumno.usuario.nombre : null;
   }
   
   openModal(type: 'empresa' | 'supervisor' | 'alumno') {
@@ -192,7 +192,8 @@ export class NuevaPracticaComponent implements OnInit{
 
   obtenerAlumnos() {
     this.servicioPracticas.obtenerAlumnos().subscribe(result =>{
-      this.alumnos = result
+      this.alumnos = result.filter(alumno => !alumno.primer_practica && !alumno.segunda_practica);
+      console.log("Alumnos disponibles:", this.alumnos);
     })
   }
 

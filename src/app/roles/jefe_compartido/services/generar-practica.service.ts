@@ -55,20 +55,18 @@ export interface empresa {
   jefe_supervisor: jefeSupervisor[];
 }
 
-export interface alumnoPractica{
+export interface AlumnosDataDto {
   id_user: number;
   primer_practica: boolean;
   segunda_practica: boolean;
+  usuario : {
+      nombre: string;
+      correo: string;
+      rut: string;
+      tipo_usuario: string;
+  }
 }
 
-export interface alumno{
-  id_usuario: number;
-  nombre: string;
-  correo: string;
-  rut: string;
-  tipo_usuario: string;
-  alumno_practica: alumnoPractica;
-}
 
 export interface AlumnoNominaInterface {
   nombre: string;
@@ -118,6 +116,6 @@ export class GenerarPracticaService {
   }
 
   public obtenerAlumnos(){
-    return this.http.get<alumno[]>(`${enviroment.API_URL}/alumno-practica`)
+    return this.http.get<AlumnosDataDto[]>(`${enviroment.API_URL}/alumno-practica`)
   }
 }

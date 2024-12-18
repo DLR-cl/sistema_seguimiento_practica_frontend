@@ -154,7 +154,8 @@
                     <!-- Plantilla para cada opción -->
                     <ng-template let-alumno pTemplate="item">
                         <div class="flex items-center space-x-2">
-                            <div>{{ alumno.nombre }}</div>
+                            
+                            <div>{{ alumno.usuario.nombre }}</div>
                         </div>
                     </ng-template>
                 </p-dropdown>
