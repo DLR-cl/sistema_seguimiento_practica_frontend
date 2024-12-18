@@ -44,6 +44,7 @@ export const combinedInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, ne
 
                     default: // Otros errores
                         errorMessage = error.error.message || "Error desconocido en el servidor.";
+                        console.log(error)
                         break;
                 }
             }
