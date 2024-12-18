@@ -30,13 +30,23 @@ export class PracticasSecretariaComponent implements OnInit {
   practicaSeleccionada!: PracticaInfo | null;
   copiaPractica!: PracticaInfo | null;
 
-  textoEstado: Record<string, string> = {
-    REVISION_INFORME_ALUMNO: 'Revisión Informe Alumno',
-    REVISION_GENERAL: 'Revisión General',
-    ESPERA_INFORME_ALUMNO: 'Espera Informe Alumno',
-    CURSANDO: 'Cursando',
-    ESPERA_INFORME_CONFIDENCIAL: 'Espera Informe Confidencial'
+  textoEstadoInforme: Record<string, string> = {
+    ENVIADA: 'Enviado',
+    REVISION: 'Revisión',
+    CORRECCION: 'Corrección',
+    ESPERA: 'Espera',
+    APROBADA: 'Aprobada'
   };
+
+  
+  textoEstadoPractica: Record<string, string> = {
+    CURSANDO: 'Cursando',
+    REVISION_GENERAL: 'Revisión General',
+    ESPERA_INFORMES: 'Espera Informes',
+    FINALIZADA: 'Finalizada',
+    INFORMES_RECIBIDOS: 'Informes Recibidos'
+  };
+
 
   textoModalidad: Record<string, string> = {
     PRESENCIAL: 'Presencial',
@@ -112,6 +122,7 @@ export class PracticasSecretariaComponent implements OnInit {
 
   public getPracticas(){
     this._asignacionService.getPracticas().subscribe(result =>{
+      console.log(result)
       this.practicasBackend = result
       if(this.modalDetalles){
         this.practicaSeleccionada = result.find(practica => practica.id_practica == this.practicaSeleccionada?.id_practica)!

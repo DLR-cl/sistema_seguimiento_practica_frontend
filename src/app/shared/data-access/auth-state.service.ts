@@ -31,7 +31,6 @@ export class AuthStateService {
         const session = this.getSession();
         if (session) {
           const decodedToken: any = jwt_decode.jwtDecode(session.access_token);
-          console.log('Rol del token decodificado:', decodedToken.rol); // Depuración
           return decodedToken.rol;
         }
         return null;

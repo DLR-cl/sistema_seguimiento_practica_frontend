@@ -23,6 +23,7 @@ export class HeaderComponent implements OnInit {
   tipoJefeCarrera = TipoUsuario.JEFE_CARRERA;
   tipoJefeDepartamento = TipoUsuario.JEFE_DEPARTAMENTO;
   tipoAcademico = TipoUsuario.ACADEMICO;
+  tipoSupervisor = TipoUsuario.JEFE_EMPLEADOR;
 
   constructor(private router: Router) {}
 
@@ -56,5 +57,12 @@ export class HeaderComponent implements OnInit {
 
   goToInfoAcademicos() {
     this.router.navigate(['lista-academicos']);
+  }
+  goToInfoSecretarias() {
+    this.router.navigate(['lista-secretarias']);
+  }
+
+  goToCrearPractica(){
+    this.router.navigate(['crear-practica'])
   }
 }

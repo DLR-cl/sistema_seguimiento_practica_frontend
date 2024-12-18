@@ -9,13 +9,12 @@ import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.co
 import { JefeAlumnoInterface } from '../../data-access/interface/jefe-alumno.interface';
 import { DataJefeAlumnoService } from '../../services/data-jefe-alumno.service';
 import { InformeConfidencialService } from '../../services/informe-confidencial.service';
-import { HeaderJefeEmpleadorComponent } from "../header-jefe-empleador/header-jefe-empleador.component";
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, ChartModule, ListboxModule, ButtonModule, HeaderComponent, HeaderJefeEmpleadorComponent],
+  imports: [CommonModule, FormsModule, TableModule, ChartModule, ListboxModule, ButtonModule, HeaderComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -38,9 +37,9 @@ export class DashboardComponent implements OnInit {
         console.log(this.dataJefe)
         if (this.dataJefe?.id_jefe && this.dataJefe.id_empresa) {
           console.log(this.dataJefe)
-          this.obtenerPracticas(this.dataJefe.id_jefe);
+          this.obtenerPracticas();
           this.obtenerEmpresa(this.dataJefe.id_empresa);
-          this.obtenerAlumnosAsignados(this.dataJefe.id_jefe)
+          this.obtenerAlumnosAsignados()
         }
       },
       error: error =>{
@@ -66,27 +65,40 @@ export class DashboardComponent implements OnInit {
     alert(`Ver informe: ${informe.tipo_practica} de ${informe.nombre_alumno}`);
   }
 
-  obtenerPracticas(id_user: number){
-    this.informeConfidencialService.obtenerDestallesInformes(id_user).subscribe({
-      next: result =>{
-        console.log(result)
-        this.informesPendientes = result.filter((practica: any) => practica.estado_informe == 'ESPERA').length
-        
-        this.detalleInformes = result.filter((informe:any) => {
-          const fechaActual = new Date(); // fecha actual
-          const fechaLimite = new Date(informe.fecha_limite_entrega); // fecha llmite
-        
+  obtenerPracticas() {
+    this.informeConfidencialService.obtenerDestallesInformes().subscribe({
+      next: result => {
+        console.log(result);
+        this.informesPendientes = result.filter((practica: any) => practica.estado_informe == 'ESPERA').length;
+        this.detalleInformes = result.filter((informe: any) => {
+          const fechaActual = new Date();
+          const fechaLimite = new Date(informe.fecha_limite_entrega);
           const diferenciaDias = Math.ceil((fechaActual.getTime() - fechaLimite.getTime()) / (1000 * 60 * 60 * 24));
-        
-          return diferenciaDias <= 7// fecha limite no mas antigua que una semana
+          return diferenciaDias <= 7; // fecha limite no más antigua que una semana
         });
-        
         this.informesPendientesList = this.detalleInformes.filter(
-          (informe:any) => informe.estado_informe == 'ESPERA'
+          (informe: any) => informe.estado_informe == 'ESPERA'
         );
+      },
+      error: error => {
+        console.error('Error obteniendo prácticas', error);
       }
-    })
+    });
   }
+  
+  obtenerAlumnosAsignados() {
+    this.informeConfidencialService.obtenerAlumnosAsignados().subscribe({
+      next: result => {
+        console.log(result)
+        this.alumnosAsignados = result.cantAlumnosAsignados;
+        this.totalInformes = result.cantidadTotalInformes
+      },
+      error: error => {
+        console.error('Error obteniendo alumnos asignados', error);
+      }
+    });
+  }
+  
 
   obtenerEmpresa(id_empresa: number){
     this.informeConfidencialService.obtenerDatosEmpresa().subscribe({
@@ -100,13 +112,7 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  obtenerAlumnosAsignados(id_user: number){
-    this.informeConfidencialService.obtenerAlumnosAsignados(id_user).subscribe({
-      next: result =>{
-        this.alumnosAsignados = result.cant_alumnos
-      }
-    })
-  }
+
 
   realizarInforme(id_informe: number) {
     console.log('Realizando informe:', id_informe);

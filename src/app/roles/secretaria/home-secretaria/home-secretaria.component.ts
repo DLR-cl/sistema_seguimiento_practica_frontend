@@ -19,8 +19,9 @@ export class HomeSecretariaComponent {
   private readonly _authService = inject(AuthService);
   private readonly _secretariaDataService = inject(DataSecretariaService);
 
-  public dataSecretaria!:Secretaria | null;
+  public dataSecretaria!: Secretaria | null;
 
+  imagenFondo: string = "/departamento_ici/transicion_6.webp"
 
   ngOnInit(): void {
     this._secretariaDataService.getDataSecretaria().subscribe(
@@ -33,16 +34,20 @@ export class HomeSecretariaComponent {
     )
   }
 
-  
-  public signOut(){
-      this._authService.logout()
+  public signOut() {
+    this._authService.logout();
   }
 
-  public goToInformes(){
+  public goToInformes() {
     this._routerService.navigate(['ver-informes-jefe']);
   }
-  
-  public goToPracticas(){
+
+  public goToPracticas() {
     this._routerService.navigate(['ver-practicas-secretaria']);
+  }
+
+  // Nueva función para Cargar Usuarios por Nómina
+  public cargarUsuariosPorNomina() {
+    this._routerService.navigate(['cargar-alumnos-nomina']);
   }
 }

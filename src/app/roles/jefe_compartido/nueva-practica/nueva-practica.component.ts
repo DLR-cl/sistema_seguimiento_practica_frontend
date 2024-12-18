@@ -2,24 +2,26 @@ import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header-jefes/header.component";
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { alumno, empresa, GenerarPracticaService, jefeSupervisor, nuevaPractica, nuevoAlumno, nuevoSupervisor } from '../services/generar-practica.service';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { alumno, AlumnoNominaInterface, empresa, GenerarPracticaService, jefeSupervisor, nuevaPractica, nuevoAlumno, nuevoSupervisor } from '../services/generar-practica.service';
 import { DialogModule } from 'primeng/dialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
+import { AlumnosNominaService } from '../services/alumnos-nomina.service';
 
 @Component({
   selector: 'app-nueva-practica',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, RouterLink, ReactiveFormsModule, DialogModule, FloatLabelModule, InputTextModule, DropdownModule, CalendarModule],
+  imports: [HeaderComponent, CommonModule, RouterLink, ReactiveFormsModule, DialogModule, FormsModule, FloatLabelModule, InputTextModule, DropdownModule, CalendarModule],
   templateUrl: './nueva-practica.component.html',
   styleUrl: './nueva-practica.component.css'
 })
 export class NuevaPracticaComponent implements OnInit{
 
   private servicioPracticas= inject(GenerarPracticaService);
+  private readonly _alumnosNominaService = inject(AlumnosNominaService);
   errorMessage?:string | null = null;
 
   ngOnInit(): void {
@@ -198,4 +200,59 @@ export class NuevaPracticaComponent implements OnInit{
     this.formPractica.get('id_supervisor')?.setValue(null);
   }
 
+  obtenerDatosAlumno(){
+    const rut = this.rutControl.value?.trim().toLowerCase();
+    if (!rut) {
+      alert('Por favor, ingrese un RUT válido.');
+      return;
+    }
+    console.log(rut, "obtener alumno")
+    const alumno = this._alumnosNominaService.obtenerAlumnoNomina(rut).subscribe(
+      (response) => {
+        this.alumno = response
+      }
+    )
+  }
+  rutBusqueda: string = ''
+  modalAlumno: boolean = false;
+  rutControl = new FormControl(''); // Control Reactivo del RUT
+  alumno: any = null; // Datos del alumno encontrado
+  mensajeExito: string = ''; // Mensaje de éxito
+  alumnoNoEncontrado = false; // Estado si no se encuentra el alumno
+  openModalAlumno(){
+    this.modalAlumno = true;
+  }
+  cerrarModal(): void {
+    this.modalAlumno = false;
+  }
+
+  confirmarAlumno() {
+    console.log(this.alumno)
+    if(this.alumno){
+      const crear: nuevoAlumno = {
+        nombre: this.alumno.nombre,
+        correo: this.alumno.email,
+        rut: this.alumno.rut,
+        nomina: true,
+        tipo_usuario: "ALUMNO_PRACTICA"
+      }
+      const createALumno = this.servicioPracticas.crearAlumno(crear).subscribe(
+        (res) => {
+          console.log('Alumno c reado:', res);
+          this.alumnos.push(res.data) 
+          this.obtenerAlumnos()
+          console.log(this.alumnos)
+          this.rutControl .reset()
+          this.mensajeExito = 'El alumno ha sido creado con éxito.';
+          this.alumno = null; // Limpiar alumno seleccionado
+          this.mensajeExito = '';
+        },
+        (err) => {
+          console.error('Error al crear el alumno:', err);
+        }
+      );
+
+      this.obtenerAlumnos()
+    }
+  }
 }

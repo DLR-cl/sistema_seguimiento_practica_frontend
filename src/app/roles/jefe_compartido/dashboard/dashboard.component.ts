@@ -1,7 +1,4 @@
-import { Component } from '@angular/core';
-import { AlumnosEnPracticaCardComponent } from "../alumnos-en-practica-card/alumnos-en-practica-card.component";
-import { AlumnosSinInformeCardComponent } from "../alumnos-sin-informe-card/alumnos-sin-informe-card.component";
-import { DocentesSinInformesCardComponent } from "../docentes-sin-informes-card/docentes-sin-informes-card.component";
+import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header-jefes/header.component";
 import { ListboxModule } from 'primeng/listbox';
 import { ChartModule } from 'primeng/chart';
@@ -9,50 +6,257 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
+import { AuthStateService } from '../../../shared/data-access/auth-state.service';
+import { DashboardService, detallePractica, estadisticasPractica } from '../services/dashboard.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [AlumnosEnPracticaCardComponent, AlumnosSinInformeCardComponent, DocentesSinInformesCardComponent, CommonModule, FormsModule, HeaderComponent, ListboxModule, ChartModule, TableModule, ButtonModule],
+  imports: [CommonModule, FormsModule, ListboxModule, ChartModule, TableModule, ButtonModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
-  // Definimos las variables para la cantidad de estudiantes en práctica y carga docente.
-  cantidadEstudiantesPractica: number = 120; // Ajusta con tus datos reales
-  estudiantesSinCalificar: number = 15; // Número de estudiantes sin calificar, ajusta según tus datos
+export class DashboardComponent implements OnInit{
 
-  // Datos de los docentes con los informes
-  cargaDocenteData = [
-    { docente: 'Juan Pérez', informes: 15 },
-    { docente: 'Ana González', informes: 12 },
-    { docente: 'Carlos López', informes: 11 },
-    { docente: 'María Ruiz', informes: 9 },
-  ];
+  constructor(
+    private authService: AuthStateService,
+    private dashboardService: DashboardService
+  ){}
 
-  // Datos de carga docente (profesores con más de 10 informes)
-  cargaDocente: number = this.cargaDocenteData.filter(docente => docente.informes >= 10).length;
+  dataUser!:any;
 
-  detalleInformes: any[] = [
-    { alumno: 'Juan Pérez', nombre: 'Práctica I', estado: 'Finalizado' },
-    { alumno: 'Ana González', nombre: 'Práctica II', estado: 'Cursando' },
-    { alumno: 'Carlos López', nombre: 'Práctica I', estado: 'Finalizado' },
-    { alumno: 'María Ruiz', nombre: 'Práctica II', estado: 'Cursando' },
-    { alumno: 'José Díaz', nombre: 'Práctica I', estado: 'Finalizado' }
-  ];
+  ngOnInit(): void {
+    this.dataUser = this.authService.getData();
+    this.getEstadisticasPracticas()
+    this.getAprobacionPracticas()
+    this.getAlumnosActivosPracticas()
+    this.getDetallesPractica()
+    this.getPracticasMeses()
+  }
+
+  public getEstadisticasPracticas(){
+    this.dashboardService.getEstadisticasPracticas().subscribe({
+      next: result => {
+        this.estadisticasPractica = result
+        console.log(result)
+
+
+        const totalAsignados = this.estadisticasPractica.total_asignados; // Ejemplo: 25
+        const maxInformes = this.estadisticasPractica.max_informes; // Ejemplo: 20
+
+        // Calcular el porcentaje de carga académica
+        const porcentajeCargaAcademica = (totalAsignados / maxInformes) * 100;
+
+        // Calcular el porcentaje restante
+        let porcentajeRestante = 100 - porcentajeCargaAcademica;
+        if (porcentajeRestante < 0) {
+          porcentajeRestante = 0; // No mostrar un valor negativo
+        }
+
+        // Crear el gráfico
+        // this.academicosCargaLaboralElevadaChartData = {
+        //   labels: ['Carga académica', 'Restante'],
+        //   datasets: [
+        //     {
+        //       data: [
+        //         // Mostrar el porcentaje real de carga
+        //         porcentajeCargaAcademica, 
+        //         // Mostrar el porcentaje restante solo si es mayor que 0
+        //         porcentajeRestante > 0 ? porcentajeRestante : 0
+        //       ],
+        //       backgroundColor: ['#1565c0', '#42aaff'], // Color de la carga y el restante
+        //     }
+        //   ]
+        // };
+      },
+      error: error =>{
+        console.log(error)
+      }
+    })
+  }
+  
+  public getAprobacionPracticas(){
+    this.dashboardService.getAprobacionPracticas().subscribe({
+      next: result => {
+        console.log(result)
+        const primerPractica = result.primerPractica;
+        if(primerPractica.length != 0){
+          const aprobadosI = primerPractica
+            .filter((practica: any) => practica.estado === 'APROBADOS')
+            .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+          const total = primerPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+          const aprobadosPorcentajeI = total > 0 ? (aprobadosI / total) * 100 : 0;
+          const reprobadosPorcentajeI = 100 - aprobadosPorcentajeI;
+
+          this.practicaIChartData = {
+            labels: ['Aprobados', 'Reprobados'],
+            datasets: [
+              {
+                data: [aprobadosPorcentajeI.toFixed(2), reprobadosPorcentajeI.toFixed(2)],
+                backgroundColor: ['#1565c0', '#42aaff'],
+              }
+            ]
+          };
+        }
+        
+
+        const segundaPractica = result.segundaPractica;
+        if(segundaPractica.length != 0){
+          const aprobadosII = segundaPractica
+            .filter((practica: any) => practica.estado === 'APROBADOS')
+            .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+          const totalII = segundaPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+          const aprobadosPorcentajeII = totalII > 0 ? (aprobadosII / totalII) * 100 : 0;
+          const reprobadosPorcentajeII = 100 - aprobadosPorcentajeII;
+
+          this.practicaIIChartData = {
+            labels: ['Aprobados', 'Reprobados'],
+            datasets: [
+              {
+                data: [aprobadosPorcentajeII.toFixed(2), reprobadosPorcentajeII.toFixed(2)],
+                backgroundColor: ['#1565c0', '#42aaff'],
+              }
+            ]
+          };
+        } 
+      },
+      error: error =>{
+        console.log(error)
+      }
+    })
+  }
+
+  public getAlumnosActivosPracticas() {
+    this.dashboardService.getAlumnosActivosPracticas().subscribe({
+      next: (result) => {
+        console.log(result, "hola soy ese grafico");
+  
+        // Buscar prácticas y asignar 0 si no existen
+        const practicaUno = result.find((practica: any) => practica.tipo_practica === "PRACTICA_UNO")?.cantidad_estudiantes || 0;
+        const practicaDos = result.find((practica: any) => practica.tipo_practica === "PRACTICA_DOS")?.cantidad_estudiantes || 0;
+  
+        // Configuración del gráfico con valores asegurados
+        this.cantidadEstudiantesTipoPracticaChartData = {
+          labels: ['Práctica 1', 'Práctica 2'],
+          datasets: [
+            {
+              data: [practicaUno, practicaDos],
+              backgroundColor: ['#1565c0', '#42aaff'],
+            }
+          ]
+        };
+  
+        console.log(this.cantidadEstudiantesTipoPracticaChartData);
+      },
+      error: (error) => {
+        console.log(error);
+  
+        // En caso de error, asignar datos vacíos
+        this.cantidadEstudiantesTipoPracticaChartData = {
+          labels: ['Práctica 1', 'Práctica 2'],
+          datasets: [
+            {
+              data: [0, 0],
+              backgroundColor: ['#1565c0', '#42aaff'],
+            }
+          ]
+        };
+      }
+    });
+  }
+  
+  
+
+  public getDetallesPractica(){
+    this.dashboardService.getDetallesPracticas().subscribe({
+      next: result => {
+        console.log(result)
+        this.detallesPractica = result
+      }
+    })
+  }
+
+  public getPracticasMeses() {
+    this.dashboardService.getPracticasMeses(this.periodoSeleccionado).subscribe({
+        next: (result) => {
+            console.log(result);
+
+            // Define un tipo más flexible para permitir índices dinámicos
+            const practicasPorMes: { [mes: string]: { [key: string]: number } } = {};
+
+            // Organizar los datos recibidos
+            result.forEach((practica) => {
+                const mes = this.translateMonth(practica.mes_inicio);
+                if (!practicasPorMes[mes]) {
+                    practicasPorMes[mes] = {}; // Inicializa el mes si no existe
+                }
+                practicasPorMes[mes][practica.tipo_practica] = practica.total_practicas;
+            });
+
+            // Definir todos los meses posibles
+            const todosLosMeses = [
+                'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+            ];
+
+            // Extraer los datos para el gráfico asegurando que todos los meses están presentes
+            const labels = todosLosMeses; // Todos los meses del año
+            const dataPracticaUno = labels.map((mes) => practicasPorMes[mes]?.['PRACTICA_UNO'] || 0); // 0 si no existe
+            const dataPracticaDos = labels.map((mes) => practicasPorMes[mes]?.['PRACTICA_DOS'] || 0); // 0 si no existe
+
+            // Configurar los datos del gráfico
+            this.mesChartData = {
+                labels,
+                datasets: [
+                    {
+                        label: 'Práctica Uno',
+                        data: dataPracticaUno,
+                        backgroundColor: '#1E88E5',
+                        borderColor: '#1565C0',
+                        borderWidth: 1,
+                    },
+                    {
+                        label: 'Práctica Dos',
+                        data: dataPracticaDos,
+                        backgroundColor: '#42aaff',
+                        borderColor: '#42aaff',
+                        borderWidth: 1,
+                    },
+                ],
+            };
+        },
+    });
+  }
+
+  // Método para traducir los nombres de los meses del backend al español
+  private translateMonth(month: string): string {
+    const monthsMap: { [key: string]: string } = {
+        January: 'Enero',
+        February: 'Febrero',
+        March: 'Marzo',
+        April: 'Abril',
+        May: 'Mayo',
+        June: 'Junio',
+        July: 'Julio',
+        August: 'Agosto',
+        September: 'Septiembre',
+        October: 'Octubre',
+        November: 'Noviembre',
+        December: 'Diciembre',
+    };
+    return monthsMap[month] || month;
+  } 
+
+  estadisticasPractica!: estadisticasPractica
+  
+  detallesPractica!: detallePractica[]
+
+  periodoSeleccionado: number = 2024
 
   selectedInforme: any;
 
   // **Gráfico de Cantidad Estudiantes por Práctica** (No cambia a porcentaje)
-  cantidadEstudiantesTipoPracticaChartData = {
-    labels: ['Práctica 1', 'Práctica 2'],
-    datasets: [
-      {
-        data: [100, 80], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
-  };
+  cantidadEstudiantesTipoPracticaChartData: any
 
   cantidadEstudiantesTipoPracticaChartOptions = {
     responsive: true,
@@ -67,16 +271,8 @@ export class DashboardComponent {
     cutout: '70%'
   };
 
-  // **Gráfico de Práctica I** (Convertido a porcentaje)
-  practicaIChartData = {
-    labels: ['Aprobados', 'Reprobados'],
-    datasets: [
-      {
-        data: [85, 15], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
-  };
+  // **Gráfico de Práctica I**
+  practicaIChartData: any
 
   practicaIChartOptions = {
     responsive: true,
@@ -96,15 +292,7 @@ export class DashboardComponent {
   };
 
   // **Gráfico de Práctica II** (Convertido a porcentaje)
-  practicaIIChartData = {
-    labels: ['Aprobados', 'Reprobados'],
-    datasets: [
-      {
-        data: [75, 25], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
-  };
+  practicaIIChartData:any
 
   practicaIIChartOptions = {
     responsive: true,
@@ -152,32 +340,24 @@ export class DashboardComponent {
   };
 
   // **Gráfico de Carga Laboral Académica** (Convertido a porcentaje)
-  academicosCargaLaboralElevadaChartData = {
-    labels: ['Carga Alta', 'Carga Baja'],
-    datasets: [
-      {
-        data: [30, 70], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
-  };
+  // academicosCargaLaboralElevadaChartData: any
 
-  academicosCargaLaboralElevadaChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: any) => {
-            const total = 100; // Total de la categoría (100%)
-            const percentage = (tooltipItem.raw / total) * 100;
-            return `${percentage.toFixed(1)}% Académicos`;
-          }
-        }
-      }
-    },
-    cutout: '70%'
-  };
+  // academicosCargaLaboralElevadaChartOptions = {
+  //   responsive: true,
+  //   plugins: {
+  //     legend: { position: 'top' },
+  //     tooltip: {
+  //       callbacks: {
+  //         label: (tooltipItem: any) => {
+  //           const total = 100; // Total de la categoría (100%)
+  //           const percentage = (tooltipItem.raw / total) * 100;
+  //           return `${percentage.toFixed(1)}% Académicos`;
+  //         }
+  //       }
+  //     }
+  //   },
+  //   cutout: '70%'
+  // };
 
   // **Gráfico de Prácticas Supervisadas por Mes** (No cambia a porcentaje)
   mesChartData = {
@@ -197,13 +377,21 @@ export class DashboardComponent {
     responsive: true,
     maintainAspectRatio: false,
     scales: {
-      x: { beginAtZero: true },
-      y: { beginAtZero: true, ticks: { stepSize: 2 } },
+        x: {
+            beginAtZero: true,
+            stacked: true, // Apilar en el eje X
+        },
+        y: {
+            beginAtZero: true,
+            stacked: true, // Apilar en el eje Y
+            ticks: { stepSize: 2 }, // Intervalos del eje Y
+        },
     },
-  };
+};
+
 
   // Función para ver detalles de informes
   verInforme(informe: any) {
-    alert(`Ver informe: ${informe.nombre} de ${informe.alumno}`);
+    alert(`Ver informe: ${informe.nombre_alumno} de ${informe.tipo_practica}`);
   }
 }

@@ -11,6 +11,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { PreguntasInformeService } from '../../jefe_compartido/services/preguntas-informe.service';
+import { ActualizarInformeConfidencialDto } from '../../../shared/interface/data-informe-confidencial.interface';
 
 interface Pregunta{
   id_pregunta: number,
@@ -56,35 +57,11 @@ export class InformePrimeraPracticaComponent implements OnInit{
       tipo_pregunta: "CERRADA"
     },
     {
-      id_pregunta: 3,
-      enunciado_pregunta: "El practicante entregó las tareas asignadas en el tiempo acordado.",
-      tipo_pregunta: "CERRADA",
-    },
-    {
-      id_pregunta: 4,
-      enunciado_pregunta: "El practicante mostró habilidades efectivas para resolver problemas de manera autónoma.",
-      tipo_pregunta: "CERRADA",
-    },
-    {
-      id_pregunta: 5,
-      enunciado_pregunta: "¿Cómo describiría el trabajo realizado por el practicante?",
-      tipo_pregunta: "ABIERTA",
-    },
-    {
-      id_pregunta: 6,
-      enunciado_pregunta: "¿Cuáles son los aspectos a mejorar?",
-      tipo_pregunta: "ABIERTA",
-    },
-    {
       id_pregunta: 7,
       enunciado_pregunta: "¿Qué nota le evaluaría al alumno? (esto no afecta a la nota final del alumno)",
       tipo_pregunta: "EVALUATIVA",
     },
-    {
-      id_pregunta: 8,
-      enunciado_pregunta: "¿Cómo describiría el trabajo realizado por el practicante?",
-      tipo_pregunta: "ABIERTA",
-    },
+
   ]
   preguntas_paginas: number = 3;
   preguntas_len! :number
@@ -103,12 +80,12 @@ export class InformePrimeraPracticaComponent implements OnInit{
   }
   
   formularioDatos: FormGroup = new FormGroup({
-    fechaInicio: new FormControl(null, Validators.required),
-    fechaTermino: new FormControl(null, Validators.required),
-    horasSemanales: new FormControl(null, Validators.required),
-    horasRegulares: new FormControl(null, Validators.required),
-    horasExtraordinarias: new FormControl(null, Validators.required),
-    horasInasistencia: new FormControl(null, Validators.required)
+    fecha_inicio_practica: new FormControl(null, Validators.required),
+    fecha_fin_practica: new FormControl(null, Validators.required),
+    horas_semanales: new FormControl(null, Validators.required),
+    horas_practicas_regulares: new FormControl(null, Validators.required),
+    horas_practicas_extraordinarias: new FormControl(null, Validators.required),
+    horas_inasistencia: new FormControl(null, Validators.required)
   })
 
   idAlumno!: number
@@ -138,8 +115,11 @@ export class InformePrimeraPracticaComponent implements OnInit{
         if (preg.tipo_pregunta === 'ABIERTA') {
           respuesta.respuesta_texto = '';
         }    
-        if (preg.tipo_pregunta === 'EVALUATIVA' || preg.tipo_pregunta === 'CERRADA') {
+        if (preg.tipo_pregunta === 'CERRADA') {
           respuesta.puntos = 0;
+        }
+        if (preg.tipo_pregunta === 'EVALUATIVA'){
+          respuesta.nota = 0;
         }
         return respuesta;
       });
@@ -165,6 +145,12 @@ export class InformePrimeraPracticaComponent implements OnInit{
   enviarRespuesta(){
     console.log(this.formularioDatos.value)
     console.log(this.respuestasSupervisor)
+    const total_horas= this.formularioDatos.get('horas_practicas_regulares')?.value + this.formularioDatos.get('horas__practicas_extraordinarias')?.value + this.formularioDatos.get('horas_inasistencia')?.value
+    const data: ActualizarInformeConfidencialDto = {
+      ...this.formularioDatos.value,
+      total_horas: total_horas,
+    }
+    
     this.respuestasService.registrarRespuestasConfidencial(this.respuestasSupervisor).subscribe({
       next: result =>{
         console.log(result)
@@ -175,6 +161,16 @@ export class InformePrimeraPracticaComponent implements OnInit{
         console.log(error)
       }
     })
+    this.respuestasService.enviarInformeConfidencial(this.formularioDatos.value, this.idInforme).subscribe(
+      {
+        next: result => {
+          console.log(result);
+        },
+        error: error => {
+          console.log(error);
+        }
+      }
+    )
     this.goTofin()
   }
 }

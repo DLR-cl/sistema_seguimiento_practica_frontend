@@ -26,7 +26,6 @@ export class PerfilDataComponent implements OnInit {
   ngOnInit(): void {
     this._authService.waitForToken().then((decodedToken) => {
       this.dataUser = decodedToken;
-      console.log('Datos del usuario decodificados:', this.dataUser);
   
       if (this.dataUser) {
         this.getCantidadInformesPendientes();

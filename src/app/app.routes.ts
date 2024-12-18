@@ -28,6 +28,11 @@ import { ChangePasswordComponent } from './pages/general/change-password/change-
 
 import { DashboardComponent } from './roles/jefe_empleador/components/dashboard/dashboard.component';
 
+import { DetallesInformesComponent } from './roles/academico/components/detalles-informes/detalles-informes.component';
+
+import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component';
+import { InfoSecretariaComponent } from './roles/jefe_compartido/pages/info-secretaria/info-secretaria.component';
+
 
 export const routes: Routes = [
     {
@@ -49,12 +54,21 @@ export const routes: Routes = [
     },
     {
         path: 'home-academicos', component: AcademicoComponent,
-    }
-    ,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.ACADEMICO])]
+    },
     {
-        path: 'lista-academicos', component: InfoAcademicosComponent,
-    }
-    ,
+        path: 'lista-academicos', component: InfoAcademicosComponent, 
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO])]
+    },
+    {
+        path: 'lista-secretarias', component: InfoSecretariaComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO])]
+
+    },
+    {
+        path: 'revision-informe/:idPractica', component: DetallesInformesComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.ACADEMICO])]
+    },
     {
         path: 'nueva-practica', component: NuevaPracticaComponent,
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]
@@ -65,7 +79,15 @@ export const routes: Routes = [
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])] 
     },
     {
-        path: 'home', component: HomeComponent
+        path: 'home', component: HomeComponent,
+        canActivate: [publicGuard()]
+    },
+    {
+        path: 'cargar-alumnos-nomina', component: CargarUsuariosNominaComponent,
+        canActivate: [privateGuard()]
+    },
+    {
+        path: 'crear-practica', component: NuevaPracticaComponent,
     },
     {
         path: 'solicitar-practicante', component: SolicitarPracticanteComponent,

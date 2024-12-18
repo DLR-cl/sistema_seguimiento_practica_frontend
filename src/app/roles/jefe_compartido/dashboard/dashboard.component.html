@@ -1,61 +1,57 @@
 <div class="p-6 bg-gray-100 min-h-screen">
     <!-- Encabezado -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <h1 class="text-2xl bg-white shadow rounded px-5 py-3 font-bold text-gray-800">Bienvenido Francisco Pantoja</h1>
+        <h1 class="text-2xl bg-white shadow rounded px-5 py-3 font-bold text-gray-800">Bienvenido {{dataUser.nombre}}</h1>
     </div>
 
     <!-- Contenido Principal -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
         <!-- Columna Izquierda -->
         <div class="col-span-1 space-y-6">
-            <!-- Nueva Tabla con Estadísticas -->
-            <div class="bg-white shadow rounded p-6 h-[300px]">
-                <h2 class="text-lg font-semibold text-gray-700 mb-6">Estadísticas de Prácticas</h2>
-                <table class="min-w-full table-auto border-collapse">
-                    <thead>
-                        <tr class="border-b">
-                            <th class="py-3 px-6 text-left text-gray-600">Cantidad</th>
-                            <th class="py-3 px-6 text-left text-gray-600">Categoría</th>
+            <!-- Nueva Tabla Mejorada con Estadísticas -->
+            <div class="bg-white shadow-xl rounded-lg p-8">
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Estadísticas de Prácticas</h2>
+                <table class="min-w-full table-auto border-collapse rounded-md overflow-hidden">
+                    <thead class="bg-blue-500 text-white">
+                        <tr>
+                            <th class="py-4 px-6 text-left">Cantidad</th>
+                            <th class="py-4 px-6 text-left">Categoría</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="text-gray-700">
                         <!-- Cantidad de Estudiantes en Práctica -->
-                        <tr class="border-b border-t hover:bg-gray-50">
-                            <td class="py-3 border-r px-6 text-gray-600">{{ cantidadEstudiantesPractica }}</td>
-                            <td class="py-3 px-6 text-gray-700 font-medium">Estudiantes en Práctica</td>
+                        <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
+                            <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.estudiantes_practica }}</td>
+                            <td class="py-4 px-6 font-medium">Estudiantes en Práctica</td>
                         </tr>
-                        <!-- Carga Docente -->
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="py-3 border-r px-6 text-gray-600">{{ cargaDocente }}</td>
-                            <td class="py-3 px-6 text-gray-700 font-medium">Carga Docente</td>
+                        <!-- Cantidad de Estudiantes en Revisión -->
+                        <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
+                            <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.estudiantes_revision }}</td>
+                            <td class="py-4 px-6 font-medium">Estudiantes en Revisión</td>
+                        </tr>
+                        <!-- Cantidad de Informes Asignados -->
+                        <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
+                            <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.total_asignados }}</td>
+                            <td class="py-4 px-6 font-medium">Informes Asignados</td>
                         </tr>
                         <!-- Estudiantes sin Calificar -->
-                        <tr class="border-b hover:bg-gray-50">
-                            <td class="py-3 border-r px-6 text-gray-600">{{ estudiantesSinCalificar }}</td>
-                            <td class="py-3 px-6 text-gray-700 font-medium">Estudiantes sin Calificar</td>
+                        <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
+                            <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.informes_sin_enviar }}</td>
+                            <td class="py-4 px-6 font-medium">Informes de alumno sin enviar</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-
-            <!-- Gráfico de Barras: Cantidad de Prácticas por Mes -->
-            <div class="bg-white shadow rounded p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4">Prácticas por Mes</h2>
-                <p-chart 
-                    [data]="mesChartData" 
-                    [options]="mesChartOptions" 
-                    [type]="'bar'"
-                    height="300px">
-                </p-chart>
-            </div>
-
         </div>
+        
+        
 
         <!-- Estadísticas, Gráficos y Detalles -->
         <div class="col-span-3 grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Gráfico de la Cantidad de Estudiantes por Tipo de Práctica -->
-            <div class="col-span-1 bg-white shadow rounded p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes por Tipo de Práctica</h2>
+            <div *ngIf="cantidadEstudiantesTipoPracticaChartData?.datasets?.length > 0" class="col-span-1 bg-white shadow rounded p-4">
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes cursando por Tipo de Práctica</h2>
+
                 <p-chart
                     [data]="cantidadEstudiantesTipoPracticaChartData"
                     [options]="cantidadEstudiantesTipoPracticaChartOptions"
@@ -63,9 +59,41 @@
                     height="230px">
                 </p-chart>
             </div>
+            <div
+            *ngIf="!(cantidadEstudiantesTipoPracticaChartData?.datasets?.length > 0)"
+            class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200"
+          >
+            <!-- Mensaje -->
+            <p class="text-lg text-center font-medium text-gray-700 mb-4">
+              Aún no hay alumnos cursando practicas
+            </p>
+          
+            <!-- Ícono -->
+            <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                width="48"
+                height="48"
+                stroke-width="2"
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke="currentColor"
+                class="text-gray-500"
+              >
+                <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
+                <path d="M4 6v6c0 1.657 3.582 3 8 3c1.118 0 2.182 -.086 3.148 -.241m4.852 -2.759v-6"></path>
+                <path d="M4 12v6c0 1.657 3.582 3 8 3c1.064 0 2.079 -.078 3.007 -.22"></path>
+                <path d="M19 16v3"></path>
+                <path d="M19 22v.01"></path>
+              </svg>
+            </div>
+          </div>
+          
 
             <!-- Gráfico de Aprobados y Reprobados Práctica I -->
-            <div class="col-span-1 bg-white shadow rounded p-4">
+            <div *ngIf="practicaIChartData" class="col-span-1 bg-white shadow rounded p-4">
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Aprobados/Reprobados Práctica I</h2>
                 <p-chart
                     [data]="practicaIChartData"
@@ -74,9 +102,42 @@
                     height="230px">
                 </p-chart>
             </div>
+            <div
+            *ngIf="!practicaIChartData"
+            class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200"
+            >
+            <!-- Mensaje -->
+            <p class="text-lg text-center font-medium text-gray-700 mb-4">
+              Aún no hay alumnos que hayan finalizado su práctica I
+            </p>
+          
+            <!-- Ícono -->
+            <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                width="48"
+                height="48"
+                stroke-width="2"
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke="currentColor"
+                class="text-gray-500"
+              >
+                <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
+                <path d="M4 6v6c0 1.657 3.582 3 8 3c1.118 0 2.182 -.086 3.148 -.241m4.852 -2.759v-6"></path>
+                <path d="M4 12v6c0 1.657 3.582 3 8 3c1.064 0 2.079 -.078 3.007 -.22"></path>
+                <path d="M19 16v3"></path>
+                <path d="M19 22v.01"></path>
+              </svg>
+            </div>
+          </div>
+
+            
 
             <!-- Gráfico de Aprobados y Reprobados Práctica II -->
-            <div class="col-span-1 bg-white shadow rounded p-4">
+            <div *ngIf="practicaIIChartData" class="col-span-1 bg-white shadow rounded p-4">
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Aprobados/Reprobados Práctica II</h2>
                 <p-chart
                     [data]="practicaIIChartData"
@@ -85,6 +146,38 @@
                     height="230px">
                 </p-chart>
             </div>
+            <div
+            *ngIf="!practicaIIChartData"
+            class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200"
+            >
+            <!-- Mensaje -->
+            <p class="text-lg text-center font-medium text-gray-700 mb-4">
+              Aún no hay alumnos que hayan finalizado su práctica II
+            </p>
+          
+            <!-- Ícono -->
+            <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                width="48"
+                height="48"
+                stroke-width="2"
+                stroke-linejoin="round"
+                stroke-linecap="round"
+                stroke="currentColor"
+                class="text-gray-500"
+              >
+                <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
+                <path d="M4 6v6c0 1.657 3.582 3 8 3c1.118 0 2.182 -.086 3.148 -.241m4.852 -2.759v-6"></path>
+                <path d="M4 12v6c0 1.657 3.582 3 8 3c1.064 0 2.079 -.078 3.007 -.22"></path>
+                <path d="M19 16v3"></path>
+                <path d="M19 22v.01"></path>
+              </svg>
+            </div>
+          </div>
+
 
             <!-- Gráfico de la Percepción de las Empresas -->
             <div class="col-span-1 bg-white shadow rounded p-4">
@@ -97,8 +190,19 @@
                 </p-chart>
             </div>
 
+             <!-- Gráfico de Barras: Cantidad de Prácticas por Mes -->
+             <div class="col-span-2 bg-white shadow rounded p-4">
+                <h2 class="text-lg font-semibold text-gray-700 mb-4">Prácticas por Mes</h2>
+                <p-chart 
+                    [data]="mesChartData" 
+                    [options]="mesChartOptions" 
+                    [type]="'bar'"
+                    height="300px">
+                </p-chart>
+            </div>
+
             <!-- Gráfico de Carga Laboral Elevada -->
-            <div class="col-span-1 bg-white shadow rounded p-4">
+            <!-- <div class="col-span-1 bg-white shadow rounded p-4">
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Carga Docente</h2>
                 <p-chart
                     [data]="academicosCargaLaboralElevadaChartData"
@@ -106,35 +210,37 @@
                     [type]="'doughnut'"
                     height="230px">
                 </p-chart>
-            </div>
+            </div> -->
 
 
             <!-- Tabla de Detalles de Informes -->
             <div class="col-span-3 bg-white shadow rounded p-6">
                 <h2 class="text-lg font-semibold text-gray-700 mb-4">Detalles de Prácticas</h2>
-                <p-table [value]="detalleInformes" [paginator]="true" [rows]="5">
+                <p-table [value]="detallesPractica" [paginator]="true" [rows]="5">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Alumno</th>
                             <th>Práctica</th>
                             <th>Estado</th>
-                            <th>Acciones</th>
+                            <th>Accion</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-informe>
+                    <ng-template pTemplate="body" let-practica>
                         <tr>
-                            <td>{{ informe.alumno }}</td>
-                            <td>{{ informe.nombre }}</td>
+                            <td>{{ practica.nombre_alumno }}</td>
+                            <td>{{ practica.tipo_practica }}</td>
                             <td>
                                 <span [ngClass]="{
-                                    'text-green-600': informe.estado === 'Finalizado',
-                                    'text-red-600': informe.estado === 'Cursando'
+                                    'text-green-600': practica.estado_practica === 'FINALIZADA',
+                                    'text-red-600': practica.estado_practica === 'CURSANDO',
+                                    'text-yellow-600': practica.estado_practica === 'ESPERA_INFORMES',
+                                    'text-blue-600': practica.estado_practica === 'REVISION-GENERAL'
                                 }">
-                                    {{ informe.estado }}
+                                    {{ practica.estado_practica }}
                                 </span>
                             </td>
                             <td>
-                                <button pButton label="Ver" class="p-button-text" (click)="verInforme(informe)"></button>
+                                <button pButton label="Ver" class="p-button-text" (click)="verInforme(practica)"></button>
                             </td>
                         </tr>
                     </ng-template>

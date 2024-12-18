@@ -54,7 +54,8 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   private readonly _router = inject(Router);
-  datos_listo = false;
+  datos_listo: boolean = false;
+  correccion: boolean = false;
   dataAlumno: any
   page: number = 1;
   preguntas: Pregunta[]= []
@@ -178,8 +179,11 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
         if (preg.tipo_pregunta === 'ABIERTA') {
           respuesta.texto = '';
         }    
-        if (preg.tipo_pregunta === 'EVALUATIVA' || preg.tipo_pregunta === 'CERRADA') {
+        if (preg.tipo_pregunta === 'CERRADA') {
           respuesta.puntaje = 0;
+        }
+        if (preg.tipo_pregunta === 'EVALUATIVA'){
+          respuesta.nota = 0
         }
         return respuesta;
       });
@@ -237,21 +241,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   changeForm(){
-    console.log(this.respuestasAlumno)
-      this.respuestasAlumno = this.respuestasAlumno.map(respuesta => ({
-        ...respuesta,
-        id_informe: this.idInforme
-      }));
-
-      const asociarRespuestas: ListaRespuestas = {
-        respuestas: this.respuestasAlumno
-      }
-
-      this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
-        console.log(resultRespuestas)
-        this.datos_listo = !this.datos_listo;
-        alert('Respuestas registradas con exito')
-      })
+    this.datos_listo = !this.datos_listo
   }
 
   getOptionText(value: number): string {
@@ -308,6 +298,9 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   enviarInforme(){
+    console.log(this.respuestasAlumno)
+
+        
     const formData: FormData = new FormData()
     
     formData.append('id_informe', ''+this.idInforme)
@@ -319,18 +312,36 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
       console.log(`${key}:`, value);
     });
     
+
+    if(!this.correccion){
+      this.respuestasAlumno = this.respuestasAlumno.map(respuesta => ({
+      ...respuesta,
+      id_informe: this.idInforme
+      }));
+
+      const asociarRespuestas: ListaRespuestas = {
+        respuestas: this.respuestasAlumno
+      }
+      console.log(asociarRespuestas)
+      
+      this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
+        console.log(resultRespuestas)
+      })
+    }
+
     this.respuestasService.enviarInforme(formData).subscribe(resultInforme =>{
       console.log(resultInforme)
-      alert('Informe subido con exito')
+      alert('Enviado con exito')
       this.goTofin()
     });
   }
 
   public existeRespuesta(){
-    this.respuestasService.existeRespuesta(this.idPractica).subscribe((result: any) => {
-      if(JSON. stringify(result) != '{}'){
+    this.respuestasService.existeRespuesta(this.idInforme).subscribe((result: any) => {
+      console.log(result)
+      if(result.existeRespuesta || result.correcion){
         this.datos_listo = true;
-        this.idInforme = result.id_informe
+        this.correccion = true;
       } else {
         this.datos_listo = false
       }
