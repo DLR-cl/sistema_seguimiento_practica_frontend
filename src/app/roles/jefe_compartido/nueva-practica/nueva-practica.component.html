@@ -136,25 +136,35 @@
                 <span class="font-semibold text-blue-600">"Nuevo alumno"</span> para registrarlo.
             </p>
 
-            <div class="mt-6 w-1/4">
+            <div class="mt-6 w-1/3">
                 <label for="id_alumno" class="block text-sm font-medium text-gray-700 mb-2">
                     Alumno
                 </label>
-                <p-dropdown [options]="alumnos" optionLabel="nombre" optionValue="id_usuario"
-                    placeholder="Seleccione..." formControlName="id_alumno"
+                <p-dropdown [options]="alumnos" formControlName="id_alumno" optionLabel="nombre"
+                    optionValue="id_usuario" [filter]="true" filterBy="nombre" [showClear]="true"
+                    placeholder="Seleccione un Alumno" appendTo="body"
                     class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-1/4">
+                    <!-- Plantilla para el elemento seleccionado -->
+                    <ng-template pTemplate="selectedItem">
+                        <div class="flex items-center space-x-2" *ngIf="getNombreAlumnoSeleccionado()">
+                            <div>{{ getNombreAlumnoSeleccionado() }}</div>
+                        </div>
+                    </ng-template>
+
+                    <!-- Plantilla para cada opción -->
+                    <ng-template let-alumno pTemplate="item">
+                        <div class="flex items-center space-x-2">
+                            <div>{{ alumno.nombre }}</div>
+                        </div>
+                    </ng-template>
                 </p-dropdown>
+
             </div>
 
             <button
                 class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
-                (click)="openModal('alumno')">
-                Nuevo alumno
-            </button>
-            <button
-                class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
                 (click)="openModalAlumno()">
-                Buscar
+                Registrar por Rut
             </button>
         </div>
 
@@ -168,7 +178,7 @@
                 </button>
 
                 <!-- Encabezado -->
-                <h2 class="text-3xl font-bold text-center text-gray-700 mb-6">Buscar Alumno por RUT</h2>
+                <h2 class="text-3xl font-bold text-center text-gray-700 mb-6">Registrar Alumno por RUT</h2>
 
                 <!-- Campo de búsqueda (Reactivo) -->
                 <div class="flex gap-4 items-center mb-6">

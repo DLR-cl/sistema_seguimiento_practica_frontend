@@ -23,3 +23,8 @@
     width: 100% !important; /* Asegura que el dropdown ocupe todo el ancho */
     min-width: 0; /* Opcional: evita que el dropdown tenga un ancho mínimo */
   }
+
+.p-dropdown-panel {
+    top: auto !important; /* Anula la posición automática */
+    bottom: 0; /* Ajusta hacia abajo */
+  }

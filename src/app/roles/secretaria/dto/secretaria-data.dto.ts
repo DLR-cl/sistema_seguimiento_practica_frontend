@@ -2,8 +2,10 @@ import { EstadoInforme, EstadoPractica, TipoUsuario } from "../../../enum/enumer
 
 
 export class AsignacionDto {
-    id_informe!: number;
+    id_informe_alumno!: number;
     id_academico!: number;
+    id_practica!: number;
+    id_informe_confidencial!: number;
 }
 
 export interface Secretaria{
@@ -72,3 +74,13 @@ interface InformeConfidencial {
     id_academico?: number | null;  // opcional y puede ser null
   }
   
+  export interface SeguimientoData {
+    nombre_alumno:      string;
+    tipo_practica:      string;
+    estado_informe:     string;
+    nombre_academico:   string;
+    correo_academico:   string;
+    dias_para_revision: number;
+    inicio_revision:    Date;
+    fin_revision:       Date;
+}

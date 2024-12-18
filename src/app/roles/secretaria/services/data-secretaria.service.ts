@@ -77,4 +77,8 @@ export class DataSecretariaService {
       })
     )
   }
+
+  public obtenerEstadoAcademico(){
+    return this._http.get<any>(`${enviroment.API_URL}/dashboard/obtener-seguimiento-academicos`);
+  }
 }
