@@ -12,3 +12,8 @@ export interface CantidadInformesPendientes {
     cantidad_informes_alumno:         number;
     cantidad_informes_confidenciales: number;
 }
+
+export interface ResumenConteoInformes {
+    revisados: number;
+    porRevisar: number;
+}

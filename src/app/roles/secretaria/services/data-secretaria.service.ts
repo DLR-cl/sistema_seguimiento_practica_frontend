@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
-import { Practicas, Secretaria } from '../dto/secretaria-data.dto';
+import { Practicas, Secretaria, SeguimientoData } from '../dto/secretaria-data.dto';
 import { enviroment } from '../../../environment/environment';
 import { jwtDecode } from "jwt-decode";
 
@@ -76,5 +76,9 @@ export class DataSecretariaService {
         throw error;
       })
     )
+  }
+
+  public obtenerEstadoAcademico(){
+    return this._http.get<SeguimientoData[]>(`${enviroment.API_URL}/dashboard/obtener-seguimiento-academicos`);
   }
 }

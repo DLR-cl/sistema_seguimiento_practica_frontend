@@ -33,7 +33,7 @@ export class NuevaPracticaComponent implements OnInit{
   }
   
   empresas: empresa[] = [];
-
+  alumnoSeleccionado!: alumno;
   tipoPracticas: any = [{tipo: "PRACTICA_UNO", titulo:'Práctica profesional I'},{tipo:"PRACTICA_DOS", titulo:"Práctica profesional II"}]
 
   modalidades: any = [{tipo: "PRESENCIAL", titulo: "Presencial"},{tipo: "SEMI_PRESENCIAL", titulo: "Semipresencial"}, {tipo: "REMOTO", titulo: "Remoto"}]
@@ -79,7 +79,12 @@ export class NuevaPracticaComponent implements OnInit{
   modalTitle = '';
 
   pasoActual = 1;  
-
+  getNombreAlumnoSeleccionado(): string | null {
+    const idAlumno = this.formPractica.get('id_alumno')?.value;
+    const alumno = this.alumnos.find(alumno => alumno.id_usuario === idAlumno);
+    return alumno ? alumno.nombre : null;
+  }
+  
   openModal(type: 'empresa' | 'supervisor' | 'alumno') {
     this.modalType = type;
     this.showModal = true;

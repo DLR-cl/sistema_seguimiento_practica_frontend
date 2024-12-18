@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
+import { AsignacionDto } from '../dto/secretaria-data.dto';
 
 export interface PracticaInfo {
   id_practica: number;
-  id_informe: number;
+  id_informe_alumno: number;
+  id_informe_confidencial: number;
   tipo_practica: string;
   estado_practica: string;
   cantidad_horas: number;
@@ -40,10 +42,6 @@ export interface AcademicoInformes {
   id_academico: number;
 }
 
-export interface AcademicoAsociado{
-  id_academico: number;
-  id_informe: number;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -62,7 +60,7 @@ export class AsignacionInformesService {
     return this._http.get<PracticaInfo[]>(`${enviroment.API_URL}/practicas`)
   }
 
-  public asociarInformeAcademico(academicoAsociado: AcademicoAsociado){
+  public asociarInformeAcademico(academicoAsociado: AsignacionDto){
     return this._http.patch<any>(`${enviroment.API_URL}/informe-alumno/asociar-informe`, academicoAsociado)
   }
 

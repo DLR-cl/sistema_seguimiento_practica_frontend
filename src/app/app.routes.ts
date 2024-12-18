@@ -32,6 +32,7 @@ import { DetallesInformesComponent } from './roles/academico/components/detalles
 
 import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component';
 import { InfoSecretariaComponent } from './roles/jefe_compartido/pages/info-secretaria/info-secretaria.component';
+import { EstadoAcademicosComponent } from './roles/secretaria/estado-academicos/estado-academicos.component';
 
 
 export const routes: Routes = [
@@ -95,6 +96,10 @@ export const routes: Routes = [
     {
         path: 'home-secretaria',  component: HomeSecretariaComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA])]
+    },
+    {
+        path: 'seguimiento-academicos', component: EstadoAcademicosComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA, TipoUsuario.JEFE_CARRERA])]
     },
     {
         path: 'ver-practicas-secretaria', component: PracticasSecretariaComponent,

@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { AcademicoAsociado, AcademicoInformes, AsignacionInformesService, PracticaInfo } from '../services/asignacion-informes.service';
+import { AcademicoInformes, AsignacionInformesService, PracticaInfo } from '../services/asignacion-informes.service';
+import { AsignacionDto } from '../dto/secretaria-data.dto';
 
 @Component({
   selector: 'app-practicas-secretaria',
@@ -31,6 +32,13 @@ export class PracticasSecretariaComponent implements OnInit {
   copiaPractica!: PracticaInfo | null;
 
   textoEstadoInforme: Record<string, string> = {
+    ENVIADA: 'Enviado',
+    REVISION: 'Revisión',
+    CORRECCION: 'Corrección',
+    ESPERA: 'Espera',
+    APROBADA: 'Aprobada'
+  };
+  textoEstadoInformeConfidencial: Record<string, string> = {
     ENVIADA: 'Enviado',
     REVISION: 'Revisión',
     CORRECCION: 'Corrección',
@@ -79,9 +87,11 @@ export class PracticasSecretariaComponent implements OnInit {
 
   confirmarAsignacion() {
     if(this.copiaPractica?.academico_nombre !== ''){
-      const academicoAsociado: AcademicoAsociado = {
-        id_informe: this.copiaPractica?.id_informe!,
-        id_academico: this.profesoresBackend.find(academico => academico.nombre_academico === this.copiaPractica?.academico_nombre)?.id_academico!
+      const academicoAsociado: AsignacionDto= {
+        id_informe_alumno: this.copiaPractica?.id_informe_alumno!,
+        id_academico: this.profesoresBackend.find(academico => academico.nombre_academico === this.copiaPractica?.academico_nombre)?.id_academico!,
+        id_practica: this.copiaPractica?.id_practica!,
+        id_informe_confidencial: this.copiaPractica?.id_informe_confidencial!
       }
   
       this._asignacionService.asociarInformeAcademico(academicoAsociado).subscribe(result => {

@@ -50,4 +50,8 @@ export class HomeSecretariaComponent {
   public cargarUsuariosPorNomina() {
     this._routerService.navigate(['cargar-alumnos-nomina']);
   }
+
+  public goToEstadoAcademicos(){
+    this._routerService.navigate(['seguimiento-academicos'])
+  }
 }
