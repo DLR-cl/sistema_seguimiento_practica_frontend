@@ -12,10 +12,12 @@ import { InformeConfidencialService } from '../../services/informe-confidencial.
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
+import { DialogModule } from 'primeng/dialog';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, ChartModule, ListboxModule, ButtonModule, HeaderComponent],
+  imports: [CommonModule, FormsModule, TableModule, ChartModule, ListboxModule, ButtonModule, HeaderComponent, DialogModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -54,7 +56,7 @@ export class DashboardComponent implements OnInit {
 
   alumnosAsignados!: number;
   informesPendientes!:number;
-  totalInformes = 25;
+  totalInformes = 0;
 
   // Datos de informes pendientes y detalles, con nombres de prácticas
   detalleInformes: any = []
@@ -63,9 +65,61 @@ export class DashboardComponent implements OnInit {
 
   selectedInforme: any;
   
+  modalDetalles = false;
+
+  practicaSeleccionada: any
+
+  textoEstadoInforme: Record<string, string> = {
+    ENVIADA: 'Enviado',
+    REVISION: 'Revisión',
+    CORRECCION: 'Corrección',
+    ESPERA: 'Espera',
+    APROBADA: 'Aprobada'
+  };
+  textoEstadoInformeConfidencial: Record<string, string> = {
+    ENVIADA: 'Enviado',
+    REVISION: 'Revisión',
+    CORRECCION: 'Corrección',
+    ESPERA: 'Espera',
+    APROBADA: 'Aprobada'
+  };
+
+  
+  textoEstadoPractica: Record<string, string> = {
+    CURSANDO: 'Cursando',
+    REVISION_GENERAL: 'Revisión General',
+    ESPERA_INFORMES: 'Espera Informes',
+    FINALIZADA: 'Finalizada',
+    INFORMES_RECIBIDOS: 'Informes Recibidos'
+  };
+
+
+  textoModalidad: Record<string, string> = {
+    PRESENCIAL: 'Presencial',
+    REMOTO: 'Remoto',
+    SEMI_PRESENCIAL: 'Semipresencial'
+  };
+
+
+  cerrarModalDetalles() {
+    this.modalDetalles = false;
+    this.practicaSeleccionada = null;
+  }
+
   // Función para ver detalles de informes
-  verInforme(informe: any) {
-    alert(`Ver informe: ${informe.tipo_practica} de ${informe.nombre_alumno}`);
+  verInforme(practica: any) {
+    this.informeConfidencialService.obtenerPractica(practica.id_practica).subscribe({
+      next: result => {
+        console.log(practica, "lol")
+        this.selectedInforme = practica
+        this.practicaSeleccionada = result
+        this.modalDetalles = true
+        console.log(result)
+      },
+      error: error => {
+        console.log(error)
+      }
+    })
   }
 
   obtenerPracticas() {

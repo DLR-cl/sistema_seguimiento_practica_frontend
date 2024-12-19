@@ -43,7 +43,7 @@ export class HomeSecretariaComponent {
   }
 
   public goToPracticas() {
-    this._routerService.navigate(['ver-practicas-secretaria']);
+    this._routerService.navigate(['ver-practicas']);
   }
 
   // Nueva función para Cargar Usuarios por Nómina

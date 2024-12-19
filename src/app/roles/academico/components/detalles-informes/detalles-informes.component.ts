@@ -40,6 +40,8 @@ export class DetallesInformesComponent implements OnInit {
 
   idInforme!: number;
   pdfUrl!: SafeResourceUrl;
+  pdfUrlDownload!: string;
+  url!: string;
   idInformeConfidencial!: number;
   informeConfidencial: any;
 
@@ -57,18 +59,77 @@ export class DetallesInformesComponent implements OnInit {
   paginaActual: number = 0;
   preguntasPorPagina: number = 3;
 
-  preguntasBackend!: PreguntaEvaluacion[];
-  respuestasEvaluacion: { [key: number]: string } = {};
-  opcionesRevision = ['T', 'R', 'S', 'D'];
-  opcionesCumple = ['Sí', 'No'];
-  
+  preguntasBackend!: PreguntaEvaluacion[]; // Datos del backend
+  respuestasEvaluacion: { [key: number]: string } = {}; // Almacena respuestas seleccionadas
+  opcionesRevision = ['T', 'R', 'S', 'D']; // Opciones para revisión académica
+  opcionesCumple = ['Si', 'No']; // Opciones para preguntas cerradas
+
+  // Mapa de abreviaturas a nombres completos
   opcionesMap: Record<string, string> = {
     T: 'Total',
     R: 'Regular',
     S: 'Suficiente',
-    D: 'Deficiente',
+    D: 'Deficiente'
   };
-  
+
+  // Llama al servicio para obtener preguntas
+  public getPreguntas() {
+    this.practicaService.obtenerPreguntasEvaluacion().subscribe({
+      next: (result) => {
+        this.preguntasBackend = result; // Almacena los datos obtenidos
+      },
+      error: (error) => {
+        console.error('Error al obtener las preguntas:', error);
+      }
+    });
+  }
+
+  get agrupadosAspectos() {
+    const grupos = this.preguntasBackend
+      .filter((item) =>
+        item.pregunta.dimension.nombre === 'Formato' ||
+        item.pregunta.dimension.nombre === 'Estructura'
+      )
+      .reduce((acc: { [key: string]: any }, item) => {
+        const aspecto = item.pregunta.dimension.nombre;
+
+        if (!acc[aspecto]) {
+          acc[aspecto] = { aspecto, preguntas: [] };
+        }
+
+        acc[aspecto].preguntas.push({
+          id: item.pregunta.id_pregunta,
+          pregunta: item.pregunta.enunciado_pregunta,
+          tipo: item.pregunta.tipo_pregunta
+        });
+
+        return acc;
+      }, {});
+
+    return Object.values(grupos); // Convierte el objeto a un array para que sea iterable
+  }
+
+  // Filtra preguntas de "Evaluación General Informe Confidencial"
+  get evaluacionGeneralConfidencial() {
+    return this.preguntasBackend.filter(
+      (item) => item.pregunta.dimension.nombre === 'Evaluación General Informe Confidencial'
+    ).map((item) => ({
+      id: item.pregunta.id_pregunta,
+      pregunta: item.pregunta.enunciado_pregunta,
+      tipo: item.pregunta.tipo_pregunta
+    }));
+  }
+
+  // Selección de una respuesta
+  selectOne(id: number, opcion: string) {
+    // Mapea la abreviatura a su nombre completo
+    if (this.opcionesMap[opcion]) {
+      this.respuestasEvaluacion[id] = this.opcionesMap[opcion]; // Almacena el nombre completo
+    } else {
+      this.respuestasEvaluacion[id] = opcion; // Para otros tipos de preguntas (como Sí/No)
+    }
+  }
+
   constructor(
     private sanitizer: DomSanitizer,
     private practicaService: DatosPracticaService,
@@ -78,60 +139,11 @@ export class DetallesInformesComponent implements OnInit {
 
   ngOnInit(): void {
     this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
-    const url = '/sample.pdf'; // URL de tu PDF
-    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     this.obtenerInfoPractica();
     this.getPreguntas()
   }
 
-  public getPreguntas(){
-    this.practicaService.obtenerPreguntasEvaluacion().subscribe({
-      next: result => {
-        console.log(result)
-        this.preguntasBackend = result
-      },
-      error: error => {
-        console.log(error)
-      }
-    })
-  }
   
-  // Organiza las dimensiones y sus preguntas/subdimensiones
-  get dimensionesOrganizadas(): DimensionOrganizada[] {
-    const grupos = this.preguntasBackend.reduce((acc: { [key: number]: DimensionOrganizada }, item) => {
-      const padre = item.pregunta.dimension.idDimensionPadre;
-      const subdimension = item.pregunta.dimension.nombre;
-
-      // Crear la dimensión padre si no existe
-      if (!acc[padre]) acc[padre] = { nombre: `Dimension Padre ${padre}`, subdimensiones: {} };
-
-      // Crear la subdimensión si no existe
-      if (!acc[padre].subdimensiones[subdimension]) acc[padre].subdimensiones[subdimension] = [];
-
-      // Agregar la pregunta a la subdimensión
-      acc[padre].subdimensiones[subdimension].push({
-        id: item.pregunta.id_pregunta,
-        pregunta: item.pregunta.enunciado_pregunta,
-        tipo: item.pregunta.tipo_pregunta,
-      });
-
-      return acc;
-    }, {} as { [key: number]: DimensionOrganizada });
-
-    return Object.values(grupos);
-  }
-
-  getKeys(obj: any): string[] {
-    return Object.keys(obj);
-  }
-
-  selectOne(id: number, opcion: string) {
-    if (this.opcionesMap[opcion]) {
-      this.respuestasEvaluacion[id] = this.opcionesMap[opcion]; // Almacena el nombre completo
-    } else {
-      this.respuestasEvaluacion[id] = opcion; // Para otros tipos de preguntas (como Sí/No)
-    }
-  }
 
   get preguntasConfidencial() {
     return this.preguntasBackend
@@ -219,10 +231,9 @@ export class DetallesInformesComponent implements OnInit {
   }
 
   descargarPdf() {
-    const url = 'sample.pdf'; // La misma URL del PDF
     const link = document.createElement('a');
-    link.href = url;
-    link.download = 'informe.pdf'; // Nombre del archivo a descargar
+    link.href = this.pdfUrlDownload;
+    link.download = `informe-${this.practica.tipo_practica}-${this.practica.informe_alumno.alumno.usuario.nombre}`; // Nombre del archivo descargado
     link.target = '_blank'; // Abre en una nueva pestaña
     link.click();
   }
@@ -263,6 +274,7 @@ export class DetallesInformesComponent implements OnInit {
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
             window.URL.createObjectURL(blob)
           );
+          this.pdfUrlDownload = window.URL.createObjectURL(blob);
         },
         error: (error) => {
           console.error('Error al obtener el informe:', error);
