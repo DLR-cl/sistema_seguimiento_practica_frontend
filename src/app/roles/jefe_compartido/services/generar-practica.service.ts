@@ -18,7 +18,8 @@ export interface nuevaEmpresa {
   nombre_razon_social: string;
   ubicacion: string;
   rubro: string;
-  nombre_gerente: string;
+  caracter_empresa: string;
+  tamano_empresa: string;
 }
 
 export interface nuevoAlumno {
@@ -35,6 +36,7 @@ export interface nuevoSupervisor {
     rut: string;
     tipo_usuario: string;
     cargo: string;
+    numero_telefono: string;
     id_empresa: number;
 }
 

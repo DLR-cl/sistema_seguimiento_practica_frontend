@@ -58,7 +58,8 @@ export class NuevaPracticaComponent implements OnInit{
     nombre_razon_social: new FormControl ('', Validators.required),
     ubicacion: new FormControl ('', Validators.required),
     rubro: new FormControl ('', Validators.required),
-    nombre_gerente: new FormControl ('', Validators.required)
+    caracter_empresa: new FormControl('', Validators.required),
+    tamano_empresa: new FormControl('', Validators.required)
   });
 
   formSupervisor: FormGroup = new FormGroup({
@@ -66,6 +67,7 @@ export class NuevaPracticaComponent implements OnInit{
     rut: new FormControl ('', Validators.required),
     correo: new FormControl ('', [Validators.required, Validators.email]),
     cargo: new FormControl ('', Validators.required),
+    numero_telefono: new FormControl ('', Validators.required)
   });
 
   formAlumno: FormGroup = new FormGroup({
@@ -84,6 +86,7 @@ export class NuevaPracticaComponent implements OnInit{
     const alumno = this.alumnos.find(alumno => alumno.id_user === idAlumno);
     return alumno ? alumno.usuario.nombre : null;
   }
+  
   
   openModal(type: 'empresa' | 'supervisor' | 'alumno') {
     this.modalType = type;
