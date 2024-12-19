@@ -23,10 +23,8 @@ export class InformeConfidencialService {
     private http: HttpClient
   ) { }
 
-  private url_informes = 'http://localhost:3000/jefe-alumno';
-
   public obtenerInformes(idSupervisor: number){
-    return this.http.get<listaInformes>(`${this.url_informes}/${idSupervisor}/lista-informes`)
+    return this.http.get<listaInformes>(`${enviroment.API_URL}/jefe-alumno/${idSupervisor}/lista-informes`)
   }
   public obtenerDestallesInformes(token: string) {
 
