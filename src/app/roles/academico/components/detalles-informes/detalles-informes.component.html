@@ -38,72 +38,98 @@
   
     <!-- Formulario de Evaluación -->
     <div class="w-full h-full flex flex-col md:col-span-1 lg:col-span-2">
-      <h2 class="text-lg font-semibold text-gray-700 mb-4">Evaluación del Informe</h2>
+      <!-- Tabla 1: Aspectos de Forma y Escritura -->
+<div class="bg-white shadow-md rounded-lg p-4 mb-4" *ngIf="agrupadosAspectos.length > 0">
+  <h3 class="text-sm font-semibold text-gray-700 mb-2 border-b pb-1">Aspectos de Forma y Escritura</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm table-auto border-collapse">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="px-2 py-1 text-left border">Aspecto</th>
+          <th class="px-2 py-1 text-left border">Pregunta</th>
+          <th class="px-2 py-1 text-left border">Revisión</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let grupo of agrupadosAspectos">
+          <tr>
+            <td class="border px-2 py-1 font-semibold align-top" [attr.rowspan]="grupo.preguntas.length">
+              {{ grupo.aspecto }}
+            </td>
+            <td class="border px-2 py-1">{{ grupo.preguntas[0]?.pregunta }}</td>
+            <td class="border px-2 py-1">
+              <div class="flex gap-1">
+                <button *ngFor="let opcion of opcionesRevision"
+                        class="py-1 px-2 rounded text-xs cursor-pointer transition"
+                        [ngClass]="{
+                          'bg-blue-500 text-white': respuestasEvaluacion[grupo.preguntas[0]?.id] === opcionesMap[opcion],
+                          'bg-gray-100 text-gray-700': respuestasEvaluacion[grupo.preguntas[0]?.id] !== opcionesMap[opcion]
+                        }"
+                        (click)="selectOne(grupo.preguntas[0]?.id, opcion)">
+                  {{ opcion }}
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngFor="let pregunta of grupo.preguntas.slice(1)">
+            <td class="border px-2 py-1">{{ pregunta.pregunta }}</td>
+            <td class="border px-2 py-1">
+              <div class="flex gap-1">
+                <button *ngFor="let opcion of opcionesRevision"
+                        class="py-1 px-2 rounded text-xs cursor-pointer transition"
+                        [ngClass]="{
+                          'bg-blue-500 text-white': respuestasEvaluacion[pregunta.id] === opcionesMap[opcion],
+                          'bg-gray-100 text-gray-700': respuestasEvaluacion[pregunta.id] !== opcionesMap[opcion]
+                        }"
+                        (click)="selectOne(pregunta.id, opcion)">
+                  {{ opcion }}
+                </button>
+              </div>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>
+</div>
+
     
-      <!-- Iteración por cada Dimensión Padre -->
-      <div *ngFor="let dimension of dimensionesOrganizadas" class="col-span-full mb-6">
-        <!-- Título de la Dimensión Padre -->
-        <h3 class="text-md font-semibold text-gray-800 border-b pb-2 mb-4">{{ dimension.nombre }}</h3>
-    
-        <!-- Contenedor con scroll horizontal -->
-        <div class="bg-white shadow-sm rounded-md p-4 overflow-x-auto">
-          <table class="w-full text-sm border-collapse border border-gray-300">
+      <!-- Tabla 2: Evaluación General Informe Alumno -->
+      <div class="bg-white shadow-md rounded-lg p-4 mb-4" *ngIf="evaluacionGeneralConfidencial.length > 0">
+        <h3 class="text-sm font-semibold text-gray-700 mb-2 border-b pb-1">Evaluación General Informe Confidencial</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm table-auto border-collapse">
             <thead>
-              <tr class="bg-gray-100 text-gray-700">
-                <th class="px-4 py-2 text-left border border-gray-300">Aspecto</th>
-                <th class="px-4 py-2 text-left border border-gray-300">Item</th>
-                <th class="px-4 py-2 text-center border border-gray-300">Revisión</th>
+              <tr class="bg-gray-100">
+                <th class="px-2 py-1 text-left border">Pregunta</th>
+                <th class="px-2 py-1 text-left border">Respuesta</th>
               </tr>
             </thead>
             <tbody>
-              <ng-container *ngFor="let subdimension of getKeys(dimension.subdimensiones)">
-                <tr *ngFor="let pregunta of dimension.subdimensiones[subdimension]; let i = index">
-                  <!-- Subdimensión -->
-                  <td
-                    *ngIf="i === 0"
-                    class="border border-gray-300 px-4 py-2 text-gray-700 text-center align-middle bg-gray-50"
-                    [attr.rowspan]="dimension.subdimensiones[subdimension].length"
-                  >
-                    {{ subdimension }}
-                  </td>
-                  <!-- Pregunta -->
-                  <td class="border border-gray-300 px-4 py-2 text-gray-600">{{ pregunta.pregunta }}</td>
-                  <!-- Píldoras de revisión -->
-                  <td class="border border-gray-300 px-4 py-2 text-center">
-                    <div class="flex gap-2 justify-center">
-                      <span
-                      *ngFor="let opcion of (pregunta.tipo === 'REVISION_ACADEMICA' ? opcionesRevision : opcionesCumple)"
-                      class="cursor-pointer px-3 py-1 rounded-full text-xs transition-all shadow-sm"
-                      [ngClass]="{
-                        'bg-blue-500 text-white': respuestasEvaluacion[pregunta.id] === (pregunta.tipo === 'REVISION_ACADEMICA' ? opcionesMap[opcion] : opcion),
-                        'bg-gray-100 text-gray-700 hover:bg-gray-200': respuestasEvaluacion[pregunta.id] !== (pregunta.tipo === 'REVISION_ACADEMICA' ? opcionesMap[opcion] : opcion)
-                      }"
-                      (click)="selectOne(pregunta.id, opcion)"
-                    >
+              <tr *ngFor="let pregunta of evaluacionGeneralConfidencial">
+                <td class="border px-2 py-1">{{ pregunta.pregunta }}</td>
+                <td class="border px-2 py-1">
+                  <div class="flex gap-1">
+                    <button *ngFor="let opcion of opcionesCumple"
+                            class="py-1 px-2 rounded text-xs cursor-pointer transition"
+                            [ngClass]="{
+                              'bg-blue-500 text-white': respuestasEvaluacion[pregunta.id] === opcion,
+                              'bg-gray-100 text-gray-700': respuestasEvaluacion[pregunta.id] !== opcion
+                            }"
+                            (click)="selectOne(pregunta.id, opcion)">
                       {{ opcion }}
-                    </span>
-                    
-
-                    </div>
-                  </td>
-                </tr>
-              </ng-container>
+                    </button>
+                  </div>
+                </td>
+              </tr>
             </tbody>
           </table>
-    
-          <!-- Leyenda -->
-          <div
-            *ngIf="dimension.subdimensiones && tienePreguntasRevisionAcademica(dimension.subdimensiones)"
-            class="text-xs text-gray-600 mt-2 text-right"
-          >
-            <span class="font-semibold">T:</span> Total, 
-            <span class="font-semibold">R:</span> Regular, 
-            <span class="font-semibold">S:</span> Suficiente, 
-            <span class="font-semibold">D:</span> Deficiente
-          </div>
         </div>
       </div>
+
     </div>
+    
+    
     
     
     <!-- Informe Confidencial -->

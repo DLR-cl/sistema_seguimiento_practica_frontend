@@ -23,7 +23,7 @@
                         <td class="px-4 py-4 text-gray-600">{{informe.estado_informe}}</td>
                         <td class="px-4 py-4 text-gray-600">{{informe.intentos}}</td>
                         <td class="px-4 py-4">
-                            <button class="py-2 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200" (click)="revision(informe.id_practica)">
+                            <button *ngIf="informe.estado_informe === 'REVISION'" class="py-2 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200" (click)="revision(informe.id_practica)">
                                 Revisar
                             </button>
                         </td>
