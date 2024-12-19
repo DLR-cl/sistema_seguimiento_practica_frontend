@@ -4,6 +4,7 @@ export interface PayloadInterface {
     id_usuario: number;
     correo: string;
     nombre: string;
-    rut: string;
     rol: TipoUsuario;
+    rut: string;
+    access_token: string;
 }

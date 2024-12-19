@@ -1,0 +1,74 @@
+<app-header></app-header>
+<div class="relative overflow-x-auto">
+  <div class="w-[90%] m-auto mb-4 mt-2">
+    <input
+      type="text"
+      class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Buscar por RUT"
+      [(ngModel)]="filtroRut"
+    />
+  </div>
+  
+    <!-- Contenedor con sombra y bordes redondeados -->
+    <div class="w-[90%] m-auto shadow-lg rounded-lg overflow-hidden">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <!-- Encabezado -->
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-6 py-3">Nombre del Alumno</th>
+            <th scope="col" class="px-6 py-3">Rut del Alumno</th>
+            <th scope="col" class="px-6 py-3">Tipo de Práctica</th>
+            <th scope="col" class="px-6 py-3">Estado Práctica</th>
+            <th scope="col" class="px-6 py-3">Nombre del Académico</th>
+            <th scope="col" class="px-6 py-3">Correo del Académico</th>
+            <th scope="col" class="px-6 py-3">Días para Revisión</th>
+            <th scope="col" class="px-6 py-3">Inicio Revisión</th>
+            <th scope="col" class="px-6 py-3">Fin Revisión</th>
+          </tr>
+        </thead>
+        <!-- Cuerpo -->
+        <tbody>
+          <tr
+            *ngFor="let data of obtenerDatosPaginados()"
+            [class.bg-red-100]="data.dias_para_revision <= 3"
+            [class.bg-yellow-100]="data.dias_para_revision > 3 && data.dias_para_revision <= 7"
+            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 transition-colors"
+          >
+            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+              {{ data.nombre_alumno }}
+            </th>
+            <td class="px-6 py-4">{{ data.rut_alumno }}</td>
+            <td class="px-6 py-4">{{ convertirTipoPractica(data.tipo_practica) }}</td>
+            <td class="px-6 py-4">{{ convertirEstadoPractica(data.estado_practica) }}</td>
+            <td class="px-6 py-4">{{ data.nombre_academico }}</td>
+            <td class="px-6 py-4">{{ data.correo_academico }}</td>
+            <td class="px-6 py-4 font-semibold">{{ data.dias_para_revision }} días</td>
+            <td class="px-6 py-4">{{ formatearFecha(data.inicio_revision) }}</td>
+            <td class="px-6 py-4">{{ formatearFecha(data.fin_revision) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Paginador -->
+    <div class="flex justify-between items-center mt-4 w-[90%] m-auto">
+      <button
+        class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
+        [disabled]="paginaActual === 0"
+        (click)="paginaAnterior()"
+      >
+        Anterior
+      </button>
+      <span class="text-sm text-gray-500">
+        Página {{ paginaActual + 1 }} de {{ totalPaginas }}
+      </span>
+      <button
+        class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
+        [disabled]="paginaActual >= totalPaginas - 1"
+        (click)="paginaSiguiente()"
+      >
+        Siguiente
+      </button>
+    </div>
+  </div>
+  
