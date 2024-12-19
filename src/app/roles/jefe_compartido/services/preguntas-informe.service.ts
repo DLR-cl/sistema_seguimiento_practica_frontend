@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { enviroment } from '../../../environment/environment';
 
 export interface Dimension {
   nombre: string;
@@ -29,10 +30,10 @@ export class PreguntasInformeService {
     private http: HttpClient,
   ) { }
   
-  private url_dimensiones = 'http://localhost:3000/dimensiones-evaluativas';
-  private url_preguntas = 'http://localhost:3000/preguntas'
-  private url_implementadas_confidencial = 'http://localhost:3000/preguntas-implementadas-confidencial';
-  private url_implementadas_alumno = 'http://localhost:3000/preguntas-implementadas-informe-alumno';
+  private url_dimensiones = `${enviroment.API_URL}/dimensiones-evaluativas`;
+  private url_preguntas = `${enviroment.API_URL}/preguntas`
+  private url_implementadas_confidencial = `${enviroment.API_URL}/preguntas-implementadas-confidencial`;
+  private url_implementadas_alumno = `${enviroment.API_URL}/preguntas-implementadas-informe-alumno`;
 
   public getPreguntasConfidencial(){
     return this.http.get<any>(`${this.url_implementadas_confidencial}`)
