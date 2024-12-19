@@ -28,8 +28,13 @@ export class InformeConfidencialService {
   public obtenerInformes(idSupervisor: number){
     return this.http.get<listaInformes>(`${this.url_informes}/${idSupervisor}/lista-informes`)
   }
-  public obtenerDestallesInformes() {
-    return this.http.get<any>(`${enviroment.API_URL}/dashboard/informes-supervisor`);
+  public obtenerDestallesInformes(token: string) {
+
+    return this.http.get<any>(`${enviroment.API_URL}/dashboard/informes-supervisor`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
   }
   
   public obtenerAlumnosAsignados() {

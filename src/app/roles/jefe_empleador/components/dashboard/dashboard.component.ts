@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
@@ -10,7 +10,8 @@ import { JefeAlumnoInterface } from '../../data-access/interface/jefe-alumno.int
 import { DataJefeAlumnoService } from '../../services/data-jefe-alumno.service';
 import { InformeConfidencialService } from '../../services/informe-confidencial.service';
 import { Router } from '@angular/router';
-
+import { AuthService } from '../../../../auth/services/auth.service';
+import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -23,7 +24,9 @@ export class DashboardComponent implements OnInit {
   constructor(
     private informeConfidencialService: InformeConfidencialService,
     private _jefeDataService: DataJefeAlumnoService,
-    private _router: Router
+    private _router: Router,
+    private _authStateService: AuthStateService,
+    private cdr: ChangeDetectorRef
   ){}
 
   public dataJefe?:JefeAlumnoInterface | null;
@@ -66,24 +69,30 @@ export class DashboardComponent implements OnInit {
   }
 
   obtenerPracticas() {
-    this.informeConfidencialService.obtenerDestallesInformes().subscribe({
-      next: result => {
-        console.log(result);
-        this.informesPendientes = result.filter((practica: any) => practica.estado_informe == 'ESPERA').length;
-        this.detalleInformes = result.filter((informe: any) => {
-          const fechaActual = new Date();
-          const fechaLimite = new Date(informe.fecha_limite_entrega);
-          const diferenciaDias = Math.ceil((fechaActual.getTime() - fechaLimite.getTime()) / (1000 * 60 * 60 * 24));
-          return diferenciaDias <= 7; // fecha limite no más antigua que una semana
-        });
-        this.informesPendientesList = this.detalleInformes.filter(
-          (informe: any) => informe.estado_informe == 'ESPERA'
-        );
-      },
-      error: error => {
-        console.error('Error obteniendo prácticas', error);
-      }
-    });
+    const token = this._authStateService.getSession()?.access_token
+    console.log(token)
+    if(token){
+
+      this.informeConfidencialService.obtenerDestallesInformes(token).subscribe({
+        next: result => {
+          console.log(result);
+          this.informesPendientes = result.filter((practica: any) => practica.estado_informe == 'ESPERA').length;
+          this.detalleInformes = result.filter((informe: any) => {
+            const fechaActual = new Date();
+            const fechaLimite = new Date(informe.fecha_limite_entrega);
+            const diferenciaDias = Math.ceil((fechaActual.getTime() - fechaLimite.getTime()) / (1000 * 60 * 60 * 24));
+            return diferenciaDias <= 500; // fecha limite no más antigua que una semana
+          });
+          this.informesPendientesList = this.detalleInformes.filter(
+            (informe: any) => informe.estado_informe == 'ESPERA'
+          );
+          
+        },
+        error: error => {
+          console.error('Error obteniendo prácticas', error);
+        }
+      });
+    }
   }
   
   obtenerAlumnosAsignados() {
