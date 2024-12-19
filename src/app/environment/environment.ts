@@ -1,4 +1,4 @@
 export const enviroment = {
     production: false,
-    API_URL: 'https://seguimientopractica.vercel.app'
+    API_URL: 'http://localhost:3000'
 };

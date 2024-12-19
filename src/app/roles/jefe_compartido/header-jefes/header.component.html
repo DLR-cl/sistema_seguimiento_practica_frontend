@@ -53,8 +53,8 @@
       </div>
 
       <!-- Opciones comunes -->
-      <a *ngIf="dataUser?.rol == tipoAcademico || dataUser?.rol == tipoSupervisor" (click)="goToInfoAcademicos()" class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Academicos</a>
-      <a *ngIf="dataUser?.rol == tipoAcademico || dataUser?.rol == tipoSupervisor" (click)="goToInfoSecretarias()" class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Secretarias</a>
+      <a *ngIf="dataUser?.rol !== tipoAcademico && dataUser?.rol !== tipoSupervisor" (click)="goToInfoAcademicos()" class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Academicos</a>
+      <a *ngIf="dataUser?.rol !== tipoAcademico && dataUser?.rol !== tipoSupervisor" (click)="goToInfoSecretarias()" class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Secretarias</a>
       <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Guía Usuario</a>
       <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Objetivos</a>
     </div>
