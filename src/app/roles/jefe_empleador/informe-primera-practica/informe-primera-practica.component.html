@@ -110,26 +110,84 @@
                     </div>
 
                     <!-- Pregunta Evaluativa -->
-                    <div *ngIf="preg.tipo_pregunta == 'EVALUATIVA'" class="mt-4 space-y-3">re
-                        <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900">Califica</label>
-                        <p-inputNumber
-                            id="number-input"
-                            [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.nota"
-                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, nota: $event })"
-                            [min]="1"
-                            [max]="7"
-                            [mode]="'decimal'"
-                            [step]="0.1"
-                            [locale]="'en-US'"
-                            [showButtons]="true"
-                            [minFractionDigits]="0"
-                            [maxFractionDigits]="1"
-                            placeholder="7.0"
-                            inputStyleClass="px-2 py-1"
-                            [incrementButtonClass]="'bg-gray-200 text-gray-600 w-6 border-0 text-xs hover:bg-gray-300 rounded-t-sm'"
-                            [decrementButtonClass]="'bg-gray-200 text-gray-600 w-6 border-0 text-xs hover:bg-gray-300 rounded-b-sm'"
-                        ></p-inputNumber>
-                    </div>
+                    <div *ngIf="preg.tipo_pregunta === 'HABILIDADES_TECNICAS'" class="respuestas mt-4 space-y-3">
+                        <!-- Botones de selección para habilidades -->
+                        <div *ngFor="let value of habilidadesOpciones" class="flex items-center">
+                          <p-radioButton 
+                            [inputId]="'habilidad_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            [name]="'habilidad_' + (i + (page - 1) * preguntas_paginas)" 
+                            [value]="value" 
+                            [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto" 
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: value })"
+                          >
+                          </p-radioButton>
+                          <label 
+                            [for]="'habilidad_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            class="ml-2 text-gray-600 text-sm cursor-pointer">
+                            {{ value }}
+                          </label>    
+                        </div>
+                      
+                        <!-- Campo de texto para otras herramientas -->
+                        <div class="mt-4">
+                          <input
+                            type="text"
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
+                            placeholder="Escriba otra herramienta"
+                            [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto"
+                            (ngModelChange)="actualizarInputText(preg.id_pregunta, $event)"
+                          />
+                        </div>
+                      </div>
+                      
+                      
+
+                      <div *ngIf="preg.tipo_pregunta === 'VINCULACION_MEDIO'" class="respuestas mt-4 space-y-3">
+                        <!-- Opciones Sí, No y Tal vez -->
+                        <div *ngFor="let value of ['Sí', 'No', 'Tal vez']" class="flex items-center">
+                          <p-radioButton 
+                            [inputId]="'vinculacion_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            [name]="'vinculacion_' + (i + (page - 1) * preguntas_paginas)" 
+                            [value]="value" 
+                            [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto" 
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: value })"
+                          >
+                          </p-radioButton>
+                          <label 
+                            [for]="'vinculacion_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            class="ml-2 text-gray-600 text-sm cursor-pointer">
+                            {{ value }}
+                          </label>    
+                        </div>
+                      </div>
+                      
+                      
+                        
+                      <div *ngIf="preg.tipo_pregunta === 'SALARIO_ESTIMADO'" class="respuestas mt-4 space-y-3">
+                        <!-- Opciones Salariales -->
+                        <div *ngFor="let value of [
+                          'Menos de $500.000', 
+                          'Entre $500.001 y $700.000', 
+                          'Entre $700.001 y $1.000.000', 
+                          'Más de $1.000.001'
+                        ]" class="flex items-center">
+                          <p-radioButton 
+                            [inputId]="'salario_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            [name]="'salario_' + (i + (page - 1) * preguntas_paginas)" 
+                            [value]="value" 
+                            [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto" 
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: value })"
+                          >
+                          </p-radioButton>
+                          <label 
+                            [for]="'salario_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            class="ml-2 text-gray-600 text-sm cursor-pointer">
+                            {{ value }}
+                          </label>    
+                        </div>
+                      </div>
+                      
+                      
                 </div>
             </div>
 

@@ -42,27 +42,21 @@ export class InformePrimeraPracticaComponent implements OnInit{
     console.log(this.idInforme)
   }
 
+  habilidadesOpciones: string[] = [
+    "Microsoft Excel",
+    "SAP",
+    "Python/R",
+    "Power BI",
+    "Tableau",
+    "ERP específico de la Empresa"
+  ];
+  
   private readonly _router = inject(Router);
   public datos_listo = false;
   public page: number=1;
-  preguntas: Pregunta[]= [
-    {
-      id_pregunta: 1,
-      enunciado_pregunta: "El practicante demostró conocimiento técnico adecuado para las tareas asignadas.",
-      tipo_pregunta: "CERRADA",
-    },
-    {
-      id_pregunta: 2,
-      enunciado_pregunta: "El practicante realizó su trabajo con precisión y atención al detalle.",
-      tipo_pregunta: "CERRADA"
-    },
-    {
-      id_pregunta: 7,
-      enunciado_pregunta: "¿Qué nota le evaluaría al alumno? (esto no afecta a la nota final del alumno)",
-      tipo_pregunta: "EVALUATIVA",
-    },
+  input_texto= '';
+  preguntas: Pregunta[]= []
 
-  ]
   preguntas_paginas: number = 3;
   preguntas_len! :number
   
@@ -94,13 +88,37 @@ export class InformePrimeraPracticaComponent implements OnInit{
 
   public actualizarRespuesta(preguntaId: number, respuesta: respuestaInformeConfidencial) {
     const index = this.respuestasSupervisor.findIndex(r => r.id_pregunta === preguntaId);
+  
     if (index !== -1) {
-      this.respuestasSupervisor[index] = respuesta; // actualiza la respuesta si existe
+      // Actualiza la respuesta si ya existe
+      this.respuestasSupervisor[index] = {
+        ...this.respuestasSupervisor[index],
+        ...respuesta, // Actualiza solo los campos modificados
+      };
     } else {
-      this.respuestasSupervisor.push(respuesta); // si no existe agregas una nueva respuesta
+      // Si no existe, agrega la nueva respuesta
+      this.respuestasSupervisor.push(respuesta);
     }
-    console.log(this.respuestasSupervisor)
+  
+    console.log(this.respuestasSupervisor);
   }
+  
+  public actualizarInputText(preguntaId: number, texto: string) {
+    const index = this.respuestasSupervisor.findIndex(r => r.id_pregunta === preguntaId);
+  
+    if (index !== -1) {
+      this.respuestasSupervisor[index].respuesta_texto = texto;
+    } else {
+      this.respuestasSupervisor.push({
+        id_informe: this.idInforme,
+        id_pregunta: preguntaId,
+        respuesta_texto: texto,
+      });
+    }
+  
+    console.log(this.respuestasSupervisor);
+  }
+  
 
   public obtenerPreguntas(){
     this.preguntasService.getPreguntasConfidencial().subscribe(result=>{
@@ -110,7 +128,8 @@ export class InformePrimeraPracticaComponent implements OnInit{
       this.respuestasSupervisor = this.preguntas.map(preg => {
         let respuesta: respuestaInformeConfidencial = {
           id_pregunta: preg.id_pregunta,
-          id_informe: this.idInforme
+          id_informe: this.idInforme,
+          respuesta_texto: ''
         };       
         if (preg.tipo_pregunta === 'ABIERTA') {
           respuesta.respuesta_texto = '';
@@ -120,6 +139,9 @@ export class InformePrimeraPracticaComponent implements OnInit{
         }
         if (preg.tipo_pregunta === 'EVALUATIVA'){
           respuesta.nota = 0;
+        }
+        if (preg.tipo_pregunta === 'VINCULACION_MEDIO' || preg.tipo_pregunta === 'HABILIDADES_TECNICAS') {
+          respuesta.respuesta_texto = ''; // Inicializa el campo para entradas personalizadas
         }
         return respuesta;
       });
