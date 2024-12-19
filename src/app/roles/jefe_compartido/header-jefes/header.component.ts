@@ -55,6 +55,10 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['preguntas/confidencial']);
   }
 
+  public goToPracticas() {
+    this.router.navigate(['ver-practicas']);
+  }
+
   goToInfoAcademicos() {
     this.router.navigate(['lista-academicos']);
   }

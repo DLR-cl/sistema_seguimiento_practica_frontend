@@ -19,7 +19,7 @@ export interface Secretaria{
 export interface Practicas {
     id_practica:          number;
     tipo_practica:        string;
-    estado:               EstadoPractica;
+    estado:               string;
     cantidad_horas:       number;
     horas_semanales:      number;
     fecha_inicio:         Date;
@@ -27,23 +27,21 @@ export interface Practicas {
     modalidad:            string;
     id_alumno:            number;
     id_supervisor:        number;
-    alumno:               Alumno;
-    informe_alumno?:       InformeAlumno | null;
-    informe_confidencial?: InformeConfidencial | null;
+    informe_alumno:       InformeAlumno;
+    informe_confidencial: InformeConfidencial;
 }
 
 export interface Alumno {
     id_user:          number;
     primer_practica:  boolean;
     segunda_practica: boolean;
-    usuario:          Usuario;
+    usuario:          AlumnoUsuario;
 }
 
-export interface Usuario {
-    correo:       string;
-    nombre:       string;
-    rut:          string;
-    tipo_usuario: TipoUsuario;
+
+export interface AlumnoUsuario {
+    nombre: string;
+    correo: string;
 }
 
 export interface InformeAlumno {
@@ -51,29 +49,62 @@ export interface InformeAlumno {
     id_practica:            number;
     id_alumno:              number;
     archivo:                string;
-    estado:                 EstadoInforme;
-    id_academico:           number | null;
-    fecha_inicio_revision:  Date | null;
-    fecha_termino_revision: Date | null;
+    archivo_correccion:     null;
+    estado:                 string;
+    id_academico:           number;
+    fecha_inicio:           Date;
+    intentos:               number;
+    fecha_inicio_revision:  Date;
+    fecha_termino_revision: Date;
+    alumno:                 Alumno;
 }
 
-interface InformeConfidencial {
-    id_informe_confidencial: number;
-    horas_practicas_regulares: number;
+
+export interface InformeConfidencial {
+    id_informe_confidencial:         number;
+    horas_practicas_regulares:       number;
     horas_practicas_extraordinarias: number;
-    total_horas: number;
-    horas_inasistencia: number;
-    nota_evaluacion?: number | null;  // opcional y puede ser null
-    
-    fecha_inicio_revision?: Date | null;  // opcional y puede ser null
-    fecha_termino_revision?: Date | null; // opcional y puede ser null
-    
-    id_supervisor: number;
-    id_alumno_evaluado: number;
-    id_practica: number;
-    id_academico?: number | null;  // opcional y puede ser null
-  }
+    total_horas:                     number;
+    horas_semanales:                 number;
+    horas_inasistencia:              number;
+    nota_evaluacion:                 null;
+    fecha_inicio:                    Date;
+    fecha_envio:                     null;
+    estado:                          string;
+    fecha_inicio_revision:           Date;
+    fecha_termino_revision:          Date;
+    fecha_inicio_practica:           Date;
+    fecha_fin_practica:              Date;
+    fecha_real_revision:             null;
+    id_supervisor:                   number;
+    id_alumno_evaluado:              number;
+    id_practica:                     number;
+    id_academico:                    number;
+    supervisor:                      Supervisor;
+}
   
+export interface Supervisor {
+    id_user:    number;
+    cargo:      string;
+    id_empresa: number;
+    usuario:    SupervisorUsuario;
+    empresa:    Empresa;
+}
+
+export interface Empresa {
+    id_empresa:          number;
+    nombre_razon_social: string;
+    ubicacion:           string;
+    rubro:               string;
+    nombre_gerente:      string;
+}
+
+export interface SupervisorUsuario {
+    nombre: string;
+    correo: string;
+    rut:    string;
+}
+
   export interface SeguimientoData {
     nombre_alumno:      string;
     rut_alumno:         string;

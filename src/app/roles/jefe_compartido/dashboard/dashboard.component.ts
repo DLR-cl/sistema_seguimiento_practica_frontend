@@ -52,22 +52,6 @@ export class DashboardComponent implements OnInit{
         if (porcentajeRestante < 0) {
           porcentajeRestante = 0; // No mostrar un valor negativo
         }
-
-        // Crear el gráfico
-        // this.academicosCargaLaboralElevadaChartData = {
-        //   labels: ['Carga académica', 'Restante'],
-        //   datasets: [
-        //     {
-        //       data: [
-        //         // Mostrar el porcentaje real de carga
-        //         porcentajeCargaAcademica, 
-        //         // Mostrar el porcentaje restante solo si es mayor que 0
-        //         porcentajeRestante > 0 ? porcentajeRestante : 0
-        //       ],
-        //       backgroundColor: ['#1565c0', '#42aaff'], // Color de la carga y el restante
-        //     }
-        //   ]
-        // };
       },
       error: error =>{
         console.log(error)
@@ -338,26 +322,6 @@ export class DashboardComponent implements OnInit{
     },
     cutout: '70%'
   };
-
-  // **Gráfico de Carga Laboral Académica** (Convertido a porcentaje)
-  // academicosCargaLaboralElevadaChartData: any
-
-  // academicosCargaLaboralElevadaChartOptions = {
-  //   responsive: true,
-  //   plugins: {
-  //     legend: { position: 'top' },
-  //     tooltip: {
-  //       callbacks: {
-  //         label: (tooltipItem: any) => {
-  //           const total = 100; // Total de la categoría (100%)
-  //           const percentage = (tooltipItem.raw / total) * 100;
-  //           return `${percentage.toFixed(1)}% Académicos`;
-  //         }
-  //       }
-  //     }
-  //   },
-  //   cutout: '70%'
-  // };
 
   // **Gráfico de Prácticas Supervisadas por Mes** (No cambia a porcentaje)
   mesChartData = {
