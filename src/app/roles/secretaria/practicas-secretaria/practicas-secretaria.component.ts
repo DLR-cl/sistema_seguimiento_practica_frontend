@@ -6,22 +6,39 @@ import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { AcademicoInformes, AsignacionInformesService, PracticaInfo } from '../services/asignacion-informes.service';
 import { AsignacionDto } from '../dto/secretaria-data.dto';
+import { InputTextModule } from 'primeng/inputtext';
+import { AuthStateService } from '../../../shared/data-access/auth-state.service';
+import { PayloadInterface } from '../../../shared/interface/payload.interface';
+import { TipoUsuario } from '../../../enum/enumerables.enum';
+
 
 @Component({
   selector: 'app-practicas-secretaria',
   standalone: true,
-  imports: [HeaderSecretariaComponent, CommonModule, DropdownModule, FormsModule, DialogModule],
+  imports: [HeaderSecretariaComponent, CommonModule, DropdownModule, FormsModule, DialogModule, InputTextModule],
   templateUrl: './practicas-secretaria.component.html',
   styleUrl: './practicas-secretaria.component.css'
 })
 export class PracticasSecretariaComponent implements OnInit {
 
   private readonly _asignacionService = inject(AsignacionInformesService);
+  private readonly _dataUserService = inject(AuthStateService);
+
+  
+
 
   ngOnInit(): void {
     this.getProfesores(),
-    this.getPracticas()
+    this.getPracticas(),
+    this.getData()
   }
+
+  dataUser?: PayloadInterface | null;
+  tipoJefeCarrera = TipoUsuario.JEFE_CARRERA;
+  tipoSecretaria= TipoUsuario.SECRETARIA;
+
+
+  buscador: string = ''
 
   practicasBackend: PracticaInfo[] = []
   profesoresBackend: AcademicoInformes[] = []
@@ -61,6 +78,49 @@ export class PracticasSecretariaComponent implements OnInit {
     REMOTO: 'Remoto',
     SEMI_PRESENCIAL: 'Semipresencial'
   };
+
+  paginaActual: number = 0; // Página actual
+  elementosPorPagina: number = 5; // Número de elementos por página
+
+  private getData() {
+    this.dataUser = this._dataUserService.getData();
+  }
+
+  obtenerDatosPaginados() {
+    // Filtrar los datos solo si hay un valor en el buscador
+    const datosFiltrados = this.buscador
+      ? this.practicasBackend.filter((data) =>
+          data.alumno_rut.startsWith(this.buscador) // Verifica la secuencia exacta
+        )
+      : this.practicasBackend;
+  
+    // Calcular el inicio y fin de los elementos paginados
+    const inicio = this.paginaActual * this.elementosPorPagina;
+    const fin = inicio + this.elementosPorPagina;
+  
+    // Retorna los elementos paginados
+    return datosFiltrados.slice(inicio, fin);
+  }
+  
+
+  // Cambiar a la página anterior
+  paginaAnterior(): void {
+    if (this.paginaActual > 0) {
+      this.paginaActual--;
+    }
+  }
+
+  // Cambiar a la página siguiente
+  paginaSiguiente(): void {
+    if (this.paginaActual < this.totalPaginas - 1) {
+      this.paginaActual++;
+    }
+  }
+
+  // Total de páginas
+  get totalPaginas(): number {
+    return Math.ceil(this.practicasBackend.length / this.elementosPorPagina);
+  }
 
   abrirModal() {
     this.modalAsignacion = true;

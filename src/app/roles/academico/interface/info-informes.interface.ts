@@ -6,6 +6,7 @@ export interface InfoInformes {
     dias_para_revision:  BigInt;
     inicio_revision: Date;
     fin_revision:    Date;
+    intentos: number;
 }
 
 export interface CantidadInformesPendientes {

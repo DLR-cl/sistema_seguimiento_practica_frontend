@@ -40,7 +40,7 @@
                     [options]="informesPendientesList" 
                     [(ngModel)]="selectedInforme"
                     optionLabel="nombre" 
-                    (onChange)="verInforme(selectedInforme)"
+                    (onChange)="realizarInforme(selectedInforme.id_practica)"
                     [listStyle]="{'max-height': '400px'}">
                   <ng-template let-informe pTemplate="item">
                     <div class="flex flex-col">
@@ -98,7 +98,7 @@
                             </td>
                             <td>{{ informe.dias_restantes }} días</td>
                             <td>
-                                <button pButton label="{{informe.estado_informe == 'ESPERA' ? 'Realizar' : 'Ver'}}" class="p-button-text" (click)="informe.estado_informe === 'ESPERA' ? realizarInforme(informe.id_informe_confidencial) : verInforme(informe.id_informe_confidencial)"></button>
+                                <button pButton label="{{informe.estado_informe == 'ESPERA' ? 'Realizar' : 'Ver'}}" class="p-button-text" (click)="informe.estado_informe === 'ESPERA' ? realizarInforme(informe.id_informe_confidencial) : verInforme(informe)"></button>
                             </td>
                         </tr>
                     </ng-template>
@@ -107,3 +107,121 @@
         </div>
     </div>
 </div>
+
+<!-- Modal de Detalles -->
+<p-dialog [(visible)]="modalDetalles" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" [style]="{ width: '750px' }">
+    <!-- Header -->
+    <ng-template pTemplate="header">
+      <div class="text-center mx-auto py-4">
+        <h2 class="text-2xl font-semibold text-blue-700">Detalles de la Práctica</h2>
+      </div>
+    </ng-template>
+  
+    <!-- Content -->
+    <ng-template pTemplate="content">
+      <div class="space-y-8">
+        <!-- Información General -->
+        <div class="space-y-6">
+          <div class="border-b pb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Información General</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-6 text-sm">
+            <div>
+              <p class="text-gray-500">Tipo de Práctica</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.tipo_practica == 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Alumno</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_alumno.alumno.usuario.nombre }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Modalidad</p>
+              <p class="font-medium text-gray-900">{{ textoModalidad[practicaSeleccionada?.modalidad] }}</p>
+            </div>
+        
+            <!-- Estado Informe Confidencial -->
+            <div *ngIf="!['CURSANDO'].includes(practicaSeleccionada!.estado_practica)">
+              <p class="text-sm text-gray-500">Estado Informe Confidencial</p>
+              <p class="text-base font-medium truncate"
+                [ngClass]="{
+                  'text-blue-600': selectedInforme.estado_informe === 'ENVIADA',
+                  'text-red-600': selectedInforme.estado_informe === 'ESPERA',
+                  'text-green-600': selectedInforme.estado_informe === 'APROBADA',
+                  'text-yellow-600': selectedInforme.estado_informe === 'REVISION'
+
+                }">
+                {{ textoEstadoInforme[selectedInforme.estado_informe] }}
+              </p>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Fechas y Horas -->
+        <div class="space-y-6">
+          <div class="border-b pb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Fechas y Horas</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-6 text-sm">
+            <div>
+              <p class="text-gray-500">Fecha de Inicio</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.fecha_inicio | date: 'dd/MM/yyyy' }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Fecha de Finalización</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.fecha_termino | date: 'dd/MM/yyyy' }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Cantidad de Horas</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.cantidad_horas }} horas</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Horas Semanales</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.horas_semanales }} horas/semana</p>
+            </div>
+          </div>
+        </div>
+    
+        <!-- Notas Evaluador -->
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado_practica !== 'CURSANDO'">
+          <div class="border-b pb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Notas Evaluador</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-6 text-sm">
+            <div>
+              <p class="text-gray-500">Total de Horas</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial.total_horas }} horas</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Horas extraordinarias</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial.horas_practicas_extraordinarias }} horas</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Horas regulares</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial.horas_practicas_regulares }} horas</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Horas de Inasistencia</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial.horas_inasistencia }} horas</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Nota Evaluación</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial.nota_evaluacion || 'Sin calificación' }}</p>
+            </div>
+          </div>
+        </div>
+  
+  
+      </div>
+    </ng-template>
+  
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end space-x-6">
+        <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-medium px-4 py-2 rounded-lg"
+          (click)="cerrarModalDetalles()">
+          Cerrar
+        </button>
+      </div>
+    </ng-template>
+  </p-dialog>
+  

@@ -102,8 +102,8 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA, TipoUsuario.JEFE_CARRERA])]
     },
     {
-        path: 'ver-practicas-secretaria', component: PracticasSecretariaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA])]
+        path: 'ver-practicas', component: PracticasSecretariaComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA, TipoUsuario.JEFE_CARRERA])]
     },
     {
         path: 'home-jefe-alumno', component: DashboardComponent,

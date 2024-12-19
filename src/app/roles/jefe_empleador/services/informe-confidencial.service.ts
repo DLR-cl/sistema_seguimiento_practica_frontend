@@ -36,6 +36,9 @@ export class InformeConfidencialService {
     return this.http.get<any>(`${enviroment.API_URL}/dashboard/cantidad-alumnos-asignados`);
   }
   
+  public obtenerPractica(idPractica: number){
+    return this.http.get<any>(`${enviroment.API_URL}/practicas/${idPractica}`)
+  }
 
   public obtenerDatosEmpresa(){
     return this.http.get<any>(`${enviroment.API_URL}/empresas`)

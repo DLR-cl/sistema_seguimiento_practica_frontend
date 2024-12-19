@@ -40,6 +40,8 @@ export class DetallesInformesComponent implements OnInit {
 
   idInforme!: number;
   pdfUrl!: SafeResourceUrl;
+  pdfUrlDownload!: string;
+  url!: string;
   idInformeConfidencial!: number;
   informeConfidencial: any;
 
@@ -78,8 +80,6 @@ export class DetallesInformesComponent implements OnInit {
 
   ngOnInit(): void {
     this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
-    const url = '/sample.pdf'; // URL de tu PDF
-    this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
     this.obtenerInfoPractica();
     this.getPreguntas()
   }
@@ -219,10 +219,9 @@ export class DetallesInformesComponent implements OnInit {
   }
 
   descargarPdf() {
-    const url = 'sample.pdf'; // La misma URL del PDF
     const link = document.createElement('a');
-    link.href = url;
-    link.download = 'informe.pdf'; // Nombre del archivo a descargar
+    link.href = this.pdfUrlDownload;
+    link.download = `informe-${this.practica.tipo_practica}-${this.practica.informe_alumno.alumno.usuario.nombre}`; // Nombre del archivo descargado
     link.target = '_blank'; // Abre en una nueva pestaña
     link.click();
   }
@@ -263,6 +262,7 @@ export class DetallesInformesComponent implements OnInit {
           this.pdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
             window.URL.createObjectURL(blob)
           );
+          this.pdfUrlDownload = window.URL.createObjectURL(blob);
         },
         error: (error) => {
           console.error('Error al obtener el informe:', error);

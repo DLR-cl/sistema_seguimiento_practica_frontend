@@ -23,12 +23,9 @@ export class HeaderSecretariaComponent {
   }
 
   public goToPracticas(){
-    this._router.navigate(['ver-practicas-secretaria']);
+    this._router.navigate(['ver-practicas']);
   }
   
-  // public goToData(){
-  //   this._router.navigate(['ver-practicas']);
-  // }
   public signOut(){
     this._authService.logout()
 }
