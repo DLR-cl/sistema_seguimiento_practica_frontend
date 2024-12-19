@@ -1,0 +1,208 @@
+<app-header-jefe-empleador></app-header-jefe-empleador>
+
+<div class="bg-gray-50 py-12 flex items-center justify-center min-h-screen">
+    <div class="container max-w-screen-lg p-10 bg-white rounded-lg shadow-lg">
+        <h1 class="text-3xl font-bold text-center text-blue-800 mb-6">Formulario de Seguimiento de Práctica</h1>
+        <p class="text-center text-gray-600 mb-10">Por favor, complete las preguntas para ayudar en el seguimiento del
+            desempeño del alumno en su práctica profesional.</p>
+
+        <div *ngIf="!datos_listo" class="datos_formulario w-2/3 m-auto">
+            <form [formGroup]="formularioDatos" class="mx-auto">
+                <!-- Fecha Inicio -->
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="date" id="floating_email" formControlName="fecha_inicio_practica"
+                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "/>
+                    <label for="floating_email"
+                        class="peer-focus:font-medium absolxute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                        Fecha Inicio</label>
+                </div>
+            
+                <!-- Fecha Termino -->
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="date" id="floating_password" formControlName="fecha_fin_practica"
+                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "/>
+                    <label for="floating_password"
+                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                        Fecha Termino</label>
+                </div>
+            
+                <!-- Horas Semanales de trabajo -->
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="number" id="floating_repeat_password" formControlName="horas_semanales"
+                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                        placeholder=" "/>
+                    <label for="floating_repeat_password"
+                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                        Horas Semanales de trabajo</label>
+                </div>
+            
+                <div class="grid md:grid-cols-2 md:gap-6">
+                    <!-- Horas de Prácticas Regulares -->
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="number" id="floating_first_name" formControlName="horas_practicas_regulares"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "/>
+                        <label for="floating_first_name"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Horas de Prácticas Regulares</label>
+                    </div>
+            
+                    <!-- Horas de Prácticas Extraordinarias -->
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="number" id="floating_last_name" formControlName="horas_practicas_extraordinarias"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "/>
+                        <label for="floating_last_name"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Horas de Prácticas Extraordinarias</label>
+                    </div>
+                </div>
+            
+                <!-- Horas de Inasistencia -->
+                <div class="grid md:grid-cols-1 md:gap-6">
+                    <div class="relative z-0 w-full mb-5 group">
+                        <input type="number" id="floating_phone" formControlName="horas_inasistencia"
+                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                            placeholder=" "/>
+                        <label for="floating_phone"
+                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                            Horas de Inasistencia</label>
+                    </div>
+                </div>
+            
+                <button (click)="changeForm()"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Confirmar Datos
+                </button>
+            </form>
+        </div>
+        <!-- Contenedor de preguntas con paginación -->
+        <div *ngIf="datos_listo">
+            <div class="preguntas-container min-h-[450px] mb-6">
+                <div *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index"
+                    class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm">
+                    <p class="text-lg font-semibold text-gray-700">{{ preg.enunciado_pregunta }}</p>
+
+                    <div *ngIf="preg.tipo_pregunta == 'CERRADA'" class="respuestas mt-4 space-y-3">
+                        <div *ngFor="let value of [1, 2, 3, 4, 5]" class="flex items-center">
+                            <p-radioButton 
+                                [inputId]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" 
+                                [name]="'experiencia_' + (i + (page-1) * preguntas_paginas)" 
+                                [value]="value" 
+                                [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntos" 
+                                (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, puntos: respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntos })">
+                            </p-radioButton>
+                            <label 
+                                [for]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" 
+                                class="ml-2 text-gray-600 text-sm cursor-pointer">
+                                {{ value }} - {{ getOptionText(value) }}
+                            </label>    
+                        </div>
+                    </div>
+                    
+                    <!-- Pregunta Abierta -->
+                    <div *ngIf="preg.tipo_pregunta == 'ABIERTA'" class="respuestas mt-4 space-y-3">
+                        <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Tu respuesta</label>
+                            <textarea pInputTextarea id="message" [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.respuesta_texto" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, {id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: $event })" rows="4" autoResize="true" placeholder="Deja tu respuesta aquí" class="w-full text-sm">
+                        </textarea>
+                    </div>
+
+                    <!-- Pregunta Evaluativa -->
+                    <div *ngIf="preg.tipo_pregunta === 'HABILIDADES_TECNICAS'" class="respuestas mt-4 space-y-3">
+                        <!-- Botones de selección para habilidades -->
+                        <div *ngFor="let value of habilidadesOpciones" class="flex items-center">
+                          <p-radioButton 
+                            [inputId]="'habilidad_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            [name]="'habilidad_' + (i + (page - 1) * preguntas_paginas)" 
+                            [value]="value" 
+                            [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto" 
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: value })"
+                          >
+                          </p-radioButton>
+                          <label 
+                            [for]="'habilidad_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            class="ml-2 text-gray-600 text-sm cursor-pointer">
+                            {{ value }}
+                          </label>    
+                        </div>
+                      
+                        <!-- Campo de texto para otras herramientas -->
+                        <div class="mt-4">
+                          <input
+                            type="text"
+                            class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
+                            placeholder="Escriba otra herramienta"
+                            [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto"
+                            (ngModelChange)="actualizarInputText(preg.id_pregunta, $event)"
+                          />
+                        </div>
+                      </div>
+                      
+                      
+
+                      <div *ngIf="preg.tipo_pregunta === 'VINCULACION_MEDIO'" class="respuestas mt-4 space-y-3">
+                        <!-- Opciones Sí, No y Tal vez -->
+                        <div *ngFor="let value of ['Sí', 'No', 'Tal vez']" class="flex items-center">
+                          <p-radioButton 
+                            [inputId]="'vinculacion_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            [name]="'vinculacion_' + (i + (page - 1) * preguntas_paginas)" 
+                            [value]="value" 
+                            [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto" 
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: value })"
+                          >
+                          </p-radioButton>
+                          <label 
+                            [for]="'vinculacion_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            class="ml-2 text-gray-600 text-sm cursor-pointer">
+                            {{ value }}
+                          </label>    
+                        </div>
+                      </div>
+                      
+                      
+                        
+                      <div *ngIf="preg.tipo_pregunta === 'SALARIO_ESTIMADO'" class="respuestas mt-4 space-y-3">
+                        <!-- Opciones Salariales -->
+                        <div *ngFor="let value of [
+                          'Menos de $500.000', 
+                          'Entre $500.001 y $700.000', 
+                          'Entre $700.001 y $1.000.000', 
+                          'Más de $1.000.001'
+                        ]" class="flex items-center">
+                          <p-radioButton 
+                            [inputId]="'salario_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            [name]="'salario_' + (i + (page - 1) * preguntas_paginas)" 
+                            [value]="value" 
+                            [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto" 
+                            (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: value })"
+                          >
+                          </p-radioButton>
+                          <label 
+                            [for]="'salario_' + (i + (page - 1) * preguntas_paginas) + '_' + value" 
+                            class="ml-2 text-gray-600 text-sm cursor-pointer">
+                            {{ value }}
+                          </label>    
+                        </div>
+                      </div>
+                      
+                      
+                </div>
+            </div>
+
+            <!-- Controles de paginación -->
+            <div class="nav-buttons text-center mb-4">
+                <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente"
+                    class="controles_navegacion"></pagination-controls>
+            </div>
+
+        </div>
+        <!-- Botón de enviar en la última página -->
+        <div class="text-center" *ngIf="page === preguntas_len">
+            <button
+                class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
+                (click)="enviarRespuesta()">Enviar Respuestas</button>
+        </div>
+    </div>
+</div>

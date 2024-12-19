@@ -1,3 +1,23 @@
-.image-login {
-    
+.loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    font-size: 1.5rem;
+    color: rgb(38, 0, 255);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgb(0, 17, 110); /* Color del borde */
+    border-top-color: rgb(0, 55, 255);       /* Color de la parte superior */
+    border-radius: 50%;
+    animation: spin 0.5s linear infinite;
+    margin-bottom: 1rem; /* Espacio entre el spinner y el texto */
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }

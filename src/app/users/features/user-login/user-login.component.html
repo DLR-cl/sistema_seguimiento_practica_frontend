@@ -1,39 +1,95 @@
-<!-- component -->
-<!-- component -->
-<div class="bg-sky-100 flex justify-center items-center h-screen">
-    <!-- Left: Image -->
-    <div class="w-1/2 h-screen hidden lg:block">
-        <img src="departamento_dici.png" alt="Placeholder Image"
-            class="object-cover w-full h-full image-login">
-    </div>
+<div class="relative min-h-screen bg-cover bg-center text-gray-900"
+     [style.backgroundImage]="'url(' + imagenFondo + ')'" style="overflow: hidden;">
+    <!-- Superponer el gradiente oscuro -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-gray-900/90"></div>
+
     <!-- Right: Login Form -->
-    <div class="lg:p-36 md:p-52 sm:20 p-8 w-full lg:w-1/2">
-        <h1 class="text-2xl font-bold mb-20">Portal de seguimiento de practica ICI</h1>
-        <h2 class="text-2xl font-semibold mb-4">Login</h2>
-        <form action="#" method="POST">
-            <!-- Username Input -->
-            <div class="mb-4 bg-sky-100">
-                <label for="username" class="block text-gray-600">Correo</label>
-                <input type="text" id="correo" name="correo"
-                    class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                    autocomplete="off">
+    <div class="absolute inset-0 flex items-center justify-center z-10">
+        <div class="w-full max-w-3xl p-10 bg-white shadow-2xl rounded-3xl opacity-95 relative">
+            
+            <!-- Botón de Volver al Menú (arriba a la izquierda dentro del cuadro blanco) -->
+            <div class="absolute top-7 left-7">
+                <button (click)="goToHome()"
+                        class="py-2 px-3 hover:bg-gray-100 text-white font-medium rounded-lg transition duration-300 w-full sm:w-auto flex items-center">
+                    <i class="text-2xl pi pi-arrow-left text-black"></i>
+                </button>
             </div>
-            <!-- Password Input -->
-            <div class="mb-4">
-                <label for="password" class="block text-gray-800">Contraseña</label>
-                <input type="password" id="password" name="password"
-                    class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
-                    autocomplete="off">
+            
+            <div class="flex justify-center mb-6">
+                <img src="logo_industria.png" alt="logo_dici" class="w-28 h-28">
             </div>
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-4">Portal de Seguimiento de Práctica ICI</h1>
+            <h2 class="text-xl font-normal text-center text-gray-600 mb-6">Iniciar Sesión</h2>
 
-            <!-- Forgot Password Link -->
-            <div class="mb-6 text-blue-500">
-                <a href="#" class="hover:underline">¿Olvidó su contraseña?</a>
-            </div>
-            <!-- Login Button -->
-            <button type=""
-                class="bg-red-500 hover:bg-blue-600 text-white font-semibold rounded-md py-2 px-4 w-full" (click)="toHome()">Login</button>
-        </form>
+            <form [formGroup]="loginForm" (ngSubmit)="submit()">
+                <!-- Correo Input -->
+                <div class="mb-6">
+                    <label for="correo" class="block text-gray-700 font-medium mb-2">Correo Electrónico</label>
+                    <input 
+                        type="text" 
+                        id="correo" 
+                        name="correo"
+                        class="w-full border-2 border-gray-300 rounded-lg py-3 px-4 focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-300 transition-all"
+                        autocomplete="off"
+                        placeholder="ejemplo@gmail.com"
+                        formControlName="email"
+                    >
+                    <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)" class="text-red-500 text-sm mt-2">
+                        Por favor, introduzca un correo válido.
+                    </div>
+                </div>
+                <!-- Password Input -->
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 font-medium mb-2">Contraseña</label>
+                    <div class="relative">
+                        <input 
+                            [type]="showPassword ? 'text' : 'password'" 
+                            id="password" 
+                            name="password"
+                            class="w-full border-2 border-gray-300 rounded-lg py-3 px-4 focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-300 transition-all"
+                            autocomplete="off"
+                            placeholder="••••••••"
+                            formControlName="password"
+                        >
+                        <button type="button" (click)="togglePasswordVisibility()" class="absolute right-3 top-3 text-gray-600">
+                            <span *ngIf="showPassword">
+                                <!-- Icono para mostrar contraseña -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
+                                    <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"></path>
+                                </svg>
+                            </span>
+                            <span *ngIf="!showPassword">
+                                <!-- Icono para ocultar contraseña -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828"></path>
+                                    <path d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87"></path>
+                                    <path d="M3 3l18 18"></path>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                    <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)" class="text-red-500 text-sm mt-2">
+                        La contraseña es obligatoria.
+                    </div>
+                </div>
 
+                <!-- Forgot Password Link -->
+                <!-- <div class="text-blue-600 text-center mb-8">
+                    <a href="#" class="hover:underline">¿Olvidó su contraseña?</a>
+                </div> -->
+
+                <!-- Login Button -->
+                <button type="submit"
+                    class="bg-red-600 text-white font-medium rounded-lg py-3 px-6 w-full transition duration-200 ease-in-out my-3 
+                        hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                    [disabled]="loginForm.invalid">Iniciar Sesión</button>
+            </form>
+
+            <!-- Error Message -->
+            <div *ngIf="errorMessage" class="text-red-500 text-center mt-4">
+                {{ errorMessage }}
+            </div>
+        </div>
     </div>
 </div>

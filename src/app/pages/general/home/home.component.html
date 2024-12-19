@@ -1,6 +1,37 @@
-<!-- Header -->
-
-<!--Main content: depends of role -->
-
-
-<!-- Footer -->
+<div class="relative min-h-screen bg-gray-900 text-white flex items-center justify-center overflow-hidden">
+    <!-- Fondo de imágenes rotativas -->
+    <div *ngFor="let image of imageUrls; let i = index"
+         class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+         [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
+         [class.opacity-100]="currentImageIndex === i"
+         [class.opacity-0]="currentImageIndex !== i">
+    </div>
+  
+    <!-- Overlay oscuro para legibilidad -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-gray-900/90"></div>
+  
+    <!-- Contenido principal -->
+    <div class="relative z-10 text-center px-6 max-w-4xl">
+      <!-- Título del sistema -->
+      <h1 class="text-3xl md:text-5xl font-bold leading-snug tracking-normal text-white drop-shadow-lg">
+        Sistema de Seguimiento de Prácticas Profesionales
+      </h1>
+      <!-- Descripción -->
+      <p class="mt-4 text-lg md:text-xl text-gray-300 leading-relaxed">
+        Gestiona informes, realiza seguimiento de resultados y brinda acceso a estudiantes, jefes de empleados, académicos y secretarías de manera sencilla y eficiente.
+      </p>
+      <!-- Botones -->
+      <div class="mt-6 flex justify-center space-x-4">
+        <button class="py-3 px-6 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition duration-300"
+                (click)="toLogin()">Iniciar Sesión</button>
+        <button class="py-3 px-6 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg transition duration-300"
+                (click)="toLetter()">Solicitar Practicante</button>
+      </div>
+    </div>
+  
+    <!-- Footer -->
+    <footer class="absolute bottom-4 left-0 right-0 text-center text-gray-500 text-sm">
+      <p>&copy; 2024 Departamento ICI. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+  
