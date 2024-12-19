@@ -1,4 +1,4 @@
 export const enviroment = {
-    production: false,
+    production: true,
     API_URL: 'https://seguimientopractica.vercel.app'
 };
