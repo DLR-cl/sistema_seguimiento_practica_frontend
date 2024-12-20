@@ -268,7 +268,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   enviarInforme(){
     console.log(this.respuestasAlumno)
 
-    if(this.respuestasAlumno.some(respuesta=> this.esRespuestaIncompleta(respuesta))){
+    if(this.respuestasAlumno.some(respuesta=> this.esRespuestaIncompleta(respuesta)) && !this.correccion){
       this.messageService.add({
         severity: 'error',
         summary: 'Error',

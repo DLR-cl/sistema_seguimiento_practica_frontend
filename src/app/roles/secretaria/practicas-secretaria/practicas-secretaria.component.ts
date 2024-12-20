@@ -53,12 +53,14 @@ export class PracticasSecretariaComponent implements OnInit {
     REVISION: 'Revisión',
     CORRECCION: 'Corrección',
     ESPERA: 'Espera',
-    APROBADA: 'Aprobada'
+    APROBADA: 'Aprobada',
+    DESAPROBADA: 'Desaprobada'
   };
   textoEstadoInformeConfidencial: Record<string, string> = {
     ENVIADA: 'Enviado',
     REVISION: 'Revisión',
     CORRECCION: 'Corrección',
+    DESAPROBADA: 'Desaprobada',
     ESPERA: 'Espera',
     APROBADA: 'Aprobada'
   };
