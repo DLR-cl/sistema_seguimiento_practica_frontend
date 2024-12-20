@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
 import { DetallesInformes, ListaInformes } from '../dto/informe-confidencial.dto';
 import { AlumnosAsignados } from '../dto/dashboard.dto';
-import { Practicas } from '../../secretaria/dto/secretaria-data.dto';
 import { Empresa } from '../../jefe_compartido/dto/empresa.dto';
+import { Practicas } from '../../secretaria/dto/practicas.dto';
 
 @Injectable({
   providedIn: 'root'

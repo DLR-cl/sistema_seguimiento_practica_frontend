@@ -4,12 +4,13 @@ import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { AcademicoInformes, AsignacionInformesService, PracticaInfo } from '../services/asignacion-informes.service';
+import { AsignacionInformesService } from '../services/asignacion-informes.service';
 import { AsignacionDto } from '../dto/secretaria-data.dto';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
 import { PayloadInterface } from '../../../shared/interface/payload.interface';
 import { TipoUsuario } from '../../../enum/enumerables.enum';
+import { AcademicoInformes, PracticaInfo } from '../dto/asignacion-informes.dto';
 
 
 @Component({

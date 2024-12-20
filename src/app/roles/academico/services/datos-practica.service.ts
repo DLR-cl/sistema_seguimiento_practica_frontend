@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Practicas } from '../../secretaria/dto/secretaria-data.dto';
 import { enviroment } from '../../../environment/environment';
+import { Practicas } from '../../secretaria/dto/practicas.dto';
 
 
 export interface Dimension {

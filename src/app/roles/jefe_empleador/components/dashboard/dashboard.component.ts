@@ -13,7 +13,7 @@ import { AuthStateService } from '../../../../shared/data-access/auth-state.serv
 import { DialogModule } from 'primeng/dialog';
 import { DetallesInformes } from '../../dto/informe-confidencial.dto';
 import { Empresa } from '../../../jefe_compartido/dto/empresa.dto';
-import { Practicas } from '../../../secretaria/dto/secretaria-data.dto';
+import { Practicas } from '../../../secretaria/dto/practicas.dto';
 
 @Component({
   selector: 'app-dashboard',

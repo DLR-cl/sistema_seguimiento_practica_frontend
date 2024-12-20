@@ -88,6 +88,7 @@ export class PerfilDataComponent implements OnInit {
     this._accessDataService.getInformesCriticos(this.dataUser.access_token).subscribe({
       next: (r) => {
         this.informesCriticos = r;
+        console.log(this.informesCriticos)
       },
       error: (err) => console.error('Error al obtener informes críticos:', err),
     });

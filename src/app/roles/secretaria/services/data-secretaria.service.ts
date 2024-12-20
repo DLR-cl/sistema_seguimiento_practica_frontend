@@ -2,9 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, map, Observable } from 'rxjs';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
-import { Practicas, Secretaria, SeguimientoData } from '../dto/secretaria-data.dto';
+import { Secretaria, SeguimientoData } from '../dto/secretaria-data.dto';
 import { enviroment } from '../../../environment/environment';
 import { jwtDecode } from "jwt-decode";
+import { Practicas } from '../dto/practicas.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +55,7 @@ export class DataSecretariaService {
           }
       )
   }
-  // yapo
+
   public getUserId(): number | null {
       let token = localStorage.getItem('session')
       if (token) {

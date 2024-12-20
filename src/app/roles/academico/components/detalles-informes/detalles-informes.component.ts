@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Practicas } from '../../../secretaria/dto/secretaria-data.dto';
 import { DatosPracticaService, PreguntaEvaluacion } from '../../services/datos-practica.service';
 import { ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
 import { DataAccessService } from '../../services/data-access.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Practicas } from '../../../secretaria/dto/practicas.dto';
 
 interface PreguntaOrganizada {
   id: number;
