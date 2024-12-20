@@ -355,7 +355,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   public existeRespuesta(){
     this.respuestasService.existeRespuesta(this.idInforme).subscribe((result: any) => {
       console.log(result)
-      if(result.existeRespuesta || result.correcion){
+      if(result.correccion){
         this.datos_listo = true;
         this.correccion = true;
       } else {
