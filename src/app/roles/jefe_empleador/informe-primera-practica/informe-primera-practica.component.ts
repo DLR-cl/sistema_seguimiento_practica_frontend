@@ -11,8 +11,9 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { PreguntasInformeService } from '../../jefe_compartido/services/preguntas-informe.service';
-import { ActualizarInformeConfidencialDto } from '../../../shared/interface/data-informe-confidencial.interface';
 import { respuestaInformeConfidencial } from '../dto/informe-confidencial.dto';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { MessageService } from 'primeng/api';
 
 interface Pregunta{
   id_pregunta: number,
@@ -23,7 +24,7 @@ interface Pregunta{
 @Component({
   selector: 'app-informe-primera-practica',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, HeaderJefeEmpleadorComponent, FormsModule, ReactiveFormsModule, CalendarModule, RadioButtonModule, ButtonModule ,InputTextareaModule, InputNumberModule],
+  imports: [CommonModule, NgxPaginationModule, HeaderJefeEmpleadorComponent, FormsModule, ReactiveFormsModule, CalendarModule, RadioButtonModule, ButtonModule ,InputTextareaModule, InputNumberModule, FloatLabelModule],
   templateUrl: './informe-primera-practica.component.html',
   styleUrl: './informe-primera-practica.component.css'
 })
@@ -34,7 +35,8 @@ export class InformePrimeraPracticaComponent implements OnInit{
   constructor(
     private preguntasService: PreguntasInformeService,
     private respuestasService: RespuestasInformeService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessageService
   ){}
 
   ngOnInit(): void {
@@ -130,23 +132,16 @@ export class InformePrimeraPracticaComponent implements OnInit{
         let respuesta: respuestaInformeConfidencial = {
           id_pregunta: preg.id_pregunta,
           id_informe: this.idInforme,
-          respuesta_texto: ''
         };       
-        if (preg.tipo_pregunta === 'ABIERTA') {
+        if (preg.tipo_pregunta === 'ABIERTA' || preg.tipo_pregunta === 'VINCULACION_MEDIO' || preg.tipo_pregunta === 'HABILIDADES_TECNICAS') {
           respuesta.respuesta_texto = '';
         }    
         if (preg.tipo_pregunta === 'CERRADA') {
           respuesta.puntos = 0;
         }
-        if (preg.tipo_pregunta === 'EVALUATIVA'){
-          respuesta.nota = 0;
-        }
-        if (preg.tipo_pregunta === 'VINCULACION_MEDIO' || preg.tipo_pregunta === 'HABILIDADES_TECNICAS') {
-          respuesta.respuesta_texto = ''; // Inicializa el campo para entradas personalizadas
-        }
         return respuesta;
       });
-      console.log(this.respuestasSupervisor)
+      console.log(this.respuestasSupervisor, 'respuestas')
     })
   }
 
@@ -157,31 +152,34 @@ export class InformePrimeraPracticaComponent implements OnInit{
   changeForm(){
     if (!this.formularioDatos.invalid) {
       console.log(this.formularioDatos.value);
-      this.datos_listo = true;
+      this.datos_listo = !this.datos_listo;
       console.log(this.respuestasSupervisor)
     } else {
       console.log(this.formularioDatos.value);
-      alert("Formulario inválido");
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Rellene todo el formulario' });
     }
   }
 
   enviarRespuesta(){
-    console.log(this.formularioDatos.value)
-    console.log(this.respuestasSupervisor)
-    const total_horas= this.formularioDatos.get('horas_practicas_regulares')?.value + this.formularioDatos.get('horas__practicas_extraordinarias')?.value + this.formularioDatos.get('horas_inasistencia')?.value
-    const data: ActualizarInformeConfidencialDto = {
-      ...this.formularioDatos.value,
-      total_horas: total_horas,
+
+    if(this.respuestasSupervisor.some(respuesta=> this.esRespuestaIncompleta(respuesta))){
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor, complete todas las respuestas antes de enviar.'
+      });
+      return;
     }
     
     this.respuestasService.registrarRespuestasConfidencial(this.respuestasSupervisor).subscribe({
       next: result =>{
         console.log(result)
 
-        alert('Respuestas registradas correctamente')
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas enviadas con éxito' });
       },
       error: error =>{
         console.log(error)
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar las respuestas' });
       }
     })
     this.respuestasService.enviarInformeConfidencial(this.formularioDatos.value, this.idInforme).subscribe(
@@ -196,4 +194,16 @@ export class InformePrimeraPracticaComponent implements OnInit{
     )
     this.goTofin()
   }
+
+  public esRespuestaIncompleta(respuesta: respuestaInformeConfidencial){
+    // Verifica si la respuesta tiene campos requeridos incompletos
+    if ('puntos' in respuesta && (respuesta.puntos === undefined || respuesta.puntos === 0)) {
+      return true; // Falta puntaje
+    }
+    if ('respuesta_texto' in respuesta && (!respuesta.respuesta_texto || respuesta.respuesta_texto.trim() === '')) {
+      return true; // Falta texto
+    }
+    return false; // Si ninguno de los campos relevantes está incompleto
+  }
+
 }
