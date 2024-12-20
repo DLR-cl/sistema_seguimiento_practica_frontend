@@ -154,6 +154,8 @@ export class PracticasSecretariaComponent implements OnInit {
         id_informe_confidencial: this.copiaPractica?.id_informe_confidencial!
       }
   
+      console.log(academicoAsociado)
+
       this._asignacionService.asociarInformeAcademico(academicoAsociado).subscribe(result => {
         this.cerrarModalAsignacion();
         this.getProfesores()

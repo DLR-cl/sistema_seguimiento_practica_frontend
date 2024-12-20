@@ -1,4 +1,3 @@
-<app-header></app-header>
 <div class="p-6 bg-gray-100 min-h-screen">
     <!-- Encabezado -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
@@ -15,11 +14,11 @@
                 <div class="space-y-4">
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-gray-600">Empresa:</span>
-                        <span class="text-gray-900 font-semibold break-words">{{dataEmpresa?.nombre_razon_social}}</span>
+                        <span class="text-gray-900 font-semibold break-words">{{dataEmpresa.nombre_razon_social}}</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-gray-600">Rubro:</span>
-                        <span class="text-gray-900 font-semibold">{{dataEmpresa?.rubro}}</span>
+                        <span class="text-gray-900 font-semibold">{{dataEmpresa.rubro}}</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-gray-600">Cargo:</span>
@@ -27,7 +26,7 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="font-medium text-gray-600">Dirección:</span>
-                        <span class="text-gray-900 font-semibold break-words">{{dataEmpresa?.ubicacion}}</span>
+                        <span class="text-gray-900 font-semibold break-words">{{dataEmpresa.ubicacion}}</span>
                     </div>
                 </div>
             </div>
@@ -129,19 +128,19 @@
           <div class="grid grid-cols-2 gap-6 text-sm">
             <div>
               <p class="text-gray-500">Tipo de Práctica</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.tipo_practica == 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada!.tipo_practica == 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
             </div>
             <div>
               <p class="text-gray-500">Alumno</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_alumno.alumno.usuario.nombre }}</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_alumno.alumno.usuario.nombre }}</p>
             </div>
             <div>
               <p class="text-gray-500">Modalidad</p>
-              <p class="font-medium text-gray-900">{{ textoModalidad[practicaSeleccionada?.modalidad] }}</p>
+              <p class="font-medium text-gray-900">{{ textoModalidad[practicaSeleccionada!.modalidad] }}</p>
             </div>
         
             <!-- Estado Informe Confidencial -->
-            <div *ngIf="!['CURSANDO'].includes(practicaSeleccionada!.estado_practica)">
+            <div *ngIf="!['CURSANDO'].includes(practicaSeleccionada!.estado)">
               <p class="text-sm text-gray-500">Estado Informe Confidencial</p>
               <p class="text-base font-medium truncate"
                 [ngClass]="{
@@ -183,26 +182,26 @@
         </div>
     
         <!-- Horas Realizadas -->
-        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado_practica !== 'CURSANDO'">
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO'">
           <div class="border-b pb-4">
             <h3 class="text-xl font-semibold text-gray-800">Horas Realizadas</h3>
           </div>
           <div class="grid grid-cols-2 gap-6 text-sm">
             <div>
               <p class="text-gray-500">Total de Horas</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial.total_horas }} horas</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.total_horas }} horas</p>
             </div>
             <div>
               <p class="text-gray-500">Horas extraordinarias</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial.horas_practicas_extraordinarias }} horas</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_extraordinarias }} horas</p>
             </div>
             <div>
               <p class="text-gray-500">Horas regulares</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial.horas_practicas_regulares }} horas</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_regulares }} horas</p>
             </div>
             <div>
               <p class="text-gray-500">Horas de Inasistencia</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial.horas_inasistencia }} horas</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_inasistencia }} horas</p>
             </div>
           </div>
         </div>

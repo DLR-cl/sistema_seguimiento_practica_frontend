@@ -10,9 +10,7 @@ import { HomeSecretariaComponent } from './roles/secretaria/home-secretaria/home
 import { roleGuard } from './shared/guards/roleUsers.guard';
 import { PracticasSecretariaComponent } from './roles/secretaria/practicas-secretaria/practicas-secretaria.component';
 import { HomeJefeEmpleadorComponent } from './roles/jefe_empleador/components/home-jefe-empleador/home-jefe-empleador.component';
-import { VerInformesPendientesComponent } from './roles/jefe_empleador/components/ver-informes-pendientes/ver-informes-pendientes.component';
 import { InformePrimeraPracticaComponent } from './roles/jefe_empleador/informe-primera-practica/informe-primera-practica.component';
-import { VerDatosJefeComponent } from './roles/jefe_empleador/components/ver-datos-jefe/ver-datos-jefe.component';
 import { FinInformeJefeEmpleadorComponent } from './roles/jefe_empleador/components/fin-informe-jefe-empleador/fin-informe-jefe-empleador.component';
 import { HomeAlumnoComponent } from './roles/alumno_practica/home-alumno/home-alumno.component';
 import { FinInformeAlumnoComponent } from './roles/alumno_practica/components/fin-informe-alumno/fin-informe-alumno.component';
@@ -22,14 +20,9 @@ import { NotFoundComponent } from './pages/general/not-found/not-found.component
 import { TipoUsuario } from './enum/enumerables.enum';
 import { InfoAcademicosComponent } from './roles/jefe_compartido/pages/info-academicos/info-academicos.component';
 import { practicasGuard } from './shared/guards/practicas.guard';
-
 import { AcademicoComponent } from './roles/academico/academico.component';
 import { ChangePasswordComponent } from './pages/general/change-password/change-password.component';
-
-import { DashboardComponent } from './roles/jefe_empleador/components/dashboard/dashboard.component';
-
 import { DetallesInformesComponent } from './roles/academico/components/detalles-informes/detalles-informes.component';
-
 import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component';
 import { InfoSecretariaComponent } from './roles/jefe_compartido/pages/info-secretaria/info-secretaria.component';
 import { EstadoAcademicosComponent } from './roles/secretaria/estado-academicos/estado-academicos.component';
@@ -106,20 +99,12 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA, TipoUsuario.JEFE_CARRERA])]
     },
     {
-        path: 'home-jefe-alumno', component: DashboardComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
-    },
-    {
-        path: 'ver-informes-jefe', component: VerInformesPendientesComponent,
+        path: 'home-jefe-alumno', component: HomeJefeEmpleadorComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
     },
     {
         path: 'jefe_alumno/formulario_primer_practica/:idInforme', component: InformePrimeraPracticaComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
-    },
-    {
-        path: 'ver-datos-jefe', component: VerDatosJefeComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR]),]
     },
     {
         path: 'agradecimientos', component: FinInformeJefeEmpleadorComponent,

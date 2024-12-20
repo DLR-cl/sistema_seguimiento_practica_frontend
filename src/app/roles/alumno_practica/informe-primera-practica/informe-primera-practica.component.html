@@ -29,28 +29,6 @@
                             </textarea>
                         </div>
 
-                        <!-- Pregunta Evaluativa -->
-                        <div *ngIf="preg.tipo_pregunta == 'EVALUATIVA'" class="mt-4 space-y-3">
-                            <label for="number-input" class="block mb-2 text-sm font-medium text-gray-900">Califica</label>
-                            <p-inputNumber
-                                id="number-input"
-                                [(ngModel)]="respuestasAlumno[i + (page-1) * preguntas_paginas]!.nota"
-                                (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, nota: $event })"
-                                [min]="1"
-                                [max]="7"
-                                [mode]="'decimal'"
-                                [step]="0.1"
-                                [locale]="'en-US'"
-                                [showButtons]="true"
-                                [minFractionDigits]="0"
-                                [maxFractionDigits]="1"
-                                placeholder="7.0"
-                                inputStyleClass="px-2 py-1"
-                                [incrementButtonClass]="'bg-gray-200 text-gray-600 w-6 border-0 text-xs hover:bg-gray-300 rounded-t-sm'"
-                                [decrementButtonClass]="'bg-gray-200 text-gray-600 w-6 border-0 text-xs hover:bg-gray-300 rounded-b-sm'"
-                            ></p-inputNumber>
-                        </div>
-
                         <!-- Pregunta Desarrollo Profesional -->
                         <div *ngIf="preg.tipo_pregunta == 'DESARROLLO_PROFESIONAL'" class="respuestas mt-4 space-y-3">
                             <div *ngIf="asignaturas_seleccionadas.length > 0" class="my-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">

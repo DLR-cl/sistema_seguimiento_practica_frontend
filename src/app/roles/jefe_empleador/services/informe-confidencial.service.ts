@@ -1,18 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
-
-export interface listaInformes{
-  informes_data: datosInforme[]
-}
-
-export interface datosInforme{
-  estado_entrega: boolean;
-  id_practica: number;
-  id_informe_confidencial: number;
-  nombre_alumno: string;
-  tipo_practica: string;   
-}
+import { DetallesInformes, ListaInformes } from '../dto/informe-confidencial.dto';
+import { AlumnosAsignados } from '../dto/dashboard.dto';
+import { Practicas } from '../../secretaria/dto/secretaria-data.dto';
+import { Empresa } from '../../jefe_compartido/dto/empresa.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +16,11 @@ export class InformeConfidencialService {
   ) { }
 
   public obtenerInformes(idSupervisor: number){
-    return this.http.get<listaInformes>(`${enviroment.API_URL}/jefe-alumno/${idSupervisor}/lista-informes`)
+    return this.http.get<ListaInformes>(`${enviroment.API_URL}/jefe-alumno/${idSupervisor}/lista-informes`)
   }
   public obtenerDestallesInformes(token: string) {
 
-    return this.http.get<any>(`${enviroment.API_URL}/dashboard/informes-supervisor`, {
+    return this.http.get<DetallesInformes[]>(`${enviroment.API_URL}/dashboard/informes-supervisor`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -36,15 +28,15 @@ export class InformeConfidencialService {
   }
   
   public obtenerAlumnosAsignados() {
-    return this.http.get<any>(`${enviroment.API_URL}/dashboard/cantidad-alumnos-asignados`);
+    return this.http.get<AlumnosAsignados>(`${enviroment.API_URL}/dashboard/cantidad-alumnos-asignados`);
   }
   
   public obtenerPractica(idPractica: number){
-    return this.http.get<any>(`${enviroment.API_URL}/practicas/${idPractica}`)
+    return this.http.get<Practicas>(`${enviroment.API_URL}/practicas/${idPractica}`)
   }
 
-  public obtenerDatosEmpresa(){
-    return this.http.get<any>(`${enviroment.API_URL}/empresas`)
+  public obtenerDatosEmpresas(){
+    return this.http.get<Empresa[]>(`${enviroment.API_URL}/empresas`)
   }
   
 

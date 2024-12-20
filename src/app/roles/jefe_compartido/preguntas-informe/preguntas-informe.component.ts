@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Asignarpregunta, Dimension, Pregunta, PreguntasInformeService } from '../services/preguntas-informe.service';
+import { AsignarPreguntas, Dimension, CrearPreguntas, PreguntasInformeService } from '../services/preguntas-informe.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { HeaderComponent } from '../header-jefes/header.component';
 
@@ -32,9 +32,9 @@ export class PreguntasInformeComponent implements OnInit {
   }
 
   tipoInforme!: string;
-  preguntas_implementadas!: Pregunta[]; 
-  preguntas_implementadas_id!: Asignarpregunta;
-  preguntas!: Pregunta[];
+  preguntas_implementadas!: CrearPreguntas[]; 
+  preguntas_implementadas_id!: AsignarPreguntas;
+  preguntas!: CrearPreguntas[];
   formPregunta: FormGroup = new FormGroup({
     id_dimension: new FormControl (null, Validators.required),
     tipo_pregunta: new FormControl ('', Validators.required),
@@ -76,7 +76,7 @@ export class PreguntasInformeComponent implements OnInit {
 
   //this.preguntasPrueba cabmiar
   public createPreguntas(){
-    const pregunta : Pregunta = { preguntas: this.formPregunta.value }
+    const pregunta : CrearPreguntas = { preguntas: this.formPregunta.value }
     this.preguntasService.createPreguntas(this.preguntasPrueba).subscribe(result =>{
       console.log(result)
     })
@@ -101,7 +101,7 @@ export class PreguntasInformeComponent implements OnInit {
     descripcion: "Descripción de prueba 1"
   }
 
-  preguntasPrueba : Pregunta = 
+  preguntasPrueba : CrearPreguntas = 
   {
     preguntas: [
       {

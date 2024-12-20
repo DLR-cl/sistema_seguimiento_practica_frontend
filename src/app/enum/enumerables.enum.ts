@@ -22,7 +22,6 @@ export enum TipoPractica {
  export enum TipoPregunta {
     ABIERTA = "ABIERTA",
     CERRADA = "CERRADA",
-    EVALUATIVA = "EVALUATIVA",
     DESARROLLO_PROFESIONAL = "DESARROLLO_PROFESIONAL"
   }
   

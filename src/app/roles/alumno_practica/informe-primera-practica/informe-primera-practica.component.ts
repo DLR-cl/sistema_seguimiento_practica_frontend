@@ -6,32 +6,22 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { PreguntasInformeService } from '../../jefe_compartido/services/preguntas-informe.service';
-import { createInforme, ListaRespuestas, Respuesta, RespuestasInformeService } from '../services/respuestas-informe.service';
-import { AsignaturaBack, AsignaturasService, Semestre } from '../services/asignaturas.service';
+import { RespuestasInformeService } from '../services/respuestas-informe.service';
+import { AsignaturasService } from '../services/asignaturas.service';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ButtonModule } from 'primeng/button';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
-import { FileUploadModule } from 'primeng/fileupload';
-import { TipoPractica, TipoPregunta } from '../../../enum/enumerables.enum';
-
-interface Pregunta{
-  id_pregunta: number,
-  enunciado_pregunta:string,
-  tipo_pregunta: TipoPregunta,
-}
-
-interface Asignatura{
-  nombre: string,
-  codigo: string,
-  tipo: string
-}
+import { TipoPractica } from '../../../enum/enumerables.enum';
+import { Asignatura, AsignaturaBack, Semestre } from '../dto/asignaturas.dto';
+import { ListaRespuestas, Pregunta, Respuesta } from '../dto/informe-alumno.dto'  ;
+import { MessageService } from 'primeng/api';
 
 
 @Component({
   selector: 'app-informe-primera-practica',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, NgxPaginationModule, FormsModule, DialogModule, RadioButtonModule, ButtonModule, InputTextareaModule, InputNumberModule, FileUploadModule],
+  imports: [CommonModule, HeaderComponent, NgxPaginationModule, FormsModule, DialogModule, RadioButtonModule, ButtonModule, InputTextareaModule, InputNumberModule],
   templateUrl: './informe-primera-practica.component.html',
   styleUrl: './informe-primera-practica.component.css'
 })
@@ -41,7 +31,8 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     private preguntasService: PreguntasInformeService,
     private respuestasService: RespuestasInformeService,
     private route: ActivatedRoute,
-    private asignaturasService: AsignaturasService
+    private asignaturasService: AsignaturasService,
+    private messageService: MessageService,
   ){}
 
   ngOnInit(): void {
@@ -78,7 +69,6 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
 
   public recibirDatos(datos: string) {
     this.dataAlumno = datos;
-    console.log('Datos recibidos del hijo:', datos);
   }
 
   public obtenerAsignaturas() {
@@ -145,25 +135,6 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     }
   }
 
-  public datos(){
-    // console.log(this.respuestas),
-    // console.log(this.asignaturas_seleccionadas)
-    console.log(this.respuestasAlumno)
-    this.respuestasService.obtenerArchivo(13).subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'informe.pdf';
-        a.click();
-        window.URL.revokeObjectURL(url);
-      },
-      error: (err) => {
-        console.error('Error al descargar', err);
-      },
-    })
-  }
-
   public obtenerPreguntas(){
     this.preguntasService.getPreguntasAlumno().subscribe(result=>{
       console.log(result)
@@ -181,9 +152,6 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
         }    
         if (preg.tipo_pregunta === 'CERRADA') {
           respuesta.puntaje = 0;
-        }
-        if (preg.tipo_pregunta === 'EVALUATIVA'){
-          respuesta.nota = 0
         }
         return respuesta;
       });
@@ -300,7 +268,24 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   enviarInforme(){
     console.log(this.respuestasAlumno)
 
-        
+    if(this.respuestasAlumno.some(respuesta=> this.esRespuestaIncompleta(respuesta))){
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Por favor, complete todas las respuestas antes de enviar el informe.'
+      });
+      return;
+    }
+
+    if (!this.uploadedFile) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Debe seleccionar un archivo antes de enviar.'
+      });
+      return; // Detiene el envío si no hay archivo
+    }
+
     const formData: FormData = new FormData()
     
     formData.append('id_informe', ''+this.idInforme)
@@ -324,17 +309,48 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
       }
       console.log(asociarRespuestas)
       
-      this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe(resultRespuestas => {
-        console.log(resultRespuestas)
-      })
+      formData.append('respuestas', JSON.stringify(this.respuestasAlumno))
+
+
+      // this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe({
+      //   next:resultRespuestas => {
+      //     console.log(resultRespuestas)
+      //     this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas registradas correctamente' });
+      //   },
+      //   error: error => {
+      //     console.log(error),
+      //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar las respuestas' });
+      //   }
+      // })
     }
 
-    this.respuestasService.enviarInforme(formData).subscribe(resultInforme =>{
-      console.log(resultInforme)
-      alert('Enviado con exito')
-      this.goTofin()
+    this.respuestasService.enviarInforme(formData).subscribe({
+      next: resultInforme => {
+        console.log(resultInforme)
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Informe enviado con éxito' });
+        this.goTofin() 
+      },
+      error: error => {
+        console.log(error),
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar el informe' });
+      }
     });
   }
+
+  public esRespuestaIncompleta(respuesta: Respuesta){
+    // Verifica si la respuesta tiene campos requeridos incompletos
+    if ('puntaje' in respuesta && (respuesta.puntaje === undefined || respuesta.puntaje === 0)) {
+      return true; // Falta puntaje
+    }
+    if ('texto' in respuesta && (!respuesta.texto || respuesta.texto.trim() === '')) {
+      return true; // Falta texto
+    }
+    if ('asignaturas' in respuesta && (!respuesta.asignaturas || respuesta.asignaturas.length === 0)) {
+      return true; // Falta asignaturas
+    }
+    return false; // Si ninguno de los campos relevantes está incompleto
+  }
+  
 
   public existeRespuesta(){
     this.respuestasService.existeRespuesta(this.idInforme).subscribe((result: any) => {

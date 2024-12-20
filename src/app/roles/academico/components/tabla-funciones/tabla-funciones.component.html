@@ -19,7 +19,7 @@
                     <tr *ngFor="let informe of data" class="bg-white border-b hover:bg-gray-50 transition-all duration-300">
                         <th class="px-4 py-4 font-medium text-gray-900">{{informe.nombre_alumno}}</th>
                         <td class="px-4 py-4 text-gray-700">{{informe.tipo_practica}}</td>
-                        <td class="px-4 py-4 text-gray-600">{{informe.dias_para_revision}}</td>
+                        <td class="px-4 py-4 text-gray-600">{{informe.estado_informe === 'APROBADA' ? 'Revisión Enviada' : informe.dias_para_revision}}</td>
                         <td class="px-4 py-4 text-gray-600">{{informe.estado_informe}}</td>
                         <td class="px-4 py-4 text-gray-600">{{informe.intentos}}</td>
                         <td class="px-4 py-4">

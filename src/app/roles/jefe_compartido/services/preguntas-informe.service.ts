@@ -7,7 +7,7 @@ export interface Dimension {
   descripcion: string;
 }
 
-export interface Pregunta {
+export interface CrearPreguntas {
   preguntas: {
     enunciado_pregunta: string;
     tipo_pregunta: string;
@@ -15,7 +15,7 @@ export interface Pregunta {
   }[]
 }
 
-export interface Asignarpregunta{
+export interface AsignarPreguntas{
   preguntas: {
     id_pregunta: number
   }[]
@@ -43,7 +43,7 @@ export class PreguntasInformeService {
     return this.http.get<any>(`${this.url_implementadas_alumno}`)
   }
 
-  public asociatePreguntasAlumno(preguntas: Asignarpregunta[]){
+  public asociatePreguntasAlumno(preguntas: AsignarPreguntas[]){
     return this.http.post<any>(`${this.url_implementadas_alumno}/asociar-varios`, preguntas)
   }
 
@@ -60,7 +60,7 @@ export class PreguntasInformeService {
     return this.http.get<any>(`${this.url_preguntas}`)
   } 
 
-  public createPreguntas(preguntas: Pregunta){
+  public createPreguntas(preguntas: CrearPreguntas){
     console.log(preguntas)
     return this.http.post<any>(`${this.url_preguntas}/crear-varios`, preguntas)
   }

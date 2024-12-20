@@ -1,16 +1,16 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { HeaderJefeEmpleadorComponent } from '../header-jefe-empleador/header-jefe-empleador.component';
 import { StorageService } from '../../../../shared/data-access/storage.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { DataJefeAlumnoService } from '../../services/data-jefe-alumno.service';
 import { JefeAlumnoInterface } from '../../data-access/interface/jefe-alumno.interface';
-import { NgOptimizedImage } from '@angular/common'
+import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
+import { DashboardComponent } from "../dashboard/dashboard.component";
 
 @Component({
   selector: 'app-home-jefe-empleador',
   standalone: true,
-  imports: [HeaderJefeEmpleadorComponent],
+  imports: [HeaderComponent, DashboardComponent],
   templateUrl: './home-jefe-empleador.component.html',
   styleUrl: './home-jefe-empleador.component.css'
 })

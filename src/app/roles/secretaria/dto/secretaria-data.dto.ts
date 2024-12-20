@@ -19,7 +19,7 @@ export interface Secretaria{
 export interface Practicas {
     id_practica:          number;
     tipo_practica:        string;
-    estado:               string;
+    estado:               EstadoPractica;
     cantidad_horas:       number;
     horas_semanales:      number;
     fecha_inicio:         Date;
@@ -70,7 +70,7 @@ export interface InformeConfidencial {
     nota_evaluacion:                 null;
     fecha_inicio:                    Date;
     fecha_envio:                     null;
-    estado:                          string;
+    estado:                          EstadoInforme;
     fecha_inicio_revision:           Date;
     fecha_termino_revision:          Date;
     fecha_inicio_practica:           Date;
@@ -80,29 +80,35 @@ export interface InformeConfidencial {
     id_alumno_evaluado:              number;
     id_practica:                     number;
     id_academico:                    number;
-    supervisor:                      Supervisor;
+    supervisor:                      JefeSupervisor;
 }
   
-export interface Supervisor {
-    id_user:    number;
-    cargo:      string;
-    id_empresa: number;
-    usuario:    SupervisorUsuario;
-    empresa:    Empresa;
-}
-
-export interface Empresa {
+export interface Empresas {
     id_empresa:          number;
     nombre_razon_social: string;
     ubicacion:           string;
     rubro:               string;
-    nombre_gerente:      string;
+    caracter_empresa:    string;
+    tamano_empresa:      string;
+    jefe_supervisor:     JefeSupervisor[];
 }
 
-export interface SupervisorUsuario {
-    nombre: string;
-    correo: string;
-    rut:    string;
+export interface JefeSupervisor {
+    id_user:         number;
+    cargo:           string;
+    id_empresa:      number;
+    numero_telefono: string;
+    usuario:         Usuario;
+}
+
+export interface Usuario {
+    id_usuario:   number;
+    password:     string;
+    correo:       string;
+    nombre:       string;
+    rut:          string;
+    primerSesion: boolean;
+    tipo_usuario: string;
 }
 
   export interface SeguimientoData {

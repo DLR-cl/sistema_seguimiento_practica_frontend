@@ -1,32 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
-
-export interface createInforme{
-  id_practica: number;
-  id_alumno: number;
-}
-
-export interface ListaRespuestas{
-  respuestas: Respuesta[]
-}
-
-export interface Respuesta{
-  id_informe?: number;
-  id_pregunta: number;
-  texto?: string;
-  puntaje?: number;
-  asignaturas?: string[];
-  nota?: number
-}
-
-export interface respuestaInformeConfidencial {
-  id_informe: number;
-  id_pregunta: number;
-  respuesta_texto?: string;
-  puntos?: number;
-  nota?: number;
-}
+import { existeRespuesta, ListaRespuestas } from '../dto/informe-alumno.dto';
+import { respuestaInformeConfidencial } from '../../jefe_empleador/dto/informe-confidencial.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +16,7 @@ export class RespuestasInformeService {
   public enviarInformeConfidencial(data: FormData, id_informe: number){
     return this.http.patch<any>(`${enviroment.API_URL}/informe-confidencial/actualizar-informe/${id_informe}`, data);
   }
+
   public asociarRespuestas(respuestas: ListaRespuestas){
     return this.http.post<any>(`${enviroment.API_URL}/respuestas-informe-alumno`, respuestas)
   }
@@ -55,7 +32,7 @@ export class RespuestasInformeService {
   }
 
   public existeRespuesta(idPractica: number){
-    return this.http.get(`${enviroment.API_URL}/informe-alumno/existeRespuesta/${idPractica}`)
+    return this.http.get<existeRespuesta>(`${enviroment.API_URL}/informe-alumno/existeRespuesta/${idPractica}`)
   }
 
   public registrarRespuestasConfidencial(respuestas: respuestaInformeConfidencial[]){

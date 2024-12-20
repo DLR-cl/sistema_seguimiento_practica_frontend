@@ -7,7 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
-import { DashboardService, detallePractica, estadisticasPractica } from '../services/dashboard.service';
+import { DashboardService } from '../services/dashboard.service';
+import { detallePractica, estadisticasPractica } from '../dto/dashboard-practicas.dto';
 
 @Component({
   selector: 'app-dashboard',
@@ -62,13 +63,13 @@ export class DashboardComponent implements OnInit{
   public getAprobacionPracticas(){
     this.dashboardService.getAprobacionPracticas().subscribe({
       next: result => {
-        console.log(result)
+        console.log(result, "aprobacion")
         const primerPractica = result.primerPractica;
-        if(primerPractica.length != 0){
+        if(primerPractica.length != 0 && primerPractica[0].cantidad){
           const aprobadosI = primerPractica
-            .filter((practica: any) => practica.estado === 'APROBADOS')
-            .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
-          const total = primerPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+            .filter(practica => practica.estado === 'APROBADOS')
+            .reduce((sum: number, practica) => sum + practica.cantidad, 0);
+          const total = primerPractica.reduce((sum: number, practica) => sum + practica.cantidad, 0);
           const aprobadosPorcentajeI = total > 0 ? (aprobadosI / total) * 100 : 0;
           const reprobadosPorcentajeI = 100 - aprobadosPorcentajeI;
 
@@ -85,11 +86,12 @@ export class DashboardComponent implements OnInit{
         
 
         const segundaPractica = result.segundaPractica;
-        if(segundaPractica.length != 0){
+        console.log(segundaPractica, "lol")
+        if(segundaPractica.length != 0 && segundaPractica[0].cantidad){
           const aprobadosII = segundaPractica
-            .filter((practica: any) => practica.estado === 'APROBADOS')
-            .reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
-          const totalII = segundaPractica.reduce((sum: number, practica: any) => sum + practica.cantidad, 0);
+            .filter(practica => practica.estado === 'APROBADOS')
+            .reduce((sum: number, practica) => sum + practica.cantidad, 0);
+          const totalII = segundaPractica.reduce((sum: number, practica) => sum + practica.cantidad, 0);
           const aprobadosPorcentajeII = totalII > 0 ? (aprobadosII / totalII) * 100 : 0;
           const reprobadosPorcentajeII = 100 - aprobadosPorcentajeII;
 
@@ -115,9 +117,10 @@ export class DashboardComponent implements OnInit{
       next: (result) => {
         console.log(result, "hola soy ese grafico");
   
-        // Buscar prácticas y asignar 0 si no existen
-        const practicaUno = result.find((practica: any) => practica.tipo_practica === "PRACTICA_UNO")?.cantidad_estudiantes || 0;
-        const practicaDos = result.find((practica: any) => practica.tipo_practica === "PRACTICA_DOS")?.cantidad_estudiantes || 0;
+        if(result.length > 0){
+          // Buscar prácticas y asignar 0 si no existen
+        const practicaUno = result.find(practica => practica.tipo_practica === "PRACTICA_UNO")?.cantidad_estudiantes || 0;
+        const practicaDos = result.find(practica => practica.tipo_practica === "PRACTICA_DOS")?.cantidad_estudiantes || 0;
   
         // Configuración del gráfico con valores asegurados
         this.cantidadEstudiantesTipoPracticaChartData = {
@@ -131,20 +134,11 @@ export class DashboardComponent implements OnInit{
         };
   
         console.log(this.cantidadEstudiantesTipoPracticaChartData);
+        }
+        
       },
       error: (error) => {
-        console.log(error);
-  
-        // En caso de error, asignar datos vacíos
-        this.cantidadEstudiantesTipoPracticaChartData = {
-          labels: ['Práctica 1', 'Práctica 2'],
-          datasets: [
-            {
-              data: [0, 0],
-              backgroundColor: ['#1565c0', '#42aaff'],
-            }
-          ]
-        };
+        console.log(error);      
       }
     });
   }
@@ -237,7 +231,7 @@ export class DashboardComponent implements OnInit{
 
   periodoSeleccionado: number = 2024
 
-  selectedInforme: any;
+  // selectedInforme: any;
 
   // **Gráfico de Cantidad Estudiantes por Práctica** (No cambia a porcentaje)
   cantidadEstudiantesTipoPracticaChartData: any

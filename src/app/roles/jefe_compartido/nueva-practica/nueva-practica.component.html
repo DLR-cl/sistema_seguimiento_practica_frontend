@@ -79,7 +79,7 @@
                 <label for="id_empresa" class="block text-sm font-medium text-gray-700 mb-2">
                     Empresa asociada
                 </label>
-                <p-dropdown [options]="empresas" optionLabel="nombre_razon_social" optionValue="id_empresa"
+                <p-dropdown [options]="empresas" optionLabel="nombre_razon_social" optionValue="id_empresa" emptyMessage="No hay empresas registradas"
                     placeholder="Seleccione..." formControlName="id_empresa"
                     class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-1/4">
                 </p-dropdown>
@@ -145,6 +145,7 @@
                 formControlName="id_alumno"
                 optionLabel="usuario.nombre"
                 optionValue="id_user" 
+                emptyMessage="No existen alumnos disponibles"
                 [filter]="true"
                 filterBy="usuario.nombre"
                 [showClear]="true"
@@ -553,7 +554,5 @@
             </ng-container>
         </div>
     </p-dialog>
-
-
-
 </div>
+

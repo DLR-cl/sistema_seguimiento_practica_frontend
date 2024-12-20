@@ -3,28 +3,7 @@ import { Injectable } from "@angular/core";
 import { enviroment } from "../../../environment/environment";
 import { CantidadAlumnosEnPractica } from "../interface/alumnosPractica.interface";
 import { map } from "rxjs";
-import { EstadoPractica, TipoPractica } from "../../../enum/enumerables.enum";
-
-export interface estadisticasPractica{
-    estudiantes_practica: number,
-    estudiantes_revision: number,
-    informes_sin_enviar: number,
-    total_asignados: number,
-    max_informes: number
-}
-
-export interface detallePractica {
-    nombre_alumno:   string;
-    id_practica:     number;
-    tipo_practica:   string;
-    estado_practica: EstadoPractica;
-}
-
-export interface practicasMes {
-    mes_inicio:      string;
-    tipo_practica:   string;
-    total_practicas: number;
-}
+import { AlumnosActivosPractica, AprobacionPracticas, detallePractica, estadisticasPractica, practicasMes } from "../dto/dashboard-practicas.dto";
 
 @Injectable({
     providedIn: 'root'
@@ -45,15 +24,15 @@ export class DashboardService {
     }
 
     public getEstadisticasPracticas(){
-        return this._http.get<any>(`${enviroment.API_URL}/dashboard/estadistica-practicas-dashboard-jefe-carrera`)   
+        return this._http.get<estadisticasPractica>(`${enviroment.API_URL}/dashboard/estadistica-practicas-dashboard-jefe-carrera`)   
     }
 
     public getAprobacionPracticas(){
-        return this._http.get<any>(`${enviroment.API_URL}/dashboard/aprobacion-practicas`)   
+        return this._http.get<AprobacionPracticas>(`${enviroment.API_URL}/dashboard/aprobacion-practicas`)   
     }
     
     public getAlumnosActivosPracticas(){
-        return this._http.get<any>(`${enviroment.API_URL}/dashboard/alumnos-activos-practica`)   
+        return this._http.get<AlumnosActivosPractica[]>(`${enviroment.API_URL}/dashboard/alumnos-activos-practica`)   
     }
     
     public getDetallesPracticas(){

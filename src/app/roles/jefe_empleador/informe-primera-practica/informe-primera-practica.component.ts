@@ -6,12 +6,13 @@ import { HeaderJefeEmpleadorComponent } from "../components/header-jefe-empleado
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { Respuesta, respuestaInformeConfidencial, RespuestasInformeService } from '../../alumno_practica/services/respuestas-informe.service';
+import { RespuestasInformeService } from '../../alumno_practica/services/respuestas-informe.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { PreguntasInformeService } from '../../jefe_compartido/services/preguntas-informe.service';
 import { ActualizarInformeConfidencialDto } from '../../../shared/interface/data-informe-confidencial.interface';
+import { respuestaInformeConfidencial } from '../dto/informe-confidencial.dto';
 
 interface Pregunta{
   id_pregunta: number,

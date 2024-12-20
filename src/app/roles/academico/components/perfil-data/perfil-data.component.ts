@@ -6,6 +6,7 @@ import { CantidadInformesPendientes, InfoInformes, ResumenConteoInformes } from 
 import { PayloadInterface } from '../../../../shared/interface/payload.interface';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil-data',
@@ -17,7 +18,7 @@ import { AuthStateService } from '../../../../shared/data-access/auth-state.serv
 export class PerfilDataComponent implements OnInit {
   private readonly _accessDataService = inject(DataAccessService);
   private readonly _authServiceState = inject(AuthStateService);
-
+  private readonly _router = inject(Router)
 
   dataUser: any; // Payload decodificado del token
   informesPendientes?: CantidadInformesPendientes;
@@ -90,5 +91,9 @@ export class PerfilDataComponent implements OnInit {
       },
       error: (err) => console.error('Error al obtener informes críticos:', err),
     });
+  }
+
+  public revision(idPractica: number){
+    this._router.navigate(['revision-informe/'+idPractica])
   }
 }

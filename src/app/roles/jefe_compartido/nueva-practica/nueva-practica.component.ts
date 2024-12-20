@@ -3,13 +3,17 @@ import { HeaderComponent } from "../header-jefes/header.component";
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AlumnoNominaInterface, AlumnosDataDto, empresa, GenerarPracticaService, jefeSupervisor, nuevaPractica, nuevoAlumno, nuevoSupervisor } from '../services/generar-practica.service';
 import { DialogModule } from 'primeng/dialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { AlumnosNominaService } from '../services/alumnos-nomina.service';
+import { GenerarPracticaService } from '../services/generar-practica.service';
+import { Empresa, JefeSupervisor, NuevoSupervisor } from '../dto/empresa.dto';
+import { AlumnosDataDto, nuevoAlumno } from '../dto/alumno.dto';
+import { MessageService } from 'primeng/api';
+
 
 @Component({
   selector: 'app-nueva-practica',
@@ -20,8 +24,9 @@ import { AlumnosNominaService } from '../services/alumnos-nomina.service';
 })
 export class NuevaPracticaComponent implements OnInit{
 
-  private servicioPracticas= inject(GenerarPracticaService);
+  private readonly servicioPracticas= inject(GenerarPracticaService);
   private readonly _alumnosNominaService = inject(AlumnosNominaService);
+  private readonly messageService = inject(MessageService)
   errorMessage?:string | null = null;
 
   ngOnInit(): void {
@@ -32,13 +37,13 @@ export class NuevaPracticaComponent implements OnInit{
     });
   }
   
-  empresas: empresa[] = [];
+  empresas: Empresa[] = [];
   alumnoSeleccionado!: AlumnosDataDto;
   tipoPracticas: any = [{tipo: "PRACTICA_UNO", titulo:'Práctica profesional I'},{tipo:"PRACTICA_DOS", titulo:"Práctica profesional II"}]
 
   modalidades: any = [{tipo: "PRESENCIAL", titulo: "Presencial"},{tipo: "SEMI_PRESENCIAL", titulo: "Semipresencial"}, {tipo: "REMOTO", titulo: "Remoto"}]
   
-  supervisoresFiltrados: jefeSupervisor[] = [];
+  supervisoresFiltrados: JefeSupervisor[] = [];
 
   alumnos: AlumnosDataDto[] = [];
 
@@ -105,26 +110,40 @@ export class NuevaPracticaComponent implements OnInit{
   submitModal() {
     if (this.modalType === 'empresa') {
       //agregar manejo de errores a los subscribe
-      this.servicioPracticas.crearEmpresa(this.formEmpresa.value).subscribe(result => {
-        this.obtenerEmpresas()
-        console.log(result)
-        this.closeModal();
-        this.formSupervisor.reset()
-        alert('creado con exito')
+      this.servicioPracticas.crearEmpresa(this.formEmpresa.value).subscribe({
+        next: result =>{
+          this.obtenerEmpresas()
+          console.log(result, 'empresa')
+          this.closeModal();
+          this.formSupervisor.reset()
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Empresa registrada con éxito' });
+          this.formEmpresa.reset()
+        },
+        error: error =>{
+          console.log(error)
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar la empresa' });
+        }
       })
-      this.formEmpresa.reset()
+      
     } else if (this.modalType === 'supervisor') {
-      const supervisor : nuevoSupervisor= {
+      const supervisor : NuevoSupervisor= {
         ...this.formSupervisor.value,
         tipo_usuario: 'JEFE_EMPLEADOR',
         id_empresa: this.formPractica.get('id_empresa')?.value,
       };
-      this.servicioPracticas.crearSupervisor(supervisor).subscribe(result => {
-        this.obtenerEmpresas()
-        console.log(result)
-        this.closeModal();
-        this.formSupervisor.reset()
-        alert('creado con exito')
+      this.servicioPracticas.crearSupervisor(supervisor).subscribe({
+        next: result => {
+          this.obtenerEmpresas()
+          console.log(result, 'supervisor')
+          this.closeModal();
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Supervisor registrado con éxito' });
+          this.formSupervisor.reset()
+        },
+        error: error => {
+          console.log(error)
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar el supervisor' });
+
+        }
       })
     } else if (this.modalType === 'alumno') {
       const alumno : nuevoAlumno = {
@@ -132,12 +151,18 @@ export class NuevaPracticaComponent implements OnInit{
         tipo_usuario: 'ALUMNO_PRACTICA',
       };
       console.log(alumno)
-      this.servicioPracticas.crearAlumno(alumno).subscribe(result => {
-        this.obtenerAlumnos()
-        console.log(result)
-        this.closeModal();
-        this.formAlumno.reset()
-        alert('creado con exito')
+      this.servicioPracticas.crearAlumno(alumno).subscribe({
+        next: result => {
+          this.obtenerAlumnos()
+          console.log(result, 'alumno')
+          this.closeModal();
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Supervisor registrado con éxito' });
+          this.formAlumno.reset()
+        },
+        error: error =>{
+          console.log(error)
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar el alumno' });
+        }
       })
     }
   }
@@ -167,14 +192,16 @@ export class NuevaPracticaComponent implements OnInit{
       console.log(practica);
       this.servicioPracticas.crearPractica(practica).subscribe(
         {
-          next: (result: any) =>{
-            alert('Práctica generada con exito 👍')
+          next: result =>{
             this.formPractica.reset()
             this.pasoActual = 1
             console.log(result)
+            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Práctica generada con exito' });
           },
-          error: (error: any) => {
+          error: error => {
             this.errorMessage = error.message;
+            console.log(error)
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error' });
           }    
         }
       )
@@ -245,22 +272,25 @@ export class NuevaPracticaComponent implements OnInit{
         nomina: true,
         tipo_usuario: "ALUMNO_PRACTICA"
       }
-      const createALumno = this.servicioPracticas.crearAlumno(crear).subscribe(
-        (res) => {
-          console.log('Alumno c reado:', res);
-          this.alumnos.push(res.data) 
+      this.servicioPracticas.crearAlumno(crear).subscribe({
+        next: result => {
+          console.log('Alumno c reado:', result);
+          this.alumnos.push(result.data) 
           this.obtenerAlumnos()
           console.log(this.alumnos)
-          this.rutControl .reset()
+          this.rutControl.reset()
           this.mensajeExito = 'El alumno ha sido creado con éxito.';
           this.alumno = null; // Limpiar alumno seleccionado
           this.mensajeExito = '';
-        },
-        (err) => {
-          console.error('Error al crear el alumno:', err);
-        }
-      );
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Alumno registrado con éxito.' });
 
+        },
+        error: error => {
+          console.log('Error al crear el alumno:', error);
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar el alumno' });
+
+        }
+      });
       this.obtenerAlumnos()
     }
   }

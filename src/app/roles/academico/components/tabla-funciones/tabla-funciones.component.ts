@@ -4,6 +4,7 @@ import { DataAccessService } from '../../services/data-access.service';
 import { InfoInformes } from '../../interface/info-informes.interface';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { Router } from '@angular/router';
+import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 
 
 @Component({
@@ -22,6 +23,7 @@ export class TablaFuncionesComponent implements OnInit {
 
   private readonly _dataAccessService = inject(DataAccessService);
   private readonly _authService = inject(AuthService);
+  private readonly _authStateService = inject(AuthStateService)
 
   data?: InfoInformes[];
   decodedToken: any;
@@ -36,6 +38,7 @@ export class TablaFuncionesComponent implements OnInit {
 
   private getInfoInformes() {
     const token = this.decodedToken?.access_token; // Opcionalmente puedes validar el token aquí
+    console.log(token)
     this._dataAccessService.getInformacionInformes(token).subscribe({
       next: (r) => {
         console.log("data para tabla",r)

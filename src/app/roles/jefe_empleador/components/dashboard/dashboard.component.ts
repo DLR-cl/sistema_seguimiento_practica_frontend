@@ -5,19 +5,20 @@ import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
 import { ListboxModule } from 'primeng/listbox';
 import { ButtonModule } from 'primeng/button';
-import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
 import { JefeAlumnoInterface } from '../../data-access/interface/jefe-alumno.interface';
 import { DataJefeAlumnoService } from '../../services/data-jefe-alumno.service';
 import { InformeConfidencialService } from '../../services/informe-confidencial.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../../../../auth/services/auth.service';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 import { DialogModule } from 'primeng/dialog';
+import { DetallesInformes } from '../../dto/informe-confidencial.dto';
+import { Empresa } from '../../../jefe_compartido/dto/empresa.dto';
+import { Practicas } from '../../../secretaria/dto/secretaria-data.dto';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, TableModule, ChartModule, ListboxModule, ButtonModule, HeaderComponent, DialogModule],
+  imports: [CommonModule, FormsModule, TableModule, ChartModule, ListboxModule, ButtonModule, DialogModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -28,12 +29,11 @@ export class DashboardComponent implements OnInit {
     private _jefeDataService: DataJefeAlumnoService,
     private _router: Router,
     private _authStateService: AuthStateService,
-    private cdr: ChangeDetectorRef
   ){}
 
   public dataJefe?:JefeAlumnoInterface | null;
 
-  public dataEmpresa: any
+  public dataEmpresa!: Empresa
 
   ngOnInit(): void {
     this._jefeDataService.getData().subscribe({
@@ -59,15 +59,15 @@ export class DashboardComponent implements OnInit {
   totalInformes = 0;
 
   // Datos de informes pendientes y detalles, con nombres de prácticas
-  detalleInformes: any = []
+  detalleInformes: DetallesInformes[] = []
 
-  informesPendientesList = []
+  informesPendientesList:  DetallesInformes[] = []
 
-  selectedInforme: any;
+  selectedInforme!: DetallesInformes;
   
   modalDetalles = false;
 
-  practicaSeleccionada: any
+  practicaSeleccionada!: Practicas | null
 
   textoEstadoInforme: Record<string, string> = {
     ENVIADA: 'Enviado',
@@ -114,7 +114,7 @@ export class DashboardComponent implements OnInit {
         this.selectedInforme = practica
         this.practicaSeleccionada = result
         this.modalDetalles = true
-        console.log(result)
+        console.log(result, 'caca')
       },
       error: error => {
         console.log(error)
@@ -130,12 +130,12 @@ export class DashboardComponent implements OnInit {
       this.informeConfidencialService.obtenerDestallesInformes(token).subscribe({
         next: result => {
           console.log(result);
-          this.informesPendientes = result.filter((practica: any) => practica.estado_informe == 'ESPERA').length;
-          this.detalleInformes = result.filter((informe: any) => {
+          this.informesPendientes = result.filter(practica => practica.estado_informe == 'ESPERA').length;
+          this.detalleInformes = result.filter(informe => {
             const fechaActual = new Date();
             const fechaLimite = new Date(informe.fecha_limite_entrega);
             const diferenciaDias = Math.ceil((fechaActual.getTime() - fechaLimite.getTime()) / (1000 * 60 * 60 * 24));
-            return diferenciaDias <= 500; // fecha limite no más antigua que una semana
+            return diferenciaDias <= 500;
           });
           this.informesPendientesList = this.detalleInformes.filter(
             (informe: any) => informe.estado_informe == 'ESPERA'
@@ -152,7 +152,7 @@ export class DashboardComponent implements OnInit {
   obtenerAlumnosAsignados() {
     this.informeConfidencialService.obtenerAlumnosAsignados().subscribe({
       next: result => {
-        console.log(result)
+        console.log(result, 'asignados')
         this.alumnosAsignados = result.cantAlumnosAsignados;
         this.totalInformes = result.cantidadTotalInformes
       },
@@ -164,9 +164,9 @@ export class DashboardComponent implements OnInit {
   
 
   obtenerEmpresa(id_empresa: number){
-    this.informeConfidencialService.obtenerDatosEmpresa().subscribe({
+    this.informeConfidencialService.obtenerDatosEmpresas().subscribe({
       next: result =>{
-        this.dataEmpresa = result.find((empresa:any) => empresa.id_empresa == id_empresa)
+        this.dataEmpresa = result.find(empresa => empresa.id_empresa == id_empresa)!
         console.log(this.dataEmpresa)
       },
       error: error =>{

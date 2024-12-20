@@ -51,7 +51,6 @@ export class DetallesInformesComponent implements OnInit {
     corregir: false
   };
 
-  comentario: string = '';
   archivoSeleccionado: File | null = null;
   
   observaciones: string = '';
@@ -76,6 +75,7 @@ export class DetallesInformesComponent implements OnInit {
   public getPreguntas() {
     this.practicaService.obtenerPreguntasEvaluacion().subscribe({
       next: (result) => {
+        console.log(result)
         this.preguntasBackend = result; // Almacena los datos obtenidos
       },
       error: (error) => {
@@ -193,7 +193,7 @@ export class DetallesInformesComponent implements OnInit {
     // Lógica para enviar la revisión al backend
     console.log('Enviando revisión:', {
       archivo: this.archivoSeleccionado,
-      comentario: this.comentario,
+      comentario: this.observaciones,
     });
 
     const respuestas = Object.keys(this.respuestasEvaluacion).map((preguntaId) => {
