@@ -108,7 +108,7 @@
                     <p class="text-gray-600">{{ respuesta.pregunta }}</p>
                     <div class="respuestas mt-4 space-y-3">
                         <p class="text-gray-600 font-semibold">Respuesta</p>
-                        <div *ngIf="respuesta.respuesta_texto; else respuestaNumerica">
+                        <div *ngIf="respuesta.respuesta_texto">
                         <textarea
                             pInputTextarea
                             id="message"
@@ -118,15 +118,24 @@
                             readonly
                         >{{ respuesta.respuesta_texto }}</textarea>
                         </div>
-                        <ng-template #respuestaNumerica>
-                        <div class="flex items-center mt-2">
+                       
+                        <div *ngIf="respuesta.puntaje" class="flex items-center mt-2">
                             <span
                             class="w-fit px-6 py-2 bg-white text-gray-600 rounded-md text-center text-sm font-medium shadow-sm"
                             >
                             {{ convertirPuntaje(respuesta.puntaje) || 'Sin calificación' }}
                             </span>
                         </div>
-                        </ng-template>
+                        <div *ngIf="!respuesta.puntaje && !respuesta.respuesta_texto" class="respuestas mt-4 space-y-3">
+                            <div *ngIf="respuestasAlumno.asignaturas.length > 0" class="my-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
+                                <h3 class="text-md font-semibold text-blue-600 mb-4">Asignaturas seleccionadas:</h3>
+                                <ul class="list-disc pl-6 space-y-2">
+                                    <li *ngFor="let asignatura of respuestasAlumno.asignaturas" class="text-sm text-gray-700 bg-blue-200 p-2 rounded shadow-md mb-3">
+                                        <span class="font-semibold text-gray-700">{{ asignatura.nombre }}</span> ({{ asignatura.codigo }})
+                                    </li>
+                                </ul>
+                            </div>                    
+                        </div>
                     </div>
                     </div>
                     <!-- Navegador -->

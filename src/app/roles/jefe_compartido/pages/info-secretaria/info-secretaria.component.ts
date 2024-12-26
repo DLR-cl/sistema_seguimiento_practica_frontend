@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HeaderComponent } from "../../header-jefes/header.component";
 import { DatosSecretariaService } from '../../services/datos-secretaria.service';
 import { MessageService } from 'primeng/api';
@@ -47,6 +47,7 @@ export class InfoSecretariaComponent implements OnInit {
     this.datosSecretariaService.getInfoSecretarias().subscribe({
       next: (data) => {
         this.secretariasData = data;
+        console.log(data)
         this.cargando = false
       },
       error: (err) => console.error('Error al obtener las secretarias:', err),
