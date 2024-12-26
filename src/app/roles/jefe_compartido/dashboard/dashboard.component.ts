@@ -8,9 +8,10 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
 import { DashboardService } from '../services/dashboard.service';
-import { detallePractica, estadisticasPractica } from '../dto/dashboard-practicas.dto';
-import { Practicas } from '../../secretaria/dto/practicas.dto';
+import { CantidadEmpresasPorTipo, detallePractica, estadisticasPractica } from '../dto/dashboard-practicas.dto';
+import { PrimeNGConfig } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
+import { Practicas } from '../../secretaria/dto/practicas.dto';
 import { DatosAcademicosService } from '../services/datos-academicos.service';
 import { AcademicoSolo } from '../dto/academicos.dto';
 
@@ -32,14 +33,18 @@ export class DashboardComponent implements OnInit{
   dataUser!:any;
   @Output() estadoCargando = new EventEmitter<boolean>();
   cargando: boolean = true;
+  modalDetallePractica= false;
+  cantidadEmpresasPorTipo!: CantidadEmpresasPorTipo;
 
   ngOnInit(): void {
     this.dataUser = this.authService.getData();
-    this.getEstadisticasPracticas()
     this.getAprobacionPracticas()
     this.getAlumnosActivosPracticas()
     this.getDetallesPractica()
     this.getPracticasMeses()
+    this.getEstadisticasPracticas()
+    this.getCantidadEmpresasPorTipos();
+    console.log("estadisticas, practica", this.estadisticasPractica)
   }
 
   estadisticasPractica!: estadisticasPractica
@@ -107,32 +112,17 @@ export class DashboardComponent implements OnInit{
   };
 
   // **Gráfico de Percepción de Empresas** (Convertido a porcentaje)
-  percepcionEmpresasChartData = {
-    labels: ['Buen Prácticante', 'Mal Prácticante'],
+  tipoEmpresasChartData = {
+    labels: ['Privada', 'Pública'],
     datasets: [
       {
-        data: [80, 20], // Datos ajustados
+        data: [0, 0], // Datos ajustados
         backgroundColor: ['#1565c0', '#42aaff'],
       }
     ]
   };
 
-  percepcionEmpresasChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: any) => {
-            const total = 100; // Total de la categoría (100%)
-            const percentage = (tooltipItem.raw / total) * 100;
-            return `${percentage.toFixed(1)}% Estudiantes`;
-          }
-        }
-      }
-    },
-    cutout: '70%'
-  };
+
 
   // **Gráfico de Prácticas Supervisadas por Mes** (No cambia a porcentaje)
   mesChartData = {
@@ -184,8 +174,9 @@ export class DashboardComponent implements OnInit{
   public getEstadisticasPracticas(){
     this.dashboardService.getEstadisticasPracticas().subscribe({
       next: result => {
-        this.estadisticasPractica = result
-        console.log(result)
+        console.log('estadisticas result', result)
+        this.estadisticasPractica = result 
+        console.log(this.estadisticasPractica)
 
 
         const totalAsignados = this.estadisticasPractica.total_asignados; // Ejemplo: 25
@@ -205,11 +196,33 @@ export class DashboardComponent implements OnInit{
       }
     })
   }
-  
+  cerrarModal() {
+    this.modalDetallePractica = false;
+  }
+
+  abrirModal() {
+    this.modalDetallePractica = true;
+  }
+
+  getCantidadEmpresasPorTipos(){
+    this.dashboardService.getCantidadEmpresasPorTipo().subscribe({
+      next: result => {
+        this.cantidadEmpresasPorTipo = result;
+        this.tipoEmpresasChartData = {
+          labels: ['Privada', 'Pública'],
+          datasets: [
+            {
+              data: [result.privada, result.publica],
+              backgroundColor: ['#1565c0', '#42aaff']
+            }
+          ]
+        }
+      }
+    })
+  };
   public getAprobacionPracticas(){
     this.dashboardService.getAprobacionPracticas().subscribe({
       next: result => {
-        console.log(result, "aprobacion")
         const primerPractica = result.primerPractica;
         if(primerPractica.length != 0 && primerPractica[0].cantidad){
           const aprobadosI = primerPractica
@@ -261,7 +274,6 @@ export class DashboardComponent implements OnInit{
   public getAlumnosActivosPracticas() {
     this.dashboardService.getAlumnosActivosPracticas().subscribe({
       next: (result) => {
-        console.log(result, "hola soy ese grafico");
   
         if(result.length > 0){
           // Buscar prácticas y asignar 0 si no existen
@@ -292,7 +304,7 @@ export class DashboardComponent implements OnInit{
   public getDetallesPractica(){
     this.dashboardService.getDetallesPracticas().subscribe({
       next: result => {
-        console.log(result, 'practicas')
+
         this.detallesPractica = result
       }
     })
@@ -301,7 +313,6 @@ export class DashboardComponent implements OnInit{
   public getPracticasMeses() {
     this.dashboardService.getPracticasMeses(this.periodoSeleccionado).subscribe({
         next: (result) => {
-            console.log(result);
 
             // Define un tipo más flexible para permitir índices dinámicos
             const practicasPorMes: { [mes: string]: { [key: string]: number } } = {};

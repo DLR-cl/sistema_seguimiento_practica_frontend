@@ -12,12 +12,13 @@ import { PayloadInterface } from '../../../shared/interface/payload.interface';
 import { TipoUsuario } from '../../../enum/enumerables.enum';
 import { AcademicoInformes, PracticaInfo } from '../dto/asignacion-informes.dto';
 import { MessageService } from 'primeng/api';
+import { HeaderComponent } from "../../jefe_compartido/header-jefes/header.component";
 
 
 @Component({
   selector: 'app-practicas-secretaria',
   standalone: true,
-  imports: [HeaderSecretariaComponent, CommonModule, DropdownModule, FormsModule, DialogModule, InputTextModule],
+  imports: [CommonModule, DropdownModule, FormsModule, DialogModule, InputTextModule, HeaderComponent],
   templateUrl: './practicas-secretaria.component.html',
   styleUrl: './practicas-secretaria.component.css'
 })
@@ -37,7 +38,8 @@ export class PracticasSecretariaComponent implements OnInit {
 
   dataUser?: PayloadInterface | null;
   tipoJefeCarrera = TipoUsuario.JEFE_CARRERA;
-  tipoSecretaria= TipoUsuario.SECRETARIA;
+  tipoSecretariaCarrera= TipoUsuario.SECRETARIA_CARRERA;
+  tipoSecretariaDepartamento= TipoUsuario.SECRETARIA_DEPARTAMENTO;
 
   cargando: boolean = true
   cargandoAsignacion: boolean = false

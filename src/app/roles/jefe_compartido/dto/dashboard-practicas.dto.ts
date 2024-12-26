@@ -46,3 +46,8 @@ export interface AlumnosActivosPractica {
     tipo_practica:        string;
     cantidad_estudiantes: number;
 }
+
+export interface CantidadEmpresasPorTipo {
+    privada: number;
+    publica: number;
+}

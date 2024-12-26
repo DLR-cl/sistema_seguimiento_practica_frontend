@@ -44,7 +44,7 @@ export const routes: Routes = [
     },
     {
         path: 'home-administracion', component: HomeAdministracionComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.JEFE_CARRERA])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.JEFE_CARRERA, TipoUsuario.ADMINISTRADOR])]
     },
     {
         path: 'home-academicos', component: AcademicoComponent,
@@ -52,11 +52,11 @@ export const routes: Routes = [
     },
     {
         path: 'lista-academicos', component: InfoAcademicosComponent, 
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR])]
     },
     {
         path: 'lista-secretarias', component: InfoSecretariaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR])]
 
     },
     {
@@ -65,7 +65,7 @@ export const routes: Routes = [
     },
     {
         path: 'nueva-practica', component: NuevaPracticaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.JEFE_CARRERA])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.JEFE_CARRERA, TipoUsuario.ADMINISTRADOR])]
 
     },
     {       // RUTA EN CONSTRUCION --------------- RUTA EN CONSTRUCCION (eliminar??)
@@ -82,22 +82,22 @@ export const routes: Routes = [
     },
     {
         path: 'crear-practica', component: NuevaPracticaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR])]
     },
     {
         path: 'solicitar-practicante', component: SolicitarPracticanteComponent,
     },
     {
         path: 'home-secretaria',  component: HomeSecretariaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.SECRETARIA_DEPARTAMENTO])]
     },
     {
         path: 'seguimiento-academicos', component: EstadoAcademicosComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA, TipoUsuario.JEFE_CARRERA])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA_DEPARTAMENTO, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA])]
     },
     {
         path: 'ver-practicas', component: PracticasSecretariaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA, TipoUsuario.JEFE_CARRERA])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA_DEPARTAMENTO, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.ADMINISTRADOR])]
     },
     {
         path: 'home-jefe-alumno', component: HomeJefeEmpleadorComponent,
