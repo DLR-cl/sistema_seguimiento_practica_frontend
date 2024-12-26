@@ -2,9 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AlumnoService } from '../data-access/alumno.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
-import { HeaderComponent } from "../components/header/header.component"
 import { CommonModule } from '@angular/common';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
+import { HeaderComponent } from '../../jefe_compartido/header-jefes/header.component';
 
 @Component({
   selector: 'app-home-alumno',

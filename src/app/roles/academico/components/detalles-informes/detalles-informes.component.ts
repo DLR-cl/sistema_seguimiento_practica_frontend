@@ -280,7 +280,7 @@ uploadCorrection(): void {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al registrar las respuestas: ${error.message}` });
       }
     })
-
+    
   }
 
   onFileSelected(event: any): void {
