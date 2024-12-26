@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { HeaderComponent } from "../header-jefes/header.component";
 import { ListboxModule } from 'primeng/listbox';
 import { ChartModule } from 'primeng/chart';
@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit{
   ){}
 
   dataUser!:any;
+  @Output() estadoCargando = new EventEmitter<boolean>();
+  cargando: boolean = true;
 
   ngOnInit(): void {
     this.dataUser = this.authService.getData();
@@ -34,6 +36,145 @@ export class DashboardComponent implements OnInit{
     this.getDetallesPractica()
     this.getPracticasMeses()
   }
+
+  estadisticasPractica!: estadisticasPractica
+  
+  detallesPractica!: detallePractica[]
+
+  periodoSeleccionado: number = 2024
+
+  // selectedInforme: any;
+
+  // **Gráfico de Cantidad Estudiantes por Práctica** (No cambia a porcentaje)
+  cantidadEstudiantesTipoPracticaChartData: any
+
+  cantidadEstudiantesTipoPracticaChartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: any) => `${tooltipItem.raw} Estudiantes`
+        }
+      }
+    },
+    cutout: '70%'
+  };
+
+  // **Gráfico de Práctica I**
+  practicaIChartData: any
+
+  practicaIChartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: any) => {
+            const total = 100; // Total de la categoría (100%)
+            const percentage = (tooltipItem.raw / total) * 100;
+            return `${percentage.toFixed(1)}% Estudiantes`;
+          }
+        }
+      }
+    },
+    cutout: '70%'
+  };
+
+  // **Gráfico de Práctica II** (Convertido a porcentaje)
+  practicaIIChartData:any
+
+  practicaIIChartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: any) => {
+            const total = 100; // Total de la categoría (100%)
+            const percentage = (tooltipItem.raw / total) * 100;
+            return `${percentage.toFixed(1)}% Estudiantes`;
+          }
+        }
+      }
+    },
+    cutout: '70%'
+  };
+
+  // **Gráfico de Percepción de Empresas** (Convertido a porcentaje)
+  percepcionEmpresasChartData = {
+    labels: ['Buen Prácticante', 'Mal Prácticante'],
+    datasets: [
+      {
+        data: [80, 20], // Datos ajustados
+        backgroundColor: ['#1565c0', '#42aaff'],
+      }
+    ]
+  };
+
+  percepcionEmpresasChartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: any) => {
+            const total = 100; // Total de la categoría (100%)
+            const percentage = (tooltipItem.raw / total) * 100;
+            return `${percentage.toFixed(1)}% Estudiantes`;
+          }
+        }
+      }
+    },
+    cutout: '70%'
+  };
+
+  // **Gráfico de Prácticas Supervisadas por Mes** (No cambia a porcentaje)
+  mesChartData = {
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    datasets: [
+      {
+        label: 'Prácticas Realizadas',
+        data: [4, 6, 7, 5, 6, 8, 11, 9, 5, 6, 3, 2],
+        backgroundColor: '#1E88E5',
+        borderColor: '#1565C0',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  mesChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+        x: {
+            beginAtZero: true,
+            stacked: true, // Apilar en el eje X
+        },
+        y: {
+            beginAtZero: true,
+            stacked: true, // Apilar en el eje Y
+            ticks: { stepSize: 2 }, // Intervalos del eje Y
+        },
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (tooltipItem: any) => {
+            // Tooltip muestra los datos de cada dataset en la barra apilada
+            const datasets = tooltipItem.chart.data.datasets;
+            const index = tooltipItem.dataIndex;
+  
+            // Generar un mensaje para cada dataset
+            return datasets.map((dataset: any) => {
+              const value = dataset.data[index];
+              return `${dataset.label}: ${value}`;
+            }).join(', ');
+          },
+        },
+      },
+    },
+  };
 
   public getEstadisticasPracticas(){
     this.dashboardService.getEstadisticasPracticas().subscribe({
@@ -202,6 +343,8 @@ export class DashboardComponent implements OnInit{
                     },
                 ],
             };
+            this.cargando = false
+            this.estadoCargando.emit(this.cargando);
         },
     });
   }
@@ -224,129 +367,6 @@ export class DashboardComponent implements OnInit{
     };
     return monthsMap[month] || month;
   } 
-
-  estadisticasPractica!: estadisticasPractica
-  
-  detallesPractica!: detallePractica[]
-
-  periodoSeleccionado: number = 2024
-
-  // selectedInforme: any;
-
-  // **Gráfico de Cantidad Estudiantes por Práctica** (No cambia a porcentaje)
-  cantidadEstudiantesTipoPracticaChartData: any
-
-  cantidadEstudiantesTipoPracticaChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: any) => `${tooltipItem.raw} Estudiantes`
-        }
-      }
-    },
-    cutout: '70%'
-  };
-
-  // **Gráfico de Práctica I**
-  practicaIChartData: any
-
-  practicaIChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: any) => {
-            const total = 100; // Total de la categoría (100%)
-            const percentage = (tooltipItem.raw / total) * 100;
-            return `${percentage.toFixed(1)}% Estudiantes`;
-          }
-        }
-      }
-    },
-    cutout: '70%'
-  };
-
-  // **Gráfico de Práctica II** (Convertido a porcentaje)
-  practicaIIChartData:any
-
-  practicaIIChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: any) => {
-            const total = 100; // Total de la categoría (100%)
-            const percentage = (tooltipItem.raw / total) * 100;
-            return `${percentage.toFixed(1)}% Estudiantes`;
-          }
-        }
-      }
-    },
-    cutout: '70%'
-  };
-
-  // **Gráfico de Percepción de Empresas** (Convertido a porcentaje)
-  percepcionEmpresasChartData = {
-    labels: ['Buen Prácticante', 'Mal Prácticante'],
-    datasets: [
-      {
-        data: [80, 20], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
-  };
-
-  percepcionEmpresasChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: any) => {
-            const total = 100; // Total de la categoría (100%)
-            const percentage = (tooltipItem.raw / total) * 100;
-            return `${percentage.toFixed(1)}% Estudiantes`;
-          }
-        }
-      }
-    },
-    cutout: '70%'
-  };
-
-  // **Gráfico de Prácticas Supervisadas por Mes** (No cambia a porcentaje)
-  mesChartData = {
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    datasets: [
-      {
-        label: 'Prácticas Realizadas',
-        data: [4, 6, 7, 5, 6, 8, 11, 9, 5, 6, 3, 2],
-        backgroundColor: '#1E88E5',
-        borderColor: '#1565C0',
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  mesChartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    scales: {
-        x: {
-            beginAtZero: true,
-            stacked: true, // Apilar en el eje X
-        },
-        y: {
-            beginAtZero: true,
-            stacked: true, // Apilar en el eje Y
-            ticks: { stepSize: 2 }, // Intervalos del eje Y
-        },
-    },
-};
-
 
   // Función para ver detalles de informes
   verInforme(informe: any) {

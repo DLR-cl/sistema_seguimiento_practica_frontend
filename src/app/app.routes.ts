@@ -44,7 +44,7 @@ export const routes: Routes = [
     },
     {
         path: 'home-administracion', component: HomeAdministracionComponent,
-        // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.JEFE_CARRERA])]
     },
     {
         path: 'home-academicos', component: AcademicoComponent,
@@ -65,10 +65,10 @@ export const routes: Routes = [
     },
     {
         path: 'nueva-practica', component: NuevaPracticaComponent,
-        // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.JEFE_CARRERA])]
 
     },
-    {       // RUTA EN CONSTRUCION --------------- RUTA EN CONSTRUCCION
+    {       // RUTA EN CONSTRUCION --------------- RUTA EN CONSTRUCCION (eliminar??)
         path: 'preguntas/:tipo', component: PreguntasInformeComponent, 
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])] 
     },
@@ -82,6 +82,7 @@ export const routes: Routes = [
     },
     {
         path: 'crear-practica', component: NuevaPracticaComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO])]
     },
     {
         path: 'solicitar-practicante', component: SolicitarPracticanteComponent,

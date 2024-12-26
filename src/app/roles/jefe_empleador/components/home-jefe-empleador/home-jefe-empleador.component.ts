@@ -6,26 +6,29 @@ import { DataJefeAlumnoService } from '../../services/data-jefe-alumno.service';
 import { JefeAlumnoInterface } from '../../data-access/interface/jefe-alumno.interface';
 import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
 import { DashboardComponent } from "../dashboard/dashboard.component";
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home-jefe-empleador',
   standalone: true,
-  imports: [HeaderComponent, DashboardComponent],
+  imports: [HeaderComponent, DashboardComponent, CommonModule],
   templateUrl: './home-jefe-empleador.component.html',
   styleUrl: './home-jefe-empleador.component.css'
 })
 export class HomeJefeEmpleadorComponent implements OnInit{
 
-  private _storageService = inject(StorageService);
-  private readonly _routerService = inject(Router);
-  private readonly _authService = inject(AuthService);
-  private readonly _jefeDataService = inject(DataJefeAlumnoService);
+  constructor(
+    private routerService: Router,
+    private authService: AuthService,
+    private jefeDataService: DataJefeAlumnoService
+  ){}
 
   public dataJefe!:JefeAlumnoInterface | null;
 
+  public cargando: boolean = true
 
   ngOnInit(): void {
-    this._jefeDataService.getData().subscribe(
+    this.jefeDataService.getData().subscribe(
       (data) => {
         this.dataJefe = data;
       },
@@ -35,16 +38,19 @@ export class HomeJefeEmpleadorComponent implements OnInit{
     )
   }
 
-  
+  public finalizoCarga(estado: boolean){
+    this.cargando = estado
+  }
+
   public signOut(){
-      this._authService.logout()
+      this.authService.logout()
   }
 
   public goToInformes(){
-    this._routerService.navigate(['ver-informes-jefe']);
+    this.routerService.navigate(['ver-informes-jefe']);
   }
   
   public goToData(){
-    this._routerService.navigate(['ver-datos-jefe']);
+    this.routerService.navigate(['ver-datos-jefe']);
   }
 }

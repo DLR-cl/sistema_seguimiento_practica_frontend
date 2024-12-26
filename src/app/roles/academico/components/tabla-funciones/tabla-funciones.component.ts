@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { DataAccessService } from '../../services/data-access.service';
-import { InfoInformes } from '../../interface/info-informes.interface';
+import { InfoInformes } from '../../dto/info-informes.dto';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { Router } from '@angular/router';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
@@ -15,35 +15,54 @@ import { AuthStateService } from '../../../../shared/data-access/auth-state.serv
   styleUrls: ['./tabla-funciones.component.css'], // Corregido a styleUrls
 })
 export class TablaFuncionesComponent implements OnInit {
+
   asignado: boolean = false;
+  @Output() estadoCargando = new EventEmitter<boolean>();
+  cargando: boolean = true;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private dataAccessService: DataAccessService,
+    private authService: AuthService
   ){}
 
-  private readonly _dataAccessService = inject(DataAccessService);
-  private readonly _authService = inject(AuthService);
-  private readonly _authStateService = inject(AuthStateService)
+  ngOnInit(): void {
+    this.decodedToken = this.authService.getDecodedToken();
+    this.getInfoInformes();
+  }
 
   data?: InfoInformes[];
   decodedToken: any;
 
-  ngOnInit(): void {
-    // Obtén el token decodificado
-    this.decodedToken = this._authService.getDecodedToken();
+  textoEstadoInforme: Record<string, string> = {
+    ENVIADA: 'Enviado',
+    REVISION: 'Revisión',
+    CORRECCION: 'Corrección',
+    ESPERA: 'Espera',
+    APROBADA: 'Aprobada',
+    DESAPROBADA: 'Desaprobada'
+  };
 
-    // Llama al método para obtener informes
-    this.getInfoInformes();
-  }
+  textoEstadoPractica: Record<string, string> = {
+    CURSANDO: 'Cursando',
+    REVISION_GENERAL: 'Revisión General',
+    ESPERA_INFORMES: 'Espera Informes',
+    FINALIZADA: 'Finalizada',
+    INFORMES_RECIBIDOS: 'Informes Recibidos'
+  };
+
+ 
 
   private getInfoInformes() {
     const token = this.decodedToken?.access_token; // Opcionalmente puedes validar el token aquí
     console.log(token)
-    this._dataAccessService.getInformacionInformes(token).subscribe({
+    this.dataAccessService.getInformacionInformes(token).subscribe({
       next: (r) => {
         console.log("data para tabla",r)
         this.data = r;
-        this.asignado = this.data?.length > 0;
+        this.asignado = this.data.length > 0;
+        this.cargando = false
+        this.estadoCargando.emit(this.cargando);
       },
       error: (err) =>
         console.error('Error al obtener información de informes:', err),

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
@@ -31,9 +31,15 @@ export class DashboardComponent implements OnInit {
     private _authStateService: AuthStateService,
   ){}
 
+  @Output() estadoCargando = new EventEmitter<boolean>();
+  public cargando: boolean = true;
+  public cargandoPractica: boolean = false;
+
   public dataJefe?:JefeAlumnoInterface | null;
 
-  public dataEmpresa!: Empresa
+  
+
+  public dataEmpresa!: Empresa;
 
   ngOnInit(): void {
     this._jefeDataService.getData().subscribe({
@@ -56,7 +62,7 @@ export class DashboardComponent implements OnInit {
 
   alumnosAsignados!: number;
   informesPendientes!:number;
-  totalInformes = 0;
+  totalInformes!:number;
 
   // Datos de informes pendientes y detalles, con nombres de prácticas
   detalleInformes: DetallesInformes[] = []
@@ -69,6 +75,11 @@ export class DashboardComponent implements OnInit {
 
   practicaSeleccionada!: Practicas | null
 
+  tipoPractica: Record<string, string> = {
+    PRACTICA_DOS: 'Práctica Profesional II',
+    PRACTICA_UNO: 'Práctica Profesional I'
+  }
+
   textoEstadoInforme: Record<string, string> = {
     ENVIADA: 'Enviado',
     REVISION: 'Revisión',
@@ -76,6 +87,7 @@ export class DashboardComponent implements OnInit {
     ESPERA: 'Espera',
     APROBADA: 'Aprobada'
   };
+
   textoEstadoInformeConfidencial: Record<string, string> = {
     ENVIADA: 'Enviado',
     REVISION: 'Revisión',
@@ -84,7 +96,6 @@ export class DashboardComponent implements OnInit {
     APROBADA: 'Aprobada'
   };
 
-  
   textoEstadoPractica: Record<string, string> = {
     CURSANDO: 'Cursando',
     REVISION_GENERAL: 'Revisión General',
@@ -100,6 +111,8 @@ export class DashboardComponent implements OnInit {
     SEMI_PRESENCIAL: 'Semipresencial'
   };
 
+  cargandoPracticas: Set<number> = new Set<number>();
+
 
   cerrarModalDetalles() {
     this.modalDetalles = false;
@@ -107,19 +120,26 @@ export class DashboardComponent implements OnInit {
   }
 
   // Función para ver detalles de informes
-  verInforme(practica: any) {
-    this.informeConfidencialService.obtenerPractica(practica.id_practica).subscribe({
-      next: result => {
-        console.log(practica, "lol")
-        this.selectedInforme = practica
-        this.practicaSeleccionada = result
-        this.modalDetalles = true
-        console.log(result, 'caca')
-      },
-      error: error => {
-        console.log(error)
-      }
-    })
+  verInforme(informe: any) {
+    const idInforme = informe.id_informe_confidencial;
+    if (!this.cargandoPracticas.has(idInforme)) {
+      this.cargandoPracticas.add(idInforme); // Agrega el ID al conjunto de "cargando"
+
+      this.informeConfidencialService.obtenerPractica(informe.id_practica).subscribe({
+        next: result => {
+          this.selectedInforme = informe
+          this.practicaSeleccionada = result
+          this.modalDetalles = true
+          this.cargandoPracticas.delete(idInforme);
+        },
+        error: error => {
+          console.log(error)
+          this.cargandoPracticas.delete(idInforme);
+        }
+      })
+    }
+    
+    
   }
 
   obtenerPracticas() {
@@ -155,6 +175,8 @@ export class DashboardComponent implements OnInit {
         console.log(result, 'asignados')
         this.alumnosAsignados = result.cantAlumnosAsignados;
         this.totalInformes = result.cantidadTotalInformes
+        this.cargando = false
+        this.estadoCargando.emit(this.cargando);        
       },
       error: error => {
         console.error('Error obteniendo alumnos asignados', error);

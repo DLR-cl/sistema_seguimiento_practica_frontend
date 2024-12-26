@@ -1,3 +1,5 @@
+import { EstadoInforme } from "../../../enum/enumerables.enum";
+
 export interface respuestaInformeConfidencial {
     id_informe: number;
     id_pregunta: number;
@@ -11,7 +13,7 @@ export interface DetallesInformes {
     tipo_practica:           string;
     id_alumno:               number;
     nombre_alumno:           string;
-    estado_informe:          string;
+    estado_informe:          EstadoInforme;
     id_informe_confidencial: number;
     fecha_inicio:            Date;
     fecha_limite_entrega:    Date;

@@ -11,6 +11,7 @@ import { AuthStateService } from '../../../shared/data-access/auth-state.service
 import { PayloadInterface } from '../../../shared/interface/payload.interface';
 import { TipoUsuario } from '../../../enum/enumerables.enum';
 import { AcademicoInformes, PracticaInfo } from '../dto/asignacion-informes.dto';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -22,11 +23,11 @@ import { AcademicoInformes, PracticaInfo } from '../dto/asignacion-informes.dto'
 })
 export class PracticasSecretariaComponent implements OnInit {
 
-  private readonly _asignacionService = inject(AsignacionInformesService);
-  private readonly _dataUserService = inject(AuthStateService);
-
-  
-
+  constructor(
+    private asignacionService: AsignacionInformesService,
+    private dataUserService: AuthStateService,
+    private messageService: MessageService
+  ){}
 
   ngOnInit(): void {
     this.getProfesores(),
@@ -38,6 +39,8 @@ export class PracticasSecretariaComponent implements OnInit {
   tipoJefeCarrera = TipoUsuario.JEFE_CARRERA;
   tipoSecretaria= TipoUsuario.SECRETARIA;
 
+  cargando: boolean = true
+  cargandoAsignacion: boolean = false
 
   buscador: string = ''
 
@@ -57,16 +60,7 @@ export class PracticasSecretariaComponent implements OnInit {
     APROBADA: 'Aprobada',
     DESAPROBADA: 'Desaprobada'
   };
-  textoEstadoInformeConfidencial: Record<string, string> = {
-    ENVIADA: 'Enviado',
-    REVISION: 'Revisión',
-    CORRECCION: 'Corrección',
-    DESAPROBADA: 'Desaprobada',
-    ESPERA: 'Espera',
-    APROBADA: 'Aprobada'
-  };
 
-  
   textoEstadoPractica: Record<string, string> = {
     CURSANDO: 'Cursando',
     REVISION_GENERAL: 'Revisión General',
@@ -74,7 +68,6 @@ export class PracticasSecretariaComponent implements OnInit {
     FINALIZADA: 'Finalizada',
     INFORMES_RECIBIDOS: 'Informes Recibidos'
   };
-
 
   textoModalidad: Record<string, string> = {
     PRESENCIAL: 'Presencial',
@@ -86,7 +79,7 @@ export class PracticasSecretariaComponent implements OnInit {
   elementosPorPagina: number = 5; // Número de elementos por página
 
   private getData() {
-    this.dataUser = this._dataUserService.getData();
+    this.dataUser = this.dataUserService.getData();
   }
 
   obtenerDatosPaginados() {
@@ -150,6 +143,7 @@ export class PracticasSecretariaComponent implements OnInit {
 
   confirmarAsignacion() {
     if(this.copiaPractica?.academico_nombre !== ''){
+      this.cargandoAsignacion = true
       const academicoAsociado: AsignacionDto= {
         id_informe_alumno: this.copiaPractica?.id_informe_alumno!,
         id_academico: this.profesoresBackend.find(academico => academico.nombre_academico === this.copiaPractica?.academico_nombre)?.id_academico!,
@@ -159,14 +153,22 @@ export class PracticasSecretariaComponent implements OnInit {
   
       console.log(academicoAsociado)
 
-      this._asignacionService.asociarInformeAcademico(academicoAsociado).subscribe(result => {
-        this.cerrarModalAsignacion();
-        this.getProfesores()
-        this.getPracticas();
-        console.log(this.copiaPractica)
+      this.asignacionService.asociarInformeAcademico(academicoAsociado).subscribe({
+        next: result => {
+          this.cerrarModalAsignacion();
+          this.getProfesores()
+          this.getPracticas();
+          console.log(this.copiaPractica)
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Académico asignado con éxito.' });
+
+        },
+        error: error => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al asignar el académico: ${error.message}` });
+
+        }
       })
     } else{
-      alert('Debe asignar un profesor antes de confirmar')
+      this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe seleccionar un profesor` });
     }
     
   }
@@ -190,18 +192,21 @@ export class PracticasSecretariaComponent implements OnInit {
   }
 
   public getProfesores(){
-   this._asignacionService.getProfesores().subscribe(result =>{
+   this.asignacionService.getProfesores().subscribe(result =>{
     this.profesoresBackend = result
    }) 
   }
 
   public getPracticas(){
-    this._asignacionService.getPracticas().subscribe(result =>{
+    this.asignacionService.getPracticas().subscribe(result =>{
       console.log(result)
       this.practicasBackend = result
       if(this.modalDetalles){
         this.practicaSeleccionada = result.find(practica => practica.id_practica == this.practicaSeleccionada?.id_practica)!
       }
+      this.cargando = false
+      this.cargandoAsignacion = false
+
     })
   }
 

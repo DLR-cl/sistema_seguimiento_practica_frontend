@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header-jefes/header.component";
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -13,6 +13,7 @@ import { GenerarPracticaService } from '../services/generar-practica.service';
 import { Empresa, JefeSupervisor, NuevoSupervisor } from '../dto/empresa.dto';
 import { AlumnosDataDto, nuevoAlumno } from '../dto/alumno.dto';
 import { MessageService } from 'primeng/api';
+import { checkRunValidator } from '../../../core/util/validator-rut.function';
 
 
 @Component({
@@ -24,10 +25,14 @@ import { MessageService } from 'primeng/api';
 })
 export class NuevaPracticaComponent implements OnInit{
 
-  private readonly servicioPracticas= inject(GenerarPracticaService);
-  private readonly _alumnosNominaService = inject(AlumnosNominaService);
-  private readonly messageService = inject(MessageService)
-  errorMessage?:string | null = null;
+  errorMessage:string | null = null;
+
+  constructor(
+    private practicasService: GenerarPracticaService,
+    private alumnosNominaService: AlumnosNominaService,
+    private messageService: MessageService,
+    private router: Router
+  ){}
 
   ngOnInit(): void {
     this.obtenerEmpresas()
@@ -37,6 +42,12 @@ export class NuevaPracticaComponent implements OnInit{
     });
   }
   
+  cargando: boolean = true;
+  cargandoCrear: boolean = false;
+  cargandoBuscar: boolean = false;
+
+  practicaSeleccionada: boolean = false;
+
   empresas: Empresa[] = [];
   alumnoSeleccionado!: AlumnosDataDto;
   tipoPracticas: any = [{tipo: "PRACTICA_UNO", titulo:'Práctica profesional I'},{tipo:"PRACTICA_DOS", titulo:"Práctica profesional II"}]
@@ -69,7 +80,7 @@ export class NuevaPracticaComponent implements OnInit{
 
   formSupervisor: FormGroup = new FormGroup({
     nombre: new FormControl ('', Validators.required),
-    rut: new FormControl ('', Validators.required),
+    rut: new FormControl ('', [Validators.required,Validators.pattern(/^\d{1,8}-\d{1}$/), checkRunValidator()]),
     correo: new FormControl ('', [Validators.required, Validators.email]),
     cargo: new FormControl ('', Validators.required),
     numero_telefono: new FormControl ('', Validators.required)
@@ -78,7 +89,7 @@ export class NuevaPracticaComponent implements OnInit{
   formAlumno: FormGroup = new FormGroup({
     nombre: new FormControl ('', Validators.required),
     correo: new FormControl (null, [Validators.required, Validators.email]),
-    rut: new FormControl ('', Validators.required)
+    rut: new FormControl ('', [Validators.required, Validators.pattern(/^\d{1,8}-\d{1}$/), checkRunValidator()])
   });
 
   showModal = false;
@@ -86,13 +97,26 @@ export class NuevaPracticaComponent implements OnInit{
   modalTitle = '';
 
   pasoActual = 1;  
+
+  rutBusqueda: string = ''
+  modalAlumno: boolean = false;
+  rutControl = new FormControl('', [Validators.required,Validators.pattern(/^\d{1,8}-\d{1}$/), checkRunValidator()]); // Control Reactivo del RUT
+  alumno: any = null; // Datos del alumno encontrado
+
   getNombreAlumnoSeleccionado(): string | null {
     const idAlumno = this.formPractica.get('id_alumno')?.value;
     const alumno = this.alumnos.find(alumno => alumno.id_user === idAlumno);
     return alumno ? alumno.usuario.nombre : null;
   }
   
-  
+  get listadoAlumnos(){
+    if(this.formPractica.get('tipo_practica')?.value === 'PRACTICA_UNO'){
+      return this.alumnos.filter(alumno => !alumno.primer_practica)
+    } else{
+      return this.alumnos.filter(alumno => !alumno.segunda_practica && alumno.primer_practica)
+    }
+  }
+
   openModal(type: 'empresa' | 'supervisor' | 'alumno') {
     this.modalType = type;
     this.showModal = true;
@@ -102,69 +126,74 @@ export class NuevaPracticaComponent implements OnInit{
   closeModal() {
     this.showModal = false;
     this.modalType = null;
-    this.formAlumno.reset()
+    this.alumno = null
+    this.rutControl.reset()
     this.formEmpresa.reset()
     this.formSupervisor.reset()
   }
 
   submitModal() {
     if (this.modalType === 'empresa') {
-      //agregar manejo de errores a los subscribe
-      this.servicioPracticas.crearEmpresa(this.formEmpresa.value).subscribe({
+      this.cargandoCrear = true;
+      this.practicasService.crearEmpresa(this.formEmpresa.value).subscribe({
         next: result =>{
           this.obtenerEmpresas()
           console.log(result, 'empresa')
           this.closeModal();
-          this.formSupervisor.reset()
           this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Empresa registrada con éxito' });
           this.formEmpresa.reset()
+          this.cargandoCrear = false;
         },
         error: error =>{
           console.log(error)
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar la empresa' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al registrar la empresa: ${error.message}` });
+          this.cargandoCrear = false;
         }
       })
       
     } else if (this.modalType === 'supervisor') {
+      this.cargandoCrear = true;
       const supervisor : NuevoSupervisor= {
         ...this.formSupervisor.value,
         tipo_usuario: 'JEFE_EMPLEADOR',
         id_empresa: this.formPractica.get('id_empresa')?.value,
       };
-      this.servicioPracticas.crearSupervisor(supervisor).subscribe({
+      this.practicasService.crearSupervisor(supervisor).subscribe({
         next: result => {
           this.obtenerEmpresas()
           console.log(result, 'supervisor')
           this.closeModal();
           this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Supervisor registrado con éxito' });
           this.formSupervisor.reset()
+          this.cargandoCrear = false;
         },
         error: error => {
           console.log(error)
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar el supervisor' });
-
-        }
-      })
-    } else if (this.modalType === 'alumno') {
-      const alumno : nuevoAlumno = {
-        ...this.formAlumno.value,
-        tipo_usuario: 'ALUMNO_PRACTICA',
-      };
-      console.log(alumno)
-      this.servicioPracticas.crearAlumno(alumno).subscribe({
-        next: result => {
-          this.obtenerAlumnos()
-          console.log(result, 'alumno')
-          this.closeModal();
-          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Supervisor registrado con éxito' });
-          this.formAlumno.reset()
-        },
-        error: error =>{
-          console.log(error)
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar el alumno' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al registrar el supervisor: ${error.message}` });
+          this.cargandoCrear = false;
         }
       })
     }
+    // } else if (this.modalType === 'alumno') {
+    //   const alumno : nuevoAlumno = {
+    //     ...this.formAlumno.value,
+    //     tipo_usuario: 'ALUMNO_PRACTICA',
+    //   };
+    //   console.log(alumno)
+    //   this.practicasService.crearAlumno(alumno).subscribe({
+    //     next: result => {
+    //       this.obtenerAlumnos()
+    //       console.log(result, 'alumno')
+    //       this.closeModal();
+    //       this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Supervisor registrado con éxito' });
+    //       this.formAlumno.reset()
+    //     },
+    //     error: error =>{
+    //       console.log(error)
+    //       this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al registrar el alumno: ${error.message}` });
+    //     }
+    //   })
+    // }
   }
 
   siguientePaso() {
@@ -183,6 +212,7 @@ export class NuevaPracticaComponent implements OnInit{
 
   onSubmit() {
     if (this.formPractica.valid) {
+      this.cargandoCrear = true;
       const practica = this.formPractica.value;
       delete practica.id_empresa;
       practica.id_alumno= Number(practica.id_alumno),
@@ -190,38 +220,47 @@ export class NuevaPracticaComponent implements OnInit{
       practica.fecha_inicio = new Date(practica.fecha_inicio);
       practica.fecha_termino = new Date(practica.fecha_termino);
       console.log(practica);
-      this.servicioPracticas.crearPractica(practica).subscribe(
-        {
-          next: result =>{
-            this.formPractica.reset()
-            this.pasoActual = 1
-            console.log(result)
-            this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Práctica generada con exito' });
-          },
-          error: error => {
-            this.errorMessage = error.message;
-            console.log(error)
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error' });
-          }    
+      this.practicasService.crearPractica(practica).subscribe({
+        next: result =>{
+          this.formPractica.reset()
+          this.pasoActual = 1
+          console.log(result)
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Práctica generada con exito' });
+          this.cargandoCrear = false
+          // this.router.navigate(['home-administracion'])
+        },
+        error: error => {
+          this.errorMessage = error.message;
+          console.log(error)
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error: ${error.message}` });
+          this.cargandoCrear = false
         }
-      )
+      })
     }
   }
 
+  seleccionarPractica(practica: string){
+    this.practicaSeleccionada = true
+    this.formPractica.patchValue({
+      tipo_practica: practica
+    })
+  }
+
   obtenerEmpresas() {
-    this.servicioPracticas.obtenerEmpresas().subscribe(result => {
+    this.practicasService.obtenerEmpresas().subscribe(result => {
       this.empresas = result;
       console.log("empresas",result)
       const idEmpresaSeleccionada = this.formPractica.get('id_empresa')?.value;
       if (idEmpresaSeleccionada) {
         this.filterSupervisores(idEmpresaSeleccionada);
       }
+      this.cargando = false
     });
   }
   
 
   obtenerAlumnos() {
-    this.servicioPracticas.obtenerAlumnos().subscribe(result =>{
+    this.practicasService.obtenerAlumnos().subscribe(result =>{
       this.alumnos = result.filter(alumno => !alumno.primer_practica && !alumno.segunda_practica);
       console.log("Alumnos disponibles:", this.alumnos);
     })
@@ -237,24 +276,23 @@ export class NuevaPracticaComponent implements OnInit{
   }
 
   obtenerDatosAlumno(){
-    const rut = this.rutControl.value?.trim().toLowerCase();
-    if (!rut) {
-      alert('Por favor, ingrese un RUT válido.');
-      return;
-    }
+    this.cargandoBuscar = true;
+    this.alumno = null
+    const rut = this.rutControl.value?.trim().toLowerCase()!;
+
     console.log(rut, "obtener alumno")
-    const alumno = this._alumnosNominaService.obtenerAlumnoNomina(rut).subscribe(
-      (response) => {
-        this.alumno = response
+    this.alumnosNominaService.obtenerAlumnoNomina(rut).subscribe({
+      next: (response) => {
+        this.alumno = response;
+        this.cargandoBuscar = false;
+      },
+      error: error =>{
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: `Error: ${error.message}` });
+        this.cargandoBuscar = false;
       }
-    )
+    })
   }
-  rutBusqueda: string = ''
-  modalAlumno: boolean = false;
-  rutControl = new FormControl(''); // Control Reactivo del RUT
-  alumno: any = null; // Datos del alumno encontrado
-  mensajeExito: string = ''; // Mensaje de éxito
-  alumnoNoEncontrado = false; // Estado si no se encuentra el alumno
+
   openModalAlumno(){
     this.modalAlumno = true;
   }
@@ -265,6 +303,7 @@ export class NuevaPracticaComponent implements OnInit{
   confirmarAlumno() {
     console.log(this.alumno)
     if(this.alumno){
+      this.cargandoCrear = true;
       const crear: nuevoAlumno = {
         nombre: this.alumno.nombre,
         correo: this.alumno.email,
@@ -272,22 +311,22 @@ export class NuevaPracticaComponent implements OnInit{
         nomina: true,
         tipo_usuario: "ALUMNO_PRACTICA"
       }
-      this.servicioPracticas.crearAlumno(crear).subscribe({
+      this.practicasService.crearAlumno(crear).subscribe({
         next: result => {
           console.log('Alumno c reado:', result);
           this.alumnos.push(result.data) 
           this.obtenerAlumnos()
           console.log(this.alumnos)
           this.rutControl.reset()
-          this.mensajeExito = 'El alumno ha sido creado con éxito.';
           this.alumno = null; // Limpiar alumno seleccionado
-          this.mensajeExito = '';
           this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Alumno registrado con éxito.' });
+          this.cargandoCrear = false;
 
         },
         error: error => {
           console.log('Error al crear el alumno:', error);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar el alumno' });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al registrar el alumno: ${error.message}` });
+          this.cargandoCrear = false;
 
         }
       });

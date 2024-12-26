@@ -20,6 +20,8 @@ import { TableModule } from 'primeng/table';
 })
 export class HomeAdministracionComponent{
 
+  cargando: boolean = true
+  
   // Datos para los resúmenes
   alumnos_en_practica = {
     cantidad_alumnos_practica: 15,
@@ -78,5 +80,9 @@ export class HomeAdministracionComponent{
       },
     },
   };
+
+  finalizoCarga(estado: boolean){
+    this.cargando = estado
+  }
 
 }
