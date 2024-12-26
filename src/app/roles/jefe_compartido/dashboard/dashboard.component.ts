@@ -11,6 +11,9 @@ import { DashboardService } from '../services/dashboard.service';
 import { CantidadEmpresasPorTipo, detallePractica, estadisticasPractica } from '../dto/dashboard-practicas.dto';
 import { PrimeNGConfig } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
+import { Practicas } from '../../secretaria/dto/practicas.dto';
+import { DatosAcademicosService } from '../services/datos-academicos.service';
+import { AcademicoSolo } from '../dto/academicos.dto';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,7 +26,8 @@ export class DashboardComponent implements OnInit{
 
   constructor(
     private authService: AuthStateService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private academicoService: DatosAcademicosService
   ){}
 
   dataUser!:any;
@@ -297,11 +301,10 @@ export class DashboardComponent implements OnInit{
     });
   }
   
-  
-
   public getDetallesPractica(){
     this.dashboardService.getDetallesPracticas().subscribe({
       next: result => {
+
         this.detallesPractica = result
       }
     })
@@ -379,8 +382,75 @@ export class DashboardComponent implements OnInit{
     return monthsMap[month] || month;
   } 
 
+  modalDetalles = false;
+
+  practicaSeleccionada!: Practicas | null
+  academicoPractica!: AcademicoSolo[] | null
+
+  textoEstadoInforme: Record<string, string> = {
+    ENVIADA: 'Enviado',
+    REVISION: 'Revisión',
+    CORRECCION: 'Corrección',
+    ESPERA: 'Espera',
+    APROBADA: 'Aprobada',
+    DESAPROBADA: 'Desaprobada'
+  };
+
+  textoEstadoPractica: Record<string, string> = {
+    CURSANDO: 'Cursando',
+    REVISION_GENERAL: 'Revisión General',
+    ESPERA_INFORMES: 'Espera Informes',
+    FINALIZADA: 'Finalizada',
+    INFORMES_RECIBIDOS: 'Informes Recibidos'
+  };
+
+
+  textoModalidad: Record<string, string> = {
+    PRESENCIAL: 'Presencial',
+    REMOTO: 'Remoto',
+    SEMI_PRESENCIAL: 'Semipresencial'
+  };
+
+  cargandoPracticas: Set<number> = new Set<number>();
+
+  cerrarModalDetalles() {
+    this.modalDetalles = false;
+    this.practicaSeleccionada = null;
+    this.academicoPractica = null;
+  }
+
   // Función para ver detalles de informes
-  verInforme(informe: any) {
-    alert(`Ver informe: ${informe.nombre_alumno} de ${informe.tipo_practica}`);
+  verInforme(practica: any) {
+    const idPractica = practica.id_practica;
+    if (!this.cargandoPracticas.has(idPractica)) {
+      this.cargandoPracticas.add(idPractica); // Agrega el ID al conjunto de "cargando"
+
+      this.dashboardService.obtenerPractica(idPractica).subscribe({
+        next: result => {
+          console.log(result)
+          this.practicaSeleccionada = result
+          if(result.informe_alumno.id_academico){
+            this.academicoService.getInfoAcademico(result.informe_alumno.id_academico).subscribe({
+              next: academico => {
+                this.academicoPractica = academico
+                console.log(this.academicoPractica)
+                this.modalDetalles = true
+                this.cargandoPracticas.delete(idPractica);
+              },
+            })
+          } else {
+            this.modalDetalles = true
+            this.cargandoPracticas.delete(idPractica);
+          }
+          
+        },
+        error: error => {
+          console.log(error)
+          this.cargandoPracticas.delete(idPractica);
+        }
+      })
+    }
+    
+    
   }
 }

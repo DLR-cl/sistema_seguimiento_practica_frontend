@@ -20,6 +20,8 @@ export class HomeAlumnoComponent implements OnInit{
     { id: 2, nombre: 'Práctica Profesional 2' }
   ];
 
+  cargando: boolean = true;
+
   imagenFondo: string = "/departamento_ici/transicion_5.webp"
 
   private readonly _alumnoService = inject(AlumnoService);
@@ -43,6 +45,7 @@ export class HomeAlumnoComponent implements OnInit{
       next: (data) => {
         this.dataAlumno = { ...data, id_user: this.dataAlumno.id_user }; // Combina datos de la API y token
         console.log('Datos del alumno:', this.dataAlumno);
+        this.cargando = false;
       },
       error: (error) => {
         console.error('Error al obtener la data del alumno:', error);
@@ -53,8 +56,6 @@ export class HomeAlumnoComponent implements OnInit{
     });
   }
   
-  
-
   public informeEnEspera(): boolean {
     return this.dataAlumno?.informe?.some((informe:any) => informe.estado == 'ESPERA' || informe.estado == 'CORRECCION') || false;
   }

@@ -21,6 +21,6 @@ export class DatosAcademicosService {
     }
 
     public getInfoAcademico(id_academico: number){
-        return this._http.get<AcademicoSolo>(`${enviroment.API_URL}/academicos/${id_academico}`)
+        return this._http.get<AcademicoSolo[]>(`${enviroment.API_URL}/academicos/${id_academico}`)
     }
 }

@@ -187,3 +187,196 @@
     </div>
 </p-dialog>
 
+       
+
+<p-dialog [(visible)]="modalDetalles" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" [style]="{ width: '750px' }">
+    <!-- Header -->
+    <ng-template pTemplate="header">
+      <div class="text-center mx-auto py-4">
+        <h2 class="text-2xl font-semibold text-blue-700">Detalles de la Práctica</h2>
+      </div>
+    </ng-template>
+  
+    <!-- Content -->
+    <ng-template pTemplate="content">
+      <div class="space-y-8">
+        <!-- Información General -->
+        <div class="space-y-6">
+          <div class="border-b pb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Información General</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-6 text-sm">
+            <div>
+                <p class="text-gray-500">Alumno</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_alumno.alumno.usuario.nombre }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Tipo de Práctica</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada!.tipo_practica == 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Modalidad</p>
+              <p class="font-medium text-gray-900">{{ textoModalidad[practicaSeleccionada!.modalidad] }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Estado Práctica</p>
+                <p class="text-base font-medium truncate"
+                  [ngClass]="{
+                    'text-blue-600': practicaSeleccionada?.estado === 'CURSANDO',
+                    'text-red-600': practicaSeleccionada?.estado === 'ESPERA_INFORMES',
+                    'text-green-500': practicaSeleccionada?.estado === 'INFORMES_RECIBIDOS',
+                    'text-yellow-600': practicaSeleccionada?.estado === 'REVISION_GENERAL',
+                    'text-green-600': practicaSeleccionada?.estado === 'FINALIZADA'
+                  }">
+                  {{ textoEstadoPractica[practicaSeleccionada!.estado] }}
+                </p>
+              </div>
+    
+              <!-- Estado Informe Alumno -->
+              <div *ngIf="!['CURSANDO'].includes(practicaSeleccionada!.estado)">
+                <p class="text-gray-500">Estado Informe Alumno</p>
+                <p class="text-base font-medium"
+                  [ngClass]="{
+                    'text-blue-600': practicaSeleccionada!.informe_alumno.estado === 'ENVIADA',
+                    'text-red-600': practicaSeleccionada!.informe_alumno.estado=== 'ESPERA',
+                    'text-red-800': practicaSeleccionada!.informe_alumno.estado === 'DESAPROBADA',
+                    'text-yellow-600': practicaSeleccionada!.informe_alumno.estado === 'REVISION',
+                    'text-orange-600': practicaSeleccionada!.informe_alumno.estado === 'CORRECCION',
+                    'text-green-600': practicaSeleccionada!.informe_alumno.estado === 'APROBADA'
+                  }">
+                  {{ textoEstadoInforme[practicaSeleccionada!.informe_alumno.estado] }}
+                </p>
+              </div>
+    
+              <!-- Estado Informe Confidencial -->
+              <div *ngIf="!['CURSANDO'].includes(practicaSeleccionada!.estado)">
+                <p class="text-sm text-gray-500">Estado Informe Confidencial</p>
+                <p class="text-base font-medium truncate"
+                  [ngClass]="{
+                    'text-blue-600': practicaSeleccionada!.informe_confidencial.estado === 'ENVIADA',
+                    'text-red-600': practicaSeleccionada!.informe_confidencial.estado === 'ESPERA',
+                    'text-red-800': practicaSeleccionada!.informe_confidencial.estado === 'DESAPROBADA',
+                    'text-yellow-600': practicaSeleccionada!.informe_confidencial.estado === 'REVISION',
+                    'text-orange-600': practicaSeleccionada!.informe_confidencial.estado === 'CORRECCION',
+                    'text-green-600': practicaSeleccionada!.informe_confidencial.estado === 'APROBADA'
+                  }">
+                  {{ textoEstadoInforme[practicaSeleccionada!.informe_confidencial.estado] }}
+                </p>
+              </div>
+          </div>
+        </div>
+  
+        <!-- Fechas y Horas -->
+        <div class="space-y-6">
+          <div class="border-b pb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Fechas y Horas</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-6 text-sm">
+            <div>
+              <p class="text-gray-500">Fecha de Inicio</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.fecha_inicio | date: 'dd/MM/yyyy' }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Fecha de Finalización</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.fecha_termino | date: 'dd/MM/yyyy' }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Cantidad de Horas</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.cantidad_horas }} horas</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Horas Semanales</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.horas_semanales }} horas/semana</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO'">
+            <div class="border-b pb-4">
+              <h3 class="text-xl font-semibold text-gray-800">Empresa</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-6 text-sm">
+                <div>
+                    <p class="text-gray-500">Empresa</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.nombre_razon_social }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Rubro de Empresa</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.rubro }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Ubicación de Empresa</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.ubicacion }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Carácter de Empresa</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.ubicacion }}</p>
+                </div>
+              <div>
+                <p class="text-gray-500">Supervisor</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.usuario.nombre }}</p>
+              </div>
+              <div>
+                <p class="text-gray-500">Supervisor</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.usuario.correo }}</p>
+              </div>
+            </div>
+        </div>  
+
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO'">
+            <div class="border-b pb-4">
+              <h3 class="text-xl font-semibold text-gray-800">Horas Realizadas</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-6 text-sm">
+                <div>
+                    <p class="text-gray-500">Total de Horas</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.total_horas }} horas</p>
+                  </div>
+                  <div>
+                    <p class="text-gray-500">Horas extraordinarias</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_extraordinarias }} horas</p>
+                  </div>
+                  <div>
+                    <p class="text-gray-500">Horas regulares</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_regulares }} horas</p>
+                  </div>
+                  <div>
+                    <p class="text-gray-500">Horas de Inasistencia</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_inasistencia }} horas</p>
+                  </div>
+            </div>
+        </div>  
+
+        <div class="space-y-6" *ngIf="['REVISION', 'CORRECCION', 'APROBADA', 'ENVIADA', 'DESAPROBADA'].includes(practicaSeleccionada!.informe_alumno.estado)">
+            <div class="border-b pb-4">
+              <h3 class="text-xl font-semibold text-gray-800">Profesor Asignado</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-6 text-sm">
+              <div>
+                <p class="text-gray-500">Profesor</p>
+                <p class="font-medium" [ngClass]="academicoPractica![0].nombre ? 'text-gray-900' : 'text-red-600'">
+                  {{ academicoPractica![0].nombre || 'Sin asignar' }}
+                </p>
+              </div>
+              <div>
+                <p class="text-gray-500">Profesor</p>
+                <p class="font-medium" [ngClass]="academicoPractica![0].correo ? 'text-gray-900' : 'text-red-600'">
+                  {{ academicoPractica![0].correo}}
+                </p>
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </ng-template>
+  
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end space-x-6">
+        <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-medium px-4 py-2 rounded-lg"
+          (click)="cerrarModalDetalles()">
+          Cerrar
+        </button>
+      </div>
+    </ng-template>
+</p-dialog>

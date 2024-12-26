@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { ChartModule } from 'primeng/chart';
@@ -26,9 +26,9 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private informeConfidencialService: InformeConfidencialService,
-    private _jefeDataService: DataJefeAlumnoService,
-    private _router: Router,
-    private _authStateService: AuthStateService,
+    private jefeDataService: DataJefeAlumnoService,
+    private router: Router,
+    private authStateService: AuthStateService,
   ){}
 
   @Output() estadoCargando = new EventEmitter<boolean>();
@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
   public dataEmpresa!: Empresa;
 
   ngOnInit(): void {
-    this._jefeDataService.getData().subscribe({
+    this.jefeDataService.getData().subscribe({
       next: data =>{
         this.dataJefe = data;
         console.log(this.dataJefe)
@@ -85,15 +85,8 @@ export class DashboardComponent implements OnInit {
     REVISION: 'Revisión',
     CORRECCION: 'Corrección',
     ESPERA: 'Espera',
-    APROBADA: 'Aprobada'
-  };
-
-  textoEstadoInformeConfidencial: Record<string, string> = {
-    ENVIADA: 'Enviado',
-    REVISION: 'Revisión',
-    CORRECCION: 'Corrección',
-    ESPERA: 'Espera',
-    APROBADA: 'Aprobada'
+    APROBADA: 'Aprobada',
+    DESAPROBADA: 'Desaprobada'
   };
 
   textoEstadoPractica: Record<string, string> = {
@@ -143,7 +136,7 @@ export class DashboardComponent implements OnInit {
   }
 
   obtenerPracticas() {
-    const token = this._authStateService.getSession()?.access_token
+    const token = this.authStateService.getSession()?.access_token
     console.log(token)
     if(token){
 
@@ -201,6 +194,6 @@ export class DashboardComponent implements OnInit {
 
   realizarInforme(id_informe: number) {
     console.log('Realizando informe:', id_informe);
-    this._router.navigate(['jefe_alumno/formulario_primer_practica/'+id_informe])
+    this.router.navigate(['jefe_alumno/formulario_primer_practica/'+id_informe])
   }  
 }
