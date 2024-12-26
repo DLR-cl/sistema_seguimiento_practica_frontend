@@ -173,7 +173,68 @@
     </div>
   </div>
   
-  
+  <!-- Informe Confidencial -->
+  <div class="col-span-full mt-8">
+    <h2 class="text-lg font-semibold text-gray-700">Respuestas alumno</h2>
+    <div class="preguntas-container flex flex-col gap-6 mb-6">
+      <div *ngIf="respuestasConfidenciales.length > 0">
+        <!-- Iterar sobre preguntas -->
+        <div
+          *ngFor="let respuesta of obtenerTandaPreguntas(); let i = index"
+          class="pregunta bg-blue-50 rounded-lg p-6 shadow-sm"
+        >
+          <p class="text-lg font-semibold text-gray-700">
+            Pregunta {{ paginaActual * preguntasPorPagina + i + 1 }}:
+          </p>
+          <p class="text-gray-600">{{ respuesta.pregunta }}</p>
+          <div class="respuestas mt-4 space-y-3">
+            <p class="text-gray-600 font-semibold">Respuesta</p>
+            <div *ngIf="respuesta.respuesta_texto; else respuestaNumerica">
+              <textarea
+                pInputTextarea
+                id="message"
+                rows="4"
+                autoResize="true"
+                class="w-full text-sm"
+                readonly
+              >{{ respuesta.respuesta_texto }}</textarea>
+            </div>
+            <ng-template #respuestaNumerica>
+              <div class="flex items-center mt-2">
+                <span
+                  class="w-fit px-6 py-2 bg-white text-gray-600 rounded-md text-center text-sm font-medium shadow-sm"
+                >
+                  {{ convertirPuntaje(respuesta.puntos) || 'Sin calificación' }}
+                </span>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+        <!-- Navegador -->
+        <div class="flex justify-between mt-4">
+          <button
+            (click)="paginaAnterior()"
+            [disabled]="paginaActual === 0"
+            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <button
+            (click)="paginaSiguiente()"
+            [disabled]="(paginaActual + 1) * preguntasPorPagina >= respuestasConfidenciales.length"
+            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+          >
+            Siguiente
+          </button>
+        </div>
+      </div>
+      <!-- Mensaje si no hay respuestas -->
+      <p *ngIf="respuestasConfidenciales.length === 0" class="text-gray-600">
+        No hay respuestas disponibles.
+      </p>
+    </div>
+  </div>
+
   <div class="flex flex-col space-y-4 mt-4">
     <!-- Observaciones y Subir Archivo -->
     <div class="flex flex-wrap gap-4">
