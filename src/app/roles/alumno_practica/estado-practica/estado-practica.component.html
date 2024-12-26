@@ -76,13 +76,27 @@
     <!-- Detalles de la práctica -->
     <div *ngIf="detallesPractica" class="mt-8">
 
+        <div *ngIf="pasoActual >= 1">
+            <h3 class="text-2xl font-semibold text-blue-600">Detalles de la Práctica</h3>
+            <p class="text-gray-700 mt-4"><strong>Nombre Alumno:</strong> {{ detallesPractica.informe_alumno.alumno.usuario.nombre }}</p>
+            <p class="text-gray-700"><strong>Tipo de Práctica:</strong> {{ tipoPractica[detallesPractica.tipo_practica]}}</p>
+            <p class="text-gray-700"><strong>Empresa:</strong> {{ detallesPractica.informe_confidencial.supervisor.empresa.nombre_razon_social }}</p>
+            <p class="text-gray-700"><strong>Modalidad:</strong> {{ textoModalidad[detallesPractica.modalidad]}}</p>
+            <p class="text-gray-700"><strong>Estado de Práctica:</strong> {{ textoEstadoPractica[detallesPractica.estado]}}</p>
+            <p class="text-gray-700"><strong>Cantidad de Horas:</strong> {{ detallesPractica.cantidad_horas }}</p>
+            <p class="text-gray-700"><strong>Horas Semanales:</strong> {{ detallesPractica.horas_semanales }}</p>
+            <p class="text-gray-700"><strong>Fecha de Inicio:</strong> {{ detallesPractica.fecha_inicio | date:'dd/MM/yyyy' }}</p>
+            <p class="text-gray-700"><strong>Fecha de Término:</strong> {{ detallesPractica.fecha_termino | date:'dd/MM/yyyy' }}</p>
+        </div>
+        
+        
         <div *ngIf="pasoActual >= 3">
             
             <!-- Informe Confidencial -->
             <div class="col-span-full mt-8">
-                <h2 class="text-lg font-semibold text-gray-700">Informe Confidencial</h2>
+                <h2 class="text-lg font-semibold text-gray-700">Respuestas Alumno</h2>
                 <div class="preguntas-container flex flex-col gap-6 mb-6">
-                <div *ngIf="respuestasAlumno.length > 0">
+                <div *ngIf="respuestasAlumno.respuestas.length > 0">
                     <!-- Iterar sobre preguntas -->
                     <div
                     *ngFor="let respuesta of obtenerTandaPreguntas(); let i = index"
@@ -109,7 +123,7 @@
                             <span
                             class="w-fit px-6 py-2 bg-white text-gray-600 rounded-md text-center text-sm font-medium shadow-sm"
                             >
-                            {{ convertirPuntaje(respuesta.puntos) || 'Sin calificación' }}
+                            {{ convertirPuntaje(respuesta.puntaje) || 'Sin calificación' }}
                             </span>
                         </div>
                         </ng-template>
@@ -126,7 +140,7 @@
                     </button>
                     <button
                         (click)="paginaSiguiente()"
-                        [disabled]="(paginaActual + 1) * preguntasPorPagina >= respuestasAlumno.length"
+                        [disabled]="(paginaActual + 1) * preguntasPorPagina >= respuestasAlumno!.respuestas.length"
                         class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
                     >
                         Siguiente
@@ -134,7 +148,7 @@
                     </div>
                 </div>
                 <!-- Mensaje si no hay respuestas -->
-                <p *ngIf="respuestasAlumno.length === 0" class="text-gray-600">
+                <p *ngIf="respuestasAlumno.respuestas.length === 0" class="text-gray-600">
                     No hay respuestas disponibles.
                 </p>
                 </div>
@@ -142,20 +156,20 @@
 
         </div>
 
-
-        <div *ngIf="pasoActual >= 1">
-            <h3 class="text-2xl font-semibold text-blue-600">Detalles de la Práctica</h3>
-            <p class="text-gray-700 mt-4"><strong>Nombre Alumno:</strong> {{ detallesPractica.informe_alumno.alumno.usuario.nombre }}</p>
-            <p class="text-gray-700"><strong>Tipo de Práctica:</strong> {{ tipoPractica[detallesPractica.tipo_practica]}}</p>
-            <p class="text-gray-700"><strong>Empresa:</strong> {{ detallesPractica.informe_confidencial.supervisor.empresa.nombre_razon_social }}</p>
-            <p class="text-gray-700"><strong>Modalidad:</strong> {{ textoModalidad[detallesPractica.modalidad]}}</p>
-            <p class="text-gray-700"><strong>Estado de Práctica:</strong> {{ textoEstadoPractica[detallesPractica.estado]}}</p>
-            <p class="text-gray-700"><strong>Cantidad de Horas:</strong> {{ detallesPractica.cantidad_horas }}</p>
-            <p class="text-gray-700"><strong>Horas Semanales:</strong> {{ detallesPractica.horas_semanales }}</p>
-            <p class="text-gray-700"><strong>Fecha de Inicio:</strong> {{ detallesPractica.fecha_inicio | date:'dd/MM/yyyy' }}</p>
-            <p class="text-gray-700"><strong>Fecha de Término:</strong> {{ detallesPractica.fecha_termino | date:'dd/MM/yyyy' }}</p>
+        <div *ngIf="pasoActual >= 4">
+            <p class="text-gray-700"><strong>¿El Informe fue asignado a un académico?:</strong> {{ detallesPractica.informe_alumno.id_academico? 'Si' : 'No'}}</p>
+            <p class="text-gray-700"><strong>Estado de informe:</strong> {{ textoEstadoInforme[detallesPractica.informe_alumno.estado]}}</p>
+            <div *ngIf="detallesPractica.informe_alumno.archivo_correccion && detallesPractica.estado != 'FINALIZADA'" class="w-full h-full flex flex-col md:col-span-3 lg:col-span-4">
+                <h2 class="font-semibold text-gray-700">Corrección de informe</h2>
+                <div class="border rounded-md shadow flex-grow h-[calc(100vh-200px)]">
+                  <embed
+                    src="sample.pdf"
+                    type="application/pdf"
+                    class="w-full h-full rounded-md shadow-xl"
+                  />
+                </div>
+              </div>
         </div>
-        
 
     </div>
 </div>

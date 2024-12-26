@@ -12,7 +12,7 @@ import { MessageService } from 'primeng/api';
   standalone: true,
   templateUrl: './info-academicos.component.html',
   styleUrls: ['./info-academicos.component.css'],
-  imports: [HeaderComponent, ReactiveFormsModule, CommonModule],
+  imports: [HeaderComponent, ReactiveFormsModule, CommonModule, FormsModule],
 })
 export class InfoAcademicosComponent implements OnInit {
   academicosData?: any[]; // Lista de académicos

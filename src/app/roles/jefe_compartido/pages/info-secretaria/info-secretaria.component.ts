@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HeaderComponent } from "../../header-jefes/header.component";
 import { DatosSecretariaService } from '../../services/datos-secretaria.service';
 import { MessageService } from 'primeng/api';
@@ -9,7 +9,7 @@ import { checkRunValidator } from '../../../../core/util/validator-rut.function'
 @Component({
   selector: 'app-info-secretaria',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, HeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, HeaderComponent, FormsModule],
   templateUrl: './info-secretaria.component.html',
   styleUrls: ['./info-secretaria.component.css']
 })

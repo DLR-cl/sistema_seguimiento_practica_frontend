@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { enviroment } from "../../../environment/environment";
 import { map } from "rxjs";
-import { AlumnosActivosPractica, AprobacionPracticas, CantidadEmpresasPorTipo, detallePractica, estadisticasPractica, practicasMes } from "../dto/dashboard-practicas.dto";
+import { AlumnosActivosPractica, AprobacionPracticas, CantidadAlumnosEnPractica, CantidadEmpresasPorTipo, detallePractica, estadisticasPractica, practicasMes } from "../dto/dashboard-practicas.dto";
 import { Practicas } from "../../secretaria/dto/practicas.dto";
 
 

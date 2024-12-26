@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Practicas } from '../../secretaria/dto/practicas.dto';
 import { RespuestasInformeService } from '../services/respuestas-informe.service';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @Component({
   selector: 'app-estado-practica',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, FormsModule],
+  imports: [HeaderComponent, CommonModule, FormsModule, InputTextareaModule],
   templateUrl: './estado-practica.component.html',
   styleUrls: ['./estado-practica.component.css'] // Cambiado a styleUrls para corregir un typo
 })
@@ -34,8 +35,8 @@ export class EstadoPracticaComponent implements OnInit {
     REVISION: 'Revisión',
     CORRECCION: 'Corrección',
     ESPERA: 'Espera',
-    APROBADA: 'Aprobada',
-    DESAPROBADA: 'Desaprobada'
+    APROBADA: 'Aprobado',
+    DESAPROBADA: 'Desaprobado'
   };
 
   textoEstadoPractica: Record<string, string> = {
@@ -76,7 +77,7 @@ export class EstadoPracticaComponent implements OnInit {
   obtenerTandaPreguntas(): any[] {
     const inicio = this.paginaActual * this.preguntasPorPagina;
     const fin = inicio + this.preguntasPorPagina;
-    return this.respuestasAlumno.slice(inicio, fin);
+    return this.respuestasAlumno.respuestas.slice(inicio, fin);
   }
 
   // Navegar a la página anterior
@@ -88,7 +89,7 @@ export class EstadoPracticaComponent implements OnInit {
 
   // Navegar a la siguiente página
   paginaSiguiente(): void {
-    if ((this.paginaActual + 1) * this.preguntasPorPagina < this.respuestasAlumno.length) {
+    if ((this.paginaActual + 1) * this.preguntasPorPagina < this.respuestasAlumno.respuestas.length) {
       this.paginaActual++;
     }
   }
@@ -126,12 +127,10 @@ export class EstadoPracticaComponent implements OnInit {
   }
 
   obtenerDetallePractica(): void {
-    if (!this.practicaSeleccionada) {
-      this.detallesPractica = null;
-      this.pasoActual = 0;
-      this.resaltarPasos.fill(false);
-      return;
-    }
+    this.detallesPractica = null;
+    this.respuestasAlumno = null;
+    this.pasoActual = 0;
+    this.resaltarPasos.fill(false);
 
     this.practicasService.obtenerDetallePractica(this.practicaSeleccionada).subscribe({
       next: (result) => {
