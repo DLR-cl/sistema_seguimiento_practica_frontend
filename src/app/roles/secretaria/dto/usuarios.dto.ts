@@ -1,3 +1,5 @@
+import { Empresa } from "../../jefe_compartido/dto/empresa.dto";
+
 export interface Alumno {
     id_user:          number;
     primer_practica:  boolean;
@@ -18,6 +20,7 @@ export interface JefeSupervisor {
     id_empresa:      number;
     numero_telefono: string;
     usuario:         Usuario;
+    empresa: Empresa;
 }
 
 export interface Usuario {

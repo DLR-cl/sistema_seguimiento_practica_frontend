@@ -5,11 +5,12 @@ import { StorageService } from '../../../shared/data-access/storage.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { DataSecretariaService } from '../services/data-secretaria.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home-secretaria',
   standalone: true,
-  imports: [HeaderSecretariaComponent],
+  imports: [HeaderSecretariaComponent, CommonModule],
   templateUrl: './home-secretaria.component.html',
   styleUrl: './home-secretaria.component.css'
 })
@@ -21,17 +22,22 @@ export class HomeSecretariaComponent {
 
   public dataSecretaria!: Secretaria | null;
 
+  cargando: boolean = true;
+
   imagenFondo: string = "/departamento_ici/transicion_6.webp"
 
   ngOnInit(): void {
-    this._secretariaDataService.getDataSecretaria().subscribe(
-      (data) => {
+    this._secretariaDataService.getDataSecretaria().subscribe({
+      next: data => {
         this.dataSecretaria = data;
+        if(this.dataSecretaria){
+          this.cargando = false;
+        }
       },
-      (error) => {
+      error: error => {
         console.error('Error al capturar la data', error);
       }
-    )
+    })
   }
 
   public signOut() {

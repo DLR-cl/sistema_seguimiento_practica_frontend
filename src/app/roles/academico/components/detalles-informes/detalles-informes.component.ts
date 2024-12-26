@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DatosPracticaService } from '../../services/datos-practica.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
 import { DataAccessService } from '../../services/data-access.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
@@ -51,51 +51,90 @@ export class DetallesInformesComponent implements OnInit {
     D: 'Deficiente'
   };
 
+  textoModalidad: Record<string, string> = {
+    PRESENCIAL: 'Presencial',
+    REMOTO: 'Remoto',
+    SEMI_PRESENCIAL: 'Semipresencial'
+  };
+
+  tipoPractica: Record<string, string> = {
+    PRACTICA_UNO: 'Práctica Profesional I',
+    PRACTICA_DOS: 'Práctica Profesional II'
+  }
+
   cargando: boolean = true;
 
   constructor(
     private sanitizer: DomSanitizer,
     private practicaService: DatosPracticaService,
     private route: ActivatedRoute,
+    private router: Router,
     private dataAccessService: DataAccessService,
     private messageService: MessageService
   ) {}
 
   fileName: string = '';
-  uploadStatus: boolean = false;
+selectedFile: File | null = null; // Almacena el archivo seleccionado
 
-  // Referencia al input de archivo
-  fileInput: any;
+// Maneja la carga del archivo
+handleFileUpload(event: any): void {
+  const fileInput = event.target;
+  if (fileInput.files && fileInput.files.length > 0) {
+    const file = fileInput.files[0];
 
-  // Maneja la carga del archivo
-  handleFileUpload(event: any): void {
-    const fileInput = event.target;
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-
-      // Verificar si el archivo es PDF
-      if (file.type !== 'application/pdf') {
-        alert('Por favor, selecciona un archivo PDF');
-        this.fileName = '';
-        fileInput.value = '';  // Limpiar el archivo seleccionado
-        return;
-      }
-
-      this.fileName = file.name;
+    // Verificar si el archivo es PDF
+    if (file.type !== 'application/pdf') {
+      this.fileName = '';
+      this.selectedFile = null; // Limpiar el archivo seleccionado
+      fileInput.value = ''; // Limpiar el input
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Solo se permiten archivos PDF' });
+      return;
     }
+
+    this.fileName = file.name;
+    this.selectedFile = file; // Asignar el archivo seleccionado
+  }
+}
+
+// Subir corrección
+uploadCorrection(): void {
+  if (!this.selectedFile) {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar un archivo antes de subir' });
+    return;
   }
 
-  // Subir corrección (simulación)
-  uploadCorrection(): void {
-    // Aquí puedes agregar la lógica para subir el archivo al servidor
-    console.log('Subiendo corrección...');
-    this.uploadStatus = true;
-
-    // Simulando un tiempo de espera para ocultar el mensaje
-    setTimeout(() => {
-      this.uploadStatus = false;
-    }, 3000);
+  // Crear el FormData para enviar al backend
+  if (Object.keys(this.respuestasEvaluacion).length < this.agrupadosAspectos[0].preguntas.length + this.agrupadosAspectos[1].preguntas.length + this.evaluacionGeneralConfidencial.length){
+    this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe responder todas las preguntas`});
+    return
   }
+
+  const formData: FormData = new FormData();
+  formData.append('id_informe', '' + this.idInforme);
+  formData.append('id_academico', '' + this.practica.informe_alumno.id_academico);
+  formData.append('nombre_alumno', '' + this.practica.informe_alumno.alumno.usuario.nombre);
+  formData.append('tipo_practica', this.practica.tipo_practica);
+  formData.append('file', this.selectedFile); // Usar el archivo seleccionado
+
+  // Simulación de la carga del archivo
+  formData.forEach((value, key) => {
+    console.log(`${key}:`, value);
+  });
+  console.log('Subiendo corrección...');
+
+  this.practicaService.enviarCorreccionInforme(formData).subscribe({
+    next: result => {
+      console.log(result)
+      this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Corrección de Informe subida con éxito.' });
+      this.enviarEvaluacion()
+    },
+    error: error => {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al enviar la corrección: ${error.message}` });
+    }
+  })
+  
+
+}
 
   ngOnInit(): void {
     this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
@@ -180,10 +219,31 @@ export class DetallesInformesComponent implements OnInit {
 
     // Lógica para enviar la revisión al backend
 
-    console.log('Enviando revisión:', {
-      archivo: this.archivoSeleccionado,
-      comentario: this.observaciones,
-    });
+    if(this.selectedFile){
+      const formData: FormData = new FormData();
+      formData.append('id_informe', '' + this.idInforme);
+      formData.append('id_academico', '' + this.practica.informe_alumno.id_academico);
+      formData.append('nombre_alumno', '' + this.practica.informe_alumno.alumno.usuario.nombre);
+      formData.append('tipo_practica', this.practica.tipo_practica);
+      formData.append('file', this.selectedFile); // Usar el archivo seleccionado
+
+      // Simulación de la carga del archivo
+      formData.forEach((value, key) => {
+        console.log(`${key}:`, value);
+      });
+      console.log('Subiendo corrección...');
+
+      this.practicaService.enviarCorreccionInforme(formData).subscribe({
+        next: result => {
+          console.log(result)
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Corrección de Informe subida con éxito.' });
+          this.enviarEvaluacion()
+        },
+        error: error => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al enviar la corrección: ${error.message}` });
+        }
+      })
+    }
 
     const respuestas = Object.keys(this.respuestasEvaluacion).map((preguntaId) => {
       return {
@@ -213,6 +273,7 @@ export class DetallesInformesComponent implements OnInit {
       next: result => {
         console.log(result)
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas registradas con éxito.' });
+        this.router.navigate(['home-academico'])
       },
       error: error => {
         console.log(error)

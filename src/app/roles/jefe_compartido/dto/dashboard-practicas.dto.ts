@@ -1,5 +1,9 @@
 import { EstadoPractica } from "../../../enum/enumerables.enum";
 
+export interface CantidadAlumnosEnPractica {
+    cantidad_alumnos_practica: number;
+}
+
 export interface estadisticasPractica{
     estudiantes_practica: number,
     estudiantes_revision: number,

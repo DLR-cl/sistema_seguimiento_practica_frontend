@@ -31,4 +31,8 @@ export class DatosPracticaService {
   public enviarRevision(revision: any){
     return this.http.post<any>(`${enviroment.API_URL}/evaluacion-academica`, revision)
   }
+
+  public enviarCorreccionInforme(formdata: FormData){
+    return this.http.patch<any>(`${enviroment.API_URL}/academicos/subir-correccion`, formdata)
+  }
 }
