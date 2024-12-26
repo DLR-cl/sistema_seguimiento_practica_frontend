@@ -1,21 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { AsignaturaBack } from '../dto/asignaturas.dto';
+import { enviroment } from '../../../environment/environment';
 
-export interface AsignaturaBack{
-  nombre: string,
-  tipo_asignatura: string,
-  semestre: number,
-  codigo: string
-}
 
-export interface Semestre{
-  nombre: string,
-  asignaturas: {
-    nombre: string,
-    codigo: string,
-    tipo: string,
-  }[]
-}
 
 @Injectable({
   providedIn: 'root'
@@ -26,10 +14,8 @@ export class AsignaturasService {
     private http: HttpClient
   ) { }
 
-  private url_asignaturas = 'http://localhost:3000/asignaturas'
-
   public obtenerAsignaturas(){
-    return this.http.get<AsignaturaBack[]>(`${this.url_asignaturas}`)
+    return this.http.get<AsignaturaBack[]>(`${enviroment.API_URL}/asignaturas`)
   }
 
 }

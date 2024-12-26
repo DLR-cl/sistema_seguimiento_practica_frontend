@@ -1,4 +1,5 @@
 <app-header></app-header>
+
 <div class="relative overflow-x-auto">
   <div class="w-[90%] m-auto mb-4 mt-2">
     <input
@@ -8,19 +9,29 @@
       [(ngModel)]="filtroRut"
     />
   </div>
-  
+
+  <!-- Spinner de carga general -->
+  <div *ngIf="cargando" class="absolute top-0 left-0 w-full h-full bg-white bg-opacity-50 flex justify-center items-center z-50">
+    <div class="flex space-x-2">
+      <!-- Puntos animados con rebote e iluminación progresiva -->
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0.2s"></div>
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0.4s"></div>
+    </div>
+  </div>
+
   <!-- Contenedor con sombra y bordes redondeados -->
   <div class="w-[90%] m-auto shadow-lg rounded-lg overflow-hidden">
     <table class="w-full text-sm text-left rtl:text-right text-gray-500">
       <!-- Encabezado -->
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
-          <th scope="col" class="px-6 py-3">Nombre del Alumno</th>
-          <th scope="col" class="px-6 py-3">Rut del Alumno</th>
-          <th scope="col" class="px-6 py-3">Tipo de Práctica</th>
-          <th scope="col" class="px-6 py-3">Estado Práctica</th>
           <th scope="col" class="px-6 py-3">Nombre del Académico</th>
           <th scope="col" class="px-6 py-3">Correo del Académico</th>
+          <th scope="col" class="px-6 py-3">Tipo de Práctica</th>
+          <th scope="col" class="px-6 py-3">Estado Práctica</th>
+          <th scope="col" class="px-6 py-3">Nombre del Alumno</th>
+          <th scope="col" class="px-6 py-3">Rut del Alumno</th>
           <th scope="col" class="px-6 py-3">Días para Revisión</th>
           <th scope="col" class="px-6 py-3">Inicio Revisión</th>
           <th scope="col" class="px-6 py-3">Fin Revisión</th>
@@ -34,14 +45,12 @@
           [class.bg-yellow-100]="data.dias_para_revision > 3 && data.dias_para_revision <= 7"
           class="bg-white border-b hover:bg-gray-50 transition-colors"
         >
-          <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-            {{ data.nombre_alumno }}
-          </th>
-          <td class="px-6 py-4">{{ data.rut_alumno }}</td>
-          <td class="px-6 py-4">{{ convertirTipoPractica(data.tipo_practica) }}</td>
-          <td class="px-6 py-4">{{ convertirEstadoPractica(data.estado_practica) }}</td>
           <td class="px-6 py-4">{{ data.nombre_academico }}</td>
           <td class="px-6 py-4">{{ data.correo_academico }}</td>
+          <td class="px-6 py-4">{{ convertirTipoPractica(data.tipo_practica) }}</td>
+          <td class="px-6 py-4">{{ convertirEstadoPractica(data.estado_practica) }}</td>
+          <td class="px-6 py-4">{{ data.nombre_alumno }}</td>
+          <td class="px-6 py-4">{{ data.rut_alumno }}</td>
           <td class="px-6 py-4 font-semibold">{{ data.dias_para_revision }} días</td>
           <td class="px-6 py-4">{{ formatearFecha(data.inicio_revision) }}</td>
           <td class="px-6 py-4">{{ formatearFecha(data.fin_revision) }}</td>

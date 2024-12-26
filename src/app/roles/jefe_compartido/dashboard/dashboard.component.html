@@ -11,43 +11,51 @@
             <!-- Nueva Tabla Mejorada con Estadísticas -->
             <div class="bg-white shadow-xl rounded-lg p-4">
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Estadísticas de Prácticas</h2>
-                <div class="overflow-x-auto"> <!-- Establecemos el scroll en la tabla -->
+                <div class="overflow-x-auto bg-white shadow-md rounded-lg p-4">
                     <table class="min-w-full table-auto border-collapse rounded-md">
-                        <thead class="bg-blue-500 text-white">
+                        <thead class="bg-blue-600 text-white">
                             <tr>
-                                <th class="py-4 px-6 text-left">Cantidad</th>
-                                <th class="py-4 px-6 text-left">Categoría</th>
+                                <th class="py-4 px-6 text-left text-sm uppercase font-semibold">Cantidad</th>
+                                <th class="py-4 px-6 text-left text-sm uppercase font-semibold">Categoría</th>
                             </tr>
                         </thead>
-                        <tbody class="text-gray-700">
-                            <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
-                                <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.estudiantes_practica }}</td>
+                        <tbody class="text-gray-800">
+                            <tr class="border-b hover:bg-blue-50 transition-colors duration-300">
+                                <td class="py-4 text-center border-r px-6 font-medium">{{ estadisticasPractica.estudiantes_practica }}</td>
                                 <td class="py-4 px-6 font-medium">Estudiantes en Práctica</td>
                             </tr>
-                            <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
-                                <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.estudiantes_revision }}</td>
+                            <tr class="border-b hover:bg-blue-50 transition-colors duration-300">
+                                <td class="py-4 text-center border-r px-6 font-medium">{{ estadisticasPractica.estudiantes_revision }}</td>
                                 <td class="py-4 px-6 font-medium">Estudiantes en Revisión</td>
                             </tr>
-                            <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
-                                <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.total_asignados }}</td>
+                            <tr class="border-b hover:bg-blue-50 transition-colors duration-300">
+                                <td class="py-4 text-center border-r px-6 font-medium">{{ estadisticasPractica.total_asignados }}</td>
                                 <td class="py-4 px-6 font-medium">Informes Asignados</td>
                             </tr>
-                            <tr class="border-b hover:bg-gray-50 transition-colors duration-300">
-                                <td class="py-4 text-center border-r px-6">{{ estadisticasPractica.informes_sin_enviar }}</td>
+                            <tr class="border-b hover:bg-blue-50 transition-colors duration-300">
+                                <td class="py-4 text-center border-r px-6 font-medium">{{ estadisticasPractica.informes_sin_enviar }}</td>
                                 <td class="py-4 px-6 font-medium">Informes de alumno sin enviar</td>
                             </tr>
                         </tbody>
                     </table>
+                    <div class="flex justify-end mt-4">
+                        <button 
+                            pButton 
+                            class="p-button p-button-primary px-6 py-2 rounded-md shadow hover:bg-blue-700 transition-colors duration-300" 
+                            (click)="abrirModal()">
+                            Ver detalles
+                        </button>
+                    </div>
                 </div>
+                
             </div>
         </div>
 
         <!-- Estadísticas, Gráficos y Detalles -->
         <div class="lg:col-span-3 md:col-span-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Gráfico de la Cantidad de Estudiantes por Tipo de Práctica -->
-            <div *ngIf="cantidadEstudiantesTipoPracticaChartData?.datasets?.length > 0" class="col-span-1 bg-white shadow rounded p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes por practica</h2>
-
+            <div *ngIf="cantidadEstudiantesTipoPracticaChartData" class="col-span-1 bg-white shadow rounded p-4">
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes en Práctica</h2>p
                 <p-chart
                     [data]="cantidadEstudiantesTipoPracticaChartData"
                     [options]="cantidadEstudiantesTipoPracticaChartOptions"
@@ -56,7 +64,7 @@
                 </p-chart>
             </div>
 
-            <div *ngIf="!(cantidadEstudiantesTipoPracticaChartData?.datasets?.length > 0)" class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
+            <div *ngIf="!cantidadEstudiantesTipoPracticaChartData" class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
                 <p class="text-lg text-center font-medium text-gray-700 mb-4">Aún no hay alumnos cursando practicas</p>
                 <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" class="text-gray-500">
@@ -117,10 +125,10 @@
 
             <!-- Gráfico de la Percepción de las Empresas -->
             <div class="col-span-1 bg-white shadow rounded p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-2">Percepción de Empresas</h2>
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Tipos de Empresas</h2>
                 <p-chart
-                    [data]="percepcionEmpresasChartData"
-                    [options]="percepcionEmpresasChartOptions"
+                    [data]="tipoEmpresasChartData"
+                  
                     [type]="'doughnut'"
                     height="230px">
                 </p-chart>
@@ -137,38 +145,238 @@
                 </p-chart>
             </div>
         </div>
-        <!-- Tabla de Detalles de Informes -->
-        <div class="col-span-4 bg-white shadow rounded p-6">
-            <h2 class="text-lg font-semibold text-gray-700 mb-4">Detalles de Prácticas</h2>
-            <p-table [value]="detallesPractica" [paginator]="true" [rows]="5">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Alumno</th>
-                        <th>Práctica</th>
-                        <th>Estado</th>
-                        <th>Accion</th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-practica>
-                    <tr>
-                        <td>{{ practica.nombre_alumno }}</td>
-                        <td>{{ practica.tipo_practica }}</td>
-                        <td>
-                            <span [ngClass]="{
-                                'text-green-600': practica.estado_practica === 'FINALIZADA',
-                                'text-red-600': practica.estado_practica === 'CURSANDO',
-                                'text-yellow-600': practica.estado_practica === 'ESPERA_INFORMES',
-                                'text-blue-600': practica.estado_practica === 'REVISION-GENERAL'
-                            }">
-                                {{ practica.estado_practica }}
-                            </span>
-                        </td>
-                        <td>
-                            <button pButton label="Ver" class="p-button-text" (click)="verInforme(practica)"></button>
-                        </td>
-                    </tr>
-                </ng-template>
-            </p-table>
-        </div>
+        
     </div>
 </div>
+
+<p-dialog [(visible)]="modalDetallePractica" [modal]="true" [closable]="false" header="Detalles de Prácticas">
+    <div class="col-span-4 bg-white shadow rounded p-6">
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">Detalles de Prácticas</h2>
+        <p-table [value]="detallesPractica" [paginator]="true" [rows]="5">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Alumno</th>
+                    <th>Práctica</th>
+                    <th>Estado</th>
+                    <th>Accion</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-practica>
+                <tr>
+                    <td>{{ practica.nombre_alumno }}</td>
+                    <td>{{ practica.tipo_practica }}</td>
+                    <td>
+                        <span [ngClass]="{
+                            'text-green-600': practica.estado_practica === 'FINALIZADA',
+                            'text-red-600': practica.estado_practica === 'CURSANDO',
+                            'text-yellow-600': practica.estado_practica === 'ESPERA_INFORMES',
+                            'text-blue-600': practica.estado_practica === 'REVISION-GENERAL'
+                        }">
+                            {{ practica.estado_practica }}
+                        </span>
+                    </td>
+                    <td>
+                        <button pButton label="Ver" class="p-button-text" (click)="verInforme(practica)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div class="mt-4">
+            <button pButton label="Cerrar" class="p-button-danger" (click)="cerrarModal()"></button>
+        </div>
+    </div>
+</p-dialog>
+
+       
+
+<p-dialog [(visible)]="modalDetalles" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" [style]="{ width: '750px' }">
+    <!-- Header -->
+    <ng-template pTemplate="header">
+      <div class="text-center mx-auto py-4">
+        <h2 class="text-2xl font-semibold text-blue-700">Detalles de la Práctica</h2>
+      </div>
+    </ng-template>
+  
+    <!-- Content -->
+    <ng-template pTemplate="content">
+      <div class="space-y-8">
+        <!-- Información General -->
+        <div class="space-y-6">
+          <div class="border-b pb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Información General</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-6 text-sm">
+            <div>
+                <p class="text-gray-500">Alumno</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_alumno.alumno.usuario.nombre }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Tipo de Práctica</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada!.tipo_practica == 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Modalidad</p>
+              <p class="font-medium text-gray-900">{{ textoModalidad[practicaSeleccionada!.modalidad] }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray-500">Estado Práctica</p>
+                <p class="text-base font-medium truncate"
+                  [ngClass]="{
+                    'text-blue-600': practicaSeleccionada?.estado === 'CURSANDO',
+                    'text-red-600': practicaSeleccionada?.estado === 'ESPERA_INFORMES',
+                    'text-green-500': practicaSeleccionada?.estado === 'INFORMES_RECIBIDOS',
+                    'text-yellow-600': practicaSeleccionada?.estado === 'REVISION_GENERAL',
+                    'text-green-600': practicaSeleccionada?.estado === 'FINALIZADA'
+                  }">
+                  {{ textoEstadoPractica[practicaSeleccionada!.estado] }}
+                </p>
+              </div>
+    
+              <!-- Estado Informe Alumno -->
+              <div *ngIf="!['CURSANDO'].includes(practicaSeleccionada!.estado)">
+                <p class="text-gray-500">Estado Informe Alumno</p>
+                <p class="text-base font-medium"
+                  [ngClass]="{
+                    'text-blue-600': practicaSeleccionada!.informe_alumno.estado === 'ENVIADA',
+                    'text-red-600': practicaSeleccionada!.informe_alumno.estado=== 'ESPERA',
+                    'text-red-800': practicaSeleccionada!.informe_alumno.estado === 'DESAPROBADA',
+                    'text-yellow-600': practicaSeleccionada!.informe_alumno.estado === 'REVISION',
+                    'text-orange-600': practicaSeleccionada!.informe_alumno.estado === 'CORRECCION',
+                    'text-green-600': practicaSeleccionada!.informe_alumno.estado === 'APROBADA'
+                  }">
+                  {{ textoEstadoInforme[practicaSeleccionada!.informe_alumno.estado] }}
+                </p>
+              </div>
+    
+              <!-- Estado Informe Confidencial -->
+              <div *ngIf="!['CURSANDO'].includes(practicaSeleccionada!.estado)">
+                <p class="text-sm text-gray-500">Estado Informe Confidencial</p>
+                <p class="text-base font-medium truncate"
+                  [ngClass]="{
+                    'text-blue-600': practicaSeleccionada!.informe_confidencial.estado === 'ENVIADA',
+                    'text-red-600': practicaSeleccionada!.informe_confidencial.estado === 'ESPERA',
+                    'text-red-800': practicaSeleccionada!.informe_confidencial.estado === 'DESAPROBADA',
+                    'text-yellow-600': practicaSeleccionada!.informe_confidencial.estado === 'REVISION',
+                    'text-orange-600': practicaSeleccionada!.informe_confidencial.estado === 'CORRECCION',
+                    'text-green-600': practicaSeleccionada!.informe_confidencial.estado === 'APROBADA'
+                  }">
+                  {{ textoEstadoInforme[practicaSeleccionada!.informe_confidencial.estado] }}
+                </p>
+              </div>
+          </div>
+        </div>
+  
+        <!-- Fechas y Horas -->
+        <div class="space-y-6">
+          <div class="border-b pb-4">
+            <h3 class="text-xl font-semibold text-gray-800">Fechas y Horas</h3>
+          </div>
+          <div class="grid grid-cols-2 gap-6 text-sm">
+            <div>
+              <p class="text-gray-500">Fecha de Inicio</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.fecha_inicio | date: 'dd/MM/yyyy' }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Fecha de Finalización</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.fecha_termino | date: 'dd/MM/yyyy' }}</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Cantidad de Horas</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.cantidad_horas }} horas</p>
+            </div>
+            <div>
+              <p class="text-gray-500">Horas Semanales</p>
+              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.horas_semanales }} horas/semana</p>
+            </div>
+          </div>
+        </div>
+    
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO'">
+            <div class="border-b pb-4">
+              <h3 class="text-xl font-semibold text-gray-800">Empresa</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-6 text-sm">
+                <div>
+                    <p class="text-gray-500">Empresa</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.nombre_razon_social }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Rubro de Empresa</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.rubro }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Ubicación de Empresa</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.ubicacion }}</p>
+                </div>
+                <div>
+                    <p class="text-gray-500">Carácter de Empresa</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.ubicacion }}</p>
+                </div>
+              <div>
+                <p class="text-gray-500">Supervisor</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.usuario.nombre }}</p>
+              </div>
+              <div>
+                <p class="text-gray-500">Supervisor</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.usuario.correo }}</p>
+              </div>
+            </div>
+        </div>  
+
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO'">
+            <div class="border-b pb-4">
+              <h3 class="text-xl font-semibold text-gray-800">Horas Realizadas</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-6 text-sm">
+                <div>
+                    <p class="text-gray-500">Total de Horas</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.total_horas }} horas</p>
+                  </div>
+                  <div>
+                    <p class="text-gray-500">Horas extraordinarias</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_extraordinarias }} horas</p>
+                  </div>
+                  <div>
+                    <p class="text-gray-500">Horas regulares</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_regulares }} horas</p>
+                  </div>
+                  <div>
+                    <p class="text-gray-500">Horas de Inasistencia</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_inasistencia }} horas</p>
+                  </div>
+            </div>
+        </div>  
+
+        <div class="space-y-6" *ngIf="['REVISION', 'CORRECCION', 'APROBADA', 'ENVIADA', 'DESAPROBADA'].includes(practicaSeleccionada!.informe_alumno.estado)">
+            <div class="border-b pb-4">
+              <h3 class="text-xl font-semibold text-gray-800">Profesor Asignado</h3>
+            </div>
+            <div class="grid grid-cols-2 gap-6 text-sm">
+              <div>
+                <p class="text-gray-500">Profesor</p>
+                <p class="font-medium" [ngClass]="academicoPractica![0].nombre ? 'text-gray-900' : 'text-red-600'">
+                  {{ academicoPractica![0].nombre || 'Sin asignar' }}
+                </p>
+              </div>
+              <div>
+                <p class="text-gray-500">Profesor</p>
+                <p class="font-medium" [ngClass]="academicoPractica![0].correo ? 'text-gray-900' : 'text-red-600'">
+                  {{ academicoPractica![0].correo}}
+                </p>
+              </div>
+            </div>
+          </div>
+
+      </div>
+    </ng-template>
+  
+    <!-- Footer -->
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end space-x-6">
+        <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-medium px-4 py-2 rounded-lg"
+          (click)="cerrarModalDetalles()">
+          Cerrar
+        </button>
+      </div>
+    </ng-template>
+</p-dialog>

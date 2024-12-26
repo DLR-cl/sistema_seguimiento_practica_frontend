@@ -1,9 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { DatosAcademicosService } from '../../services/datos-academicos.service';
 import { HeaderComponent } from "../../header-jefes/header.component";
 import { CommonModule } from '@angular/common';
-import { validarRUT } from '../../../../core/util/validator-rut.function';
+import { checkRunValidator } from '../../../../core/util/validator-rut.function';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -11,14 +12,20 @@ import { validarRUT } from '../../../../core/util/validator-rut.function';
   standalone: true,
   templateUrl: './info-academicos.component.html',
   styleUrls: ['./info-academicos.component.css'],
-  imports: [HeaderComponent, ReactiveFormsModule, CommonModule],
+  imports: [HeaderComponent, ReactiveFormsModule, CommonModule, FormsModule],
 })
 export class InfoAcademicosComponent implements OnInit {
-  private readonly _datosAcademicosService = inject(DatosAcademicosService);
   academicosData?: any[]; // Lista de académicos
   formAcademico!: FormGroup; // Formulario Reactivo
 
-  constructor(private fb: FormBuilder) {}
+  cargando: boolean = true
+  cargandoCrear: boolean = false
+
+
+  constructor(
+    private datosAcademicosService: DatosAcademicosService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.getDatosDeAcademicos();
@@ -27,52 +34,41 @@ export class InfoAcademicosComponent implements OnInit {
 
   // Inicialización del Formulario Reactivo
   private initForm(): void {
-    this.formAcademico = this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(3)]],
-      correo: ['', [Validators.required, Validators.email]],
-      rut: ['', [Validators.required, Validators.pattern(/^\d{7,8}-[0-9kK]$/)]],
-      tipo_usuario: ['ACADEMICO'],
+    this.formAcademico = new FormGroup({
+      nombre: new FormControl ('', [Validators.required, Validators.minLength(3)]),
+      correo: new FormControl ('', [Validators.required, Validators.email]),
+      rut: new FormControl ('', [Validators.required, Validators.pattern(/^\d{1,8}-\d{1}$/), checkRunValidator()]),
+      tipo_usuario: new FormControl ('ACADEMICO'),
     });
   }
 
   // Obtener los datos de académicos
   private getDatosDeAcademicos(): void {
-    this._datosAcademicosService.getInfoAcademicos().subscribe({
-      next: (data) => (this.academicosData = data),
+    this.datosAcademicosService.getInfoAcademicos().subscribe({
+      next: (data) => {
+        this.academicosData = data,
+        this.cargando = false
+      },
       error: (err) => console.error('Error al cargar datos', err),
     });
   }
-  validarInputRut(event: Event): void {
-    const input = event.target as HTMLInputElement;
-  
-    // Elimina caracteres no permitidos
-    let valor = input.value.replace(/[^0-9kK-]/g, '');
-  
-    // Asegura que solo haya un guion y en la penúltima posición
-    const partes = valor.split('-');
-    if (partes.length > 2) {
-      valor = partes[0] + '-' + partes[1].replace(/-/g, '');
-    }
-  
-    // Limita la posición del guion (penúltimo carácter)
-    if (valor.includes('-')) {
-      const [rut, dv] = valor.split('-');
-      valor = rut.slice(0, 8) + (dv ? '-' + dv.slice(0, 1) : '-');
-    }
-  
-    // Asigna el valor filtrado al input
-    input.value = valor;
-  }
-  
+
   // Crear un nuevo académico
   crearAcademico(): void {
     if (this.formAcademico.valid) {
-      this._datosAcademicosService.crearAcademico(this.formAcademico.value).subscribe({
+      this.cargandoCrear = true
+      this.datosAcademicosService.crearAcademico(this.formAcademico.value).subscribe({
         next: (response) => {
           this.getDatosDeAcademicos(); // Actualizar lista
           this.formAcademico.reset({ tipo_usuario: 'ACADEMICO' });
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Académico registrado con éxito.' });
+          this.cargandoCrear = false
         },
-        error: (err) => console.error('Error al crear académico', err),
+        error: (error) => {
+          console.error('Error al crear académico', error),
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al registrar el académico: ${error.message}` });
+          this.cargandoCrear = false
+        },
       });
     }
   }

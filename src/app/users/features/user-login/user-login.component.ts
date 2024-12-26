@@ -4,6 +4,7 @@ import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { ImagePreloaderService } from '../../../core/services/image-preloader.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-user-login',
@@ -16,8 +17,9 @@ export class UserLoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private _formBuilder: FormBuilder,
-    private readonly _authService: AuthService
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -29,12 +31,12 @@ export class UserLoginComponent implements OnInit {
   backgroundImage: string = '';
 
 
-  loginForm = this._formBuilder.group({
-    email: this._formBuilder.nonNullable.control('', [
+  loginForm = this.formBuilder.group({
+    email: this.formBuilder.nonNullable.control('', [
       Validators.email,
       Validators.required,
     ]),
-    password: this._formBuilder.nonNullable.control('', Validators.required),
+    password: this.formBuilder.nonNullable.control('', Validators.required),
   });
 
   togglePasswordVisibility() {
@@ -49,24 +51,29 @@ export class UserLoginComponent implements OnInit {
   
     const { email, password } = this.loginForm.getRawValue();
   
-    this._authService.logIn(email!, password!).subscribe({
+    this.authService.logIn(email!, password!).subscribe({
       next: (response: any) => {
         console.log('Login exitoso:', response);
   
         // Asegúrate de que el token esté listo antes de redirigir
-        this._authService.refreshDecodedToken();
+        this.authService.refreshDecodedToken();
+
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Inicio de sesión exitoso.' });
+
   
         if (response.primerInicioSesion) {
           this.router.navigate(['/change-password']); // Redirige al cambio de contraseña
         } else {
           // Redirige según el rol del usuario
           setTimeout(() => {
-            this._authService.redirectUserByRol();
+            this.authService.redirectUserByRol();
           }, 50); // Retraso opcional
         }
       },
       error: (error: any) => {
         this.errorMessage = error.error?.message || 'Error en el inicio de sesión.';
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al iniciar sesión: ${error.message}` });
+
         console.error('Error en el inicio de sesión:', error);
       },
     });

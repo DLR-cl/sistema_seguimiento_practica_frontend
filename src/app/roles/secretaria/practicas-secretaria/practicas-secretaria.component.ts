@@ -4,28 +4,31 @@ import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { AcademicoInformes, AsignacionInformesService, PracticaInfo } from '../services/asignacion-informes.service';
+import { AsignacionInformesService } from '../services/asignacion-informes.service';
 import { AsignacionDto } from '../dto/secretaria-data.dto';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
 import { PayloadInterface } from '../../../shared/interface/payload.interface';
 import { TipoUsuario } from '../../../enum/enumerables.enum';
+import { AcademicoInformes, PracticaInfo } from '../dto/asignacion-informes.dto';
+import { MessageService } from 'primeng/api';
+import { HeaderComponent } from "../../jefe_compartido/header-jefes/header.component";
 
 
 @Component({
   selector: 'app-practicas-secretaria',
   standalone: true,
-  imports: [HeaderSecretariaComponent, CommonModule, DropdownModule, FormsModule, DialogModule, InputTextModule],
+  imports: [CommonModule, DropdownModule, FormsModule, DialogModule, InputTextModule, HeaderComponent],
   templateUrl: './practicas-secretaria.component.html',
   styleUrl: './practicas-secretaria.component.css'
 })
 export class PracticasSecretariaComponent implements OnInit {
 
-  private readonly _asignacionService = inject(AsignacionInformesService);
-  private readonly _dataUserService = inject(AuthStateService);
-
-  
-
+  constructor(
+    private asignacionService: AsignacionInformesService,
+    private dataUserService: AuthStateService,
+    private messageService: MessageService
+  ){}
 
   ngOnInit(): void {
     this.getProfesores(),
@@ -35,8 +38,11 @@ export class PracticasSecretariaComponent implements OnInit {
 
   dataUser?: PayloadInterface | null;
   tipoJefeCarrera = TipoUsuario.JEFE_CARRERA;
-  tipoSecretaria= TipoUsuario.SECRETARIA;
+  tipoSecretariaCarrera= TipoUsuario.SECRETARIA_CARRERA;
+  tipoSecretariaDepartamento= TipoUsuario.SECRETARIA_DEPARTAMENTO;
 
+  cargando: boolean = true
+  cargandoAsignacion: boolean = false
 
   buscador: string = ''
 
@@ -53,17 +59,10 @@ export class PracticasSecretariaComponent implements OnInit {
     REVISION: 'Revisión',
     CORRECCION: 'Corrección',
     ESPERA: 'Espera',
-    APROBADA: 'Aprobada'
-  };
-  textoEstadoInformeConfidencial: Record<string, string> = {
-    ENVIADA: 'Enviado',
-    REVISION: 'Revisión',
-    CORRECCION: 'Corrección',
-    ESPERA: 'Espera',
-    APROBADA: 'Aprobada'
+    APROBADA: 'Aprobada',
+    DESAPROBADA: 'Desaprobada'
   };
 
-  
   textoEstadoPractica: Record<string, string> = {
     CURSANDO: 'Cursando',
     REVISION_GENERAL: 'Revisión General',
@@ -71,7 +70,6 @@ export class PracticasSecretariaComponent implements OnInit {
     FINALIZADA: 'Finalizada',
     INFORMES_RECIBIDOS: 'Informes Recibidos'
   };
-
 
   textoModalidad: Record<string, string> = {
     PRESENCIAL: 'Presencial',
@@ -83,7 +81,7 @@ export class PracticasSecretariaComponent implements OnInit {
   elementosPorPagina: number = 5; // Número de elementos por página
 
   private getData() {
-    this.dataUser = this._dataUserService.getData();
+    this.dataUser = this.dataUserService.getData();
   }
 
   obtenerDatosPaginados() {
@@ -147,6 +145,7 @@ export class PracticasSecretariaComponent implements OnInit {
 
   confirmarAsignacion() {
     if(this.copiaPractica?.academico_nombre !== ''){
+      this.cargandoAsignacion = true
       const academicoAsociado: AsignacionDto= {
         id_informe_alumno: this.copiaPractica?.id_informe_alumno!,
         id_academico: this.profesoresBackend.find(academico => academico.nombre_academico === this.copiaPractica?.academico_nombre)?.id_academico!,
@@ -154,14 +153,24 @@ export class PracticasSecretariaComponent implements OnInit {
         id_informe_confidencial: this.copiaPractica?.id_informe_confidencial!
       }
   
-      this._asignacionService.asociarInformeAcademico(academicoAsociado).subscribe(result => {
-        this.cerrarModalAsignacion();
-        this.getProfesores()
-        this.getPracticas();
-        console.log(this.copiaPractica)
+      console.log(academicoAsociado)
+
+      this.asignacionService.asociarInformeAcademico(academicoAsociado).subscribe({
+        next: result => {
+          this.cerrarModalAsignacion();
+          this.getProfesores()
+          this.getPracticas();
+          console.log(this.copiaPractica)
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Académico asignado con éxito.' });
+
+        },
+        error: error => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al asignar el académico: ${error.message}` });
+
+        }
       })
     } else{
-      alert('Debe asignar un profesor antes de confirmar')
+      this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe seleccionar un profesor` });
     }
     
   }
@@ -185,18 +194,21 @@ export class PracticasSecretariaComponent implements OnInit {
   }
 
   public getProfesores(){
-   this._asignacionService.getProfesores().subscribe(result =>{
+   this.asignacionService.getProfesores().subscribe(result =>{
     this.profesoresBackend = result
    }) 
   }
 
   public getPracticas(){
-    this._asignacionService.getPracticas().subscribe(result =>{
+    this.asignacionService.getPracticas().subscribe(result =>{
       console.log(result)
       this.practicasBackend = result
       if(this.modalDetalles){
         this.practicaSeleccionada = result.find(practica => practica.id_practica == this.practicaSeleccionada?.id_practica)!
       }
+      this.cargando = false
+      this.cargandoAsignacion = false
+
     })
   }
 

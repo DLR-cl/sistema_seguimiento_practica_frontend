@@ -1,83 +1,108 @@
 <app-header-jefe-empleador></app-header-jefe-empleador>
 
-<div class="bg-gray-50 py-12 flex items-center justify-center min-h-screen">
+<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
+  <div class="flex space-x-2">
+    <!-- Puntos animados con rebote e iluminación progresiva -->
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0.2s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0.4s"></div>
+  </div>
+</div>
+
+<div *ngIf="!cargando" class="bg-gray-50 py-12 flex items-center justify-center min-h-screen">
     <div class="container max-w-screen-lg p-10 bg-white rounded-lg shadow-lg">
         <h1 class="text-3xl font-bold text-center text-blue-800 mb-6">Formulario de Seguimiento de Práctica</h1>
         <p class="text-center text-gray-600 mb-10">Por favor, complete las preguntas para ayudar en el seguimiento del
             desempeño del alumno en su práctica profesional.</p>
 
-        <div *ngIf="!datos_listo" class="datos_formulario w-2/3 m-auto">
-            <form [formGroup]="formularioDatos" class="mx-auto">
-                <!-- Fecha Inicio -->
-                <div class="relative z-0 w-full mb-5 group">
-                    <input type="date" id="floating_email" formControlName="fecha_inicio_practica"
-                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "/>
-                    <label for="floating_email"
-                        class="peer-focus:font-medium absolxute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                        Fecha Inicio</label>
-                </div>
-            
-                <!-- Fecha Termino -->
-                <div class="relative z-0 w-full mb-5 group">
-                    <input type="date" id="floating_password" formControlName="fecha_fin_practica"
-                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "/>
-                    <label for="floating_password"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                        Fecha Termino</label>
-                </div>
-            
-                <!-- Horas Semanales de trabajo -->
-                <div class="relative z-0 w-full mb-5 group">
-                    <input type="number" id="floating_repeat_password" formControlName="horas_semanales"
-                        class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                        placeholder=" "/>
-                    <label for="floating_repeat_password"
-                        class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                        Horas Semanales de trabajo</label>
-                </div>
-            
-                <div class="grid md:grid-cols-2 md:gap-6">
-                    <!-- Horas de Prácticas Regulares -->
-                    <div class="relative z-0 w-full mb-5 group">
-                        <input type="number" id="floating_first_name" formControlName="horas_practicas_regulares"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" "/>
-                        <label for="floating_first_name"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Horas de Prácticas Regulares</label>
-                    </div>
-            
-                    <!-- Horas de Prácticas Extraordinarias -->
-                    <div class="relative z-0 w-full mb-5 group">
-                        <input type="number" id="floating_last_name" formControlName="horas_practicas_extraordinarias"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" "/>
-                        <label for="floating_last_name"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Horas de Prácticas Extraordinarias</label>
-                    </div>
-                </div>
-            
-                <!-- Horas de Inasistencia -->
-                <div class="grid md:grid-cols-1 md:gap-6">
-                    <div class="relative z-0 w-full mb-5 group">
-                        <input type="number" id="floating_phone" formControlName="horas_inasistencia"
-                            class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-black dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                            placeholder=" "/>
-                        <label for="floating_phone"
-                            class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                            Horas de Inasistencia</label>
-                    </div>
-                </div>
-            
-                <button (click)="changeForm()"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                    Confirmar Datos
-                </button>
+        <div *ngIf="!datos_listo" class="w-full max-w-4xl mx-auto p-8 rounded-md mb-5">
+            <form [formGroup]="formularioDatos">
+            <!-- Fechas -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 gap-y-10">
+            <!-- Fecha Inicio -->
+            <p-floatLabel>
+                <p-calendar
+                id="fecha_inicio"
+                formControlName="fecha_inicio_practica"
+                dateFormat="dd-mm-yy"
+                styleClass="w-full"
+                inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+                [showIcon]="false"
+                ></p-calendar>
+                <label for="fecha_inicio">Fecha Inicio</label>
+            </p-floatLabel>
+        
+            <!-- Fecha Término -->
+            <p-floatLabel>
+                <p-calendar
+                id="fecha_termino"
+                formControlName="fecha_fin_practica"
+                dateFormat="dd-mm-yy"
+                styleClass="w-full"
+                inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+                [showIcon]="false"
+                ></p-calendar>
+                <label for="fecha_termino">Fecha Término</label>
+            </p-floatLabel>
+
+                                <!-- Horas Semanales -->
+            <p-floatLabel>
+            <p-inputNumber
+                id="horas_semanales"
+                formControlName="horas_semanales"
+                class="w-full"
+                styleClass="w-full"
+                inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+                [showButtons]="false"
+            ></p-inputNumber>
+            <label for="horas_semanales">Horas Semanales de Trabajo</label>
+            </p-floatLabel>
+
+            <p-floatLabel>
+            <p-inputNumber
+                id="horas_regulares"
+                formControlName="horas_practicas_regulares"
+                class="w-full"
+                styleClass="w-full"
+                inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+                [showButtons]="false"
+            ></p-inputNumber>
+            <label for="horas_regulares">Horas de Prácticas Regulares</label>
+            </p-floatLabel>
+    
+            <!-- Horas Extraordinarias -->
+            <p-floatLabel>
+            <p-inputNumber
+                id="horas_extraordinarias"
+                formControlName="horas_practicas_extraordinarias"
+                class="w-full"
+                styleClass="w-full"
+                inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+                [showButtons]="false"
+            ></p-inputNumber>
+            <label for="horas_extraordinarias">Horas de Prácticas Extraordinarias</label>
+            </p-floatLabel>
+
+            <p-floatLabel>
+            <p-inputNumber
+                id="horas_inasistencia"
+                formControlName="horas_inasistencia"
+                class="w-full"
+                styleClass="w-full"
+                inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+                [showButtons]="false"
+            ></p-inputNumber>
+            <label for="horas_inasistencia">Horas de Inasistencia</label>
+            </p-floatLabel>
+            </div>
             </form>
+
+            
         </div>
+
         <!-- Contenedor de preguntas con paginación -->
         <div *ngIf="datos_listo">
             <div class="preguntas-container min-h-[450px] mb-6">
@@ -199,10 +224,15 @@
 
         </div>
         <!-- Botón de enviar en la última página -->
-        <div class="text-center" *ngIf="page === preguntas_len">
+
+        <div class="text-center space-x-5" >
+            <button
+                *ngIf="datos_listo"
+                class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
+                (click)="changeForm()">Volver</button>
             <button
                 class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
-                (click)="enviarRespuesta()">Enviar Respuestas</button>
+                (click)="!datos_listo? changeForm() : enviarRespuesta()">{{!datos_listo? 'Continuar' : 'Enviar Respuestas'}}</button>
         </div>
     </div>
 </div>

@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
 import { DataAccessService } from '../../services/data-access.service';
-import { CantidadInformesPendientes, InfoInformes, ResumenConteoInformes } from '../../interface/info-informes.interface';
-import { PayloadInterface } from '../../../../shared/interface/payload.interface';
-import { AuthService } from '../../../../auth/services/auth.service';
+import { CantidadInformesPendientes, InfoInformes, ResumenConteoInformes } from '../../dto/info-informes.dto';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil-data',
@@ -17,7 +15,7 @@ import { AuthStateService } from '../../../../shared/data-access/auth-state.serv
 export class PerfilDataComponent implements OnInit {
   private readonly _accessDataService = inject(DataAccessService);
   private readonly _authServiceState = inject(AuthStateService);
-
+  private readonly _router = inject(Router)
 
   dataUser: any; // Payload decodificado del token
   informesPendientes?: CantidadInformesPendientes;
@@ -25,7 +23,6 @@ export class PerfilDataComponent implements OnInit {
   informesCriticos?: InfoInformes[];
   existenInformes: boolean = false;
   resumenConteoInformes?:ResumenConteoInformes;
-  private subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     const decodedToken = this._authServiceState.getData();
@@ -48,10 +45,6 @@ export class PerfilDataComponent implements OnInit {
   
   }
   
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe(); // Libera la suscripción
-  }
-
   private getCantidadInformesPendientes() {
     this._accessDataService.getCantidadInformesPendientes(this.dataUser.access_token).subscribe({
       next: (r) => {
@@ -87,8 +80,13 @@ export class PerfilDataComponent implements OnInit {
     this._accessDataService.getInformesCriticos(this.dataUser.access_token).subscribe({
       next: (r) => {
         this.informesCriticos = r;
+        console.log(this.informesCriticos)
       },
       error: (err) => console.error('Error al obtener informes críticos:', err),
     });
+  }
+
+  public revision(idPractica: number){
+    this._router.navigate(['revision-informe/'+idPractica])
   }
 }

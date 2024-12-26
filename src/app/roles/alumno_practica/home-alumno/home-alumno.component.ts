@@ -2,9 +2,9 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AlumnoService } from '../data-access/alumno.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
-import { HeaderComponent } from "../components/header/header.component"
 import { CommonModule } from '@angular/common';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
+import { HeaderComponent } from '../../jefe_compartido/header-jefes/header.component';
 
 @Component({
   selector: 'app-home-alumno',
@@ -19,6 +19,8 @@ export class HomeAlumnoComponent implements OnInit{
     { id: 1, nombre: 'Práctica Profesional 1' },
     { id: 2, nombre: 'Práctica Profesional 2' }
   ];
+
+  cargando: boolean = true;
 
   imagenFondo: string = "/departamento_ici/transicion_5.webp"
 
@@ -43,6 +45,7 @@ export class HomeAlumnoComponent implements OnInit{
       next: (data) => {
         this.dataAlumno = { ...data, id_user: this.dataAlumno.id_user }; // Combina datos de la API y token
         console.log('Datos del alumno:', this.dataAlumno);
+        this.cargando = false;
       },
       error: (error) => {
         console.error('Error al obtener la data del alumno:', error);
@@ -53,8 +56,6 @@ export class HomeAlumnoComponent implements OnInit{
     });
   }
   
-  
-
   public informeEnEspera(): boolean {
     return this.dataAlumno?.informe?.some((informe:any) => informe.estado == 'ESPERA' || informe.estado == 'CORRECCION') || false;
   }

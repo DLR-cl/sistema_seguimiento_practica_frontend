@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
+import { PracticaAlumno } from '../dto/practica-alumno.dto';
+import { Practicas } from '../../secretaria/dto/practicas.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,11 @@ export class PracticasAlumnoService {
   ) { }
 
   public obtenerPracticasAlumno(idAlumno: number){
-    return this.http.get<any>(`${enviroment.API_URL}/practicas/alumno/${idAlumno}`)
+    return this.http.get<PracticaAlumno[]>(`${enviroment.API_URL}/practicas/alumno/${idAlumno}`)
   }
+
+  public obtenerDetallePractica(idPractica: number){
+    return this.http.get<Practicas>(`${enviroment.API_URL}/practicas/${idPractica}`)
+  }
+  
 }

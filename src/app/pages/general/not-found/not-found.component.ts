@@ -42,7 +42,10 @@ export class NotFoundComponent {
         case TipoUsuario.JEFE_DEPARTAMENTO:
           this._router.navigate(['home-administracion']);
           break;
-        case TipoUsuario.SECRETARIA:
+        case TipoUsuario.SECRETARIA_CARRERA:
+          this._router.navigate(['home-secretaria']);
+          break;
+        case TipoUsuario.SECRETARIA_DEPARTAMENTO:
           this._router.navigate(['home-secretaria']);
           break;
         default:

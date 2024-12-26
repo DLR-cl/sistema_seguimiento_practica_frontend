@@ -1,7 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { enviroment } from "../../../environment/environment";
-import { CantidadAlumnosEnPractica } from "../interface/alumnosPractica.interface";
 import { map } from "rxjs";
 
 
