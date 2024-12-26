@@ -5,11 +5,12 @@ import { StorageService } from '../../../shared/data-access/storage.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { DataSecretariaService } from '../services/data-secretaria.service';
+import { HeaderComponent } from "../../jefe_compartido/header-jefes/header.component";
 
 @Component({
   selector: 'app-home-secretaria',
   standalone: true,
-  imports: [HeaderSecretariaComponent],
+  imports: [HeaderComponent],
   templateUrl: './home-secretaria.component.html',
   styleUrl: './home-secretaria.component.css'
 })
