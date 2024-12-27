@@ -4,9 +4,6 @@ import { enviroment } from '../../../environment/environment';
 import { AsignacionDto } from '../dto/secretaria-data.dto';
 import { AcademicoInformes, PracticaInfo } from '../dto/asignacion-informes.dto';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
