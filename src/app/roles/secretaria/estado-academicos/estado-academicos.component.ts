@@ -13,10 +13,13 @@ import { FormsModule, NgModel } from '@angular/forms';
   styleUrl: './estado-academicos.component.css'
 })
 export class EstadoAcademicosComponent implements OnInit{
-  // SERVICIOS
-  private readonly _datasecretariaService = inject(DataSecretariaService);
 
-  // VARIABLES
+  constructor(
+    private dataSecretariaService: DataSecretariaService
+  ){}
+
+  cargando: boolean = true;
+
   filtroRut: string = ''; // Almacena el RUT para filtrar
   dataSeguimiento: SeguimientoData[] = [];
   paginaActual: number = 0; // Página actual
@@ -26,10 +29,11 @@ export class EstadoAcademicosComponent implements OnInit{
   }
 
   private obtenerEstadoAcademicos(){
-    this._datasecretariaService.obtenerEstadoAcademico().subscribe({
+    this.dataSecretariaService.obtenerEstadoAcademico().subscribe({
       next: (result: SeguimientoData[]) => {
         this.dataSeguimiento = result;
         console.log(result)
+        this.cargando = false;
       },
       error: (error) => {
         console.log(error);

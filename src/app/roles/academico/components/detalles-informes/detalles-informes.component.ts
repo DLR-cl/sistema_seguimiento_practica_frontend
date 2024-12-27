@@ -1,29 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { DatosPracticaService, PreguntaEvaluacion } from '../../services/datos-practica.service';
-import { ActivatedRoute } from '@angular/router';
+import { DatosPracticaService } from '../../services/datos-practica.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
 import { DataAccessService } from '../../services/data-access.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { Practicas } from '../../../secretaria/dto/practicas.dto';
-
-interface PreguntaOrganizada {
-  id: number;
-  pregunta: string;
-  tipo: string;
-}
-
-interface SubdimensionOrganizada {
-  [subdimension: string]: PreguntaOrganizada[];
-}
-
-interface DimensionOrganizada {
-  nombre: string;
-  subdimensiones: SubdimensionOrganizada;
-}
-
+import { PreguntaEvaluacion } from '../../dto/revision-informes.dto';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-detalles-informes',
@@ -45,12 +31,6 @@ export class DetallesInformesComponent implements OnInit {
   idInformeConfidencial!: number;
   informeConfidencial: any;
 
-  estado = {
-    aprobado: false,
-    rechazado: false,
-    corregir: false
-  };
-
   archivoSeleccionado: File | null = null;
   
   observaciones: string = '';
@@ -71,12 +51,103 @@ export class DetallesInformesComponent implements OnInit {
     D: 'Deficiente'
   };
 
+  textoModalidad: Record<string, string> = {
+    PRESENCIAL: 'Presencial',
+    REMOTO: 'Remoto',
+    SEMI_PRESENCIAL: 'Semipresencial'
+  };
+
+  tipoPractica: Record<string, string> = {
+    PRACTICA_UNO: 'Práctica Profesional I',
+    PRACTICA_DOS: 'Práctica Profesional II'
+  }
+
+  cargando: boolean = true;
+
+  constructor(
+    private sanitizer: DomSanitizer,
+    private practicaService: DatosPracticaService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private dataAccessService: DataAccessService,
+    private messageService: MessageService
+  ) {}
+
+  fileName: string = '';
+selectedFile: File | null = null; // Almacena el archivo seleccionado
+
+// Maneja la carga del archivo
+handleFileUpload(event: any): void {
+  const fileInput = event.target;
+  if (fileInput.files && fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+
+    // Verificar si el archivo es PDF
+    if (file.type !== 'application/pdf') {
+      this.fileName = '';
+      this.selectedFile = null; // Limpiar el archivo seleccionado
+      fileInput.value = ''; // Limpiar el input
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Solo se permiten archivos PDF' });
+      return;
+    }
+
+    this.fileName = file.name;
+    this.selectedFile = file; // Asignar el archivo seleccionado
+  }
+}
+
+// Subir corrección
+uploadCorrection(): void {
+  if (!this.selectedFile) {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar un archivo antes de subir' });
+    return;
+  }
+
+  // Crear el FormData para enviar al backend
+  if (Object.keys(this.respuestasEvaluacion).length < this.agrupadosAspectos[0].preguntas.length + this.agrupadosAspectos[1].preguntas.length + this.evaluacionGeneralConfidencial.length){
+    this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe responder todas las preguntas`});
+    return
+  }
+
+  const formData: FormData = new FormData();
+  formData.append('id_informe', '' + this.idInforme);
+  formData.append('id_academico', '' + this.practica.informe_alumno.id_academico);
+  formData.append('nombre_alumno', '' + this.practica.informe_alumno.alumno.usuario.nombre);
+  formData.append('tipo_practica', this.practica.tipo_practica);
+  formData.append('file', this.selectedFile); // Usar el archivo seleccionado
+
+  // Simulación de la carga del archivo
+  formData.forEach((value, key) => {
+    console.log(`${key}:`, value);
+  });
+  console.log('Subiendo corrección...');
+
+  this.practicaService.enviarCorreccionInforme(formData).subscribe({
+    next: result => {
+      console.log(result)
+      this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Corrección de Informe subida con éxito.' });
+      this.enviarEvaluacion()
+    },
+    error: error => {
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al enviar la corrección: ${error.message}` });
+    }
+  })
+  
+
+}
+
+  ngOnInit(): void {
+    this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
+    this.obtenerInfoPractica();
+    this.getPreguntas()
+  }
+
   // Llama al servicio para obtener preguntas
   public getPreguntas() {
     this.practicaService.obtenerPreguntasEvaluacion().subscribe({
       next: (result) => {
-        console.log(result)
-        this.preguntasBackend = result; // Almacena los datos obtenidos
+        console.log(result, 'preg')
+        this.preguntasBackend = result;
       },
       error: (error) => {
         console.error('Error al obtener las preguntas:', error);
@@ -130,54 +201,10 @@ export class DetallesInformesComponent implements OnInit {
     }
   }
 
-  constructor(
-    private sanitizer: DomSanitizer,
-    private practicaService: DatosPracticaService,
-    private route: ActivatedRoute,
-    private _dataccessService: DataAccessService,
-  ) {}
-
-  ngOnInit(): void {
-    this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
-    this.obtenerInfoPractica();
-    this.getPreguntas()
-  }
-
-  
-
-  get preguntasConfidencial() {
-    return this.preguntasBackend
-      .filter((p) => p.pregunta.dimension.nombre === 'Evaluación General Informe Confidencial')
-      .map((p) => ({
-        id: p.pregunta.id_pregunta,
-        pregunta: p.pregunta.enunciado_pregunta
-      }));
-  }
-
   tienePreguntasRevisionAcademica(subdimensiones: { [key: string]: any[] }): boolean {
     return Object.values(subdimensiones).some((preguntas: any[]) =>
       preguntas.some((p) => p.tipo === 'REVISION_ACADEMICA')
     );
-  }
-
-  actualizarEstado(estado: string): void {
-    switch (estado) {
-      case 'aprobado':
-        this.estado.aprobado = !this.estado.aprobado;
-        this.estado.rechazado = false;
-        this.estado.corregir = false;
-        break;
-      case 'rechazado':
-        this.estado.rechazado = !this.estado.rechazado;
-        this.estado.aprobado = false;
-        this.estado.corregir = false;
-        break;
-      case 'corregir':
-        this.estado.corregir = !this.estado.corregir;
-        this.estado.aprobado = false;
-        this.estado.rechazado = false;
-        break;
-    }
   }
 
   enviarEvaluacion() {
@@ -191,10 +218,32 @@ export class DetallesInformesComponent implements OnInit {
     // }
 
     // Lógica para enviar la revisión al backend
-    console.log('Enviando revisión:', {
-      archivo: this.archivoSeleccionado,
-      comentario: this.observaciones,
-    });
+
+    if(this.selectedFile){
+      const formData: FormData = new FormData();
+      formData.append('id_informe', '' + this.idInforme);
+      formData.append('id_academico', '' + this.practica.informe_alumno.id_academico);
+      formData.append('nombre_alumno', '' + this.practica.informe_alumno.alumno.usuario.nombre);
+      formData.append('tipo_practica', this.practica.tipo_practica);
+      formData.append('file', this.selectedFile); // Usar el archivo seleccionado
+
+      // Simulación de la carga del archivo
+      formData.forEach((value, key) => {
+        console.log(`${key}:`, value);
+      });
+      console.log('Subiendo corrección...');
+
+      this.practicaService.enviarCorreccionInforme(formData).subscribe({
+        next: result => {
+          console.log(result)
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Corrección de Informe subida con éxito.' });
+          this.enviarEvaluacion()
+        },
+        error: error => {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al enviar la corrección: ${error.message}` });
+        }
+      })
+    }
 
     const respuestas = Object.keys(this.respuestasEvaluacion).map((preguntaId) => {
       return {
@@ -213,17 +262,25 @@ export class DetallesInformesComponent implements OnInit {
       observacion: this.observaciones
     }
 
+    if (revision.respuestas.length < this.agrupadosAspectos[0].preguntas.length + this.agrupadosAspectos[1].preguntas.length + this.evaluacionGeneralConfidencial.length){
+      this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe responder todas las preguntas`});
+      return
+    }
+
     console.log('Respuestas de Evaluación:', revision);
 
     this.practicaService.enviarRevision(revision).subscribe({
       next: result => {
         console.log(result)
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas registradas con éxito.' });
+        this.router.navigate(['home-academico'])
       },
       error: error => {
         console.log(error)
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al registrar las respuestas: ${error.message}` });
       }
     })
-
+    
   }
 
   onFileSelected(event: any): void {
@@ -265,7 +322,7 @@ export class DetallesInformesComponent implements OnInit {
 
   obtenerInformeAlumno() {
     if (this.idInforme) {
-      this._dataccessService.getArchivoInforme(this.idInforme).subscribe({
+      this.practicaService.getArchivoInforme(this.idInforme).subscribe({
         next: (result) => {
           // Crear un Blob a partir de la respuesta
           const blob = new Blob([result], { type: 'application/pdf' });
@@ -285,10 +342,12 @@ export class DetallesInformesComponent implements OnInit {
 
   obtenerInformeConfidencial() {
     if (this.idInformeConfidencial) {
-      this._dataccessService.getRespuestasInformeConfidencial(this.idInformeConfidencial).subscribe({
+      this.dataAccessService.getRespuestasInformeConfidencial(this.idInformeConfidencial).subscribe({
         next: (result: any) => {
           console.log('Respuestas del informe confidencial:', result);
           this.respuestasConfidenciales = result; // Asigna las respuestas al arreglo
+          this.cargando = false;
+
         },
         error: (error) => {
           console.error('Error al obtener el informe confidencial:', error);
@@ -297,7 +356,7 @@ export class DetallesInformesComponent implements OnInit {
     }
   }
 
-  convertirPuntaje(puntos: number | null): string {
+  convertirPuntaje(puntos: number): string {
     switch (puntos) {
       case 1:
         return 'Muy en desacuerdo';

@@ -4,62 +4,77 @@
   
     <!-- Contenido principal -->
     <div class="absolute inset-0 z-10 flex flex-col items-center justify-start px-4">
-      <app-header class="absolute top-0 w-full"></app-header>
-  
-      <!-- Mensaje de bienvenida (Título en la parte superior, no centrado verticalmente) -->
-      <div class="text-center mb-12 pt-36">
-        <h1 class="text-4xl lg:text-5xl font-extrabold text-white mb-4">
-          Bienvenido, {{ dataAlumno?.nombre }}
-        </h1>
-        <p class="text-lg lg:text-xl text-gray-200">
-          Aquí puedes gestionar y dar seguimiento a tu práctica profesional. Revisa el estado de tu revisión de práctica y sube tu informe de práctica.
-        </p>
-      </div>
-  
-      <!-- Contenedor de tarjetas centradas en la pantalla -->
-      <div class="flex flex-col items-center justify-center w-full h-full">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl w-full">
-          <!-- Tarjeta: Estado de la práctica -->
-          <div 
-            class="mb-40 bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transform transition-transform hover:scale-105 duration-300 ease-in-out min-h-[250px]"
-          >
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">
-              Estado de tu Práctica Profesional
-            </h3>
-            <p class="text-gray-600 mb-6">
-              Consulta el estado actual de tu práctica, incluyendo las aprobaciones y comentarios recibidos.
-            </p>
-            <div class="mt-auto w-full"> <!-- Alinea el botón al fondo -->
-              <button 
-                class="bg-blue-500 text-white font-medium rounded-md px-6 py-3 w-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-400 transition duration-200"
-                (click)="goToEstado()"
-              >
-                Ver Estado
-              </button>
-            </div>
-          </div>
-  
-          <!-- Tarjeta: Informe de práctica -->
-          <div 
-            *ngIf="informeEnEspera()" 
-            class="mb-40 bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transform transition-transform hover:scale-105 duration-300 ease-in-out min-h-[250px]"
-          >
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">
-              Sube tu Informe de Práctica
-            </h3>
-            <p class="text-gray-600 mb-6">
-              Accede al área de subida de informes. Asegúrate de que el archivo esté en formato PDF, cumpliendo con los estándares establecidos por la universidad.
-            </p>
-            <div class="mt-auto w-full"> <!-- Alinea el botón al fondo -->
-              <button 
-                class="bg-blue-500 text-white font-medium rounded-md px-6 py-3 w-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-400 transition duration-200"
-                (click)="goToInforme()"
-              >
-                Subir Informe
-              </button>
-            </div>
-          </div>
+
+      <app-header class="absolute z-50 top-0 w-full"></app-header>
+
+      <div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none z-15">
+        <div class="flex space-x-2">
+          <!-- Puntos animados con rebote e iluminación progresiva -->
+          <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+               style="animation-delay: 0s"></div>
+          <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+               style="animation-delay: 0.2s"></div>
+          <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+               style="animation-delay: 0.4s"></div>
         </div>
+      </div>
+      
+      <div *ngIf="!cargando">
+            <!-- Mensaje de bienvenida (Título en la parte superior, no centrado verticalmente) -->
+            <div class="text-center mb-12 pt-36">
+              <h1 class="text-4xl lg:text-5xl font-extrabold text-white mb-4">
+                Bienvenido, {{ dataAlumno?.nombre }}
+              </h1>
+              <p class="text-lg lg:text-xl text-gray-200">
+                Aquí puedes gestionar y dar seguimiento a tu práctica profesional. Revisa el estado de tu revisión de práctica y sube tu informe de práctica.
+              </p>
+            </div>
+        
+            <!-- Contenedor de tarjetas centradas en la pantalla -->
+            <div class="flex flex-col items-center justify-center w-full h-full">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 max-w-7xl w-full">
+                <!-- Tarjeta: Estado de la práctica -->
+                <div 
+                  class="mb-40 bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transform transition-transform hover:scale-105 duration-300 ease-in-out min-h-[250px]"
+                >
+                  <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                    Estado de tu Práctica Profesional
+                  </h3>
+                  <p class="text-gray-600 mb-6">
+                    Consulta el estado actual de tu práctica, incluyendo las aprobaciones y comentarios recibidos.
+                  </p>
+                  <div class="mt-auto w-full"> <!-- Alinea el botón al fondo -->
+                    <button 
+                      class="bg-blue-500 text-white font-medium rounded-md px-6 py-3 w-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-400 transition duration-200"
+                      (click)="goToEstado()"
+                    >
+                      Ver Estado
+                    </button>
+                  </div>
+                </div>
+        
+                <!-- Tarjeta: Informe de práctica -->
+                <div 
+                  *ngIf="informeEnEspera()" 
+                  class="mb-40 bg-white shadow-lg rounded-xl p-6 flex flex-col items-center text-center transform transition-transform hover:scale-105 duration-300 ease-in-out min-h-[250px]"
+                >
+                  <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                    Sube tu Informe de Práctica
+                  </h3>
+                  <p class="text-gray-600 mb-6">
+                    Accede al área de subida de informes. Asegúrate de que el archivo esté en formato PDF, cumpliendo con los estándares establecidos por la universidad.
+                  </p>
+                  <div class="mt-auto w-full"> <!-- Alinea el botón al fondo -->
+                    <button 
+                      class="bg-blue-500 text-white font-medium rounded-md px-6 py-3 w-full hover:bg-blue-600 focus:outline-none focus:ring-4 focus:ring-blue-400 transition duration-200"
+                      (click)="goToInforme()"
+                    >
+                      Subir Informe
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
       </div>
     </div>
   </div>

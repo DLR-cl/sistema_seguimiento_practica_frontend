@@ -14,12 +14,7 @@ import { PreguntasInformeService } from '../../jefe_compartido/services/pregunta
 import { respuestaInformeConfidencial } from '../dto/informe-confidencial.dto';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { MessageService } from 'primeng/api';
-
-interface Pregunta{
-  id_pregunta: number,
-  enunciado_pregunta:string,
-  tipo_pregunta: string,
-}
+import { Pregunta } from '../../alumno_practica/dto/informe-alumno.dto';
 
 @Component({
   selector: 'app-informe-primera-practica',
@@ -44,6 +39,8 @@ export class InformePrimeraPracticaComponent implements OnInit{
     this.idInforme = Number(this.route.snapshot.paramMap.get('idInforme'))!;
     console.log(this.idInforme)
   }
+
+  cargando: boolean = true;
 
   habilidadesOpciones: string[] = [
     "Microsoft Excel",
@@ -79,10 +76,10 @@ export class InformePrimeraPracticaComponent implements OnInit{
   formularioDatos: FormGroup = new FormGroup({
     fecha_inicio_practica: new FormControl(null, Validators.required),
     fecha_fin_practica: new FormControl(null, Validators.required),
-    horas_semanales: new FormControl(null, Validators.required),
-    horas_practicas_regulares: new FormControl(null, Validators.required),
-    horas_practicas_extraordinarias: new FormControl(null, Validators.required),
-    horas_inasistencia: new FormControl(null, Validators.required)
+    horas_semanales: new FormControl(null, [Validators.required, Validators.min(1)]),
+    horas_practicas_regulares: new FormControl(null, [Validators.required, Validators.min(1)]),
+    horas_practicas_extraordinarias: new FormControl(null, [Validators.required, Validators.min(1)]),
+    horas_inasistencia: new FormControl(null, [Validators.required, Validators.min(1)])
   })
 
   idAlumno!: number
@@ -142,6 +139,7 @@ export class InformePrimeraPracticaComponent implements OnInit{
         return respuesta;
       });
       console.log(this.respuestasSupervisor, 'respuestas')
+      this.cargando = false
     })
   }
 
@@ -156,7 +154,7 @@ export class InformePrimeraPracticaComponent implements OnInit{
       console.log(this.respuestasSupervisor)
     } else {
       console.log(this.formularioDatos.value);
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Rellene todo el formulario' });
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Rellene correctamente el formulario' });
     }
   }
 
@@ -175,24 +173,25 @@ export class InformePrimeraPracticaComponent implements OnInit{
       next: result =>{
         console.log(result)
 
-        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas enviadas con éxito' });
+        this.respuestasService.enviarInformeConfidencial(this.formularioDatos.value, this.idInforme).subscribe(
+          {
+            next: result => {
+              console.log(result);
+              this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas enviadas con éxito'});
+              this.goTofin()
+            },
+            error: error => {
+              console.log(error);
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar las respuestas'});
+            }
+          }
+        )
       },
       error: error =>{
         console.log(error)
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar las respuestas' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar las respuestas'});
       }
     })
-    this.respuestasService.enviarInformeConfidencial(this.formularioDatos.value, this.idInforme).subscribe(
-      {
-        next: result => {
-          console.log(result);
-        },
-        error: error => {
-          console.log(error);
-        }
-      }
-    )
-    this.goTofin()
   }
 
   public esRespuestaIncompleta(respuesta: respuestaInformeConfidencial){

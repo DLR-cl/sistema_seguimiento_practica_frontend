@@ -1,6 +1,18 @@
 <app-header-jefe-empleador></app-header-jefe-empleador>
 
-<div class="bg-gray-50 py-12 flex items-center justify-center min-h-screen">
+<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
+  <div class="flex space-x-2">
+    <!-- Puntos animados con rebote e iluminación progresiva -->
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0.2s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0.4s"></div>
+  </div>
+</div>
+
+<div *ngIf="!cargando" class="bg-gray-50 py-12 flex items-center justify-center min-h-screen">
     <div class="container max-w-screen-lg p-10 bg-white rounded-lg shadow-lg">
         <h1 class="text-3xl font-bold text-center text-blue-800 mb-6">Formulario de Seguimiento de Práctica</h1>
         <p class="text-center text-gray-600 mb-10">Por favor, complete las preguntas para ayudar en el seguimiento del
@@ -215,12 +227,12 @@
           <!-- Botón de enviar en la última página -->
         <div class="text-center space-x-5" *ngIf="page === preguntas_len">
             <button
-                *ngIf="this.datos_listo"
+                *ngIf="datos_listo"
                 class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
                 (click)="changeForm()">Volver</button>
             <button
                 class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"
-                (click)="!this.datos_listo? changeForm() : enviarRespuesta()">{{!this.datos_listo? 'Continuar' : 'Enviar Respuestas'}}</button>
+                (click)="!datos_listo? changeForm() : enviarRespuesta()">{{!datos_listo? 'Continuar' : 'Enviar Respuestas'}}</button>
         </div>
     </div>
 </div>

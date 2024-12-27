@@ -1,5 +1,9 @@
 import { EstadoPractica } from "../../../enum/enumerables.enum";
 
+export interface CantidadAlumnosEnPractica {
+    cantidad_alumnos_practica: number;
+}
+
 export interface estadisticasPractica{
     estudiantes_practica: number,
     estudiantes_revision: number,
@@ -41,4 +45,9 @@ export interface SegundaPractica {
 export interface AlumnosActivosPractica {
     tipo_practica:        string;
     cantidad_estudiantes: number;
+}
+
+export interface CantidadEmpresasPorTipo {
+    privada: number;
+    publica: number;
 }

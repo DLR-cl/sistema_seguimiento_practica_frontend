@@ -7,3 +7,20 @@
 .controles_navegacion {
   border: 1px solid red; /* Para depuración */
 }
+
+
+@keyframes bounce-bright {
+    0%, 100% {
+      transform: translateY(0);
+      background-color: #3b82f6; /* Azul original */
+    }
+    50% {
+      transform: translateY(-10px); /* Rebote hacia arriba */
+      background-color: #93c5fd; /* Azul más brillante */
+    }
+  }
+  
+  .animate-bounce-bright {
+    animation: bounce-bright 1s infinite;
+  }
+

@@ -57,9 +57,15 @@
             <!-- Botón para subir el archivo -->
             <button
                 class="bg-blue-500 text-white font-medium rounded-lg px-6 py-3 w-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 disabled:bg-blue-300"
-                (click)="onUpload()" [disabled]="!selectedFile">
+                (click)="onUpload()" [disabled]="!selectedFile || cargando">
                 <i class="fas fa-upload mr-2"></i> Subir Archivo
             </button>
+
+            <div *ngIf="cargando" class="flex items-center justify-center mt-6">
+                <div class="w-12 h-12 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
+            </div>
+            
+
             <!-- Mensaje de respuesta -->
             <div *ngIf="uploadResponse" class="mt-6">
                 <h3 class="text-lg font-semibold text-gray-600">Resultado de la Carga</h3>

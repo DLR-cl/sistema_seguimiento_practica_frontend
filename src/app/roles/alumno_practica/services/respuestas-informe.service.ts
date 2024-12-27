@@ -13,16 +13,16 @@ export class RespuestasInformeService {
     private http: HttpClient,
   ) { }
 
-  public enviarInformeConfidencial(data: FormData, id_informe: number){
-    return this.http.patch<any>(`${enviroment.API_URL}/informe-confidencial/actualizar-informe/${id_informe}`, data);
-  }
-
   public asociarRespuestas(respuestas: ListaRespuestas){
     return this.http.post<any>(`${enviroment.API_URL}/respuestas-informe-alumno`, respuestas)
   }
 
   public enviarInforme(formData: FormData){
     return this.http.post<any>(`${enviroment.API_URL}/informe-alumno/subir-informe`, formData)
+  }
+
+  public obtenerRespuestasAlumno(idAlumno:number){
+    return this.http.get<any>(`${enviroment.API_URL}/informe-alumno/obtener-respuestas/${idAlumno}`)
   }
 
   public obtenerArchivo(idInforme: number){
@@ -37,5 +37,9 @@ export class RespuestasInformeService {
 
   public registrarRespuestasConfidencial(respuestas: respuestaInformeConfidencial[]){
     return this.http.post<any>(`${enviroment.API_URL}/respuesta-informe-confidencial`, respuestas)
+  }
+
+  public enviarInformeConfidencial(data: FormData, id_informe: number){
+    return this.http.patch<any>(`${enviroment.API_URL}/informe-confidencial/actualizar-informe/${id_informe}`, data);
   }
 }

@@ -108,11 +108,17 @@ export class AuthService {
         case TipoUsuario.JEFE_CARRERA:
           this._router.navigate(['home-administracion']);
           break;
-        case TipoUsuario.SECRETARIA:
+        case TipoUsuario.SECRETARIA_CARRERA:
+          this._router.navigate(['home-secretaria']);
+          break;
+        case TipoUsuario.SECRETARIA_DEPARTAMENTO:
           this._router.navigate(['home-secretaria']);
           break;
         case TipoUsuario.ACADEMICO:
           this._router.navigate(['home-academicos']);
+          break;
+        case TipoUsuario.ADMINISTRADOR:
+          this._router.navigate(['home-administracion']);
           break;
         default:
           console.warn('Rol desconocido, redirigiendo a home');
