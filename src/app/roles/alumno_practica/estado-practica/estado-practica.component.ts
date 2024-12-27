@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { Practicas } from '../../secretaria/dto/practicas.dto';
 import { RespuestasInformeService } from '../services/respuestas-informe.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Empresa } from '../../jefe_compartido/dto/empresa.dto';
+import { AlumnoService } from '../data-access/alumno.service';
 
 @Component({
   selector: 'app-estado-practica',
@@ -18,12 +20,16 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 export class EstadoPracticaComponent implements OnInit {
   idAlumno!: number;
   practicas: any[] = [];
+  datosEmpresa: Empresa | null = null; 
   practicaSeleccionada!: number;
   detallesPractica: Practicas | null = null;
   respuestasAlumno: any
   pasos: string[] = ['Cursando', 'En espera de informe', 'Informe recibido', 'Revisión general', 'Finalizada'];
   pasoActual: number = 0;
   resaltarPasos: boolean[] = [false, false, false, false, false];
+
+  cargando: boolean = true;
+  cargandoDetalle: boolean = false;
 
   tipoPractica: Record<string, string> = {
     PRACTICA_UNO: 'Práctica Profesional I',
@@ -98,6 +104,7 @@ export class EstadoPracticaComponent implements OnInit {
     private route: ActivatedRoute,
     private practicasService: PracticasAlumnoService,
     private informeService: RespuestasInformeService,
+    private alumnoService: AlumnoService,
     private router: Router
   ) {}
 
@@ -121,22 +128,28 @@ export class EstadoPracticaComponent implements OnInit {
         } else {
           console.warn('Respuesta inesperada:', result);
         }
+        this.cargando = false
       },
       error: (error) => console.error('Error al obtener prácticas:', error)
     });
   }
 
+  alumno: any
+
   obtenerDetallePractica(): void {
+    this.cargandoDetalle = true;
     this.detallesPractica = null;
     this.respuestasAlumno = null;
     this.pasoActual = 0;
     this.resaltarPasos.fill(false);
+    this.datosEmpresa = null
 
     this.practicasService.obtenerDetallePractica(this.practicaSeleccionada).subscribe({
       next: (result) => {
         this.detallesPractica = result;
-        console.log(this.detallesPractica)
+        console.log(result, 'PRACTICA')
         this.actualizarPasoActual(result.estado);
+        this.cargandoDetalle = false
       },
       error: (error) => console.error('Error al obtener detalles de la práctica:', error)
     });
@@ -181,8 +194,6 @@ export class EstadoPracticaComponent implements OnInit {
         this.timeouts.push(timeout);
       }
     }, 300);
-
     this.timeouts.push(resetTimeout);
   }
-  
 }

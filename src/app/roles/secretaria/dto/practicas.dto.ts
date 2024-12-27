@@ -14,6 +14,9 @@ export interface Practicas {
     id_supervisor:        number;
     informe_alumno:       InformeAlumno;
     informe_confidencial: InformeConfidencial;
+    nombre_empresa:       string;
+    nombre_supervisor:    string;
+    nombre_alumno:        string;
 }
 
 

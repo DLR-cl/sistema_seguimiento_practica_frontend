@@ -324,7 +324,6 @@ export class DashboardComponent implements OnInit{
     this.cargandoSolicitudes++;
     this.dashboardService.getDetallesPracticas().subscribe({
       next: result => {
-
         this.detallesPractica = result
       },
       complete: () => {
@@ -456,7 +455,7 @@ export class DashboardComponent implements OnInit{
         next: result => {
           console.log(result)
           this.practicaSeleccionada = result
-          if(result.informe_alumno.id_academico){
+          if(result.informe_alumno && result.informe_alumno.id_academico){
             this.academicoService.getInfoAcademico(result.informe_alumno.id_academico).subscribe({
               next: academico => {
                 this.academicoPractica = academico

@@ -178,35 +178,46 @@
     </div>
 
     <!-- Mostrar la tabla si hay datos -->
-    <p-table *ngIf="detallesPractica && detallesPractica.length > 0" [value]="detallesPractica" [paginator]="true" [rows]="5">
-        <ng-template pTemplate="header">
-            <tr>
-                <th>Alumno</th>
-                <th>Práctica</th>
-                <th>Estado</th>
-                <th>Acción</th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-practica>
-            <tr>
-                <td>{{ practica.nombre_alumno }}</td>
-                <td>{{ practica.tipo_practica }}</td>
-                <td>
-                    <span [ngClass]="{
-                        'text-green-600': practica.estado_practica === 'FINALIZADA',
-                        'text-red-600': practica.estado_practica === 'CURSANDO',
-                        'text-yellow-600': practica.estado_practica === 'ESPERA_INFORMES',
-                        'text-blue-600': practica.estado_practica === 'REVISION-GENERAL'
-                    }">
-                        {{ practica.estado_practica }}
-                    </span>
+    <p-table [value]="detallesPractica" [paginator]="true" [rows]="5">
+      <ng-template pTemplate="header">
+          <tr>
+              <th>Alumno</th>
+              <th>Práctica</th>
+              <th>Estado</th>
+              <th>Accion</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-practica>
+          <tr>
+              <td>{{ practica.nombre_alumno }}</td>
+              <td>{{ practica.tipo_practica }}</td>
+              <td>
+                  <span [ngClass]="{
+                      'text-green-600': practica.estado_practica === 'FINALIZADA',
+                      'text-red-600': practica.estado_practica === 'CURSANDO',
+                      'text-yellow-600': practica.estado_practica === 'ESPERA_INFORMES',
+                      'text-blue-600': practica.estado_practica === 'REVISION-GENERAL'
+                  }">
+                      {{ textoEstadoPractica[practica.estado_practica]}}
+                  </span>
+              </td>
+              <td>
+                  <div class="flex items-center space-x-5">
+                    <button
+                      pButton
+                      label="Ver"
+                      class="p-button-text"
+                      (click)="verInforme(practica)"
+                    ></button>
+                    <div
+                      *ngIf="cargandoPracticas.has(practica.id_practica)"
+                      class="w-5 h-5 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"
+                    ></div>
+                  </div>
                 </td>
-                <td>
-                    <button pButton label="Ver" class="p-button-text" (click)="verInforme(practica)"></button>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
+          </tr>
+      </ng-template>
+  </p-table>
   </ng-template>  
 
   <ng-template pTemplate="footer">
@@ -238,7 +249,7 @@
           <div class="grid grid-cols-2 gap-6 text-sm">
             <div>
                 <p class="text-gray-500">Alumno</p>
-                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_alumno.alumno.usuario.nombre }}</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.nombre_alumno }}</p>
             </div>
             <div>
               <p class="text-gray-500">Tipo de Práctica</p>
@@ -328,7 +339,7 @@
             <div class="grid grid-cols-2 gap-6 text-sm">
                 <div>
                     <p class="text-gray-500">Empresa</p>
-                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.nombre_razon_social }}</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.nombre_empresa }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500">Rubro de Empresa</p>
@@ -344,16 +355,16 @@
                 </div>
               <div>
                 <p class="text-gray-500">Supervisor</p>
-                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.usuario.nombre }}</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.nombre_supervisor }}</p>
               </div>
               <div>
-                <p class="text-gray-500">Supervisor</p>
+                <p class="text-gray-500">Correo Supervisor</p>
                 <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.usuario.correo }}</p>
               </div>
             </div>
         </div>  
 
-        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO'">
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO' && practicaSeleccionada?.informe_confidencial?.total_horas">
             <div class="border-b pb-4">
               <h3 class="text-xl font-semibold text-gray-800">Horas Realizadas</h3>
             </div>
@@ -377,7 +388,7 @@
             </div>
         </div>  
 
-        <div class="space-y-6" *ngIf="['REVISION', 'CORRECCION', 'APROBADA', 'ENVIADA', 'DESAPROBADA'].includes(practicaSeleccionada!.informe_alumno.estado)">
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO' && ['REVISION', 'CORRECCION', 'APROBADA', 'ENVIADA', 'DESAPROBADA'].includes(practicaSeleccionada!.informe_alumno.estado)">
             <div class="border-b pb-4">
               <h3 class="text-xl font-semibold text-gray-800">Profesor Asignado</h3>
             </div>
