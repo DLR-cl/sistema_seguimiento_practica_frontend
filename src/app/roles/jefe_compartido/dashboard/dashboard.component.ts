@@ -411,7 +411,7 @@ export class DashboardComponent implements OnInit{
   modalDetalles = false;
 
   practicaSeleccionada!: Practicas | null
-  academicoPractica!: AcademicoSolo[] | null
+  academicoPractica!: AcademicoSolo | null
 
   textoEstadoInforme: Record<string, string> = {
     ENVIADA: 'Enviado',
@@ -458,8 +458,8 @@ export class DashboardComponent implements OnInit{
           if(result.informe_alumno && result.informe_alumno.id_academico){
             this.academicoService.getInfoAcademico(result.informe_alumno.id_academico).subscribe({
               next: academico => {
-                this.academicoPractica = academico
-                console.log(this.academicoPractica)
+                this.academicoPractica = academico[0]
+                console.log(this.academicoPractica, 'ola')
                 this.modalDetalles = true
                 this.cargandoPracticas.delete(idPractica);
               },

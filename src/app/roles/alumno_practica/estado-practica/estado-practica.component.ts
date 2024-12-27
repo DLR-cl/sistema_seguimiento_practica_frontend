@@ -148,7 +148,11 @@ export class EstadoPracticaComponent implements OnInit {
       next: (result) => {
         this.detallesPractica = result;
         console.log(result, 'PRACTICA')
-        this.actualizarPasoActual(result.estado);
+        if(result.estado == 'ESPERA_INFORMES'){
+          this.actualizarPasoActual(result.informe_alumno.estado);
+        } else {
+          this.actualizarPasoActual(result.estado);
+        }
         this.cargandoDetalle = false
       },
       error: (error) => console.error('Error al obtener detalles de la práctica:', error)
@@ -158,8 +162,8 @@ export class EstadoPracticaComponent implements OnInit {
   actualizarPasoActual(estado: string): void {
     const estados: Record<string, number> = {
       CURSANDO: 1,
-      EN_ESPERA_INFORMES: 2,
-      INFORMES_RECIBIDOS: 3,
+      ESPERA: 2,
+      ENVIADA : 3,
       REVISION_GENERAL: 4,
       FINALIZADA: 5,
     };

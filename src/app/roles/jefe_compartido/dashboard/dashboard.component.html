@@ -395,14 +395,14 @@
             <div class="grid grid-cols-2 gap-6 text-sm">
               <div>
                 <p class="text-gray-500">Profesor</p>
-                <p class="font-medium" [ngClass]="academicoPractica![0].nombre ? 'text-gray-900' : 'text-red-600'">
-                  {{ academicoPractica![0].nombre || 'Sin asignar' }}
+                <p class="font-medium" [ngClass]="academicoPractica ? 'text-gray-900' : 'text-red-600'">
+                  {{ academicoPractica ? academicoPractica!.nombre : 'Sin asignar' }}
                 </p>
               </div>
-              <div>
-                <p class="text-gray-500">Profesor</p>
-                <p class="font-medium" [ngClass]="academicoPractica![0].correo ? 'text-gray-900' : 'text-red-600'">
-                  {{ academicoPractica![0].correo}}
+              <div *ngIf="academicoPractica">
+                <p class="text-gray-500">Correo Profesor</p>
+                <p class="font-medium" [ngClass]="academicoPractica ? 'text-gray-900' : 'text-red-600'">
+                  {{ academicoPractica!.correo}}
                 </p>
               </div>
             </div>

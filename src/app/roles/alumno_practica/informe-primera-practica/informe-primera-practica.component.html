@@ -1,6 +1,18 @@
 <app-header (data)="recibirDatos($event)"></app-header>
 
-<div class="bg-gray-50 min-h-screen">
+<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
+    <div class="flex space-x-2">
+      <!-- Puntos animados con rebote e iluminación progresiva -->
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+           style="animation-delay: 0s"></div>
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+           style="animation-delay: 0.2s"></div>
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+           style="animation-delay: 0.4s"></div>
+    </div>
+</div>
+
+<div *ngIf="!cargando" class="bg-gray-50 min-h-screen">
     <div class="bg-gray-50 py-12 flex items-center justify-center">
         <div class="container max-w-screen-lg p-10 bg-white rounded-lg shadow-lg">
             <div *ngIf="!datos_listo">

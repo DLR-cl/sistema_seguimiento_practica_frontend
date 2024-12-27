@@ -67,6 +67,8 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   uploadedFile: File | null = null;
   errorMessage: string = '';
 
+  cargando: boolean = true;
+
   public recibirDatos(datos: string) {
     this.dataAlumno = datos;
   }
@@ -156,6 +158,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
         return respuesta;
       });
       console.log(this.respuestasAlumno)
+      this.cargando = false;
     })
   }
 
@@ -359,7 +362,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
         this.datos_listo = true;
         this.correccion = true;
       } else {
-        this.datos_listo = false
+        this.datos_listo = false;
       }
     })
   }
