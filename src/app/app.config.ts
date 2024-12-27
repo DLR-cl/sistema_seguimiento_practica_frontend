@@ -14,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),  // Detecta cambios en la zona
     provideRouter(routes), // Proporciona las rutas de la aplicación
     provideHttpClient(
-      withInterceptors([combinedInterceptor, SlowHttpInterceptor])  // Agrega tus interceptores
+      withInterceptors([combinedInterceptor, SlowHttpInterceptor])  // Agrega tus interceptores ()
     ),
     provideAnimations(), // Animaciones de Angular
     MessageService, // Servicio de PrimeNG para mensajes

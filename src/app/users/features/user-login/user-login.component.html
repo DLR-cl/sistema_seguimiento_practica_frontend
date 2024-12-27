@@ -80,6 +80,12 @@
                 </div> -->
 
                 <!-- Login Button -->
+
+                    <!-- Spinner de carga centrado -->
+                <div *ngIf="cargandoLogin" class="absolute inset-0 flex items-center justify-center z-50 bg-white/40 rounded-3xl">
+                    <div class="w-16 h-16 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
+                </div>
+
                 <button type="submit"
                     class="bg-red-600 text-white font-medium rounded-lg py-3 px-6 w-full transition duration-200 ease-in-out my-3 
                         hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"

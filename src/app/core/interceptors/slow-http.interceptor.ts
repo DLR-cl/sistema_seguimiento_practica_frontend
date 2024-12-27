@@ -21,6 +21,6 @@ export const SlowHttpInterceptor: HttpInterceptorFn = (
           observer.complete();  // Completar la observación
         }
       });
-    }, 0); // Retraso de 2 segundos
+    }, 0); 
   });
 };

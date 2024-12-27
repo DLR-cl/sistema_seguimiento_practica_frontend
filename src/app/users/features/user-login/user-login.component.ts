@@ -30,6 +30,7 @@ export class UserLoginComponent implements OnInit {
   errorMessage: string | null = null;
   backgroundImage: string = '';
 
+  cargandoLogin: boolean = false;
 
   loginForm = this.formBuilder.group({
     email: this.formBuilder.nonNullable.control('', [
@@ -44,6 +45,7 @@ export class UserLoginComponent implements OnInit {
   }
 
   submit() {
+    this.cargandoLogin = true;
     if (this.loginForm.invalid) {
       this.errorMessage = 'Ingrese los datos requeridos';
       return;
@@ -60,6 +62,7 @@ export class UserLoginComponent implements OnInit {
 
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Inicio de sesión exitoso.' });
 
+        this.cargandoLogin = false
   
         if (response.primerInicioSesion) {
           this.router.navigate(['/change-password']); // Redirige al cambio de contraseña
@@ -73,7 +76,7 @@ export class UserLoginComponent implements OnInit {
       error: (error: any) => {
         this.errorMessage = error.error?.message || 'Error en el inicio de sesión.';
         this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al iniciar sesión: ${error.message}` });
-
+        this.cargandoLogin = false;
         console.error('Error en el inicio de sesión:', error);
       },
     });

@@ -1,6 +1,19 @@
-<app-header></app-header>
+<app-header class="z-99"></app-header>
 
-<div class="relative overflow-x-auto">
+<!-- Spinner de carga general -->
+<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
+  <div class="flex space-x-2">
+    <!-- Puntos animados con rebote e iluminación progresiva -->
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0.2s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0.4s"></div>
+  </div>
+</div>
+
+<div *ngIf="!cargando" class="relative overflow-x-auto">
   <div class="w-[90%] m-auto mb-4 mt-2">
     <input
       type="text"
@@ -10,57 +23,68 @@
     />
   </div>
 
-  <!-- Spinner de carga general -->
-  <div *ngIf="cargando" class="absolute top-0 left-0 w-full h-full bg-white bg-opacity-50 flex justify-center items-center z-50">
-    <div class="flex space-x-2">
-      <!-- Puntos animados con rebote e iluminación progresiva -->
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0.2s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0.4s"></div>
-    </div>
-  </div>
+  
 
-  <!-- Contenedor con sombra y bordes redondeados -->
+  <!-- Contenedor de la tabla -->
   <div class="w-[90%] m-auto shadow-lg rounded-lg overflow-hidden">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-      <!-- Encabezado -->
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-        <tr>
-          <th scope="col" class="px-6 py-3">Nombre del Académico</th>
-          <th scope="col" class="px-6 py-3">Correo del Académico</th>
-          <th scope="col" class="px-6 py-3">Tipo de Práctica</th>
-          <th scope="col" class="px-6 py-3">Estado Práctica</th>
-          <th scope="col" class="px-6 py-3">Nombre del Alumno</th>
-          <th scope="col" class="px-6 py-3">Rut del Alumno</th>
-          <th scope="col" class="px-6 py-3">Días para Revisión</th>
-          <th scope="col" class="px-6 py-3">Inicio Revisión</th>
-          <th scope="col" class="px-6 py-3">Fin Revisión</th>
-        </tr>
-      </thead>
-      <!-- Cuerpo -->
-      <tbody>
-        <tr
-          *ngFor="let data of obtenerDatosPaginados()"
-          [class.bg-red-100]="data.dias_para_revision <= 3"
-          [class.bg-yellow-100]="data.dias_para_revision > 3 && data.dias_para_revision <= 7"
-          class="bg-white border-b hover:bg-gray-50 transition-colors"
-        >
-          <td class="px-6 py-4">{{ data.nombre_academico }}</td>
-          <td class="px-6 py-4">{{ data.correo_academico }}</td>
-          <td class="px-6 py-4">{{ convertirTipoPractica(data.tipo_practica) }}</td>
-          <td class="px-6 py-4">{{ convertirEstadoPractica(data.estado_practica) }}</td>
-          <td class="px-6 py-4">{{ data.nombre_alumno }}</td>
-          <td class="px-6 py-4">{{ data.rut_alumno }}</td>
-          <td class="px-6 py-4 font-semibold">{{ data.dias_para_revision }} días</td>
-          <td class="px-6 py-4">{{ formatearFecha(data.inicio_revision) }}</td>
-          <td class="px-6 py-4">{{ formatearFecha(data.fin_revision) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <ng-container *ngIf="obtenerDatosPaginados().length > 0; else noData">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <!-- Encabezado -->
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3">Nombre del Académico</th>
+            <th scope="col" class="px-6 py-3">Correo del Académico</th>
+            <th scope="col" class="px-6 py-3">Tipo de Práctica</th>
+            <th scope="col" class="px-6 py-3">Estado Práctica</th>
+            <th scope="col" class="px-6 py-3">Nombre del Alumno</th>
+            <th scope="col" class="px-6 py-3">Rut del Alumno</th>
+            <th scope="col" class="px-6 py-3">Días para Revisión</th>
+            <th scope="col" class="px-6 py-3">Inicio Revisión</th>
+            <th scope="col" class="px-6 py-3">Fin Revisión</th>
+          </tr>
+        </thead>
+        <!-- Cuerpo -->
+        <tbody>
+          <tr
+            *ngFor="let data of obtenerDatosPaginados()"
+            [class.bg-red-100]="data.dias_para_revision <= 3"
+            [class.bg-yellow-100]="data.dias_para_revision > 3 && data.dias_para_revision <= 7"
+            class="bg-white border-b hover:bg-gray-50 transition-colors"
+          >
+            <td class="px-6 py-4">{{ data.nombre_academico }}</td>
+            <td class="px-6 py-4">{{ data.correo_academico }}</td>
+            <td class="px-6 py-4">{{ convertirTipoPractica(data.tipo_practica) }}</td>
+            <td class="px-6 py-4">{{ convertirEstadoPractica(data.estado_practica) }}</td>
+            <td class="px-6 py-4">{{ data.nombre_alumno }}</td>
+            <td class="px-6 py-4">{{ data.rut_alumno }}</td>
+            <td class="px-6 py-4 font-semibold">{{ data.dias_para_revision }} días</td>
+            <td class="px-6 py-4">{{ formatearFecha(data.inicio_revision) }}</td>
+            <td class="px-6 py-4">{{ formatearFecha(data.fin_revision) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+
+    <ng-template #noData>
+      <div class="w-full text-center bg-gray-50 flex flex-col items-center justify-center h-[20rem]">
+        <!-- Ícono más representativo -->
+        <div class="text-gray-400 mb-4">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h5l2-2h6l2 2h5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6M9 16h4" />
+          </svg>
+        </div>
+        <!-- Mensaje de estado -->
+        <p class="text-2xl text-gray-700 font-bold mb-2">No se encuentran académicos revisando informes</p>
+        <p class="text-gray-500 text-md">Aún no hay revisiones activas. Por favor, verifica más tarde o ajusta los filtros de búsqueda.</p>
+      </div>
+    </ng-template>
+    
+    
   </div>
 
   <!-- Paginador -->
-  <div class="flex justify-between items-center mt-4 w-[90%] m-auto">
+  <div  class="flex justify-between items-center mt-4 w-[90%] m-auto"> 
     <button
       class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
       [disabled]="paginaActual === 0"
@@ -69,7 +93,7 @@
       Anterior
     </button>
     <span class="text-sm text-gray-500">
-      Página {{ paginaActual + 1 }} de {{ totalPaginas }}
+      Página {{ paginaActual + 1 }} de {{ totalPaginas == 0 ? 1 : totalPaginas }}
     </span>
     <button
       class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
