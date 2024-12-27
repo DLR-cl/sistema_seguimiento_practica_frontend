@@ -55,7 +55,7 @@
         <div class="lg:col-span-3 md:col-span-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Gráfico de la Cantidad de Estudiantes por Tipo de Práctica -->
             <div *ngIf="cantidadEstudiantesTipoPracticaChartData" class="col-span-1 bg-white shadow rounded p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes en Práctica</h2>p
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes en Práctica</h2>
                 <p-chart
                     [data]="cantidadEstudiantesTipoPracticaChartData"
                     [options]="cantidadEstudiantesTipoPracticaChartOptions"
@@ -65,7 +65,7 @@
             </div>
 
             <div *ngIf="!cantidadEstudiantesTipoPracticaChartData" class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-                <p class="text-lg text-center font-medium text-gray-700 mb-4">Aún no hay alumnos cursando practicas</p>
+                <p class="text-lg text-center font-medium text-gray-700 mb-4">No hay alumnos cursando practicas</p>
                 <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" class="text-gray-500">
                         <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
@@ -88,7 +88,7 @@
                 </p-chart>
             </div>
             <div *ngIf="!practicaIChartData" class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-                <p class="text-lg text-center font-medium text-gray-700 mb-4">Aún no hay alumnos que hayan finalizado su práctica I</p>
+                <p class="text-lg text-center font-medium text-gray-700 mb-4">No hay alumnos aprobados en práctica I</p>
                 <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" class="text-gray-500">
                         <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
@@ -111,7 +111,7 @@
                 </p-chart>
             </div>
             <div *ngIf="!practicaIIChartData" class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-                <p class="text-lg text-center font-medium text-gray-700 mb-4">Aún no hay alumnos que hayan finalizado su práctica II</p>
+                <p class="text-lg text-center font-medium text-gray-700 mb-4">No hay alumnos aprobados en práctica II</p>
                 <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" class="text-gray-500">
                         <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
@@ -128,7 +128,7 @@
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Tipos de Empresas</h2>
                 <p-chart
                     [data]="tipoEmpresasChartData"
-                  
+                    [options]="tipoEmpresaChartOptions"
                     [type]="'doughnut'"
                     height="230px">
                 </p-chart>

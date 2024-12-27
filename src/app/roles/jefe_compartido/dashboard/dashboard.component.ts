@@ -116,7 +116,10 @@ export class DashboardComponent implements OnInit{
   // **Gráfico de Percepción de Empresas** (Convertido a porcentaje)
   tipoEmpresasChartData: any
 
-
+  tipoEmpresaChartOptions = {
+    responsive: true,
+    cutout: '70%'
+  };
 
   // **Gráfico de Prácticas Supervisadas por Mes** (No cambia a porcentaje)
   mesChartData = {
