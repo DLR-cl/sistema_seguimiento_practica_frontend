@@ -65,7 +65,7 @@
       <a 
         *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' " (click)="goToInfoAcademicos()"
         class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Academicos</a>
-      <a *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' " (click)="goToInfoSecretarias()"
+      <a *ngIf="dataUser?.rol == 'ADMINISTRADOR' " (click)="goToInfoSecretarias()"
         class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Secretarias</a>
       <a 
         
