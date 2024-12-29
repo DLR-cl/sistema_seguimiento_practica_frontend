@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { HeaderSecretariaComponent } from "../header-secretaria/header-secretaria.component";
 import { Secretaria } from '../dto/secretaria-data.dto';
 import { StorageService } from '../../../shared/data-access/storage.service';
-import { Router } from '@angular/router';
+import { Data, Route, Router } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
 import { DataSecretariaService } from '../services/data-secretaria.service';
 import { HeaderComponent } from "../../jefe_compartido/header-jefes/header.component";
@@ -16,49 +16,59 @@ import { CommonModule } from '@angular/common';
   styleUrl: './home-secretaria.component.css'
 })
 export class HomeSecretariaComponent {
-  private _storageService = inject(StorageService);
-  private readonly _routerService = inject(Router);
-  private readonly _authService = inject(AuthService);
-  private readonly _secretariaDataService = inject(DataSecretariaService);
 
-  public dataSecretaria!: Secretaria | null;
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private secretariaDataService: DataSecretariaService
+  ){}
+
+  // private _storageService = inject(StorageService);
+
+  rolSecretaria: string = ''
 
   cargando: boolean = true;
 
   imagenFondo: string = "/departamento_ici/transicion_6.webp"
 
+  tipoSecretaria: Record<string, string> = {
+    SECRETARIA_DEPARTAMENTO: 'Secretaria de Departamento',
+    SECRETARIA_CARRERA:'Secretaria de Carrera'
+  }
+
   ngOnInit(): void {
-    this._secretariaDataService.getDataSecretaria().subscribe({
-      next: data => {
-        this.dataSecretaria = data;
-        if(this.dataSecretaria){
+    this.authService.getDecodedTokenObservable().subscribe({
+      next: (data:any) => {
+        console.log(data.rol)
+        this.rolSecretaria = data.rol;
+        if(this.rolSecretaria){
           this.cargando = false;
         }
       },
-      error: error => {
+      error: (error:any) => {
         console.error('Error al capturar la data', error);
       }
     })
   }
 
   public signOut() {
-    this._authService.logout();
+    this.authService.logout();
   }
 
   public goToInformes() {
-    this._routerService.navigate(['ver-informes-jefe']);
+    this.router.navigate(['ver-informes-jefe']);
   }
 
   public goToPracticas() {
-    this._routerService.navigate(['ver-practicas']);
+    this.router.navigate(['ver-practicas']);
   }
 
   // Nueva función para Cargar Usuarios por Nómina
   public cargarUsuariosPorNomina() {
-    this._routerService.navigate(['cargar-alumnos-nomina']);
+    this.router.navigate(['cargar-alumnos-nomina']);
   }
 
   public goToEstadoAcademicos(){
-    this._routerService.navigate(['seguimiento-academicos'])
+    this.router.navigate(['seguimiento-academicos'])
   }
 }

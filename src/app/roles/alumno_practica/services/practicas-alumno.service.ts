@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
 import { PracticaAlumno } from '../dto/practica-alumno.dto';
 import { Practicas } from '../../secretaria/dto/practicas.dto';
+import { Empresa } from '../../jefe_compartido/dto/empresa.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -21,4 +22,7 @@ export class PracticasAlumnoService {
     return this.http.get<Practicas>(`${enviroment.API_URL}/practicas/${idPractica}`)
   }
   
+  public obtenerEmpresa(){
+    return this.http.get<Empresa[]>(`${enviroment.API_URL}/empresas`)
+  }
 }

@@ -36,6 +36,8 @@ export class DashboardComponent implements OnInit{
   modalDetallePractica= false;
   cantidadEmpresasPorTipo!: CantidadEmpresasPorTipo;
 
+  cargandoSolicitudes: number = 0;
+
   ngOnInit(): void {
     this.dataUser = this.authService.getData();
     this.getAprobacionPracticas()
@@ -112,17 +114,12 @@ export class DashboardComponent implements OnInit{
   };
 
   // **Gráfico de Percepción de Empresas** (Convertido a porcentaje)
-  tipoEmpresasChartData = {
-    labels: ['Privada', 'Pública'],
-    datasets: [
-      {
-        data: [0, 0], // Datos ajustados
-        backgroundColor: ['#1565c0', '#42aaff'],
-      }
-    ]
+  tipoEmpresasChartData: any
+
+  tipoEmpresaChartOptions = {
+    responsive: true,
+    cutout: '70%'
   };
-
-
 
   // **Gráfico de Prácticas Supervisadas por Mes** (No cambia a porcentaje)
   mesChartData = {
@@ -172,6 +169,7 @@ export class DashboardComponent implements OnInit{
   };
 
   public getEstadisticasPracticas(){
+    this.cargandoSolicitudes++;
     this.dashboardService.getEstadisticasPracticas().subscribe({
       next: result => {
         console.log('estadisticas result', result)
@@ -193,6 +191,10 @@ export class DashboardComponent implements OnInit{
       },
       error: error =>{
         console.log(error)
+      },
+      complete: () => {
+        this.cargandoSolicitudes--;
+        this.checkCargandoFinalizado();
       }
     })
   }
@@ -205,22 +207,30 @@ export class DashboardComponent implements OnInit{
   }
 
   getCantidadEmpresasPorTipos(){
+    this.cargandoSolicitudes++;
     this.dashboardService.getCantidadEmpresasPorTipo().subscribe({
       next: result => {
-        this.cantidadEmpresasPorTipo = result;
-        this.tipoEmpresasChartData = {
-          labels: ['Privada', 'Pública'],
-          datasets: [
-            {
-              data: [result.privada, result.publica],
-              backgroundColor: ['#1565c0', '#42aaff']
-            }
-          ]
+        if(result.privada !== 0 || result.publica !== 0){
+          this.cantidadEmpresasPorTipo = result;
+          this.tipoEmpresasChartData = {
+            labels: ['Privada', 'Pública'],
+            datasets: [
+              {
+                data: [result.privada, result.publica],
+                backgroundColor: ['#1565c0', '#42aaff']
+              }
+            ]
+          }
         }
+      },
+      complete: () => {
+        this.cargandoSolicitudes--;
+        this.checkCargandoFinalizado();
       }
     })
   };
   public getAprobacionPracticas(){
+    this.cargandoSolicitudes++;
     this.dashboardService.getAprobacionPracticas().subscribe({
       next: result => {
         const primerPractica = result.primerPractica;
@@ -267,11 +277,16 @@ export class DashboardComponent implements OnInit{
       },
       error: error =>{
         console.log(error)
+      },
+      complete: () => {
+        this.cargandoSolicitudes--;
+        this.checkCargandoFinalizado();
       }
     })
   }
 
   public getAlumnosActivosPracticas() {
+    this.cargandoSolicitudes++;
     this.dashboardService.getAlumnosActivosPracticas().subscribe({
       next: (result) => {
   
@@ -297,20 +312,29 @@ export class DashboardComponent implements OnInit{
       },
       error: (error) => {
         console.log(error);      
+      },
+      complete: () => {
+        this.cargandoSolicitudes--;
+        this.checkCargandoFinalizado();
       }
     });
   }
   
   public getDetallesPractica(){
+    this.cargandoSolicitudes++;
     this.dashboardService.getDetallesPracticas().subscribe({
       next: result => {
-
         this.detallesPractica = result
+      },
+      complete: () => {
+        this.cargandoSolicitudes--;
+        this.checkCargandoFinalizado();
       }
     })
   }
 
   public getPracticasMeses() {
+    this.cargandoSolicitudes++;
     this.dashboardService.getPracticasMeses(this.periodoSeleccionado).subscribe({
         next: (result) => {
 
@@ -357,9 +381,11 @@ export class DashboardComponent implements OnInit{
                     },
                 ],
             };
-            this.cargando = false
-            this.estadoCargando.emit(this.cargando);
         },
+        complete: () => {
+          this.cargandoSolicitudes--;
+          this.checkCargandoFinalizado();
+        }
     });
   }
 
@@ -385,7 +411,7 @@ export class DashboardComponent implements OnInit{
   modalDetalles = false;
 
   practicaSeleccionada!: Practicas | null
-  academicoPractica!: AcademicoSolo[] | null
+  academicoPractica!: AcademicoSolo | null
 
   textoEstadoInforme: Record<string, string> = {
     ENVIADA: 'Enviado',
@@ -429,11 +455,11 @@ export class DashboardComponent implements OnInit{
         next: result => {
           console.log(result)
           this.practicaSeleccionada = result
-          if(result.informe_alumno.id_academico){
+          if(result.informe_alumno && result.informe_alumno.id_academico){
             this.academicoService.getInfoAcademico(result.informe_alumno.id_academico).subscribe({
               next: academico => {
-                this.academicoPractica = academico
-                console.log(this.academicoPractica)
+                this.academicoPractica = academico[0]
+                console.log(this.academicoPractica, 'ola')
                 this.modalDetalles = true
                 this.cargandoPracticas.delete(idPractica);
               },
@@ -450,7 +476,13 @@ export class DashboardComponent implements OnInit{
         }
       })
     }
-    
-    
+  }
+
+  private checkCargandoFinalizado() {
+    if (this.cargandoSolicitudes === 0) {
+        this.cargando = false;
+        this.estadoCargando.emit(this.cargando);
+        console.log("Todas las solicitudes han finalizado.");
+    }
   }
 }

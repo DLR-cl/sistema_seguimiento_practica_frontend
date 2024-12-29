@@ -99,8 +99,6 @@
             </p-floatLabel>
             </div>
             </form>
-
-            
         </div>
 
         <!-- Contenedor de preguntas con paginación -->
@@ -221,11 +219,9 @@
                 <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente"
                     class="controles_navegacion"></pagination-controls>
             </div>
-
-        </div>
-        <!-- Botón de enviar en la última página -->
-
-        <div class="text-center space-x-5" >
+          </div>
+          <!-- Botón de enviar en la última página -->
+        <div class="text-center space-x-5" *ngIf="page === preguntas_len">
             <button
                 *ngIf="datos_listo"
                 class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-4"

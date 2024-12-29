@@ -86,11 +86,11 @@ export class NuevaPracticaComponent implements OnInit{
     numero_telefono: new FormControl ('', Validators.required)
   });
 
-  formAlumno: FormGroup = new FormGroup({
-    nombre: new FormControl ('', Validators.required),
-    correo: new FormControl (null, [Validators.required, Validators.email]),
-    rut: new FormControl ('', [Validators.required, Validators.pattern(/^\d{1,8}-\d{1}$/), checkRunValidator()])
-  });
+  // formAlumno: FormGroup = new FormGroup({
+  //   nombre: new FormControl ('', Validators.required),
+  //   correo: new FormControl (null, [Validators.required, Validators.email]),
+  //   rut: new FormControl ('', [Validators.required, Validators.pattern(/^\d{1,8}-\d{1}$/), checkRunValidator()])
+  // });
 
   showModal = false;
   modalType: 'empresa' | 'supervisor' | 'alumno' | null = null;

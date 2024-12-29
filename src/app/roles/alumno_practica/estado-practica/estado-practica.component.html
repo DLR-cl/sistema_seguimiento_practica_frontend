@@ -1,6 +1,18 @@
 <app-header></app-header>
 
-<div class="container mx-auto mt-10 p-5 bg-white rounded-lg shadow-md">
+<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
+    <div class="flex space-x-2">
+      <!-- Puntos animados con rebote e iluminación progresiva -->
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+           style="animation-delay: 0s"></div>
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+           style="animation-delay: 0.2s"></div>
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+           style="animation-delay: 0.4s"></div>
+    </div>
+</div>
+
+<div *ngIf="!cargando" class="container mx-auto mt-10 p-5 bg-white rounded-lg shadow-md">
     <h2 class="text-4xl justify-center text-center font-semibold text-blue-700">Estado de Revisión</h2>
     <p class="text-lg text-center text-gray-700 mt-2">Seleccione una práctica para ver su estado de revisión.</p>
 
@@ -66,32 +78,48 @@
     </div>
 
     <!-- Mensaje si no hay práctica seleccionada -->
-    <div *ngIf="!detallesPractica" class="mt-8 text-center">
+    <div *ngIf="!detallesPractica && !cargandoDetalle" class="mt-8 text-center">
         <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg shadow-md">
             <h3 class="text-xl font-semibold text-blue-700">Sin práctica seleccionada</h3>
             <p class="text-gray-700 mt-2">Seleccione una práctica del menú desplegable y haga clic en "Revisar estado" para ver los detalles de la práctica.</p>
         </div>
     </div>
 
-    <!-- Detalles de la práctica -->
-    <div *ngIf="detallesPractica" class="mt-8">
+    <div *ngIf="cargandoDetalle" class="relative flex justify-center items-center h-32">
+        <!-- Spinner centrado en el contenedor -->
+        <div class="w-12 h-12 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
+    </div>
 
+    <!-- Detalles de la práctica -->
+    <div *ngIf="detallesPractica && !cargandoDetalle" class="mt-8">
         <div *ngIf="pasoActual >= 1">
-            <h3 class="text-2xl font-semibold text-blue-600">Detalles de la Práctica</h3>
-            <p class="text-gray-700 mt-4"><strong>Nombre Alumno:</strong> {{ detallesPractica.informe_alumno.alumno.usuario.nombre }}</p>
-            <p class="text-gray-700"><strong>Tipo de Práctica:</strong> {{ tipoPractica[detallesPractica.tipo_practica]}}</p>
-            <p class="text-gray-700"><strong>Empresa:</strong> {{ detallesPractica.informe_confidencial.supervisor.empresa.nombre_razon_social }}</p>
-            <p class="text-gray-700"><strong>Modalidad:</strong> {{ textoModalidad[detallesPractica.modalidad]}}</p>
-            <p class="text-gray-700"><strong>Estado de Práctica:</strong> {{ textoEstadoPractica[detallesPractica.estado]}}</p>
-            <p class="text-gray-700"><strong>Cantidad de Horas:</strong> {{ detallesPractica.cantidad_horas }}</p>
-            <p class="text-gray-700"><strong>Horas Semanales:</strong> {{ detallesPractica.horas_semanales }}</p>
-            <p class="text-gray-700"><strong>Fecha de Inicio:</strong> {{ detallesPractica.fecha_inicio | date:'dd/MM/yyyy' }}</p>
-            <p class="text-gray-700"><strong>Fecha de Término:</strong> {{ detallesPractica.fecha_termino | date:'dd/MM/yyyy' }}</p>
+            <h3 class="text-2xl font-semibold text-blue-600 mb-6">Detalles de la Práctica</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Columna izquierda -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Nombre Alumno:</strong> {{ detallesPractica.nombre_alumno }}</p>
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Tipo de Práctica:</strong> {{ tipoPractica[detallesPractica.tipo_practica] }}</p>
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Empresa:</strong> {{ detallesPractica.nombre_empresa }}</p>
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Supervisor:</strong> {{ detallesPractica.nombre_supervisor }}</p>
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Modalidad:</strong> {{ textoModalidad[detallesPractica.modalidad] }}</p>
+                </div>
+                <!-- Columna derecha -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Estado de Práctica:</strong> {{ textoEstadoPractica[detallesPractica.estado] }}</p>
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Cantidad de Horas:</strong> {{ detallesPractica.cantidad_horas }}</p>
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Horas Semanales:</strong> {{ detallesPractica.horas_semanales }}</p>
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Fecha de Inicio:</strong> {{ detallesPractica.fecha_inicio | date:'dd/MM/yyyy' }}</p>
+                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Fecha de Término:</strong> {{ detallesPractica.fecha_termino | date:'dd/MM/yyyy' }}</p>
+                </div>
+            </div>
         </div>
-        
-        
-        <div *ngIf="pasoActual >= 3">
-            
+
+        <div *ngIf="pasoActual >= 3" class="mt-8">
+            <h3 class="text-2xl font-semibold text-blue-600 mb-6">Datos del informe</h3>
+ 
+            <p class="text-lg font-medium text-gray-700 mb-2"><strong>Intentos restantes:</strong> {{ detallesPractica.informe_alumno.intentos }}</p>
+
+
             <!-- Informe Confidencial -->
             <div class="col-span-full mt-8">
                 <h2 class="text-lg font-semibold text-gray-700">Respuestas Alumno</h2>
@@ -162,23 +190,21 @@
                 </p>
                 </div>
             </div>
-
         </div>
-
-        <div *ngIf="pasoActual >= 4">
-            <p class="text-gray-700"><strong>¿El Informe fue asignado a un académico?:</strong> {{ detallesPractica.informe_alumno.id_academico? 'Si' : 'No'}}</p>
-            <p class="text-gray-700"><strong>Estado de informe:</strong> {{ textoEstadoInforme[detallesPractica.informe_alumno.estado]}}</p>
-            <div *ngIf="detallesPractica.informe_alumno.archivo_correccion && detallesPractica.estado != 'FINALIZADA'" class="w-full h-full flex flex-col md:col-span-3 lg:col-span-4">
-                <h2 class="font-semibold text-gray-700">Corrección de informe</h2>
-                <div class="border rounded-md shadow flex-grow h-[calc(100vh-200px)]">
-                  <embed
+  
+        <div *ngIf="pasoActual >= 4" class="mt-8">
+            <p class="text-lg font-medium text-gray-700 mb-2"><strong>¿El Informe fue asignado a un académico?:</strong> {{ detallesPractica.informe_alumno.id_academico ? 'Sí' : 'No' }}</p>
+            <p class="text-lg font-medium text-gray-700 mb-4"><strong>Estado de informe:</strong> {{ textoEstadoInforme[detallesPractica.informe_alumno.estado] }}</p>
+            <div *ngIf="detallesPractica.informe_alumno.archivo_correccion && detallesPractica.estado != 'FINALIZADA'" class="mt-4">
+                <h2 class="font-semibold text-gray-700 mb-4">Corrección del Informe</h2>
+                <div class="border rounded-md shadow-md h-[500px]">
+                <embed
                     src="sample.pdf"
                     type="application/pdf"
-                    class="w-full h-full rounded-md shadow-xl"
-                  />
+                    class="w-full h-full rounded-md"
+                />
                 </div>
-              </div>
+            </div>
         </div>
-
     </div>
 </div>

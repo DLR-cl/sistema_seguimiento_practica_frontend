@@ -19,7 +19,7 @@
                                 <th class="py-4 px-6 text-left text-sm uppercase font-semibold">Categoría</th>
                             </tr>
                         </thead>
-                        <tbody class="text-gray-800">
+                        <tbody *ngIf="estadisticasPractica" class="text-gray-800">
                             <tr class="border-b hover:bg-blue-50 transition-colors duration-300">
                                 <td class="py-4 text-center border-r px-6 font-medium">{{ estadisticasPractica.estudiantes_practica }}</td>
                                 <td class="py-4 px-6 font-medium">Estudiantes en Práctica</td>
@@ -55,7 +55,7 @@
         <div class="lg:col-span-3 md:col-span-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Gráfico de la Cantidad de Estudiantes por Tipo de Práctica -->
             <div *ngIf="cantidadEstudiantesTipoPracticaChartData" class="col-span-1 bg-white shadow rounded p-4">
-                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes en Práctica</h2>p
+                <h2 class="text-lg font-semibold text-gray-700 mb-2">Cantidad de Estudiantes en Práctica</h2>
                 <p-chart
                     [data]="cantidadEstudiantesTipoPracticaChartData"
                     [options]="cantidadEstudiantesTipoPracticaChartOptions"
@@ -65,7 +65,7 @@
             </div>
 
             <div *ngIf="!cantidadEstudiantesTipoPracticaChartData" class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-                <p class="text-lg text-center font-medium text-gray-700 mb-4">Aún no hay alumnos cursando practicas</p>
+                <p class="text-lg text-center font-medium text-gray-700 mb-4">No hay alumnos cursando practicas</p>
                 <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" class="text-gray-500">
                         <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
@@ -88,7 +88,7 @@
                 </p-chart>
             </div>
             <div *ngIf="!practicaIChartData" class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-                <p class="text-lg text-center font-medium text-gray-700 mb-4">Aún no hay alumnos que hayan finalizado su práctica I</p>
+                <p class="text-lg text-center font-medium text-gray-700 mb-4">No hay alumnos aprobados en práctica I</p>
                 <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" class="text-gray-500">
                         <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
@@ -111,7 +111,7 @@
                 </p-chart>
             </div>
             <div *ngIf="!practicaIIChartData" class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-                <p class="text-lg text-center font-medium text-gray-700 mb-4">Aún no hay alumnos que hayan finalizado su práctica II</p>
+                <p class="text-lg text-center font-medium text-gray-700 mb-4">No hay alumnos aprobados en práctica II</p>
                 <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" class="text-gray-500">
                         <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
@@ -123,16 +123,29 @@
                 </div>
             </div>
 
-            <!-- Gráfico de la Percepción de las Empresas -->
-            <div class="col-span-1 bg-white shadow rounded p-4">
+            <!-- Gráfico de tipo de las Empresas -->
+            <div *ngIf="tipoEmpresasChartData" class="col-span-1 bg-white shadow rounded p-4">
                 <h2 class="text-lg font-semibold text-gray-700 mb-2">Tipos de Empresas</h2>
                 <p-chart
                     [data]="tipoEmpresasChartData"
-                  
+                    [options]="tipoEmpresaChartOptions"
                     [type]="'doughnut'"
                     height="230px">
                 </p-chart>
             </div>
+
+            <div *ngIf="!tipoEmpresasChartData" class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
+              <p class="text-lg text-center font-medium text-gray-700 mb-4">Aún no hay empresas registradas en el sistema</p>
+              <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" class="text-gray-500">
+                      <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
+                      <path d="M4 6v6c0 1.657 3.582 3 8 3c1.118 0 2.182 -.086 3.148 -.241m4.852 -2.759v-6"></path>
+                      <path d="M4 12v6c0 1.657 3.582 3 8 3c1.064 0 2.079 -.078 3.007 -.22"></path>
+                      <path d="M19 16v3"></path>
+                      <path d="M19 22v.01"></path>
+                  </svg>
+              </div>
+          </div>
 
             <!-- Gráfico de Barras: Cantidad de Prácticas por Mes -->
             <div class="col-span-2 bg-white shadow rounded p-4">
@@ -149,47 +162,75 @@
     </div>
 </div>
 
-<p-dialog [(visible)]="modalDetallePractica" [modal]="true" [closable]="false" header="Detalles de Prácticas">
-    <div class="col-span-4 bg-white shadow rounded p-6">
-        <h2 class="text-lg font-semibold text-gray-700 mb-4">Detalles de Prácticas</h2>
-        <p-table [value]="detallesPractica" [paginator]="true" [rows]="5">
-            <ng-template pTemplate="header">
-                <tr>
-                    <th>Alumno</th>
-                    <th>Práctica</th>
-                    <th>Estado</th>
-                    <th>Accion</th>
-                </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-practica>
-                <tr>
-                    <td>{{ practica.nombre_alumno }}</td>
-                    <td>{{ practica.tipo_practica }}</td>
-                    <td>
-                        <span [ngClass]="{
-                            'text-green-600': practica.estado_practica === 'FINALIZADA',
-                            'text-red-600': practica.estado_practica === 'CURSANDO',
-                            'text-yellow-600': practica.estado_practica === 'ESPERA_INFORMES',
-                            'text-blue-600': practica.estado_practica === 'REVISION-GENERAL'
-                        }">
-                            {{ practica.estado_practica }}
-                        </span>
-                    </td>
-                    <td>
-                        <button pButton label="Ver" class="p-button-text" (click)="verInforme(practica)"></button>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-        <div class="mt-4">
-            <button pButton label="Cerrar" class="p-button-danger" (click)="cerrarModal()"></button>
-        </div>
+<p-dialog [(visible)]="modalDetallePractica" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" [style]="{ width: '70rem' }">
+  <ng-template pTemplate="header">
+    <div class="text-center mx-auto py-4">
+      <h2 class="text-2xl font-semibold text-blue-700">Detalles de la Práctica</h2>
     </div>
+  </ng-template>  
+  
+  <ng-template pTemplate="content">
+    <!-- Mostrar el mensaje si no hay datos -->
+    <div *ngIf="!detallesPractica || detallesPractica.length === 0" class="text-center flex flex-col items-center justify-center h-64">
+      <i class="pi pi-info-circle text-blue-500 text-6xl mb-4"></i>
+      <p class="text-gray-700 text-xl font-semibold">No se han realizado prácticas aún.</p>
+      <p class="text-gray-500 text-md">Por favor, revisa más tarde.</p>
+    </div>
+
+    <!-- Mostrar la tabla si hay datos -->
+    <p-table [value]="detallesPractica" [paginator]="true" [rows]="5">
+      <ng-template pTemplate="header">
+          <tr>
+              <th>Alumno</th>
+              <th>Práctica</th>
+              <th>Estado</th>
+              <th>Accion</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-practica>
+          <tr>
+              <td>{{ practica.nombre_alumno }}</td>
+              <td>{{ practica.tipo_practica }}</td>
+              <td>
+                  <span [ngClass]="{
+                      'text-green-600': practica.estado_practica === 'FINALIZADA',
+                      'text-red-600': practica.estado_practica === 'CURSANDO',
+                      'text-yellow-600': practica.estado_practica === 'ESPERA_INFORMES',
+                      'text-blue-600': practica.estado_practica === 'REVISION-GENERAL'
+                  }">
+                      {{ textoEstadoPractica[practica.estado_practica]}}
+                  </span>
+              </td>
+              <td>
+                  <div class="flex items-center space-x-5">
+                    <button
+                      pButton
+                      label="Ver"
+                      class="p-button-text"
+                      (click)="verInforme(practica)"
+                    ></button>
+                    <div
+                      *ngIf="cargandoPracticas.has(practica.id_practica)"
+                      class="w-5 h-5 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"
+                    ></div>
+                  </div>
+                </td>
+          </tr>
+      </ng-template>
+  </p-table>
+  </ng-template>  
+
+  <ng-template pTemplate="footer">
+    <div class="mt-4 text-end">
+      <button class="px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md" (click)="cerrarModal()">Cerrar</button>
+    </div>
+  </ng-template>
+
 </p-dialog>
 
        
 
-<p-dialog [(visible)]="modalDetalles" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" [style]="{ width: '750px' }">
+<p-dialog [(visible)]="modalDetalles" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" [style]="{ width: '47rem' }">
     <!-- Header -->
     <ng-template pTemplate="header">
       <div class="text-center mx-auto py-4">
@@ -208,7 +249,7 @@
           <div class="grid grid-cols-2 gap-6 text-sm">
             <div>
                 <p class="text-gray-500">Alumno</p>
-                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_alumno.alumno.usuario.nombre }}</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.nombre_alumno }}</p>
             </div>
             <div>
               <p class="text-gray-500">Tipo de Práctica</p>
@@ -298,7 +339,7 @@
             <div class="grid grid-cols-2 gap-6 text-sm">
                 <div>
                     <p class="text-gray-500">Empresa</p>
-                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.empresa.nombre_razon_social }}</p>
+                    <p class="font-medium text-gray-900">{{ practicaSeleccionada!.nombre_empresa }}</p>
                 </div>
                 <div>
                     <p class="text-gray-500">Rubro de Empresa</p>
@@ -314,16 +355,16 @@
                 </div>
               <div>
                 <p class="text-gray-500">Supervisor</p>
-                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.usuario.nombre }}</p>
+                <p class="font-medium text-gray-900">{{ practicaSeleccionada!.nombre_supervisor }}</p>
               </div>
               <div>
-                <p class="text-gray-500">Supervisor</p>
+                <p class="text-gray-500">Correo Supervisor</p>
                 <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_confidencial.supervisor.usuario.correo }}</p>
               </div>
             </div>
         </div>  
 
-        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO'">
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO' && practicaSeleccionada?.informe_confidencial?.total_horas">
             <div class="border-b pb-4">
               <h3 class="text-xl font-semibold text-gray-800">Horas Realizadas</h3>
             </div>
@@ -347,21 +388,21 @@
             </div>
         </div>  
 
-        <div class="space-y-6" *ngIf="['REVISION', 'CORRECCION', 'APROBADA', 'ENVIADA', 'DESAPROBADA'].includes(practicaSeleccionada!.informe_alumno.estado)">
+        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO' && ['REVISION', 'CORRECCION', 'APROBADA', 'ENVIADA', 'DESAPROBADA'].includes(practicaSeleccionada!.informe_alumno.estado)">
             <div class="border-b pb-4">
               <h3 class="text-xl font-semibold text-gray-800">Profesor Asignado</h3>
             </div>
             <div class="grid grid-cols-2 gap-6 text-sm">
               <div>
                 <p class="text-gray-500">Profesor</p>
-                <p class="font-medium" [ngClass]="academicoPractica![0].nombre ? 'text-gray-900' : 'text-red-600'">
-                  {{ academicoPractica![0].nombre || 'Sin asignar' }}
+                <p class="font-medium" [ngClass]="academicoPractica ? 'text-gray-900' : 'text-red-600'">
+                  {{ academicoPractica ? academicoPractica!.nombre : 'Sin asignar' }}
                 </p>
               </div>
-              <div>
-                <p class="text-gray-500">Profesor</p>
-                <p class="font-medium" [ngClass]="academicoPractica![0].correo ? 'text-gray-900' : 'text-red-600'">
-                  {{ academicoPractica![0].correo}}
+              <div *ngIf="academicoPractica">
+                <p class="text-gray-500">Correo Profesor</p>
+                <p class="font-medium" [ngClass]="academicoPractica ? 'text-gray-900' : 'text-red-600'">
+                  {{ academicoPractica!.correo}}
                 </p>
               </div>
             </div>
