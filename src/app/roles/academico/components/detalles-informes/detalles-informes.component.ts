@@ -237,7 +237,6 @@ uploadCorrection(): void {
         next: result => {
           console.log(result)
           this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Corrección de Informe subida con éxito.' });
-          this.enviarEvaluacion()
         },
         error: error => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al enviar la corrección: ${error.message}` });
@@ -273,7 +272,7 @@ uploadCorrection(): void {
       next: result => {
         console.log(result)
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas registradas con éxito.' });
-        this.router.navigate(['home-academico'])
+        this.router.navigate(['home-academicos'])
       },
       error: error => {
         console.log(error)
