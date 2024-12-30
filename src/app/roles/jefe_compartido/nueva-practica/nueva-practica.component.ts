@@ -261,7 +261,7 @@ export class NuevaPracticaComponent implements OnInit{
 
   obtenerAlumnos() {
     this.practicasService.obtenerAlumnos().subscribe(result =>{
-      this.alumnos = result.filter(alumno => !alumno.primer_practica && !alumno.segunda_practica);
+      this.alumnos = result;
       console.log("Alumnos disponibles:", this.alumnos);
     })
   }
