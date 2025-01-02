@@ -5,6 +5,9 @@ import { InfoInformes } from '../../dto/info-informes.dto';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { Router } from '@angular/router';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
+import { GenerarPDF } from '../../dto/revision-informes.dto';
+import { DatosPracticaService } from '../../services/datos-practica.service';
+import { MessageService } from 'primeng/api';
 
 
 @Component({
@@ -19,11 +22,14 @@ export class TablaFuncionesComponent implements OnInit {
   asignado: boolean = false;
   @Output() estadoCargando = new EventEmitter<boolean>();
   cargando: boolean = true;
+  cargandoDescarga: boolean = false;
 
   constructor(
     private router: Router,
     private dataAccessService: DataAccessService,
-    private authService: AuthService
+    private authService: AuthService,
+    private datosPracticaService: DatosPracticaService,
+    private messageService: MessageService
   ){}
 
   ngOnInit(): void {
@@ -43,15 +49,44 @@ export class TablaFuncionesComponent implements OnInit {
     DESAPROBADA: 'Desaprobada'
   };
 
-  textoEstadoPractica: Record<string, string> = {
-    CURSANDO: 'Cursando',
-    REVISION_GENERAL: 'Revisión General',
-    ESPERA_INFORMES: 'Espera Informes',
-    FINALIZADA: 'Finalizada',
-    INFORMES_RECIBIDOS: 'Informes Recibidos'
+  tipoPractica: Record<string, string> = {
+    PRACTICA_UNO: 'Práctica Profesional I',
+    PRACTICA_DOS: 'Práctica Profesional II'
   };
 
  
+  public descargarPDF(idPractica: number, idInformeEvaluativo: number, tipoPractica: string, nombreAlumno: string){
+    this.cargandoDescarga = true;
+    const practica: GenerarPDF = {
+      id_practica: idPractica,
+      id_informe_evaluativo: idInformeEvaluativo,
+      id_docente: this.decodedToken.id_usuario
+    }
+
+    const tipo = this.tipoPractica[tipoPractica].replace(/ /g, "").replace(/(Profesional)([IVXLCDM]+)/, '$1-$2');
+    const nombre = nombreAlumno.replace(/ /g, "")
+
+    console.log(tipo, nombre)
+
+    this.datosPracticaService.descargarPDF(practica).subscribe({
+      next: (pdfBlob) => {
+        const url = window.URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `evaluacion-${tipo}-${nombre}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url); // Limpia el objeto URL
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Informe evaluativo generado con éxito.' });
+        this.cargandoDescarga = false
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al generad el PDF: ${error.message}` });
+        this.cargandoDescarga = false
+      }
+    })
+  }
 
   private getInfoInformes() {
     const token = this.decodedToken?.access_token; // Opcionalmente puedes validar el token aquí

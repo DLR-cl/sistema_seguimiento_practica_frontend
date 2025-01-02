@@ -12,121 +12,134 @@
   </div>
 </div>
 
-<div *ngIf="!cargando" class="container mx-auto p-4 space-y-6">
+<div *ngIf="!cargando || true" class="container mx-auto p-4 space-y-6">
   <!-- Título del informe -->
-<h1 class="text-4xl font-bold text-center mb-6">Revisión de Informe de Práctica</h1>
+  <h1 class="text-4xl font-bold text-center mb-6">Revisión de Informe de Práctica</h1>
 
-<!-- Información del supervisor y empresa -->
-<section class="mb-6">
-  <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">Información del Supervisor y Empresa</h2>
-  <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-md">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Supervisor:</span> 
-          <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.usuario.nombre }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Empresa:</span> 
-          <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.empresa.nombre_razon_social }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Rubro:</span> 
-          <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.empresa.rubro }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Ubicación:</span> 
-          <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.empresa.ubicacion }}</span>
-        </p>
+  <!-- Información del supervisor y empresa -->
+  <section class="mb-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">Información del Supervisor y Empresa</h2>
+    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-md">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Supervisor:</span> 
+            <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.usuario.nombre }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Correo del Supervisor:</span> 
+            <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.usuario.correo }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Empresa:</span> 
+            <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.empresa.nombre_razon_social }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Rubro:</span> 
+            <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.empresa.rubro }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Ubicación:</span> 
+            <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.empresa.ubicacion }}</span>
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Información de práctica -->
-<section>
-  <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">Información de Práctica</h2>
-  <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-md">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Nombre del Alumno:</span>
-          <span class="block text-gray-700 text-sm">{{ practica.informe_alumno.alumno.usuario.nombre }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Tipo de Práctica:</span>
-          <span class="block text-gray-700 text-sm">{{ tipoPractica[practica.tipo_practica] }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Fecha de Inicio:</span>
-          <span class="block text-gray-700 text-sm">{{ practica.fecha_inicio | date:'dd/MM/yyyy' }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Fecha de Término:</span>
-          <span class="block text-gray-700 text-sm">{{ practica.fecha_termino | date:'dd/MM/yyyy' }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Cantidad de Horas:</span>
-          <span class="block text-gray-700 text-sm">{{ practica.cantidad_horas }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Horas Semanales:</span>
-          <span class="block text-gray-700 text-sm">{{ practica.horas_semanales }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Modalidad:</span>
-          <span class="block text-gray-700 text-sm">{{ textoModalidad[practica.modalidad] }}</span>
-        </p>
-      </div>
-      <div>
-        <p>
-          <span class="block text-blue-900 font-semibold text-md">Intentos Restantes Informe:</span>
-          <span class="block text-gray-700 text-sm">{{ practica.informe_alumno.intentos }}</span>
-        </p>
+  <!-- Información de práctica -->
+  <section>
+    <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">Información de Práctica</h2>
+    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-md">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Nombre del Alumno:</span>
+            <span class="block text-gray-700 text-sm">{{ practica.informe_alumno.alumno.usuario.nombre }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Tipo de Práctica:</span>
+            <span class="block text-gray-700 text-sm">{{ tipoPractica[practica.tipo_practica] }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Fecha de Inicio:</span>
+            <span class="block text-gray-700 text-sm">{{ practica.fecha_inicio | date:'dd/MM/yyyy' }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Fecha de Término:</span>
+            <span class="block text-gray-700 text-sm">{{ practica.fecha_termino | date:'dd/MM/yyyy' }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Cantidad de Horas:</span>
+            <span class="block text-gray-700 text-sm">{{ practica.cantidad_horas }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Horas Semanales:</span>
+            <span class="block text-gray-700 text-sm">{{ practica.horas_semanales }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Modalidad:</span>
+            <span class="block text-gray-700 text-sm">{{ textoModalidad[practica.modalidad] }}</span>
+          </p>
+        </div>
+        <div>
+          <p>
+            <span class="block text-blue-900 font-semibold text-md">Intentos Restantes Informe:</span>
+            <span class="block text-gray-700 text-sm">{{ practica.informe_alumno.intentos }}</span>
+          </p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
 
   
 
-  <!-- Sección en paralelo: Informe y Formulario de Evaluación -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
     <!-- Visualizador de PDF -->
-    <div class="w-full h-full flex flex-col md:col-span-3 lg:col-span-4">
-      <h2 class="text-lg font-semibold text-gray-700">Informe de Práctica</h2>
-      <div class="border rounded-md shadow flex-grow h-[calc(100vh-200px)]">
+    <div class="lg:col-span-2 flex flex-col">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">
+        Informe de Práctica
+      </h2>
+      <div
+        class="border border-gray-300 rounded-lg overflow-hidden shadow-md flex-grow flex items-center justify-center h-[800px]"
+      >
         <embed
           [src]="pdfUrl"
           type="application/pdf"
-          class="w-full h-full rounded-md shadow-xl"
+          class="w-full h-full"
         />
       </div>
     </div>
   
     <!-- Formulario de Evaluación -->
-    <div class="w-full h-full flex flex-col md:col-span-1 lg:col-span-2">
-      <!-- Tabla 1: Aspectos de Forma y Escritura -->
-      <div class="bg-white shadow-md rounded-lg p-4 mb-4" *ngIf="agrupadosAspectos.length > 0">
+    <div class="lg:col-span-1">
+      <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">
+        Evaluación del Informe
+      </h2>
+  
+      <!-- Tabla: Aspectos de Forma y Escritura -->
+      <div *ngIf="agrupadosAspectos.length > 0" class="mb-6">
         <h3 class="text-sm font-semibold text-gray-700 mb-2 border-b pb-1">
           Aspectos de Forma y Escritura
         </h3>
@@ -135,7 +148,7 @@
             <thead>
               <tr class="bg-gray-100">
                 <th class="px-2 py-1 text-left border">Aspecto</th>
-                <th class="px-2 py-1 text-left border">Pregunta</th>
+                <th class="px-2 py-1 text-left border">Item</th>
                 <th class="px-2 py-1 text-left border">Revisión</th>
               </tr>
             </thead>
@@ -187,15 +200,13 @@
             </tbody>
           </table>
         </div>
-
-        <!-- Mensaje aclaratorio -->
         <p class="text-xs text-gray-600 text-right mt-2">
           T: Total, R: Regular, S: Suficiente, D: Deficiente
         </p>
       </div>
   
-      <!-- Tabla 2: Evaluación General Informe Alumno -->
-      <div class="bg-white shadow-md rounded-lg p-4 mb-4" *ngIf="evaluacionGeneralConfidencial.length > 0">
+      <!-- Tabla: Evaluación General Informe Confidencial -->
+      <div *ngIf="evaluacionGeneralConfidencial.length > 0" class="mb-6">
         <h3 class="text-sm font-semibold text-gray-700 mb-2 border-b pb-1">
           Evaluación General Informe Confidencial
         </h3>
@@ -232,10 +243,10 @@
       </div>
   
       <!-- Botón Descargar Informe -->
-      <div class="mt-4">
+      <div>
         <button
           (click)="descargarPdf()"
-          class="w-full px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          class="w-full px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
         >
           Descargar Informe de Práctica
         </button>
@@ -243,136 +254,137 @@
     </div>
   </div>
   
-  <!-- Informe Confidencial -->
-  <div class="col-span-full mt-8">
-    <h2 class="text-lg font-semibold text-gray-700">Informe Confidencial</h2>
-    <div class="preguntas-container flex flex-col gap-6 mb-6">
-      <div *ngIf="respuestasConfidenciales.length > 0">
-        <!-- Iterar sobre preguntas -->
-        <div
-          *ngFor="let respuesta of obtenerTandaPreguntas(); let i = index"
-          class="pregunta bg-blue-50 rounded-lg p-6 shadow-sm"
-        >
-          <p class="text-lg font-semibold text-gray-700">
-            Pregunta {{ paginaActual * preguntasPorPagina + i + 1 }}:
-          </p>
-          <p class="text-gray-600">{{ respuesta.pregunta }}</p>
-          <div class="respuestas mt-4 space-y-3">
-            <p class="text-gray-600 font-semibold">Respuesta</p>
-            <div *ngIf="respuesta.respuesta_texto; else respuestaNumerica">
-              <textarea
-                pInputTextarea
-                id="message"
-                rows="4"
-                autoResize="true"
-                class="w-full text-sm"
-                readonly
-              >{{ respuesta.respuesta_texto }}</textarea>
-            </div>
-            <ng-template #respuestaNumerica>
-              <div class="flex items-center mt-2">
-                <span
-                  class="w-fit px-6 py-2 bg-white text-gray-600 rounded-md text-center text-sm font-medium shadow-sm"
-                >
-                  {{ convertirPuntaje(respuesta.puntos) || 'Sin calificación' }}
-                </span>
-              </div>
-            </ng-template>
+  
+  
+  
+
+<!-- Informe Confidencial -->
+<div class="mt-8">
+  <h2 class="text-lg font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">
+    Informe Confidencial
+  </h2>
+  <div class="preguntas-container flex flex-col gap-6 mb-6">
+    <div *ngIf="respuestasConfidenciales.length > 0">
+      <div
+        *ngFor="let respuesta of obtenerTandaPreguntas(); let i = index"
+        class="pregunta bg-blue-50 rounded-lg p-6 shadow-sm"
+      >
+        <p class="text-lg font-semibold text-gray-700">
+          Pregunta {{ paginaActual * preguntasPorPagina + i + 1 }}:
+        </p>
+        <p class="text-gray-600">{{ respuesta.pregunta }}</p>
+        <div class="respuestas mt-4 space-y-3">
+          <p class="text-gray-600 font-semibold">Respuesta</p>
+          <div *ngIf="respuesta.respuesta_texto; else respuestaNumerica">
+            <textarea
+              pInputTextarea
+              id="message"
+              rows="4"
+              autoResize="true"
+              class="w-full text-sm"
+              readonly
+            >{{ respuesta.respuesta_texto }}</textarea>
           </div>
-        </div>
-        <!-- Navegador -->
-        <div class="flex justify-between mt-4">
-          <button
-            (click)="paginaAnterior()"
-            [disabled]="paginaActual === 0"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
-          >
-            Anterior
-          </button>
-          <button
-            (click)="paginaSiguiente()"
-            [disabled]="(paginaActual + 1) * preguntasPorPagina >= respuestasConfidenciales.length"
-            class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-          >
-            Siguiente
-          </button>
+          <ng-template #respuestaNumerica>
+            <div class="flex items-center mt-2">
+              <span
+                class="w-fit px-6 py-2 bg-white text-gray-600 rounded-md text-center text-sm font-medium shadow-sm"
+              >
+                {{ convertirPuntaje(respuesta.puntos) || 'Sin calificación' }}
+              </span>
+            </div>
+          </ng-template>
         </div>
       </div>
-      <!-- Mensaje si no hay respuestas -->
-      <p *ngIf="respuestasConfidenciales.length === 0" class="text-gray-600">
-        No hay respuestas disponibles.
+      <!-- Navegador -->
+      <div class="flex justify-between mt-4">
+        <button
+          (click)="paginaAnterior()"
+          [disabled]="paginaActual === 0"
+          class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
+        >
+          Anterior
+        </button>
+        <button
+          (click)="paginaSiguiente()"
+          [disabled]="(paginaActual + 1) * preguntasPorPagina >= respuestasConfidenciales.length"
+          class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+        >
+          Siguiente
+        </button>
+      </div>
+    </div>
+    <p *ngIf="respuestasConfidenciales.length === 0" class="text-gray-600">
+      No hay respuestas disponibles.
+    </p>
+  </div>
+</div>
+
+<!-- Observaciones y Subir Archivo -->
+<section class="mt-6">
+  <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">
+    Observaciones y Archivos Adjuntos
+  </h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+    <!-- Observaciones -->
+    <div class="md:col-span-2">
+      <label for="observations" class="block text-gray-800 font-semibold mb-2">
+        Observaciones u Otros Aspectos
+      </label>
+      <textarea
+        pInputTextarea
+        id="observations"
+        [(ngModel)]="observaciones"
+        rows="5"
+        [autoResize]="true"
+        class="w-full border border-gray-300 rounded-lg p-2 mt-2"
+        placeholder="Ingrese comentarios aquí..."
+      ></textarea>
+    </div>
+
+    <!-- Subir Archivo -->
+    <div class="flex flex-col justify-between">
+      <label for="file-upload" class="text-gray-800 font-semibold mb-2">
+        Adjuntar Corrección de Informe
+      </label>
+      <div
+        class="relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50 hover:bg-gray-100 transition cursor-pointer mt-2"
+      >
+        <i class="pi pi-file-pdf text-4xl text-red-500 mb-3"></i>
+        <p *ngIf="!fileName" class="text-sm text-gray-600 text-center">
+          Arrastra tu archivo aquí o
+          <label for="file-upload-input" class="text-blue-500 font-medium cursor-pointer hover:underline">
+            selecciona un archivo PDF
+          </label>
+        </p>
+        <p *ngIf="fileName" class="block text-sm font-semibold text-gray-700 truncate">
+          {{ fileName }}
+        </p>
+        <input
+          #fileInput
+          id="file-upload-input"
+          type="file"
+          accept=".pdf"
+          class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+          (change)="handleFileUpload($event)"
+        />
+      </div>
+      <p class="text-xs text-gray-600 mt-2">
+        Al presionar "Enviar Evaluación", el archivo será enviado automáticamente al sistema.
       </p>
     </div>
   </div>
+</section>
 
-  <div class="flex flex-col space-y-4 mt-4">
-    <!-- Observaciones y Subir Archivo -->
-    <div class="flex flex-wrap gap-4">
-      <!-- Observaciones -->
-      <div class="flex-1">
-        <label for="observations" class="text-lg font-semibold text-gray-700">Observaciones u Otros Aspectos a Considerar</label>
-        <textarea
-          pInputTextarea
-          id="comentarios"
-          [(ngModel)]="observaciones"
-          rows="5"
-          [autoResize]="true"
-          class="w-full border rounded-md p-2 mt-2"
-          placeholder="Ingrese comentarios aquí..."
-        ></textarea>
-      </div>
-  
-      <!-- Subir Archivo -->
-      <div class="w-full md:w-1/3 flex flex-col">
-        <label for="file-upload" class="text-lg font-semibold text-gray-700 mb-2">
-          Adjuntar Corrección de Informe
-        </label>
-        <div
-          class="relative flex flex-col items-center justify-center w-full h-full border-2 border-dashed border-gray-300 rounded-lg p-4 bg-gray-50 hover:bg-gray-100 transition cursor-pointer"
-        >
-          <!-- Ícono de PDF de PrimeIcons -->
-          <i class="pi pi-file-pdf text-4xl text-red-500 mb-3"></i>
-      
-          <!-- Texto descriptivo -->
-          <p *ngIf="!fileName" class="text-sm text-gray-600 text-center">
-            Arrastra tu archivo aquí o
-            <label for="file-upload-input" class="text-red-500 font-medium cursor-pointer hover:underline">
-              selecciona un archivo PDF
-            </label>
-          </p>
-      
-          <!-- Nombre del archivo cuando se selecciona uno -->
-          <p *ngIf="fileName" class="text-sm font-semibold text-center truncate max-w-full overflow-hidden text-ellipsis whitespace-nowrap">
-            {{ fileName }}
-          </p>
-      
-          <!-- Input de archivo oculto -->
-          <input
-            #fileInput
-            id="file-upload-input"
-            type="file"
-            accept=".pdf"
-            class="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-            (change)="handleFileUpload($event)"
-          />
-        </div>
-      
-        <!-- Texto explicativo adicional -->
-        <p class="text-xs text-gray-600 mt-2">
-          Al presionar "Enviar Evaluación", el archivo será enviado automáticamente al sistema.
-        </p>
-      </div>
-      
-  </div>
 
-  <div class="pb-5">
-    <button
-      (click)="enviarEvaluacion()"
-      type="button"
-      class="w-2/12 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-    >
-      Enviar Evaluación
-    </button>
-  </div>
+<!-- Botón Enviar Evaluación -->
+<div class=" text-left">
+  <button
+    (click)="enviarEvaluacion()"
+    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+  >
+    Enviar Evaluación
+  </button>
+</div>
 
 </div>

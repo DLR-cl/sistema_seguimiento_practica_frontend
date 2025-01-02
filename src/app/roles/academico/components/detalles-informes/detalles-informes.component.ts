@@ -196,32 +196,6 @@ export class DetallesInformesComponent implements OnInit {
       this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe responder todas las preguntas`});
       return
     }
-
-    if(this.selectedFile){
-      const formData: FormData = new FormData();
-      formData.append('id_informe', '' + this.idInforme);
-      formData.append('id_academico', '' + this.practica.informe_alumno.id_academico);
-      formData.append('nombre_alumno', '' + this.practica.informe_alumno.alumno.usuario.nombre);
-      formData.append('tipo_practica', this.practica.tipo_practica);
-      formData.append('file', this.selectedFile); // Usar el archivo seleccionado
-
-      // Simulación de la carga del archivo
-      formData.forEach((value, key) => {
-        console.log(`${key}:`, value);
-      });
-      console.log('Subiendo corrección...');
-
-      this.practicaService.enviarCorreccionInforme(formData).subscribe({
-        next: result => {
-          console.log(result)
-          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Corrección de Informe subida con éxito.' });
-        },
-        error: error => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al enviar la corrección: ${error.message}` });
-        }
-      })
-    }
-
     console.log('Respuestas de Evaluación:', revision);
 
     this.practicaService.enviarRevision(revision).subscribe({
@@ -229,6 +203,30 @@ export class DetallesInformesComponent implements OnInit {
         console.log(result)
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas registradas con éxito.' });
         this.router.navigate(['home-academicos'])
+        if(this.selectedFile){
+          const formData: FormData = new FormData();
+          formData.append('id_informe', '' + this.idInforme);
+          formData.append('id_academico', '' + this.practica.informe_alumno.id_academico);
+          formData.append('nombre_alumno', '' + this.practica.informe_alumno.alumno.usuario.nombre);
+          formData.append('tipo_practica', this.practica.tipo_practica);
+          formData.append('file', this.selectedFile); // Usar el archivo seleccionado
+    
+          // Simulación de la carga del archivo
+          formData.forEach((value, key) => {
+            console.log(`${key}:`, value);
+          });
+          console.log('Subiendo corrección...');
+    
+          this.practicaService.enviarCorreccionInforme(formData).subscribe({
+            next: result => {
+              console.log(result)
+              this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Corrección de Informe subida con éxito.' });
+            },
+            error: error => {
+              this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al enviar la corrección: ${error.message}` });
+            }
+          })
+        }
       },
       error: error => {
         console.log(error)

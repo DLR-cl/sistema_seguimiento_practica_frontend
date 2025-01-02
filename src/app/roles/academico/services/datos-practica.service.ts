@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
 import { Practicas } from '../../secretaria/dto/practicas.dto';
 import { Observable } from 'rxjs';
-import { PreguntaEvaluacion } from '../dto/revision-informes.dto';
+import { GenerarPDF, PreguntaEvaluacion } from '../dto/revision-informes.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +34,17 @@ export class DatosPracticaService {
 
   public enviarCorreccionInforme(formdata: FormData){
     return this.http.patch<any>(`${enviroment.API_URL}/academicos/subir-correccion`, formdata)
+  }
+
+  public descargarPDF(practica: GenerarPDF) {
+    const params = { 
+      id_practica: practica.id_practica, 
+      id_informe_evaluativo: practica.id_informe_evaluativo, 
+      id_docente: practica.id_docente 
+    };
+    return this.http.get(`${enviroment.API_URL}/evaluacion-academica/generate`, { 
+      params, 
+      responseType: 'blob'
+    });
   }
 }
