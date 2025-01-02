@@ -67,6 +67,9 @@ export class HeaderComponent implements OnInit {
   }
 
   goToCrearPractica(){
-    this.router.navigate(['crear-practica'])
+    this.router.navigate(['crear-practica']);
+  }
+  goToResultadosPractica(){
+    this.router.navigate(['resultados-practica']);
   }
 }

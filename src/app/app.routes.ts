@@ -26,6 +26,7 @@ import { DetallesInformesComponent } from './roles/academico/components/detalles
 import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component';
 import { InfoSecretariaComponent } from './roles/jefe_compartido/pages/info-secretaria/info-secretaria.component';
 import { EstadoAcademicosComponent } from './roles/secretaria/estado-academicos/estado-academicos.component';
+import { ResultadosPracticaComponent } from './roles/jefe_compartido/pages/resultados-practica/resultados-practica.component';
 
 
 export const routes: Routes = [
@@ -128,6 +129,10 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA]), practicasGuard]
     },
     {
+        path: 'resultados-practica', component: ResultadosPracticaComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA   ])]
+    },
+    {
         path: '**', component: NotFoundComponent
-    }
+    },
 ];
