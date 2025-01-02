@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
 import { AsignacionDto } from '../dto/secretaria-data.dto';
 import { AcademicoInformes, PracticaInfo } from '../dto/asignacion-informes.dto';
+import { ExtensionDto } from '../dto/practicas.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,10 @@ export class AsignacionInformesService {
 
   public asociarInformeAcademico(academicoAsociado: AsignacionDto){
     return this._http.patch<any>(`${enviroment.API_URL}/informe-alumno/asociar-informe`, academicoAsociado)
+  }
+
+  public extenderPractica(extension: ExtensionDto){
+    return this._http.patch<any>(`${enviroment.API_URL}/practicas/extender`, extension)
   }
 
 }

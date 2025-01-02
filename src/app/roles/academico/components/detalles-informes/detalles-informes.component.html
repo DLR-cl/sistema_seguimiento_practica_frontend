@@ -14,30 +14,100 @@
 
 <div *ngIf="!cargando" class="container mx-auto p-4 space-y-6">
   <!-- Título del informe -->
-  <h1 class="text-2xl font-bold text-gray-800">Revisión de Informe de Práctica</h1>
+<h1 class="text-4xl font-bold text-center mb-6">Revisión de Informe de Práctica</h1>
 
-  <!-- Información del supervisor y empresa -->
-  <div>
-    <h2 class="text-lg font-semibold text-gray-700">Información del Supervisor y Empresa</h2>
-    <div class="border rounded-md p-4 shadow">
-      <p><strong>Supervisor:</strong> {{ informeConfidencial?.supervisor.usuario.nombre }}</p>
-      <p><strong>Empresa:</strong> {{ informeConfidencial?.supervisor.empresa.nombre_razon_social }}</p>
-      <p><strong>Rubro:</strong> {{ informeConfidencial?.supervisor.empresa.rubro }}</p>
+<!-- Información del supervisor y empresa -->
+<section class="mb-6">
+  <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">Información del Supervisor y Empresa</h2>
+  <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-md">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Supervisor:</span> 
+          <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.usuario.nombre }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Empresa:</span> 
+          <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.empresa.nombre_razon_social }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Rubro:</span> 
+          <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.empresa.rubro }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Ubicación:</span> 
+          <span class="block text-gray-700 text-sm">{{ informeConfidencial?.supervisor.empresa.ubicacion }}</span>
+        </p>
+      </div>
     </div>
   </div>
+</section>
 
-  <div>
-    <h2 class="text-lg font-semibold text-gray-700">Información de Práctica</h2>
-    <div class="border rounded-md p-4 shadow">
-      <p><strong>Nombre del Alumno:</strong> {{ practica.informe_alumno.alumno.usuario.nombre }}</p>
-      <p><strong>Fecha de Inicio:</strong> {{ practica.fecha_inicio | date:'dd/MM/yyyy' }}</p>
-      <p><strong>Fecha de Término:</strong> {{ practica.fecha_termino | date:'dd/MM/yyyy' }}</p>
-      <p><strong>Tipo de Práctica:</strong> {{ tipoPractica[practica.tipo_practica]}}</p>
-      <p><strong>Cantidad de Horas:</strong> {{ practica.cantidad_horas }}</p>
-      <p><strong>Horas Semanales:</strong> {{ practica.horas_semanales }}</p>
-      <p><strong>Modalidad:</strong> {{ textoModalidad[practica.modalidad]}}</p>
+<!-- Información de práctica -->
+<section>
+  <h2 class="text-xl font-semibold text-gray-900 mb-4 border-b border-blue-700 pb-2">Información de Práctica</h2>
+  <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-md">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Nombre del Alumno:</span>
+          <span class="block text-gray-700 text-sm">{{ practica.informe_alumno.alumno.usuario.nombre }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Tipo de Práctica:</span>
+          <span class="block text-gray-700 text-sm">{{ tipoPractica[practica.tipo_practica] }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Fecha de Inicio:</span>
+          <span class="block text-gray-700 text-sm">{{ practica.fecha_inicio | date:'dd/MM/yyyy' }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Fecha de Término:</span>
+          <span class="block text-gray-700 text-sm">{{ practica.fecha_termino | date:'dd/MM/yyyy' }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Cantidad de Horas:</span>
+          <span class="block text-gray-700 text-sm">{{ practica.cantidad_horas }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Horas Semanales:</span>
+          <span class="block text-gray-700 text-sm">{{ practica.horas_semanales }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Modalidad:</span>
+          <span class="block text-gray-700 text-sm">{{ textoModalidad[practica.modalidad] }}</span>
+        </p>
+      </div>
+      <div>
+        <p>
+          <span class="block text-blue-900 font-semibold text-md">Intentos Restantes Informe:</span>
+          <span class="block text-gray-700 text-sm">{{ practica.informe_alumno.intentos }}</span>
+        </p>
+      </div>
     </div>
   </div>
+</section>
+
+
+  
 
   <!-- Sección en paralelo: Informe y Formulario de Evaluación -->
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
@@ -175,7 +245,7 @@
   
   <!-- Informe Confidencial -->
   <div class="col-span-full mt-8">
-    <h2 class="text-lg font-semibold text-gray-700">Respuestas alumno</h2>
+    <h2 class="text-lg font-semibold text-gray-700">Informe Confidencial</h2>
     <div class="preguntas-container flex flex-col gap-6 mb-6">
       <div *ngIf="respuestasConfidenciales.length > 0">
         <!-- Iterar sobre preguntas -->

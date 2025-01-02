@@ -153,9 +153,9 @@ export class EstadoPracticaComponent implements OnInit {
         } else {
           this.actualizarPasoActual(result.estado);
         }
-        this.cargandoDetalle = false
       },
       error: (error) => console.error('Error al obtener detalles de la práctica:', error)
+      
     });
   }
 
@@ -173,8 +173,11 @@ export class EstadoPracticaComponent implements OnInit {
         next: result => {
           this.respuestasAlumno = result
           console.log(this.respuestasAlumno)
+          this.cargandoDetalle = false
         }
       })
+    } else {
+      this.cargandoDetalle = false
     }
 
     this.pasoActual = estados[estado] || 0;
@@ -194,10 +197,10 @@ export class EstadoPracticaComponent implements OnInit {
       for (let i = 0; i < this.pasoActual; i++) {
         const timeout = setTimeout(() => {
           this.resaltarPasos[i] = true;
-        }, i * 500); 
+        }, i * 300); 
         this.timeouts.push(timeout);
       }
-    }, 300);
+    }, 200);
     this.timeouts.push(resetTimeout);
   }
 }

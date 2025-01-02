@@ -13,12 +13,15 @@ import { TipoUsuario } from '../../../enum/enumerables.enum';
 import { AcademicoInformes, PracticaInfo } from '../dto/asignacion-informes.dto';
 import { MessageService } from 'primeng/api';
 import { HeaderComponent } from "../../jefe_compartido/header-jefes/header.component";
+import { CalendarModule } from 'primeng/calendar';
+import { ButtonModule } from 'primeng/button';
+import { ExtensionDto } from '../dto/practicas.dto';
 
 
 @Component({
   selector: 'app-practicas-secretaria',
   standalone: true,
-  imports: [CommonModule, DropdownModule, FormsModule, DialogModule, InputTextModule, HeaderComponent],
+  imports: [CommonModule, DropdownModule, FormsModule, DialogModule, InputTextModule, HeaderComponent, CalendarModule, ButtonModule],
   templateUrl: './practicas-secretaria.component.html',
   styleUrl: './practicas-secretaria.component.css'
 })
@@ -43,6 +46,7 @@ export class PracticasSecretariaComponent implements OnInit {
 
   cargando: boolean = true
   cargandoAsignacion: boolean = false
+  cargandoExtension: boolean = false
 
   buscador: string = ''
 
@@ -51,6 +55,7 @@ export class PracticasSecretariaComponent implements OnInit {
   
   modalAsignacion = false;
   modalDetalles = false;
+  modalExtension = false;
   practicaSeleccionada!: PracticaInfo | null;
   copiaPractica!: PracticaInfo | null;
 
@@ -78,7 +83,31 @@ export class PracticasSecretariaComponent implements OnInit {
   };
 
   paginaActual: number = 0; // Página actual
-  elementosPorPagina: number = 5; // Número de elementos por página
+  elementosPorPagina: number = 6; // Número de elementos por página
+
+  fechaExtension: Date | null = null;
+
+  confirmarFechaExtension() {
+    this.cargandoExtension = true;
+    if (this.fechaExtension) {
+      console.log('Fecha seleccionada:', this.fechaExtension);
+      const extension: ExtensionDto = {
+        id_practica: this.practicaSeleccionada!.id_practica,
+        fecha_fin_ext: this.fechaExtension
+      }
+      this.asignacionService.extenderPractica(extension).subscribe({
+        next: result => {
+          console.log(result)
+          this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Extensión de práctica registrada con éxito.' });
+          this.cerrarModalExtension()
+          this.getPracticas()
+        }
+      })
+    } else {
+      this.messageService.add({ severity: 'warn', summary: 'Error', detail: `No se ha seleccionado ninguna fecha`});
+      this.cargandoExtension = false
+    }
+  }
 
   private getData() {
     this.dataUser = this.dataUserService.getData();
@@ -122,6 +151,10 @@ export class PracticasSecretariaComponent implements OnInit {
 
   abrirModal() {
     this.modalAsignacion = true;
+  }
+
+  abrirModalExtension(){
+    this.modalExtension = true;
   }
 
   asignarProfesor(profesor: AcademicoInformes) {
@@ -192,6 +225,11 @@ export class PracticasSecretariaComponent implements OnInit {
   cerrarModalAsignacion() {
     this.modalAsignacion = false;
   }
+  
+  cerrarModalExtension(){
+    this.fechaExtension = null
+    this.modalExtension = false;
+  }
 
   public getProfesores(){
    this.asignacionService.getProfesores().subscribe(result =>{
@@ -208,7 +246,7 @@ export class PracticasSecretariaComponent implements OnInit {
       }
       this.cargando = false
       this.cargandoAsignacion = false
-
+      this.cargandoExtension = false
     })
   }
 

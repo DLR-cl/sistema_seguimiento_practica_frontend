@@ -63,6 +63,7 @@ export class DetallesInformesComponent implements OnInit {
   }
 
   cargando: boolean = true;
+  cargandoSolicitudes: number = 0
 
   constructor(
     private sanitizer: DomSanitizer,
@@ -74,67 +75,27 @@ export class DetallesInformesComponent implements OnInit {
   ) {}
 
   fileName: string = '';
-selectedFile: File | null = null; // Almacena el archivo seleccionado
+  selectedFile: File | null = null; // Almacena el archivo seleccionado
 
-// Maneja la carga del archivo
-handleFileUpload(event: any): void {
-  const fileInput = event.target;
-  if (fileInput.files && fileInput.files.length > 0) {
-    const file = fileInput.files[0];
+  // Maneja la carga del archivo
+  handleFileUpload(event: any): void {
+    const fileInput = event.target;
+    if (fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
 
-    // Verificar si el archivo es PDF
-    if (file.type !== 'application/pdf') {
-      this.fileName = '';
-      this.selectedFile = null; // Limpiar el archivo seleccionado
-      fileInput.value = ''; // Limpiar el input
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Solo se permiten archivos PDF' });
-      return;
+      // Verificar si el archivo es PDF
+      if (file.type !== 'application/pdf') {
+        this.fileName = '';
+        this.selectedFile = null; // Limpiar el archivo seleccionado
+        fileInput.value = ''; // Limpiar el input
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Solo se permiten archivos PDF' });
+        return;
+      }
+
+      this.fileName = file.name;
+      this.selectedFile = file; // Asignar el archivo seleccionado
     }
-
-    this.fileName = file.name;
-    this.selectedFile = file; // Asignar el archivo seleccionado
   }
-}
-
-// Subir corrección
-uploadCorrection(): void {
-  if (!this.selectedFile) {
-    this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar un archivo antes de subir' });
-    return;
-  }
-
-  // Crear el FormData para enviar al backend
-  if (Object.keys(this.respuestasEvaluacion).length < this.agrupadosAspectos[0].preguntas.length + this.agrupadosAspectos[1].preguntas.length + this.evaluacionGeneralConfidencial.length){
-    this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe responder todas las preguntas`});
-    return
-  }
-
-  const formData: FormData = new FormData();
-  formData.append('id_informe', '' + this.idInforme);
-  formData.append('id_academico', '' + this.practica.informe_alumno.id_academico);
-  formData.append('nombre_alumno', '' + this.practica.informe_alumno.alumno.usuario.nombre);
-  formData.append('tipo_practica', this.practica.tipo_practica);
-  formData.append('file', this.selectedFile); // Usar el archivo seleccionado
-
-  // Simulación de la carga del archivo
-  formData.forEach((value, key) => {
-    console.log(`${key}:`, value);
-  });
-  console.log('Subiendo corrección...');
-
-  this.practicaService.enviarCorreccionInforme(formData).subscribe({
-    next: result => {
-      console.log(result)
-      this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Corrección de Informe subida con éxito.' });
-      this.enviarEvaluacion()
-    },
-    error: error => {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al enviar la corrección: ${error.message}` });
-    }
-  })
-  
-
-}
 
   ngOnInit(): void {
     this.idPractica = Number(this.route.snapshot.paramMap.get('idPractica'))!;
@@ -144,6 +105,7 @@ uploadCorrection(): void {
 
   // Llama al servicio para obtener preguntas
   public getPreguntas() {
+    this.cargandoSolicitudes++;
     this.practicaService.obtenerPreguntasEvaluacion().subscribe({
       next: (result) => {
         console.log(result, 'preg')
@@ -151,6 +113,10 @@ uploadCorrection(): void {
       },
       error: (error) => {
         console.error('Error al obtener las preguntas:', error);
+      },
+      complete: () => {
+        this.cargandoSolicitudes--;
+        this.checkCargandoFinalizado()
       }
     });
   }
@@ -208,16 +174,28 @@ uploadCorrection(): void {
   }
 
   enviarEvaluacion() {
-    // if (!this.archivoSeleccionado) {
-    //   alert('Por favor selecciona un archivo.');
-    //   return;
-    // }
-    // if (!this.comentario.trim()) {
-    //   alert('Por favor ingresa un comentario.');
-    //   return;
-    // }
+  
+    const respuestas = Object.keys(this.respuestasEvaluacion).map((preguntaId) => {
+      return {
+        respuesta_texto: this.respuestasEvaluacion[+preguntaId],
+        pregunta_id: +preguntaId, 
+        informe_id: this.idInforme, 
+      };
+    });
 
-    // Lógica para enviar la revisión al backend
+    const revision = {
+      id_academico: this.practica.informe_confidencial?.id_academico,
+      id_informe_alumno: this.idInforme,
+      id_informe_confidencial:  this.practica.informe_confidencial?.id_informe_confidencial,
+      fecha_revision: new Date(),
+      respuestas: respuestas,
+      observacion: this.observaciones
+    }
+
+    if (revision.respuestas.length < this.agrupadosAspectos[0].preguntas.length + this.agrupadosAspectos[1].preguntas.length + this.evaluacionGeneralConfidencial.length){
+      this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe responder todas las preguntas`});
+      return
+    }
 
     if(this.selectedFile){
       const formData: FormData = new FormData();
@@ -242,28 +220,6 @@ uploadCorrection(): void {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al enviar la corrección: ${error.message}` });
         }
       })
-    }
-
-    const respuestas = Object.keys(this.respuestasEvaluacion).map((preguntaId) => {
-      return {
-        respuesta_texto: this.respuestasEvaluacion[+preguntaId],
-        pregunta_id: +preguntaId, 
-        informe_id: this.idInforme, 
-      };
-    });
-
-    const revision = {
-      id_academico: this.practica.informe_confidencial?.id_academico,
-      id_informe_alumno: this.idInforme,
-      id_informe_confidencial:  this.practica.informe_confidencial?.id_informe_confidencial,
-      fecha_revision: new Date(),
-      respuestas: respuestas,
-      observacion: this.observaciones
-    }
-
-    if (revision.respuestas.length < this.agrupadosAspectos[0].preguntas.length + this.agrupadosAspectos[1].preguntas.length + this.evaluacionGeneralConfidencial.length){
-      this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe responder todas las preguntas`});
-      return
     }
 
     console.log('Respuestas de Evaluación:', revision);
@@ -295,6 +251,7 @@ uploadCorrection(): void {
   }
 
   obtenerInfoPractica() {
+    this.cargandoSolicitudes++;
     this.practicaService.obtenerInfoPractica(this.idPractica).subscribe({
       next: result => {
         this.practica = result;
@@ -315,11 +272,16 @@ uploadCorrection(): void {
       },
       error: error => {
         console.log(error);
+      },
+      complete: () => {
+        this.cargandoSolicitudes--;
+        this.checkCargandoFinalizado()
       }
     });
   }
 
   obtenerInformeAlumno() {
+    this.cargandoSolicitudes++;
     if (this.idInforme) {
       this.practicaService.getArchivoInforme(this.idInforme).subscribe({
         next: (result) => {
@@ -335,22 +297,29 @@ uploadCorrection(): void {
         error: (error) => {
           console.error('Error al obtener el informe:', error);
         },
+        complete: () => {
+          this.cargandoSolicitudes--;
+          this.checkCargandoFinalizado()
+        }
       });
     }
   }
 
   obtenerInformeConfidencial() {
+    this.cargandoSolicitudes++;
     if (this.idInformeConfidencial) {
       this.dataAccessService.getRespuestasInformeConfidencial(this.idInformeConfidencial).subscribe({
         next: (result: any) => {
           console.log('Respuestas del informe confidencial:', result);
           this.respuestasConfidenciales = result; // Asigna las respuestas al arreglo
-          this.cargando = false;
-
         },
         error: (error) => {
           console.error('Error al obtener el informe confidencial:', error);
         },
+        complete: () => {
+          this.cargandoSolicitudes--;
+          this.checkCargandoFinalizado()
+        }
       });
     }
   }
@@ -391,4 +360,11 @@ uploadCorrection(): void {
       this.paginaActual++;
     }
   }
+
+  checkCargandoFinalizado() {
+    if (this.cargandoSolicitudes === 0) {
+        this.cargando = false;
+    }
+  }
+
 }

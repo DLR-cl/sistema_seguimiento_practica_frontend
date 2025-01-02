@@ -4,10 +4,6 @@
 
 }
 
-.controles_navegacion {
-  border: 1px solid red; /* Para depuración */
-}
-
 
 @keyframes bounce-bright {
     0%, 100% {

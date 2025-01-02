@@ -41,6 +41,7 @@ export class InformePrimeraPracticaComponent implements OnInit{
   }
 
   cargando: boolean = true;
+  cargandoEnviar: boolean = false;
 
   habilidadesOpciones: string[] = [
     "Microsoft Excel",
@@ -159,13 +160,14 @@ export class InformePrimeraPracticaComponent implements OnInit{
   }
 
   enviarRespuesta(){
-
+    this.cargandoEnviar = true
     if(this.respuestasSupervisor.some(respuesta=> this.esRespuestaIncompleta(respuesta))){
       this.messageService.add({
         severity: 'error',
         summary: 'Error',
         detail: 'Por favor, complete todas las respuestas antes de enviar.'
       });
+      this.cargandoEnviar = false;
       return;
     }
     
@@ -179,9 +181,11 @@ export class InformePrimeraPracticaComponent implements OnInit{
               console.log(result);
               this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas enviadas con éxito'});
               this.goTofin()
+              this.cargandoEnviar = false;
             },
             error: error => {
               console.log(error);
+              this.cargandoEnviar = false;
               this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar las respuestas'});
             }
           }
@@ -190,6 +194,7 @@ export class InformePrimeraPracticaComponent implements OnInit{
       error: error =>{
         console.log(error)
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar las respuestas'});
+        this.cargandoEnviar = false;
       }
     })
   }

@@ -33,6 +33,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     private route: ActivatedRoute,
     private asignaturasService: AsignaturasService,
     private messageService: MessageService,
+    private router:Router
   ){}
 
   ngOnInit(): void {
@@ -44,7 +45,6 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     this.existeRespuesta()
   }
 
-  private readonly _router = inject(Router);
   datos_listo: boolean = false;
   correccion: boolean = false;
   dataAlumno: any
@@ -68,6 +68,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   errorMessage: string = '';
 
   cargando: boolean = true;
+  cargandoEnviar: boolean = false;
 
   public recibirDatos(datos: string) {
     this.dataAlumno = datos;
@@ -208,7 +209,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   goTofin(){
-    this._router.navigate(['agradecimientos-alumno'])
+    this.router.navigate(['agradecimientos-alumno'])
   }
 
   changeForm(){
@@ -269,6 +270,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   }
 
   enviarInforme(){
+    this.cargandoEnviar = true
     console.log(this.respuestasAlumno)
 
     if(this.respuestasAlumno.some(respuesta=> this.esRespuestaIncompleta(respuesta)) && !this.correccion){
@@ -277,6 +279,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
         summary: 'Error',
         detail: 'Por favor, complete todas las respuestas antes de enviar el informe.'
       });
+      this.cargandoEnviar = false
       return;
     }
 
@@ -286,6 +289,7 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
         summary: 'Error',
         detail: 'Debe seleccionar un archivo antes de enviar.'
       });
+      this.cargandoEnviar = false
       return; // Detiene el envío si no hay archivo
     }
 
@@ -313,18 +317,6 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
       console.log(asociarRespuestas)
       
       formData.append('respuestas', JSON.stringify(this.respuestasAlumno))
-
-
-      // this.respuestasService.asociarRespuestas(asociarRespuestas).subscribe({
-      //   next:resultRespuestas => {
-      //     console.log(resultRespuestas)
-      //     this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas registradas correctamente' });
-      //   },
-      //   error: error => {
-      //     console.log(error),
-      //     this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al registrar las respuestas' });
-      //   }
-      // })
     }
 
     this.respuestasService.enviarInforme(formData).subscribe({
@@ -332,10 +324,12 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
         console.log(resultInforme)
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Informe enviado con éxito' });
         this.goTofin() 
+        this.cargandoEnviar = false
       },
       error: error => {
         console.log(error),
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar el informe' });
+        this.cargandoEnviar = false
       }
     });
   }

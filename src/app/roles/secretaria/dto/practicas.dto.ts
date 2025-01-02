@@ -59,3 +59,8 @@ export interface InformeConfidencial {
     id_academico:                    number;
     supervisor:                      JefeSupervisor;
 }
+
+export interface ExtensionDto{
+    id_practica: number,
+    fecha_fin_ext: Date
+}

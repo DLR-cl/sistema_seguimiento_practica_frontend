@@ -23,6 +23,8 @@ export class ChangePasswordComponent {
   errorMessage = '';
   successMessage = '';
 
+  cargando: boolean = false;
+
   imagenFondo: string = '/departamento_ici/transicion_6.webp';
 
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
@@ -73,11 +75,13 @@ export class ChangePasswordComponent {
   }
 
   onSubmit() {
+    this.cargando = true;
     if (this.changePasswordForm.valid) {
       // Obtener la sesión completa desde localStorage
       const sessionString = localStorage.getItem('session');
       if (!sessionString) {
         this.errorMessage = 'No se pudo autenticar al usuario. Por favor, inicia sesión nuevamente.';
+        this.cargando = false;
         return;
       }
   
@@ -87,6 +91,7 @@ export class ChangePasswordComponent {
         const token = session.access_token;
         if (!token) {
           this.errorMessage = 'Token de acceso no encontrado. Por favor, inicia sesión nuevamente.';
+          this.cargando = false;
           return;
         }
   
@@ -103,18 +108,20 @@ export class ChangePasswordComponent {
             next: () => {
               this.successMessage = 'Contraseña actualizada con éxito.';
               this.errorMessage = '';
-  
+              this.cargando = false;
               setTimeout(() => {
                 this.router.navigate(['/home']);
               }, 2000);
             },
             error: (err) => {
               this.successMessage = '';
+              this.cargando = false;
               this.errorMessage = err.error?.message || 'Error al cambiar contraseña.';
             },
           });
       } catch (error) {
         console.error('Error al procesar la sesión:', error);
+        this.cargando = false;
         this.errorMessage = 'Error al procesar los datos de la sesión. Por favor, inicia sesión nuevamente.';
       }
     }
