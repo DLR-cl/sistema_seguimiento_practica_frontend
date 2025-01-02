@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from "../../header-jefes/header.component";
 import { DashboardService } from '../../services/dashboard.service';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { TipoPractica } from '../../../../enum/enumerables.enum';
 import { PayloadInterface } from '../../../../shared/interface/payload.interface';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
+import Chart from 'chart.js/auto';
 
 @Component({
   selector: 'app-resultados-practica',
@@ -22,6 +23,21 @@ export class ResultadosPracticaComponent implements OnInit {
   reporteForm: FormGroup;
   reporteSemestralForm: FormGroup;
   listaRutas: string[] = [];
+
+  @ViewChild('barChart', { static: true }) barChart!: ElementRef<HTMLCanvasElement>;
+  // Datos para el gráfico
+  datosGrafico = {
+    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+    datasets: [
+      {
+        label: 'Informes Entregados',
+        data: [], // Se llenará dinámicamente
+        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+      },
+    ],
+  }
   cargando = false;
   anios = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i); // Últimos 10 años
   meses = [
@@ -40,9 +56,34 @@ export class ResultadosPracticaComponent implements OnInit {
   ];
   ngOnInit(): void {
     this.getData();
+    this.initBarChart();
   }
   private getData() {
     this.dataUser = this._dataUserService.getData();
+  }
+
+  private initBarChart() {
+    const ctx = this.barChart.nativeElement.getContext('2d');
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'bar',
+        data: this.datosGrafico,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
   }
 
   constructor(private fb: FormBuilder) {
@@ -67,7 +108,7 @@ export class ResultadosPracticaComponent implements OnInit {
       fecha_ini: ['', Validators.required],
       fecha_fin: ['', Validators.required],
     });
-    
+
   }
 
   validarTipoPractica(): (control: AbstractControl) => ValidationErrors | null {
@@ -84,7 +125,7 @@ export class ResultadosPracticaComponent implements OnInit {
     return (formGroup: FormGroup) => {
       const fechaInicio = formGroup.get(fechaInicioKey)?.value;
       const fechaFin = formGroup.get(fechaFinKey)?.value;
-  
+
       if (fechaInicio && fechaFin && new Date(fechaInicio) > new Date(fechaFin)) {
         formGroup.get(fechaFinKey)?.setErrors({ fechaInvalida: true });
       } else {
@@ -92,7 +133,7 @@ export class ResultadosPracticaComponent implements OnInit {
       }
     };
   }
-  
+
   obtenerRutasSecretaria(): void {
     this.cargando = true;
     const { anio, tipoPractica, mes } = this.filtroForm.value;
@@ -131,17 +172,17 @@ export class ResultadosPracticaComponent implements OnInit {
     if (this.reporteSemestralForm.valid) {
       // Obtén los valores del formulario
       const { practica, fecha_in, fecha_fin } = this.reporteSemestralForm.value;
-  
-  
+
+
       // Llama al servicio con los datos corregidos
       this._dashboardService.obtenerReporteSemestral(practica, fecha_in, fecha_fin)
-  }
+    }
   }
 
   generarReporteConfidencial(): void {
     if (this.reporteForm.valid) {
       const { fecha_ini, fecha_fin } = this.reporteForm.value;
-      this._dashboardService.generarReporteConfidencialPorPeriodo(new Date(fecha_ini)+'', new Date(fecha_fin)+'').subscribe({
+      this._dashboardService.generarReporteConfidencialPorPeriodo(new Date(fecha_ini) + '', new Date(fecha_fin) + '').subscribe({
         next: (response: Blob) => {
           const url = window.URL.createObjectURL(response);
           const link = document.createElement('a');
@@ -158,6 +199,7 @@ export class ResultadosPracticaComponent implements OnInit {
       console.error('Formulario inválido');
     }
   }
+
 
 
 }
