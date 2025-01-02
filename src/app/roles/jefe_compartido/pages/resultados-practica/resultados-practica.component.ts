@@ -19,6 +19,7 @@ export class ResultadosPracticaComponent implements OnInit {
   private readonly _dashboardService = inject(DashboardService);
   dataUser?: PayloadInterface | null
   filtroForm: FormGroup;
+  reporteForm: FormGroup;
   reporteSemestralForm: FormGroup;
   listaRutas: string[] = [];
   cargando = false;
@@ -61,6 +62,11 @@ export class ResultadosPracticaComponent implements OnInit {
         validators: this.validarFechas('fecha_in', 'fecha_fin'),
       }
     );
+
+    this.reporteForm = this.fb.group({
+      fecha_ini: ['', Validators.required],
+      fecha_fin: ['', Validators.required],
+    });
     
   }
 
@@ -130,7 +136,28 @@ export class ResultadosPracticaComponent implements OnInit {
       // Llama al servicio con los datos corregidos
       this._dashboardService.obtenerReporteSemestral(practica, fecha_in, fecha_fin)
   }
-  
-
   }
+
+  generarReporteConfidencial(): void {
+    if (this.reporteForm.valid) {
+      const { fecha_ini, fecha_fin } = this.reporteForm.value;
+      this._dashboardService.generarReporteConfidencialPorPeriodo(new Date(fecha_ini)+'', new Date(fecha_fin)+'').subscribe({
+        next: (response: Blob) => {
+          const url = window.URL.createObjectURL(response);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `reporte_confidencial_${fecha_ini}_to_${fecha_fin}.xlsx`;
+          link.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: (error) => {
+          console.error('Error al generar el reporte confidencial:', error);
+        },
+      });
+    } else {
+      console.error('Formulario inválido');
+    }
+  }
+
+
 }

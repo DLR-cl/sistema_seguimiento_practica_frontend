@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { enviroment } from "../../../environment/environment";
-import { map } from "rxjs";
+import { map, Observable } from "rxjs";
 import { AlumnosActivosPractica, AprobacionPracticas, CantidadAlumnosEnPractica, CantidadEmpresasPorTipo, detallePractica, estadisticasPractica, practicasMes } from "../dto/dashboard-practicas.dto";
 import { Practicas } from "../../secretaria/dto/practicas.dto";
 import { TipoPractica } from "../../../enum/enumerables.enum";
@@ -109,5 +109,20 @@ export class DashboardService {
             },
         });
     }
+
+    generarReporteConfidencialPorPeriodo(fecha_ini: string, fecha_fin: string): Observable<Blob> {
+        // Convertir las fechas a formato ISO para enviarlas como parámetros
+        const params = {
+          fecha_ini: fecha_ini,
+          fecha_fin: fecha_fin,
+        };
+    
+        // Realizar la solicitud GET al endpoint
+        return this._http.get(`${enviroment.API_URL}/evaluacion-academica/reportes/generar/confidencial/practicas/periodo`, {
+          params,
+          responseType: 'blob', // Indicamos que la respuesta será un archivo binario
+        });
+      }
+
     
 }
