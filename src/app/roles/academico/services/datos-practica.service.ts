@@ -4,6 +4,7 @@ import { enviroment } from '../../../environment/environment';
 import { Practicas } from '../../secretaria/dto/practicas.dto';
 import { Observable } from 'rxjs';
 import { GenerarPDF, PreguntaEvaluacion } from '../dto/revision-informes.dto';
+import { TipoPractica } from '../../../enum/enumerables.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -42,9 +43,27 @@ export class DatosPracticaService {
       id_informe_evaluativo: practica.id_informe_evaluativo, 
       id_docente: practica.id_docente 
     };
-    return this.http.get(`${enviroment.API_URL}/evaluacion-academica/generate`, { 
-      params, 
-      responseType: 'blob'
+    this.http
+    .get(`${enviroment.API_URL}/practicas/reportes/generar/semestral`, {
+      params, // Parámetros en formato JSON
+      responseType: 'blob', // Necesario para manejar archivos binarios
+    })
+    .subscribe({
+      next: (response) => {
+        // Crear una URL temporal para descargar el archivo
+        const url = window.URL.createObjectURL(response);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `reporte_semestral_${practica}.xlsx`;
+        link.click();
+        window.URL.revokeObjectURL(url); // Liberar la memoria
+      },
+      error: (error) => {
+        console.error('Error al descargar el reporte semestral:', error);
+      },
     });
   }
+
+
+
 }

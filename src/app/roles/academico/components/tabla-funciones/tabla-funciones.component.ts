@@ -68,24 +68,7 @@ export class TablaFuncionesComponent implements OnInit {
 
     console.log(tipo, nombre)
 
-    this.datosPracticaService.descargarPDF(practica).subscribe({
-      next: (pdfBlob) => {
-        const url = window.URL.createObjectURL(pdfBlob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `evaluacion-${tipo}-${nombre}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url); // Limpia el objeto URL
-        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Informe evaluativo generado con éxito.' });
-        this.cargandoDescarga = false
-      },
-      error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al generad el PDF: ${error.message}` });
-        this.cargandoDescarga = false
-      }
-    })
+    this.datosPracticaService.descargarPDF(practica)
   }
 
   private getInfoInformes() {

@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header-jefes/header.component";
 import { DashboardComponent } from "../dashboard/dashboard.component";
-import { ResultadoPracticaComponent } from "../resultado-practica/resultado-practica.component";
 import { PerfilDataComponent } from "../../academico/components/perfil-data/perfil-data.component";
 import { TablaFuncionesComponent } from "../../academico/components/tabla-funciones/tabla-funciones.component";
 import { CommonModule } from '@angular/common';
@@ -10,7 +9,7 @@ import { TableModule } from 'primeng/table';
 @Component({
   selector: 'app-home-administracion',
   standalone: true,
-  imports: [HeaderComponent, DashboardComponent, ResultadoPracticaComponent, PerfilDataComponent, TablaFuncionesComponent, CommonModule, ChartModule, TableModule],
+  imports: [HeaderComponent, DashboardComponent, PerfilDataComponent, TablaFuncionesComponent, CommonModule, ChartModule, TableModule],
   templateUrl: './home-administracion.component.html',
   styleUrl: './home-administracion.component.css'
 })
