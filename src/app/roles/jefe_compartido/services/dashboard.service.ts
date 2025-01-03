@@ -5,6 +5,7 @@ import { map, Observable } from "rxjs";
 import { AlumnosActivosPractica, AprobacionPracticas, CantidadAlumnosEnPractica, CantidadEmpresasPorTipo, detallePractica, estadisticasPractica, practicasMes } from "../dto/dashboard-practicas.dto";
 import { Practicas } from "../../secretaria/dto/practicas.dto";
 import { TipoPractica } from "../../../enum/enumerables.enum";
+import { ConteoPorMes, ConteoPracticas } from "../../../shared/interface/reporte-practica.interface";
 
 
 @Injectable({
@@ -123,6 +124,21 @@ export class DashboardService {
           responseType: 'blob', // Indicamos que la respuesta será un archivo binario
         });
       }
+
+    obtenerDatosConteoPractica(id_academico: number){
+        console.log(id_academico)
+        const params = {
+            id_academico: id_academico,
+        }
+        return this._http.get<ConteoPracticas>(`${enviroment.API_URL}/academicos/data/resultados-practica/conteo`, { params });
+    }
+
+    obtenerInformesPorMesPractica(id_academico: number){
+        const params = {
+            id_academico: id_academico,
+        }
+        return this._http.get<ConteoPorMes>(`${enviroment.API_URL}/academicos/data/resultados-practica/conteo/informes-practica`, { params });
+    }
 
     
 }

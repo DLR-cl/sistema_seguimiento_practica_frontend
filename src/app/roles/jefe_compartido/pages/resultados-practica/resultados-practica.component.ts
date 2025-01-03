@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { HeaderComponent } from "../../header-jefes/header.component";
 import { DashboardService } from '../../services/dashboard.service';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
@@ -7,6 +7,7 @@ import { TipoPractica } from '../../../../enum/enumerables.enum';
 import { PayloadInterface } from '../../../../shared/interface/payload.interface';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 import Chart from 'chart.js/auto';
+import { ConteoPorMes, ConteoPracticas } from '../../../../shared/interface/reporte-practica.interface';
 
 @Component({
   selector: 'app-resultados-practica',
@@ -15,7 +16,7 @@ import Chart from 'chart.js/auto';
   templateUrl: './resultados-practica.component.html',
   styleUrl: './resultados-practica.component.css'
 })
-export class ResultadosPracticaComponent implements OnInit {
+export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
   private readonly _dataUserService = inject(AuthStateService);
   private readonly _dashboardService = inject(DashboardService);
   dataUser?: PayloadInterface | null
@@ -23,21 +24,15 @@ export class ResultadosPracticaComponent implements OnInit {
   reporteForm: FormGroup;
   reporteSemestralForm: FormGroup;
   listaRutas: string[] = [];
+  errorMessage: string | null = null; // Manejo de errores
 
-  @ViewChild('barChart', { static: true }) barChart!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('barChart', { static: false }) barChart!: ElementRef<HTMLCanvasElement>;
   // Datos para el gráfico
-  datosGrafico = {
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-    datasets: [
-      {
-        label: 'Informes Entregados',
-        data: [], // Se llenará dinámicamente
-        backgroundColor: 'rgba(54, 162, 235, 0.6)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 1,
-      },
-    ],
-  }
+  datosGrafico: any = null; // Configuración para el gráfico
+
+  datosConteoPractica!: ConteoPracticas;
+  datosConteoPracticaInformesByMes!: ConteoPorMes;
+
   cargando = false;
   anios = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i); // Últimos 10 años
   meses = [
@@ -56,35 +51,19 @@ export class ResultadosPracticaComponent implements OnInit {
   ];
   ngOnInit(): void {
     this.getData();
-    this.initBarChart();
+    this.obtenerDatosConteo();
+    this.obtenerDatosInformeByMes();
+  }
+
+  ngAfterViewInit(): void {
+    if (this.datosGrafico) {
+      this.initBarChart(); // Inicializar el gráfico después de que el ViewChild esté disponible
+    }
   }
   private getData() {
     this.dataUser = this._dataUserService.getData();
   }
 
-  private initBarChart() {
-    const ctx = this.barChart.nativeElement.getContext('2d');
-    if (ctx) {
-      new Chart(ctx, {
-        type: 'bar',
-        data: this.datosGrafico,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: true,
-              position: 'top',
-            },
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      });
-    }
-  }
 
   constructor(private fb: FormBuilder) {
     this.filtroForm = this.fb.group({
@@ -200,6 +179,89 @@ export class ResultadosPracticaComponent implements OnInit {
     }
   }
 
+  public obtenerDatosConteo() {
+    this._dashboardService.obtenerDatosConteoPractica(this.dataUser?.id_usuario!).subscribe({
+      next: (data) => {
+        this.datosConteoPractica = data; // Asignar los datos a la variable
+        this.errorMessage = null; // Limpiar mensajes de error
+      },
+      error: (error) => {
+        console.error('Error al obtener el conteo de prácticas:', error);
+        this.errorMessage = 'No se pudieron cargar los datos del conteo.'; // Mostrar mensaje de error
+      },
+    });
+  }
+  obtenerDatosInformeByMes(): void {
+    this._dashboardService.obtenerInformesPorMesPractica(this.dataUser?.id_usuario!).subscribe({
+      next: (data) => {
+        this.datosConteoPracticaInformesByMes = data;
+        this.procesarDatosParaGrafico();
+        if (this.barChart) {
+          this.initBarChart(); // Inicializar el gráfico si el elemento ya está disponible
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener los datos del conteo:', error);
+      },
+    });
+  }
 
+
+  private procesarDatosParaGrafico(): void {
+    // Meses definidos
+    const meses: (keyof ConteoPorMes)[] = [
+        'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+        'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre',
+    ];
+
+    // Crear los datos para las prácticas
+    const dataPracticaUno = meses.map((mes) => this.datosConteoPracticaInformesByMes[mes]?.PRACTICA_UNO || 0);
+    const dataPracticaDos = meses.map((mes) => this.datosConteoPracticaInformesByMes[mes]?.PRACTICA_DOS || 0);
+
+    // Configurar los datos del gráfico
+    this.datosGrafico = {
+        labels: meses.map((mes) => mes.charAt(0).toUpperCase() + mes.slice(1)), // Capitalizar los nombres de los meses
+        datasets: [
+            {
+                label: 'Práctica Uno',
+                data: dataPracticaUno,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+            },
+            {
+                label: 'Práctica Dos',
+                data: dataPracticaDos,
+                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1,
+            },
+        ],
+    };
+  }
+
+  private initBarChart() {
+    const ctx = this.barChart.nativeElement.getContext('2d');
+    if (ctx) {
+      new Chart(ctx, {
+        type: 'bar',
+        data: this.datosGrafico,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      });
+    }
+  }
 
 }
