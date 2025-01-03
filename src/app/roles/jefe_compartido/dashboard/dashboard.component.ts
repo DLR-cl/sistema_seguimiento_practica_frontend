@@ -139,34 +139,38 @@ export class DashboardComponent implements OnInit{
     responsive: true,
     maintainAspectRatio: false,
     scales: {
-        x: {
-            beginAtZero: true,
-            stacked: true, // Apilar en el eje X
-        },
-        y: {
-            beginAtZero: true,
-            stacked: true, // Apilar en el eje Y
-            ticks: { stepSize: 2 }, // Intervalos del eje Y
-        },
+      x: {
+        beginAtZero: true,
+        stacked: true, // Apilar en el eje X
+      },
+      y: {
+        beginAtZero: true,
+        stacked: true, // Apilar en el eje Y
+        ticks: { stepSize: 2 }, // Intervalos del eje Y
+      },
     },
     plugins: {
       tooltip: {
         callbacks: {
           label: (tooltipItem: any) => {
-            // Tooltip muestra los datos de cada dataset en la barra apilada
-            const datasets = tooltipItem.chart.data.datasets;
-            const index = tooltipItem.dataIndex;
-  
-            // Generar un mensaje para cada dataset
-            return datasets.map((dataset: any) => {
-              const value = dataset.data[index];
-              return `${dataset.label}: ${value}`;
-            }).join(', ');
+            const dataset = tooltipItem.dataset;
+            const value = dataset.data[tooltipItem.dataIndex];
+            return `${dataset.label}: ${value}`;
+          },
+          labelColor: (tooltipItem: any) => {
+            const dataset = tooltipItem.dataset;
+            return {
+              borderColor: dataset.borderColor,
+              backgroundColor: dataset.backgroundColor,
+            };
           },
         },
       },
     },
   };
+  
+  
+  
 
   public getEstadisticasPracticas(){
     this.cargandoSolicitudes++;

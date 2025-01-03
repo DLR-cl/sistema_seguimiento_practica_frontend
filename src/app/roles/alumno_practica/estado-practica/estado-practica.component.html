@@ -12,7 +12,7 @@
     </div>
 </div>
 
-<div *ngIf="!cargando" class="container mx-auto mt-10 p-5 bg-white rounded-lg shadow-md">
+<div *ngIf="!cargando" class="container mx-auto my-10 p-5 bg-white rounded-lg shadow-md">
     <h2 class="text-4xl justify-center text-center font-semibold text-blue-700">Estado de Revisión</h2>
     <p class="text-lg text-center text-gray-700 mt-2">Seleccione una práctica para ver su estado de revisión.</p>
 
@@ -36,46 +36,60 @@
     </div>
 
     <!-- Pasos dinámicos siempre visibles -->
-    <div class="flex justify-between items-center mt-8 space-x-6">
-        <ol class="flex items-center w-full justify-center p-3 space-x-4 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm sm:text-base">
-            <li
-                class="flex items-center"
-                *ngFor="let paso of pasos; let index = index"
-                [ngClass]="{'text-blue-600': resaltarPasos[index]}"
+    <div class="flex flex-col md:flex-row justify-between items-center mt-8 space-y-4 md:space-y-0 md:space-x-6">
+        <ol class="flex flex-wrap items-center w-full justify-center p-3 space-x-4 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm sm:text-base">
+          <li
+            class="flex items-center"
+            *ngFor="let paso of pasos; let index = index"
+            [ngClass]="{'text-blue-600': resaltarPasos[index]}"
+          >
+            <!-- Número del paso -->
+            <span
+              class="flex items-center justify-center w-8 h-8 me-2 text-xs font-semibold text-white rounded-full transition-colors duration-500 ease-in-out"
+              [ngClass]="{
+                'bg-blue-600': resaltarPasos[index],
+                'bg-gray-200': !resaltarPasos[index]
+              }"
             >
-                <span
-                    class="flex items-center justify-center w-8 h-8 me-2 text-xs font-semibold text-white rounded-full transition-colors duration-500 ease-in-out"
-                    [ngClass]="{
-                        'bg-blue-600': resaltarPasos[index],
-                        'bg-gray-200': !resaltarPasos[index]
-                    }"
-                >
-                    {{ index + 1 }}
-                </span>
-                <span class="text-lg font-semibold">{{ paso }}</span>
-                <svg
-                    *ngIf="index < pasos.length - 1"
-                    class="w-3 h-3 ms-2 transition-colors duration-500 ease-in-out"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 12 10"
-                    [ngClass]="{
-                        'text-blue-600': resaltarPasos[index + 1],
-                        'text-gray-300': !resaltarPasos[index + 1]
-                    }"
-                >
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="m7 9 4-4-4-4M1 9l4-4-4-4"
-                    />
-                </svg>
-            </li>
+              {{ index + 1 }}
+            </span>
+            <!-- Texto del paso (oculto en pantallas pequeñas) -->
+            <span class="hidden sm:inline text-base font-semibold">{{ paso }}</span>
+            <!-- Flecha entre pasos -->
+            <svg
+              *ngIf="index < pasos.length - 1"
+              class="w-4 h-4 ms-2 transition-colors duration-500 ease-in-out"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 12 10"
+              [ngClass]="{
+                'text-blue-600': resaltarPasos[index + 1],
+                'text-gray-300': !resaltarPasos[index + 1]
+              }"
+            >
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="m7 9 4-4-4-4M1 9l4-4-4-4"
+              />
+            </svg>
+          </li>
         </ol>
-    </div>
+      </div>
+      
+      <!-- Descripción de los pasos visible solo en pantallas pequeñas -->
+      <div class="block sm:hidden mt-4 bg-blue-50 p-4 rounded-lg border border-blue-200">
+        <h2 class="text-lg font-semibold text-blue-600 mb-2">Descripción de los Pasos</h2>
+        <ul class="list-disc list-inside text-sm text-gray-700 space-y-2">
+          <li *ngFor="let paso of pasos; let index = index">
+            <span class="font-semibold">Paso {{ index + 1 }}:</span> {{ paso }}
+          </li>
+        </ul>
+      </div>
+      
 
     <!-- Mensaje si no hay práctica seleccionada -->
     <div *ngIf="!detallesPractica && !cargandoDetalle" class="mt-8 text-center">
@@ -105,7 +119,20 @@
                 </div>
                 <!-- Columna derecha -->
                 <div class="bg-gray-50 p-6 rounded-lg shadow-md">
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Estado de Práctica:</strong> {{ textoEstadoPractica[detallesPractica.estado] }}</p>
+                    <p class="text-lg font-medium text-gray-700 mb-2">
+                        <strong>Estado de Práctica:</strong>
+                        <span
+                          [ngClass]="{
+                            'text-blue-600': detallesPractica.estado === 'CURSANDO',
+                            'text-red-600': detallesPractica.estado === 'ESPERA_INFORMES',
+                            'text-green-500': detallesPractica.estado === 'INFORMES_RECIBIDOS',
+                            'text-yellow-600': detallesPractica.estado === 'REVISION_GENERAL',
+                            'text-green-600': detallesPractica.estado === 'FINALIZADA'
+                          }"
+                        >
+                          {{ textoEstadoPractica[detallesPractica.estado] }}
+                        </span>
+                      </p>
                     <p class="text-lg font-medium text-gray-700 mb-2"><strong>Cantidad de Horas:</strong> {{ detallesPractica.cantidad_horas }}</p>
                     <p class="text-lg font-medium text-gray-700 mb-2"><strong>Horas Semanales:</strong> {{ detallesPractica.horas_semanales }}</p>
                     <p class="text-lg font-medium text-gray-700 mb-2"><strong>Fecha de Inicio:</strong> {{ detallesPractica.fecha_inicio | date:'dd/MM/yyyy' }}</p>
@@ -114,97 +141,151 @@
             </div>
         </div>
 
+        <div *ngIf="pasoActual >= 2" class="mt-8">
+            <div>
+              <!-- Título principal -->
+              <h3 class="text-2xl font-semibold text-blue-600 mb-6">Datos del Informe</h3>
+          
+              <!-- Contenido en dos columnas -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Intentos restantes -->
+                <div class="flex items-center">
+                  <h4 class="text-lg font-semibold text-gray-700 mr-4">Intentos Restantes:</h4>
+                  <p
+                    class="text-2xl font-medium"
+                    [ngClass]="{
+                      'text-green-600': detallesPractica.informe_alumno.intentos === 3,
+                      'text-yellow-600': detallesPractica.informe_alumno.intentos === 2,
+                      'text-red-600': detallesPractica.informe_alumno.intentos === 1
+                    }"
+                  >
+                    {{ detallesPractica.informe_alumno.intentos }}
+                  </p>
+                </div>
+          
+                <!-- Informe asignado -->
+                <div class="flex items-center">
+                  <h4 class="text-lg font-semibold text-gray-700 mr-4">¿Asignado a un académico?</h4>
+                  <p class="text-xl font-medium" [ngClass]="detallesPractica.informe_alumno.id_academico ? 'text-green-600' : 'text-red-600'">
+                    {{ detallesPractica.informe_alumno.id_academico ? 'Sí' : 'No' }}
+                  </p>
+                </div>
+          
+                <!-- Estado del informe -->
+                <div class="flex items-center">
+                  <h4 class="text-lg font-semibold text-gray-700 mr-4">Estado del Informe:</h4>
+                  <p
+                    class="text-xl font-medium"
+                    [ngClass]="{
+                      'text-blue-600': detallesPractica.informe_alumno.estado === 'ENVIADA',
+                      'text-red-600': detallesPractica.informe_alumno.estado === 'ESPERA',
+                      'text-red-800': detallesPractica.informe_alumno.estado === 'DESAPROBADA',
+                      'text-yellow-600': detallesPractica.informe_alumno.estado === 'REVISION',
+                      'text-orange-600': detallesPractica.informe_alumno.estado === 'CORRECCION',
+                      'text-green-600': detallesPractica.informe_alumno.estado === 'APROBADA'
+                    }"
+                  >
+                    {{ textoEstadoInforme[detallesPractica.informe_alumno.estado] }}
+                  </p>
+                </div>
+              </div>
+          
+              <!-- Corrección del informe (visualizador de PDF en ancho completo) -->
+              <div *ngIf="detallesPractica.informe_alumno.archivo_correccion && detallesPractica.estado != 'FINALIZADA'" class="mt-8">
+                <h4 class="text-lg font-semibold text-gray-700 mb-4">Corrección del Informe</h4>
+                <div class="border rounded-lg shadow-md h-[800px]">
+                  <embed
+                    *ngIf="correccionURL"
+                    [src]="correccionURL"
+                    type="application/pdf"
+                    class="w-full h-full rounded-lg"
+                  />
+                  <p *ngIf="!correccionURL" class="text-gray-600">Cargando el archivo...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+
         <div *ngIf="pasoActual >= 3" class="mt-8">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-6">Datos del informe</h3>
- 
-            <p class="text-lg font-medium text-gray-700 mb-2"><strong>Intentos restantes:</strong> {{ detallesPractica.informe_alumno.intentos }}</p>
-
-
-            <!-- Informe Confidencial -->
-            <div class="col-span-full mt-8">
-                <h2 class="text-lg font-semibold text-gray-700">Respuestas Alumno</h2>
-                <div class="preguntas-container flex flex-col gap-6 mb-6">
-                <div *ngIf="respuestasAlumno.respuestas.length > 0">
+            <!-- Respuestas Informe Alumno -->
+            <div class="col-span-full mt-6 p-6 rounded-lg shadow-md">
+                <h2 class="text-lg font-bold text-gray-700 mb-4">Respuestas Alumno</h2>
+                <div class="preguntas-container flex flex-col gap-4">
+                  <div *ngIf="respuestasAlumno.respuestas.length > 0">
                     <!-- Iterar sobre preguntas -->
                     <div
-                    *ngFor="let respuesta of obtenerTandaPreguntas(); let i = index"
-                    class="pregunta bg-blue-50 rounded-lg p-6 shadow-sm"
+                      *ngFor="let respuesta of obtenerTandaPreguntas(); let i = index"
+                      class="pregunta bg-blue-50 p-4 shadow-sm"
                     >
-                    <p class="text-lg font-semibold text-gray-700">
+                      <p class="text-sm font-semibold text-gray-700">
                         Pregunta {{ paginaActual * preguntasPorPagina + i + 1 }}:
-                    </p>
-                    <p class="text-gray-600">{{ respuesta.pregunta }}</p>
-                    <div class="respuestas mt-4 space-y-3">
-                        <p class="text-gray-600 font-semibold">Respuesta</p>
+                      </p>
+                      <p class="text-gray-600 text-sm mb-2">{{ respuesta.pregunta }}</p>
+                      <div class="respuestas mt-2 space-y-2">
+                        <p class="text-gray-600 font-medium text-sm">Respuesta</p>
                         <div *ngIf="respuesta.respuesta_texto">
-                        <textarea
+                          <textarea
                             pInputTextarea
                             id="message"
-                            rows="4"
-                            autoResize="true"
-                            class="w-full text-sm"
+                            rows="3"
+                            class="w-full text-xs p-2 border border-gray-300 rounded"
                             readonly
-                        >{{ respuesta.respuesta_texto }}</textarea>
+                          >{{ respuesta.respuesta_texto }}</textarea>
                         </div>
-                       
-                        <div *ngIf="respuesta.puntaje" class="flex items-center mt-2">
-                            <span
-                            class="w-fit px-6 py-2 bg-white text-gray-600 rounded-md text-center text-sm font-medium shadow-sm"
-                            >
+                        <div *ngIf="respuesta.puntaje" class="flex items-center">
+                          <span
+                            class="px-4 py-1 bg-white text-gray-600 rounded-md text-center text-xs font-medium shadow-sm"
+                          >
                             {{ convertirPuntaje(respuesta.puntaje) || 'Sin calificación' }}
-                            </span>
+                          </span>
                         </div>
-                        <div *ngIf="!respuesta.puntaje && !respuesta.respuesta_texto" class="respuestas mt-4 space-y-3">
-                            <div *ngIf="respuestasAlumno.asignaturas.length > 0" class="my-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
-                                <h3 class="text-md font-semibold text-blue-600 mb-4">Asignaturas seleccionadas:</h3>
-                                <ul class="list-disc pl-6 space-y-2">
-                                    <li *ngFor="let asignatura of respuestasAlumno.asignaturas" class="text-sm text-gray-700 bg-blue-200 p-2 rounded shadow-md mb-3">
-                                        <span class="font-semibold text-gray-700">{{ asignatura.nombre_asignatura }}</span> ({{ asignatura.codigo }})
-                                    </li>
-                                </ul>
-                            </div>                    
+                        <div *ngIf="!respuesta.puntaje && !respuesta.respuesta_texto">
+                          <div
+                            *ngIf="respuestasAlumno.asignaturas.length > 0"
+                            class="bg-white rounded shadow-md p-3 border border-gray-200"
+                          >
+                            <h3 class="text-sm font-semibold text-blue-600 mb-2">
+                              Asignaturas seleccionadas:
+                            </h3>
+                            <ul class="list-disc pl-4">
+                              <li
+                                *ngFor="let asignatura of respuestasAlumno.asignaturas"
+                                class="text-xs text-gray-700 bg-blue-100 p-2 rounded mb-2"
+                              >
+                                {{ asignatura.nombre_asignatura }} ({{ asignatura.codigo }})
+                              </li>
+                            </ul>
+                          </div>
                         </div>
-                    </div>
+                      </div>
                     </div>
                     <!-- Navegador -->
                     <div class="flex justify-between mt-4">
-                    <button
+                      <button
                         (click)="paginaAnterior()"
                         [disabled]="paginaActual === 0"
-                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50"
-                    >
+                        class="px-3 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50 text-sm"
+                      >
                         Anterior
-                    </button>
-                    <button
+                      </button>
+                      <button
                         (click)="paginaSiguiente()"
                         [disabled]="(paginaActual + 1) * preguntasPorPagina >= respuestasAlumno!.respuestas.length"
-                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
-                    >
+                        class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 text-sm"
+                      >
                         Siguiente
-                    </button>
+                      </button>
                     </div>
-                </div>
-                <!-- Mensaje si no hay respuestas -->
-                <p *ngIf="respuestasAlumno.respuestas.length === 0" class="text-gray-600">
+                  </div>
+                  <!-- Mensaje si no hay respuestas -->
+                  <p *ngIf="respuestasAlumno.respuestas.length === 0" class="text-gray-600 text-sm">
                     No hay respuestas disponibles.
-                </p>
+                  </p>
                 </div>
-            </div>
-        </div>
-  
-        <div *ngIf="pasoActual >= 4" class="mt-8">
-            <p class="text-lg font-medium text-gray-700 mb-2"><strong>¿El Informe fue asignado a un académico?:</strong> {{ detallesPractica.informe_alumno.id_academico ? 'Sí' : 'No' }}</p>
-            <p class="text-lg font-medium text-gray-700 mb-4"><strong>Estado de informe:</strong> {{ textoEstadoInforme[detallesPractica.informe_alumno.estado] }}</p>
-            <div *ngIf="detallesPractica.informe_alumno.archivo_correccion && detallesPractica.estado != 'FINALIZADA'" class="mt-4">
-                <h2 class="font-semibold text-gray-700 mb-4">Corrección del Informe</h2>
-                <div class="border rounded-md shadow-md h-[500px]">
-                <embed
-                    src="sample.pdf"
-                    type="application/pdf"
-                    class="w-full h-full rounded-md"
-                />
-                </div>
-            </div>
+              </div>
+              
+              
         </div>
     </div>
 </div>

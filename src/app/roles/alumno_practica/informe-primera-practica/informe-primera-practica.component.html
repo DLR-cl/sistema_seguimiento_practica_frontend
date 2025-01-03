@@ -1,4 +1,4 @@
-<app-header (data)="recibirDatos($event)"></app-header>
+<app-header></app-header>
 
 <div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
     <div class="flex space-x-2">
@@ -13,156 +13,177 @@
 </div>
 
 <div *ngIf="!cargando" class="bg-gray-50 min-h-screen">
-    <div class="bg-gray-50 py-12 flex items-center justify-center">
-        <div class="container max-w-screen-lg p-10 bg-white rounded-lg shadow-lg">
-            <div *ngIf="!datos_listo">
-                <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">Encuesta de Satisfacción de la Experiencia de Práctica</h1>
-                <p class="text-center text-gray-600 mb-10">
-                    Por favor, responda las preguntas reflexionando sobre tu desempeño, aprendizaje y satisfacción durante tu periodo de práctica profesional, con el objetivo de mejorar futuras experiencias formativas.
-                </p>
+  <div class="bg-gray-50 py-12 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div class="container max-w-screen-lg p-6 sm:p-8 lg:p-10 bg-white rounded-lg shadow-lg">
+      <div *ngIf="!datos_listo">
+        <!-- Título -->
+        <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">
+          Encuesta de Satisfacción de la Experiencia de Práctica
+        </h1>
+        <p class="text-center text-gray-600 mb-10">
+          Por favor, responda las preguntas reflexionando sobre tu desempeño, aprendizaje y satisfacción durante tu periodo de práctica profesional, con el objetivo de mejorar futuras experiencias formativas.
+        </p>
 
-                <div class="preguntas-container min-h-[450px] mb-6">
-                    <div *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index" class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm">
-                        <p class="text-lg font-semibold text-gray-700">{{ preg.enunciado_pregunta }}</p>
+        <!-- Preguntas -->
+        <div class="preguntas-container min-h-[450px] mb-6">
+          <div
+            *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index"
+            class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm"
+          >
+            <p class="text-lg font-semibold text-gray-700">
+              {{ preg.enunciado_pregunta }}
+            </p>
 
-                        <!-- Pregunta Cerrada -->
-                        <div *ngIf="preg.tipo_pregunta == 'CERRADA'" class="respuestas mt-4 space-y-3">
-                            <div *ngFor="let value of [1, 2, 3, 4, 5]" class="flex items-center">
-                                <p-radioButton [inputId]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" [name]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" [value]="value" [(ngModel)]="respuestasAlumno[i + (page-1) * preguntas_paginas]!.puntaje" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: value })">
-                                </p-radioButton>
-                                <label [for]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value" class="ml-2 text-gray-600 text-sm cursor-pointer">{{ value }} - {{ getOptionText(value) }}</label>
-                            </div>
-                        </div>
-
-                        <!-- Pregunta Abierta -->
-                        <div *ngIf="preg.tipo_pregunta == 'ABIERTA'" class="respuestas mt-4 space-y-3">
-                            <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Tu respuesta</label>
-                            <textarea pInputTextarea id="message" [(ngModel)]="respuestasAlumno[i + (page-1) * preguntas_paginas]!.texto" (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, texto: $event })" rows="4" autoResize="true" placeholder="Deja tu respuesta aquí" class="w-full text-sm">
-                            </textarea>
-                        </div>
-
-                        <!-- Pregunta Desarrollo Profesional -->
-                        <div *ngIf="preg.tipo_pregunta == 'DESARROLLO_PROFESIONAL'" class="respuestas mt-4 space-y-3">
-                            <div *ngIf="asignaturas_seleccionadas.length > 0" class="my-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
-                                <h3 class="text-md font-semibold text-blue-600 mb-4">Asignaturas seleccionadas:</h3>
-                                <ul class="list-disc pl-6 space-y-2">
-                                    <li *ngFor="let asignatura of asignaturas_seleccionadas" class="text-sm text-gray-700 bg-blue-200 p-2 rounded shadow-md mb-3">
-                                        <span class="font-semibold text-gray-700">{{ asignatura.nombre }}</span> ({{ asignatura.codigo }})
-                                    </li>
-                                </ul>
-                            </div>
-                            <div *ngIf="asignaturas_seleccionadas.length === 0" class="my-4 bg-white rounded-lg shadow-lg p-4">
-                                No se han seleccionado asignaturas aún.
-                            </div>
-                            <button type="button"
-                            class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
-                            (click)="mostrarDialogo()">Seleccionar asignaturas
-                            </button>                        
-                        </div>
-                    </div>
-                </div>
-
-                <div class="nav-buttons text-center mb-4">
-                    <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente" class="controles_navegacion"></pagination-controls>
-                </div>
-
-                <div class="text-center" *ngIf="page === preguntas_len">
-                    <button pButton label="Continuar" class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2" (click)="changeForm()"></button>
-                </div>
+            <!-- Pregunta Cerrada -->
+            <div *ngIf="preg.tipo_pregunta == 'CERRADA'" class="respuestas mt-4 space-y-3">
+              <div *ngFor="let value of [1, 2, 3, 4, 5]" class="flex items-center">
+                <p-radioButton
+                  [inputId]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value"
+                  [name]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value"
+                  [value]="value"
+                  [(ngModel)]="respuestasAlumno[i + (page-1) * preguntas_paginas]!.puntaje"
+                  (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: value })"
+                ></p-radioButton>
+                <label
+                  [for]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value"
+                  class="ml-2 text-gray-600 text-sm cursor-pointer"
+                >
+                  {{ value }} - {{ getOptionText(value) }}
+                </label>
+              </div>
             </div>
 
-            <div *ngIf="datos_listo" class="relative">
-                <!-- Spinner de carga general -->
-                <div *ngIf="cargandoEnviar" class="absolute inset-0 flex rounded-lg items-center justify-center bg-white bg-opacity-75 z-50">
-                  <div class="w-16 h-16 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
-                </div>
-              
-                <div class="text-center">
-                  <h2 class="text-3xl font-bold text-blue-700 mb-2">Sube tu Informe de Práctica Profesional</h2>
-                  <p class="text-gray-600">Por favor, asegúrate de que el archivo esté en formato PDF y cumpla con los requisitos especificados.</p>
-                </div>
-              
-                <div class="flex items-center justify-center w-full mt-8">
-                  <div
-                    class="flex flex-col items-center justify-center w-full max-w-lg p-6 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-50 shadow-md"
-                    (drop)="onDrop($event)"
-                    (dragover)="onDragOver($event)"
-                    (click)="seleccionarArchivo()"
-                  >
-                    <!-- Placeholder for when no file is uploaded -->
-                    <div *ngIf="!uploadedFile" class="flex flex-col items-center justify-center">
-                      <svg
-                        class="w-10 h-10 mb-3 text-blue-500"
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 20 16"
-                      >
-                        <path
-                          stroke="currentColor"
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                        />
-                      </svg>
-                      <p class="text-lg font-semibold text-gray-700 mb-1">Arrastra y suelta tu archivo aquí</p>
-                      <p class="text-sm text-gray-500">o haz clic para seleccionar el archivo</p>
-                      <p class="text-xs text-gray-400 mt-1">Solo se permiten archivos en formato PDF.</p>
-                    </div>
-              
-                    <!-- Message for when a file is uploaded -->
-                    <div *ngIf="uploadedFile" class="text-center text-green-600">
-                      <p class="mb-2 font-semibold">Archivo "{{ uploadedFile.name }}" subido correctamente</p>
-                      <button class="mt-2 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700" (click)="removeFile()">
-                        Subir otro archivo
-                      </button>
-                    </div>
-              
-                    <!-- Hidden input for file selection -->
-                    <input
-                      id="dropzone-file"
-                      type="file"
-                      class="hidden"
-                      accept="application/pdf"
-                      (change)="onFileSelect($event)"
-                    />
-                  </div>
-                </div>
-              
-                <div class="flex justify-center space-x-5 mt-10 max-w-lg w-full mx-auto">
-                  <!-- Botón de volver al cuestionario -->
-                  <button
-                    *ngIf="!correccion"
-                    class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
-                    (click)="volverCuestionario()"
-                  >
-                    Volver a al encuesta
-                  </button>
-              
-                  <!-- Botón de enviar informe -->
-                  <button
-                    class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
-                    (click)="enviarInforme()"
-                    [disabled]="cargandoEnviar"
-                  >
-                    Enviar informe
-                  </button>
-                </div>
-              
-                <!-- Display error message if the uploaded file is not a PDF -->
-                <div *ngIf="errorMessage" class="mt-4 text-center text-red-600">
-                  <p>{{ errorMessage }}</p>
-                  <p class="text-sm text-gray-500">
-                    Asegúrate de subir un archivo PDF válido para evitar problemas de entrega.
-                  </p>
-                </div>
+            <!-- Pregunta Abierta -->
+            <div *ngIf="preg.tipo_pregunta == 'ABIERTA'" class="respuestas mt-4 space-y-3">
+              <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Tu respuesta</label>
+              <textarea
+                pInputTextarea
+                id="message"
+                [(ngModel)]="respuestasAlumno[i + (page-1) * preguntas_paginas]!.texto"
+                (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, texto: $event })"
+                rows="4"
+                autoResize="true"
+                placeholder="Deja tu respuesta aquí"
+                class="w-full text-sm"
+              ></textarea>
             </div>
-              
-              
+
+            <!-- Pregunta Desarrollo Profesional -->
+            <div *ngIf="preg.tipo_pregunta == 'DESARROLLO_PROFESIONAL'" class="respuestas mt-4 space-y-3">
+              <div *ngIf="asignaturas_seleccionadas.length > 0" class="my-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
+                <h3 class="text-md font-semibold text-blue-600 mb-4">Asignaturas seleccionadas:</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                  <li *ngFor="let asignatura of asignaturas_seleccionadas" class="text-sm text-gray-700 bg-blue-200 p-2 rounded shadow-md mb-3">
+                    <span class="font-semibold text-gray-700">{{ asignatura.nombre }}</span> ({{ asignatura.codigo }})
+                  </li>
+                </ul>
+              </div>
+              <div *ngIf="asignaturas_seleccionadas.length === 0" class="my-4 bg-white rounded-lg shadow-lg p-4">
+                No se han seleccionado asignaturas aún.
+              </div>
+              <button
+                type="button"
+                class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
+                (click)="mostrarDialogo()"
+              >
+                Seleccionar asignaturas
+              </button>
+            </div>
+          </div>
         </div>
+
+        <!-- Controles de Navegación -->
+        <div class="nav-buttons text-center mb-4">
+          <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente" class="controles_navegacion"></pagination-controls>
+        </div>
+
+        <!-- Botón Continuar -->
+        <div class="text-center" *ngIf="page === preguntas_len">
+          <button
+            pButton
+            label="Continuar"
+            class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
+            (click)="changeForm()"
+          ></button>
+        </div>
+      </div>
+
+      <div *ngIf="datos_listo" class="relative">
+        <!-- Spinner -->
+        <div *ngIf="cargandoEnviar" class="absolute inset-0 flex rounded-lg items-center justify-center bg-white bg-opacity-75 z-50">
+          <div class="w-16 h-16 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
+        </div>
+
+        <!-- Título de Subida -->
+        <div class="text-center">
+          <h2 class="text-3xl font-bold text-blue-700 mb-2">Sube tu Informe de Práctica Profesional</h2>
+          <p class="text-gray-600">Por favor, asegúrate de que el archivo esté en formato PDF y cumpla con los requisitos especificados.</p>
+        </div>
+
+        <!-- Contenedor de Subida de Archivos -->
+        <div class="flex items-center justify-center w-full mt-8">
+          <div
+            class="flex flex-col items-center justify-center w-full max-w-lg p-6 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-50 shadow-md"
+            (drop)="onDrop($event)"
+            (dragover)="onDragOver($event)"
+            (click)="seleccionarArchivo()"
+          >
+            <!-- Placeholder for Archivo no Subido -->
+            <div *ngIf="!uploadedFile" class="flex flex-col items-center justify-center">
+              <svg
+                class="w-10 h-10 mb-3 text-blue-500"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 16"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
+                />
+              </svg>
+              <p class="text-lg font-semibold text-gray-700 mb-1">Arrastra y suelta tu archivo aquí</p>
+              <p class="text-sm text-gray-500">o haz clic para seleccionar el archivo</p>
+              <p class="text-xs text-gray-400 mt-1">Solo se permiten archivos en formato PDF.</p>
+            </div>
+
+            <!-- Mensaje para Archivo Subido -->
+            <div *ngIf="uploadedFile" class="text-center text-green-600">
+              <p class="mb-2 font-semibold">Archivo "{{ uploadedFile.name }}" subido correctamente</p>
+              <button class="mt-2 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700" (click)="removeFile()">
+                Subir otro archivo
+              </button>
+            </div>
+            <input id="dropzone-file" type="file" class="hidden" accept="application/pdf" (change)="onFileSelect($event)" />
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex justify-center space-x-5 mt-10 max-w-lg w-full mx-auto">
+          <button
+            *ngIf="!correccion"
+            class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+            (click)="volverCuestionario()"
+          >
+            Volver a la encuesta
+          </button>
+          <button
+            class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
+            (click)="enviarInforme()"
+            [disabled]="cargandoEnviar"
+          >
+            Enviar informe
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
+
+
 
 <p-dialog
   [(visible)]="dialogVisible"

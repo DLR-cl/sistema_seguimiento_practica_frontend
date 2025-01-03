@@ -1,16 +1,16 @@
-<header class="bg-white relative">
-  <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
+<header class="bg-white shadow-md">
+  <nav class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-6" aria-label="Global">
     <!-- Logo -->
     <div class="flex lg:flex-1">
-      <a href="#" class="-m-1.5 p-1.5">
-        <img class="h-8 w-auto" src="logo_industria.png" alt="Logo Industria">
+      <a href="#" class="flex items-center">
+        <img class="h-10 w-auto" src="logo_industria.png" alt="Logo Industria">
       </a>
     </div>
 
     <!-- Menú móvil -->
     <div class="flex lg:hidden">
       <button type="button" (click)="toggleSidebar()"
-        class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+        class="inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100 transition">
         <span class="sr-only">Abrir menú lateral</span>
         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -19,83 +19,91 @@
     </div>
 
     <!-- Menú principal -->
-    <div class="hidden lg:flex lg:gap-x-12">
-      <!-- Menú solo para Jefe de Carrera y Jefe de Departamento -->
-      <div
-        *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR'"
-        class="relative">
-        <button type="button" class="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900"
-          (click)="toggleMenu()">
+    <div class="hidden lg:flex lg:gap-8">
+      <!-- Menú desplegable -->
+      <div *ngIf="dataUser?.rol === tipoJefeCarrera || dataUser?.rol === tipoJefeDepartamento || dataUser?.rol === 'ADMINISTRADOR'" class="relative">
+        <button type="button" (click)="toggleMenu()" class="flex items-center gap-1 text-sm font-semibold text-gray-900">
           Menú
-          <svg class="h-5 w-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <svg class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fill-rule="evenodd"
               d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
               clip-rule="evenodd" />
           </svg>
         </button>
-        <div *ngIf="isMenuOpen"
-          class="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
-          <div class="p-4">
-            <div
-              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR'"
-              class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
-              <a href="#" class="block font-semibold text-gray-900">Resultados de práctica</a>
-            </div>
-            <div 
-              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR'"
-              class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
-              <a href="#" class="block font-semibold text-gray-900">Estado de los informes</a>
-            </div>
-            <div
-              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'"
-              class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
-              <a (click)="goToCrearPractica()" class="block font-semibold cursor-pointer text-gray-900">Crear
-                Práctica</a>
-            </div>
-            <div 
-              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol == 'SECRETARIA_CARRERA'"
-              class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
-              <a (click)="goToPracticas()" class="block font-semibold cursor-pointer text-gray-900">Ver Prácticas</a>
-            </div>
+        <div *ngIf="isMenuOpen" class="absolute z-20 mt-2 w-48 bg-white shadow-md rounded-md">
+          <div class="py-2">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Resultados de práctica</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Estado de los informes</a>
+            <a (click)="goToCrearPractica()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">Crear Práctica</a>
+            <a (click)="goToPracticas()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer">Ver Prácticas</a>
           </div>
         </div>
       </div>
 
       <!-- Opciones comunes -->
       <a 
-        *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' " (click)="goToInfoAcademicos()"
-        class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Academicos</a>
-      <a *ngIf="dataUser?.rol == 'ADMINISTRADOR' " (click)="goToInfoSecretarias()"
-        class="text-sm font-semibold leading-6 cursor-pointer text-gray-900">Secretarias</a>
+        *ngIf="dataUser?.rol === 'ALUMNO_PRACTICA'" (click)="goToEstadoPractica(dataUser!.id_usuario)" 
+        class="text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
+        Estado Práctica
+      </a>
       <a 
-        
-        href="#" class="text-sm font-semibold leading-6 text-gray-900">Guía Usuario</a>
-      <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Objetivos</a>
+        *ngIf="dataUser?.rol === tipoJefeCarrera || dataUser?.rol === tipoJefeDepartamento || dataUser?.rol === 'ADMINISTRADOR'" 
+        (click)="goToInfoAcademicos()" class="text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
+        Académicos
+      </a>
+      <a href="#" class="text-sm font-semibold text-gray-900 hover:text-blue-600">Guía Usuario</a>
+      <a href="#" class="text-sm font-semibold text-gray-900 hover:text-blue-600">Objetivos</a>
     </div>
 
     <!-- Login / Logout -->
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-      <a *ngIf="!dataUser" href="#" class="text-sm font-semibold leading-6s text-gray-900">Iniciar Sesión <span
+      <a *ngIf="!dataUser" href="#" class="text-sm font-semibold text-gray-900 hover:text-blue-600">Iniciar Sesión <span
           aria-hidden="true">&rarr;</span></a>
       <a *ngIf="dataUser" (click)="closeSession()"
-        class="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">Cerrar Sesión <span
+        class="text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">Cerrar Sesión <span
           aria-hidden="true">&rarr;</span></a>
     </div>
   </nav>
 
   <!-- Menú lateral móvil -->
-  <div class="fixed inset-y-0 right-0 z-10 w-full max-w-sm bg-white shadow-lg transition-transform transform"
+  <div *ngIf="!isMenuOpen" class="fixed inset-y-0 right-0 z-30 w-64 bg-white shadow-lg transition-transform transform"
     [ngClass]="{ 'translate-x-0': isSidebarOpen, 'translate-x-full': !isSidebarOpen }">
-    <div class="p-6">
-      <button (click)="toggleSidebar()" class="text-gray-700">
+    <div class="p-4">
+      <button (click)="toggleSidebar()" class="text-gray-500 hover:text-gray-700">
         <span class="sr-only">Cerrar menú</span>
         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
-      <div class="mt-6">
-        <a href="#" class="block text-sm font-semibold leading-6 text-gray-900">Guía Usuario</a>
-        <a href="#" class="block text-sm font-semibold leading-6 text-gray-900">Objetivos</a>
+      <div class="mt-6 space-y-2">
+        <!-- Opciones por rol -->
+        <ng-container *ngIf="dataUser?.rol === tipoJefeCarrera || dataUser?.rol === tipoJefeDepartamento || dataUser?.rol === 'ADMINISTRADOR'">
+          <a href="#" class="block text-sm font-semibold text-gray-900 hover:text-blue-600">Resultados de práctica</a>
+          <a href="#" class="block text-sm font-semibold text-gray-900 hover:text-blue-600">Estado de los informes</a>
+          <a (click)="goToCrearPractica()" class="block text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">Crear Práctica</a>
+          <a (click)="goToPracticas()" class="block text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">Ver Prácticas</a>
+        </ng-container>
+        <a 
+          *ngIf="dataUser?.rol === 'ALUMNO_PRACTICA'" 
+          (click)="goToEstadoPractica(dataUser!.id_usuario)" 
+          class="block text-sm font-semibold text-gray-900 hover:text-blue-600">
+          Estado Práctica
+        </a>
+        <a 
+          *ngIf="dataUser?.rol === tipoJefeCarrera || dataUser?.rol === tipoJefeDepartamento || dataUser?.rol === 'ADMINISTRADOR'" 
+          (click)="goToInfoAcademicos()" 
+          class="block text-sm font-semibold text-gray-900 hover:text-blue-600">
+          Académicos
+        </a>
+        <a href="#" class="block text-sm font-semibold text-gray-900 hover:text-blue-600">Guía Usuario</a>
+        <a href="#" class="block text-sm font-semibold text-gray-900 hover:text-blue-600">Objetivos</a>
+        <!-- Cerrar Sesión -->
+        <a 
+          *ngIf="dataUser" 
+          (click)="closeSession()" 
+          class="block text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
+          Cerrar Sesión
+        </a>
       </div>
     </div>
   </div>

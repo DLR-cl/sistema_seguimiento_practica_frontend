@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { HeaderComponent } from "../components/header/header.component";
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +15,8 @@ import { TipoPractica } from '../../../enum/enumerables.enum';
 import { Asignatura, AsignaturaBack, Semestre } from '../dto/asignaturas.dto';
 import { ListaRespuestas, Pregunta, Respuesta } from '../dto/informe-alumno.dto'  ;
 import { MessageService } from 'primeng/api';
+import { HeaderComponent } from '../../jefe_compartido/header-jefes/header.component';
+import { AlumnoService } from '../data-access/alumno.service';
 
 
 @Component({
@@ -33,10 +34,12 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     private route: ActivatedRoute,
     private asignaturasService: AsignaturasService,
     private messageService: MessageService,
-    private router:Router
+    private router:Router,
+    private alumnoService: AlumnoService
   ){}
 
   ngOnInit(): void {
+    this.obtenerDatosAlumno()
     this.obtenerPreguntas()
     this.obtenerAsignaturas()
     this.idAlumno = Number(this.route.snapshot.paramMap.get('idAlumno'))!;
@@ -70,8 +73,16 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   cargando: boolean = true;
   cargandoEnviar: boolean = false;
 
-  public recibirDatos(datos: string) {
-    this.dataAlumno = datos;
+  public obtenerDatosAlumno(){
+    this.alumnoService.getAlumnoPracticante().subscribe({
+      next: result => {
+        this.dataAlumno = result
+        console.log(this.dataAlumno)
+      },
+      error: error => {
+        console.log(error)
+      }
+    })
   }
 
   public obtenerAsignaturas() {

@@ -24,7 +24,6 @@ import { AcademicoComponent } from './roles/academico/academico.component';
 import { ChangePasswordComponent } from './pages/general/change-password/change-password.component';
 import { DetallesInformesComponent } from './roles/academico/components/detalles-informes/detalles-informes.component';
 import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component';
-import { InfoSecretariaComponent } from './roles/jefe_compartido/pages/info-secretaria/info-secretaria.component';
 import { EstadoAcademicosComponent } from './roles/secretaria/estado-academicos/estado-academicos.component';
 
 
@@ -53,11 +52,6 @@ export const routes: Routes = [
     {
         path: 'lista-academicos', component: InfoAcademicosComponent, 
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR])]
-    },
-    {
-        path: 'lista-secretarias', component: InfoSecretariaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR])]
-
     },
     {
         path: 'revision-informe/:idPractica', component: DetallesInformesComponent,

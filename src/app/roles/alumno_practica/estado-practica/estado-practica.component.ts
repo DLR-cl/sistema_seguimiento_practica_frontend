@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HeaderComponent } from "../components/header/header.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { PracticasAlumnoService } from '../services/practicas-alumno.service';
 import { CommonModule } from '@angular/common';
@@ -8,7 +7,8 @@ import { Practicas } from '../../secretaria/dto/practicas.dto';
 import { RespuestasInformeService } from '../services/respuestas-informe.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { Empresa } from '../../jefe_compartido/dto/empresa.dto';
-import { AlumnoService } from '../data-access/alumno.service';
+import { HeaderComponent } from '../../jefe_compartido/header-jefes/header.component';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-estado-practica',
@@ -104,8 +104,8 @@ export class EstadoPracticaComponent implements OnInit {
     private route: ActivatedRoute,
     private practicasService: PracticasAlumnoService,
     private informeService: RespuestasInformeService,
-    private alumnoService: AlumnoService,
-    private router: Router
+    private router: Router,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -136,6 +136,8 @@ export class EstadoPracticaComponent implements OnInit {
 
   alumno: any
 
+  correccionURL: SafeResourceUrl | null = null
+
   obtenerDetallePractica(): void {
     this.cargandoDetalle = true;
     this.detallesPractica = null;
@@ -148,6 +150,21 @@ export class EstadoPracticaComponent implements OnInit {
       next: (result) => {
         this.detallesPractica = result;
         console.log(result, 'PRACTICA')
+
+        if(result.informe_alumno.archivo_correccion){
+          this.informeService.obtenerArchivoCorreccion(result.informe_alumno.id_informe).subscribe(
+            (result) => {
+              // Crear un objeto URL para el Blob recibido
+              const blobUrl = window.URL.createObjectURL(result);
+              this.correccionURL = this.sanitizer.bypassSecurityTrustResourceUrl(blobUrl);
+            },
+            (error) => {
+              console.error('Error al cargar el archivo:', error);
+              this.correccionURL = null;
+            }
+          );
+        }
+
         if(result.estado == 'ESPERA_INFORMES'){
           this.actualizarPasoActual(result.informe_alumno.estado);
         } else {
@@ -160,6 +177,8 @@ export class EstadoPracticaComponent implements OnInit {
   }
 
   actualizarPasoActual(estado: string): void {
+    console.log('entro')
+
     const estados: Record<string, number> = {
       CURSANDO: 1,
       ESPERA: 2,

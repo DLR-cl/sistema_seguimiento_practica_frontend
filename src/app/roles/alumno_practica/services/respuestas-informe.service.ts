@@ -42,4 +42,11 @@ export class RespuestasInformeService {
   public enviarInformeConfidencial(data: FormData, id_informe: number){
     return this.http.patch<any>(`${enviroment.API_URL}/informe-confidencial/actualizar-informe/${id_informe}`, data);
   }
+
+  public obtenerArchivoCorreccion(idInforme: number) {
+    return this.http.get(`${enviroment.API_URL}/informe-alumno/archivo/obtener/correccion`, {
+      params: { id_informe_alumno: idInforme },
+      responseType: 'blob', // Indicamos que esperamos un archivo binario (Blob)
+    });
+  }
 }
