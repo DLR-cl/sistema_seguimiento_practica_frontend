@@ -26,6 +26,7 @@ import { DetallesInformesComponent } from './roles/academico/components/detalles
 import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component';
 import { EstadoAcademicosComponent } from './roles/secretaria/estado-academicos/estado-academicos.component';
 import { ResultadosPracticaComponent } from './roles/jefe_compartido/pages/resultados-practica/resultados-practica.component';
+import { PdfgeneratorComponent } from './shared/pdfgenerator/pdfgenerator.component';
 
 
 export const routes: Routes = [
@@ -125,6 +126,9 @@ export const routes: Routes = [
     {
         path: 'resultados-practica', component: ResultadosPracticaComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.ACADEMICO ])]
+    },
+    {
+        path: 'informe-pdf', component: PdfgeneratorComponent,
     },
     {
         path: '**', component: NotFoundComponent

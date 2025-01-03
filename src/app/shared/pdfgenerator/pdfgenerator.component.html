@@ -1,0 +1,253 @@
+<body id="contenidoPdf" class="font-sans bg-gray-100 p-8 h-[80%]">
+
+    <body class="font-sans bg-gray-100 p-8 h-[80%]">
+        <div class="flex items-center mb-[1rem]">
+            <!-- Logo UTA -->
+            <div class="flex-shrink-0">
+                <img  alt="Logo UTA" class="w-[3rem] h-auto" />
+            </div>
+
+            <!-- Línea con Textos en los Extremos -->
+            <div class="flex-1 flex flex-col justify-between mx-4">
+                <div class="flex justify-between items-center">
+                    <!-- Texto Superior Izquierdo -->
+                    <div class="text-left">
+                        <h1 class="text-md font-bold uppercase text-[.8rem]">Universidad de Tarapacá</h1>
+                        <h2 class="text-[.7rem] italic">Arica – Chile</h2>
+                    </div>
+
+                    <!-- Texto Inferior Derecho -->
+                    <div class="text-right">
+                        <h3 class="text-md font-semibold text-[.8rem]">Departamento de Ingeniería Industrial y de
+                            Sistemas</h3>
+                        <h4 class="text-[.7rem] italic">Jefatura Carrera de Ingeniería Civil Industrial</h4>
+                    </div>
+                </div>
+                <hr class="border-t border-black mt-2" />
+            </div>
+
+            <!-- Logo Ingeniería -->
+            <div class="flex-shrink-0">
+                <img  alt="Logo Ingeniería"
+                    class="w-[3rem] h-auto" />
+            </div>
+        </div>
+
+        <!-- Título de Evaluación -->
+        <div class="text-center mb-[1rem]">
+            <h1 class="text-[1.2rem] font-bold uppercase">Evaluación Práctica Profesional</h1>
+            <h2 class="text-[.8rem] uppercase mt-[-.4rem]">Ingeniería Civil Industrial</h2>
+        </div>
+
+        <!-- Sección de Identificación -->
+        <div class="mb-8">
+            <h3 class="text-[1rem] font-bold mb-4 text-center">Identificación</h3>
+            <table class="table-auto border border-black w-full text-left">
+                <tbody>
+                    <tr>
+                        <td class="border border-black font-semibold text-[.8rem] max-w-[2rem]">Nombre del Alumno</td>
+                        <td class="border border-black border-r-0 text-[.7rem]">{{
+                            dataPdf.datosIdentificacion.nombre_alumno }}</td>
+                    </tr>
+                    <tr>
+                        <td class="border border-black font-semibold text-[.8rem]">Empresa</td>
+                        <td class="border border-black text-[.7rem]">{{ dataPdf.datosIdentificacion.nombre_empresa }}
+                        </td>
+                        <td class="border border-black font-semibold text-[.8rem]">Tipo de Práctica</td>
+                        <td class="border border-black text-[.7rem]">{{ dataPdf.datosIdentificacion.tipo_practica }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-black text-[.8rem] font-semibold">Profesor Revisor</td>
+                        <td class="border border-black text-[.7rem]">{{ dataPdf.datosIdentificacion.profesor_revisor }}
+                        </td>
+                        <td class="border border-black text-[.8rem] font-semibold">Fecha Revisión</td>
+                        <td class="border border-black text-[.7rem]"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+
+        <!-- Evaluación del Informe -->
+        <div class="mb-[1.4rem]">
+            <h3 class="text-[1rem] font-bold">Evaluación del Informe</h3>
+
+            <!-- Tabla de Aspectos -->
+            <table class="w-full mt-4 border-collapse border border-gray-400">
+                <thead class="bg-gray-200">
+
+                    <tr>
+                        <th class="border border-gray-400 ">Aspecto</th>
+                        <th class="border border-gray-400 ">Ítem</th>
+                        <th class="border border-gray-400 ">T</th>
+                        <th class="border border-gray-400 ">R</th>
+                        <th class="border border-gray-400 ">S</th>
+                        <th class="border border-gray-400 ">D</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Aspecto: Formato -->
+                    <tr>
+                        <td class="border border-gray-400 font-semibold text-[.8rem]" rowspan="2">
+                            {{dataPdf.datosRespuesta[0].dimension}}</td>
+                        <td class="border border-gray-400 text-[.7rem]">{{dataPdf.datosRespuesta[0].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[0].respuesta === 'Total' ? 'X'
+                            : '' }}</td>
+
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[0].respuesta === 'Regular' ?
+                            'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[0].respuesta === 'Suficiente' ?
+                            'X' : '' }}</td>
+                        <td class="border border-gray-400 ">
+                            {{dataPdf.datosRespuesta[0].respuesta === 'Deficiente' ? 'X' : ' '}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 text-[.7rem]">{{dataPdf.datosRespuesta[1].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[1].respuesta === 'Total' ? 'X': '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[1].respuesta === 'Regular' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[1].respuesta === 'Suficiente' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{dataPdf.datosRespuesta[1].respuesta === 'Deficiente' ? 'X' : ' '}} </td>
+                    </tr>
+
+                    <!-- Aspecto: Estructura -->
+                    <tr>
+                        <td class="border border-gray-400 font-semibold text-[.8rem]" rowspan="8"> {{dataPdf.datosRespuesta[2].dimension}}</td>
+                        <td class="border border-gray-400  text-[.7rem]">{{dataPdf.datosRespuesta[2].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[2].respuesta === 'Total' ? 'X': '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[2].respuesta === 'Regular' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[2].respuesta === 'Suficiente' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{dataPdf.datosRespuesta[2].respuesta === 'Deficiente' ? 'X' : ' '}} </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 text-[.7rem]">{{dataPdf.datosRespuesta[3].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[3].respuesta === 'Total' ? 'X': '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[3].respuesta === 'Regular' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[3].respuesta === 'Suficiente' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{dataPdf.datosRespuesta[3].respuesta === 'Deficiente' ? 'X' : ' '}} </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 text-[.7rem]">{{dataPdf.datosRespuesta[4].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[4].respuesta === 'Total' ? 'X': '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[4].respuesta === 'Regular' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[4].respuesta === 'Suficiente' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{dataPdf.datosRespuesta[4].respuesta === 'Deficiente' ? 'X' : ' '}} </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 text-[.7rem]">{{dataPdf.datosRespuesta[5].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[5].respuesta === 'Total' ? 'X': '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[5].respuesta === 'Regular' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[5].respuesta === 'Suficiente' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{dataPdf.datosRespuesta[5].respuesta === 'Deficiente' ? 'X' : ' '}} </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 text-[.7rem]">{{dataPdf.datosRespuesta[6].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[6].respuesta === 'Total' ? 'X': '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[6].respuesta === 'Regular' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[6].respuesta === 'Suficiente' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{dataPdf.datosRespuesta[6].respuesta === 'Deficiente' ? 'X' : ' '}} </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 text-[.7rem]">{{dataPdf.datosRespuesta[7].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[7].respuesta === 'Total' ? 'X': '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[7].respuesta === 'Regular' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[7].respuesta === 'Suficiente' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{dataPdf.datosRespuesta[7].respuesta === 'Deficiente' ? 'X' : ' '}} </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 text-[.7rem]">{{dataPdf.datosRespuesta[8].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[8].respuesta === 'Total' ? 'X': '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[8].respuesta === 'Regular' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[8].respuesta === 'Suficiente' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{dataPdf.datosRespuesta[8].respuesta === 'Deficiente' ? 'X' : ' '}} </td>
+                    </tr>
+                    <tr>
+                        <td class="border border-gray-400 text-[.7rem]">{{dataPdf.datosRespuesta[9].pregunta}}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[9].respuesta === 'Total' ? 'X': '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[9].respuesta === 'Regular' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{ dataPdf.datosRespuesta[9].respuesta === 'Suficiente' ?'X' : '' }}</td>
+                        <td class="border border-gray-400 ">{{dataPdf.datosRespuesta[9].respuesta === 'Deficiente' ? 'X' : ' '}} </td>
+                    </tr>
+                   
+
+                    <!-- Añade más Aspectos y Ítems según sea necesario -->
+                </tbody>
+            </table>
+
+
+            <p class="text-[.6rem] text-right">T: Total, R: Regular, S: Suficiente, D: Deficiente</p>
+            <p class="text-[.8rem] font-semibold">Nota: Con uno o más ítems deficientes, se rechaza el Informe del
+                Alumno.</p>
+        </div>
+
+        <!-- Evaluación General -->
+        <div class="mb-[.7rem]">
+            <h3 class="text-[1rem] font-bold">
+                Evaluación General Informe Alumno
+                <span class="font-normal">(marcar con una X):</span>
+            </h3>
+            <table class="w-[60%] mt-4 border-collapse border border-black text-left">
+                <tbody>
+                    <tr>
+                        <td class="border border-black px-4 py-2 font-semibold text-[.7rem]">Cumple con los Aspectos
+                            Mínimos Exigidos</td>
+                        <td class="border border-black px-4 py-2 text-center text-[.8rem]">SÍ</td>
+                        <td class="border border-black px-4 py-2 text-center ">{{dataPdf.datosRespuesta[10].respuesta === 'Si' ? 'X' : ''}}</td>
+                        <td class="border border-black px-4 py-2 text-center text-[.8rem]">NO</td>
+                        <td class="border border-black px-4 py-2 text-center">{{dataPdf.datosRespuesta[10].respuesta === 'No' ? 'X' : ''}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="mb-[.7rem]">
+            <h3 class="text-[1rem] font-bold">
+                Evaluación General Informe Confidencial
+                <span class="font-normal">(marcar con una X):</span>
+            </h3>
+            <table class="w-[60%] mt-4 border-collapse border border-black text-left">
+                <tbody>
+                    <tr>
+                        <td class="border border-black px-4 py-2 font-semibold text-[.7rem]">Cumple con los Aspectos
+                            Mínimos Exigidos</td>
+                        <td class="border border-black px-4 py-2 text-center text-[.8rem]">SÍ</td>
+                        <td class="border border-black px-4 py-2 text-center ">{{dataPdf.datosRespuesta[11].respuesta === 'Si' ? 'X' : ''}}</td>
+                        <td class="border border-black px-4 py-2 text-center text-[.8rem]">NO</td>
+                        <td class="border border-black px-4 py-2 text-center">{{dataPdf.datosRespuesta[11].respuesta === 'No' ? 'X' : ''}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mb-[1rem]">
+            <table class="w-full border-collapse border border-black">
+                <thead>
+                    <tr>
+                        <th class="border border-black text-left font-semibold italic text-[.8rem]">
+                            {{dataPdf.datosRespuesta[12].pregunta}}:
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-black">
+                            <ul class="list-disc pl-8">
+                                <p>{{dataPdf.datosRespuesta[12].respuesta}}</p>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Firma y Pie de Página -->
+        <div class="mt-[1rem] text-center">
+            <p class="mb-2">Firma Profesor Revisor: ____________________________</p>
+            <p class="text-sm">Avda. 18 Septiembre 2222 - Fono: 58-2205277 - E-mail: ici&#64;uta.cl - Arica-Chile</p>
+        </div>
+</body>
+
+<button (click)="generarPDF()" class="mt-4 p-2 bg-blue-500 text-white rounded no-pdf">
+    Generar PDF
+</button>

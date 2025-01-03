@@ -1,0 +1,27 @@
+table {
+  border-collapse: collapse; /* Elimina espacios extra */
+}
+
+td, th {
+  padding: 5px; /* Ajusta el padding */
+  line-height: 1.2; /* Reduce el interlineado */
+}
+@media print {
+  .no-print {
+      display: none !important;
+  }
+}
+/* Reducir bordes */
+table, th, td {
+  border-width: 0.5px; /* Cambiar a un tamaño menor */
+  border-color: #000;
+  border-style: solid;
+}
+
+/* Ocultar el botón al generar PDF */
+.no-pdf {
+  display: none;
+}
+
+
+
