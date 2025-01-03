@@ -55,6 +55,10 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['preguntas/confidencial']);
   }
 
+  goToEstadoPractica(idUsuario:number){
+    this.router.navigate(['estado-practica/'+idUsuario])
+  }
+
   public goToPracticas() {
     this.router.navigate(['ver-practicas']);
   }

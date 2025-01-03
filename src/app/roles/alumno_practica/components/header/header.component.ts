@@ -15,9 +15,12 @@ export class HeaderComponent implements OnInit{
 
   @Output() data: EventEmitter<string> = new EventEmitter();
 
-  private readonly _router = inject(Router);
-  private readonly _authService = inject(AuthService);
-  private readonly _alumnoSevice = inject(AlumnoService)
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private alumnoService: AlumnoService
+  ){}
+
   isMenuOpen = false;
   
 
@@ -31,11 +34,11 @@ export class HeaderComponent implements OnInit{
     this.isMenuOpen = !this.isMenuOpen;
   }
   public goToEstado(){
-    this._router.navigate(['estado-practica/'+this.dataAlumno.id_user]);
+    this.router.navigate(['estado-practica/'+this.dataAlumno.id_user]);
   }
 
   public getData(){
-    this._alumnoSevice.getAlumnoPracticante().subscribe({
+    this.alumnoService.getAlumnoPracticante().subscribe({
       next: result => {
         this.dataAlumno = result
         this.enviarDatos()
@@ -48,14 +51,14 @@ export class HeaderComponent implements OnInit{
   }
 
   public goToInformes(){
-    this._router.navigate([''])
+    this.router.navigate([''])
   }
 
   public signOut(){
-    this._authService.logout();
+    this.authService.logout();
   }
   public goToHome(){
-    this._router.navigate(['home-alumno'])
+    this.router.navigate(['home-alumno'])
   }
 
   public enviarDatos() {

@@ -43,6 +43,7 @@ export class PracticasSecretariaComponent implements OnInit {
   tipoJefeCarrera = TipoUsuario.JEFE_CARRERA;
   tipoSecretariaCarrera= TipoUsuario.SECRETARIA_CARRERA;
   tipoSecretariaDepartamento= TipoUsuario.SECRETARIA_DEPARTAMENTO;
+  tipoAdministrador= TipoUsuario.ADMINISTRADOR;
 
   cargando: boolean = true
   cargandoAsignacion: boolean = false
@@ -101,6 +102,11 @@ export class PracticasSecretariaComponent implements OnInit {
           this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Extensión de práctica registrada con éxito.' });
           this.cerrarModalExtension()
           this.getPracticas()
+        },
+        error: error => {
+          console.log(error)
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al extender la práctica: ${error.message}` });
+          this.cargandoExtension = false
         }
       })
     } else {

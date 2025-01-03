@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="h-screen bg-gradient-to-br background-image flex flex-col items-center px-6 py-10">
+<div class="bg-gradient-to-br background-image px-6 pt-10 pb-6" style="min-height: calc(100vh - var(--header-height));">
     <!-- Título principal -->
     <div class="text-center mt-10 mb-6">
         <h2 class="text-4xl font-bold text-gray-800">Cargar Alumnos por Nómina</h2>
@@ -8,12 +8,10 @@
         </p>
     </div>
 
-
     <!-- Contenedor principal -->
     <div
-        class="bg-white shadow-2xl rounded-lg p-8 w-full max-w-lg transition-transform transform hover:scale-105 duration-300 ease-in-out">
+        class="bg-white shadow-2xl rounded-lg p-8 w-full max-w-lg mx-auto transition-transform transform hover:scale-105 duration-300 ease-in-out">
         <div class="text-center space-y-6">
-
             <!-- Área de arrastrar y soltar -->
             <div *ngIf="!selectedFile"
                 class="border-2 border-dashed border-gray-300 rounded-lg py-10 px-6 bg-gray-50 hover:bg-gray-100 transition duration-300 cursor-pointer"
@@ -53,7 +51,6 @@
                 </div>
             </div>
 
-
             <!-- Botón para subir el archivo -->
             <button
                 class="bg-blue-500 text-white font-medium rounded-lg px-6 py-3 w-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-200 disabled:bg-blue-300"
@@ -64,7 +61,6 @@
             <div *ngIf="cargando" class="flex items-center justify-center mt-6">
                 <div class="w-12 h-12 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
             </div>
-            
 
             <!-- Mensaje de respuesta -->
             <div *ngIf="uploadResponse" class="mt-6">

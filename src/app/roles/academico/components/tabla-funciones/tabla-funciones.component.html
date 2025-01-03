@@ -1,62 +1,76 @@
 <div class="p-6 w-full h-full shadow-lg rounded-lg bg-white">
     <!-- Sección con informes asignados -->
-    <div class="p-3">
-        <div *ngIf="asignado" class="overflow-x-auto">
-            <div class="mt-5 flex justify-between items-center mb-6">
-                <h2 class="text-lg sm:text-2xl font-semibold text-gray-900">Listado de Informes Asignados</h2>
-
-                <!-- Spinner en la parte superior derecha -->
-                <div *ngIf="cargandoDescarga" class="flex items-center me-5">
-                    <div class="w-7 h-7 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
-                </div>
-            </div>
-
-            <table class="w-full text-sm text-left text-gray-800 bg-white border border-gray-200 shadow-sm">
-                <thead class="text-xs uppercase bg-blue-500 text-white">
-                    <tr>
-                        <th class="px-6 py-3 text-center">Alumno</th>
-                        <th class="px-6 py-3 text-center">Práctica</th>
-                        <th class="px-6 py-3 text-center">Días Restantes</th>
-                        <th class="px-6 py-3 text-center">Estado</th>
-                        <th class="px-6 py-3 text-center">Intentos Restantes</th>
-                        <th class="px-6 py-3 text-center">Acción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let informe of data" class="bg-white border-b hover:bg-gray-50 transition-all duration-300">
-                        <th class="px-6 py-4 font-medium text-gray-900 text-center">{{ informe.nombre_alumno }}</th>
-                        <td class="px-6 py-4 text-gray-700 text-center">{{ tipoPractica[informe.tipo_practica] }}</td>
-                        <td class="px-6 py-4 text-gray-600 text-center">{{ informe.estado_informe === 'APROBADA' ? 'Revisión Enviada' : informe.dias_para_revision }}</td>
-                        <td class="px-6 py-4 text-gray-600 text-center">{{ textoEstadoInforme[informe.estado_informe] }}</td>
-                        <td class="px-6 py-4 text-gray-600 text-center">{{ informe.intentos }}</td>
-                        <td class="px-6 py-4 text-center">
-                            <div class="flex space-x-2">
-                                <button *ngIf="informe.estado_informe === 'REVISION'" 
-                                        class="flex-1 py-2 px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200" 
-                                        (click)="revision(informe.id_practica)">
-                                    Revisar
-                                </button>
-                                <button *ngIf="informe.estado_informe === 'APROBADA'" 
-                                        class="flex-1 py-2 px-6 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center transition-all duration-200"  
-                                        (click)="descargarPDF(informe.id_practica, 5, informe.tipo_practica, informe.nombre_alumno)">
-                                    Descargar
-                                    <i class="pi pi-file-pdf ms-2 text-xl"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <div *ngIf="asignado" class="p-3">
+      <div class="mt-5 flex justify-between items-center mb-6">
+        <h2 class="text-lg sm:text-2xl font-semibold text-gray-900">Listado de Informes Asignados</h2>
+  
+        <!-- Spinner en la parte superior derecha -->
+        <div *ngIf="cargandoDescarga" class="flex items-center me-5">
+          <div class="w-7 h-7 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
         </div>
-    </div>
+        </div>
+  
+        <p-table
+  [value]="data"
+  [paginator]="true"
+  [rows]="5"
+  [responsiveLayout]="'scroll'"
+  styleClass="shadow-sm border rounded-lg"
+  tableStyleClass="w-full text-sm text-left text-gray-800 bg-white"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="px-6 py-3 text-center bg-blue-500 text-white">Alumno</th>
+      <th class="px-6 py-3 text-center bg-blue-500 text-white">Práctica</th>
+      <th class="px-6 py-3 text-center bg-blue-500 text-white">Días Restantes</th>
+      <th class="px-6 py-3 text-center bg-blue-500 text-white">Estado</th>
+      <th class="px-6 py-3 text-center bg-blue-500 text-white">Intentos Restantes</th>
+      <th class="px-6 py-3 text-center bg-blue-500 text-white">Acción</th>
+    </tr>
+  </ng-template>
 
+  <ng-template pTemplate="body" let-informe>
+    <tr class="h-14"> <!-- Fija una altura uniforme para todas las filas -->
+      <td class="px-6 py-2 font-medium text-gray-900 text-center">{{ informe.nombre_alumno }}</td>
+      <td class="px-6 py-2 text-gray-700 text-center">{{ tipoPractica[informe.tipo_practica] }}</td>
+      <td class="px-6 py-2 text-gray-600 text-center">
+        {{ informe.estado_informe === 'APROBADA' || informe.estado_informe === 'DESAPROBADA' ? 'Revisión Enviada' : informe.dias_para_revision }}
+      </td>
+      <td class="px-6 py-2 text-gray-600 text-center">{{ textoEstadoInforme[informe.estado_informe] }}</td>
+      <td class="px-6 py-2 text-gray-600 text-center">{{ informe.intentos }}</td>
+      <td class="px-6 py-2 text-center">
+        <div>
+          <button
+            *ngIf="informe.estado_informe === 'REVISION'"
+            class="w-full bg-blue-500 text-white px-2 py-2 text-sm rounded-md hover:bg-blue-600 transition"
+            (click)="revision(informe.id_practica)"
+          >
+            Revisar
+          </button>
+          <button
+            *ngIf="informe.estado_informe === 'APROBADA'"
+            class="w-full bg-red-500 text-white px-2 py-2 text-sm rounded-md hover:bg-red-600 transition flex items-center justify-center"
+          >
+            <span class="truncate flex items-center justify-center" (click)="descargarPDF(informe.id_practica, 2, informe.tipo_practica, informe.nombre_alumno)">
+              Descargar
+              <i class="pi pi-file-pdf ml-2 text-xl"></i>
+            </span>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+    </div>
+  
     <!-- Sección si no hay informes asignados -->
     <div *ngIf="!asignado" class="flex justify-center items-center h-[20rem] sm:h-[30rem] bg-gradient-to-r from-blue-50 to-white rounded-2xl shadow-lg">
-        <div class="text-center">
-            <img src="departamento_ici/8878488.svg" alt="imagen_relajese" loading="lazy" class="w-24 sm:w-40 mx-auto mb-6">
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Relájese</h1>
-            <p class="mt-4 text-gray-500">Actualmente no tiene informes asignados.</p>
-        </div>
+      <div class="text-center">
+        <img src="departamento_ici/8878488.svg" alt="imagen_relajese" loading="lazy" class="w-24 sm:w-40 mx-auto mb-6">
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-800">Relájese</h1>
+        <p class="mt-4 text-gray-500">Actualmente no tiene informes asignados.</p>
+      </div>
     </div>
-
-</div>
+  </div>
+  

@@ -1,19 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { DataAccessService } from '../../services/data-access.service';
 import { InfoInformes } from '../../dto/info-informes.dto';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { Router } from '@angular/router';
-import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 import { GenerarPDF } from '../../dto/revision-informes.dto';
 import { DatosPracticaService } from '../../services/datos-practica.service';
 import { MessageService } from 'primeng/api';
+import { TableModule } from 'primeng/table';
 
 
 @Component({
   selector: 'app-tabla-funciones',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TableModule],
   templateUrl: './tabla-funciones.component.html',
   styleUrls: ['./tabla-funciones.component.css'], // Corregido a styleUrls
 })
@@ -37,7 +37,7 @@ export class TablaFuncionesComponent implements OnInit {
     this.getInfoInformes();
   }
 
-  data?: InfoInformes[];
+  data!: InfoInformes[];
   decodedToken: any;
 
   textoEstadoInforme: Record<string, string> = {
