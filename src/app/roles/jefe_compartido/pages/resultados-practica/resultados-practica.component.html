@@ -1,208 +1,250 @@
 <app-header></app-header>
-<div *ngIf="dataUser?.rol === 'SECRETARIA_CARRERA'" class="p-6 w-full h-full shadow-lg rounded-lg bg-white">
-    <h2 class="text-lg sm:text-2xl font-semibold text-gray-900 mb-6">Generar Reportes</h2>
 
-    <form [formGroup]="filtroForm" (ngSubmit)="obtenerRutasSecretaria()">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <!-- Selección del Año -->
-            <div>
-                <label for="anio" class="block text-sm font-medium text-gray-700">Año</label>
-                <select id="anio" formControlName="anio"
-                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    <option *ngFor="let year of anios" [value]="year">{{ year }}</option>
-                </select>
-            </div>
-
-            <!-- Selección del Tipo de Práctica -->
-            <div>
-                <label for="tipoPractica" class="block text-sm font-medium text-gray-700">Tipo de Práctica</label>
-                <select id="tipoPractica" formControlName="tipoPractica"
-                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    <option value="PRACTICA_UNO">Práctica Uno</option>
-                    <option value="PRACTICA_DOS">Práctica Dos</option>
-                </select>
-            </div>
-
-            <!-- Selección del Mes -->
-            <div>
-                <label for="mes" class="block text-sm font-medium text-gray-700">Mes</label>
-                <select id="mes" formControlName="mes"
-                    class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
-                    <option *ngFor="let mes of meses" [value]="mes.valor">{{ mes.nombre }}</option>
-                </select>
-            </div>
-        </div>
-
-        <button type="submit"
-            class="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto">
-            Generar Reportes
-        </button>
-    </form>
-
-
-    <!-- Tabla de Resultados -->
-    <div *ngIf="listaRutas.length > 0" class="mt-8">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Rutas de Archivos</h3>
-        <table class="w-full text-sm text-left text-gray-800 bg-white border border-gray-200 shadow-sm">
-            <thead class="text-xs uppercase bg-blue-500 text-white">
-                <tr>
-                    <th class="px-6 py-3">Descripción del Archivo</th>
-                    <th class="px-6 py-3 text-center">Acción</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let ruta of listaRutas"
-                    class="bg-white border-b hover:bg-gray-50 transition-all duration-300">
-                    <td class="px-6 py-4">{{ formatDescripcion(ruta) }}</td>
-                    <td class="px-6 py-4 text-center">
-                        <button
-                            class="py-2 px-4 bg-green-600 text-white rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                            (click)="descargarArchivo(ruta)">
-                            Descargar
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Mensaje Sin Resultados -->
-    <div *ngIf="listaRutas.length === 0 && !cargando" class="mt-8 text-center text-gray-500">
-        <p>No se encontraron rutas de archivos para los filtros seleccionados.</p>
-    </div>
-
-    <!-- Spinner de Carga -->
-    <div *ngIf="cargando" class="flex justify-center mt-8">
-        <div class="w-8 h-8 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
-    </div>
+<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
+  <div class="flex space-x-2">
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0.2s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+         style="animation-delay: 0.4s"></div>
+  </div>
 </div>
 
-<div *ngIf="dataUser?.rol === 'ADMINISTRADOR' || dataUser?.rol === 'JEFE_CARRERA' || dataUser?.rol === 'JEFE_DEPARTAMENTO'"   class="p-6 w-full h-full shadow-lg rounded-lg bg-white">
-    <h2 class="text-lg sm:text-2xl font-semibold text-gray-900 mb-6">Generar Reporte Semestral</h2>
-  
+<div [hidden]="cargando">
+  <div *ngIf="dataUser?.rol === 'SECRETARIA_CARRERA'" 
+    class="p-6 shadow-lg rounded-lg bg-gradient-to-r from-white to-gray-50 border border-gray-200 mx-auto container mt-12">
+  <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-8 border-b pb-4">Generar Reportes</h2>
+
+  <form [formGroup]="filtroForm" (ngSubmit)="obtenerRutasSecretaria()" class="space-y-6">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <!-- Selección del Año -->
+          <div>
+              <label for="anio" class="block text-sm font-semibold text-gray-700">Año</label>
+              <p-dropdown
+                  id="anio"
+                  formControlName="anio"
+                  [options]="aniosOptions"
+                  placeholder="Selecciona un año"
+                  styleClass="w-full"
+                  class="w-full mt-2">
+              </p-dropdown>
+          </div>
+
+          <!-- Selección del Tipo de Práctica -->
+          <div>
+              <label for="tipoPractica" class="block text-sm font-semibold text-gray-700">Tipo de Práctica</label>
+              <p-dropdown
+                  id="tipoPractica"
+                  formControlName="tipoPractica"
+                  [options]="tipoPracticaOptions"
+                  placeholder="Selecciona una práctica"
+                  styleClass="w-full"
+                  class="w-full mt-2">
+              </p-dropdown>
+          </div>
+
+          <!-- Selección del Mes -->
+          <div>
+              <label for="mes" class="block text-sm font-semibold text-gray-700">Mes</label>
+              <p-dropdown
+                  id="mes"
+                  formControlName="mes"
+                  [options]="mesesOptions"
+                  placeholder="Selecciona un mes"
+                  styleClass="w-full"
+                  class="w-full mt-2">
+              </p-dropdown>
+          </div>
+      </div>
+
+      <button
+          type="submit"
+          class="mt-6 w-full bg-blue-600 text-white py-3 px-6 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          Generar Reportes
+      </button>
+  </form>
+
+  <!-- Tabla de Resultados -->
+  <div *ngIf="listaRutas.length > 0" class="mt-10">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Rutas de Archivos</h3>
+      <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-800 bg-white border border-gray-200 shadow-sm rounded-md">
+              <thead class="text-xs uppercase bg-blue-500 text-white">
+                  <tr>
+                      <th class="px-6 py-3">Descripción del Archivo</th>
+                      <th class="px-6 py-3 text-center">Acción</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let ruta of listaRutas"
+                      class="bg-white border-b hover:bg-gray-50 transition-all duration-300">
+                      <td class="px-6 py-4">{{ formatDescripcion(ruta) }}</td>
+                      <td class="px-6 py-4 text-center">
+                          <button
+                              class="py-2 px-4 bg-green-600 text-white rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                              Descargar
+                          </button>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+
+  <!-- Mensaje Sin Resultados -->
+  <div *ngIf="listaRutas.length === 0" class="mt-10 text-center text-gray-500">
+      <p>No se encontraron rutas de archivos para los filtros seleccionados.</p>
+  </div>
+  </div>
+
+
+
+  <div *ngIf="dataUser?.rol === 'ADMINISTRADOR' || dataUser?.rol === 'JEFE_CARRERA' || dataUser?.rol === 'JEFE_DEPARTAMENTO'" 
+     class="p-6 shadow-lg rounded-lg bg-gradient-to-r from-white to-gray-50 border border-gray-200 mt-12 container mx-auto">
+    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-8 border-b pb-4">Generar Reporte Semestral</h2>
+
     <form [formGroup]="reporteSemestralForm" (ngSubmit)="generarReporteSemestral()">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <!-- Selección del Tipo de Práctica -->
         <div>
-          <label for="practica" class="block text-sm font-medium text-gray-700">Tipo de Práctica</label>
-          <select
+          <label for="practica" class="block text-sm font-semibold text-gray-700">Tipo de Práctica</label>
+          <p-dropdown
             id="practica"
             formControlName="practica"
-            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          >
-            <option value="PRACTICA_UNO">Práctica Uno</option>
-            <option value="PRACTICA_DOS">Práctica Dos</option>
-          </select>
+            [options]="tipoPracticaOptions"
+            placeholder="Selecciona una práctica"
+            styleClass="w-full"
+            class="w-full mt-2">
+          </p-dropdown>
         </div>
-  
+
         <!-- Fecha de Inicio -->
         <div>
-          <label for="fecha_in" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
-          <input
-            type="date"
+          <label for="fecha_in" class="block text-sm font-semibold text-gray-700">Fecha de Inicio</label>
+          <p-calendar
             id="fecha_in"
             formControlName="fecha_in"
-            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          />
+            styleClass="w-full"
+            class="w-full mt-2"
+            dateFormat="dd/mm/yy"
+            [monthNavigator]="true"
+            [yearNavigator]="true"
+            [yearRange]="'2000:2030'">
+          </p-calendar>
         </div>
-  
+
         <!-- Fecha de Fin -->
         <div>
-          <label for="fecha_fin" class="block text-sm font-medium text-gray-700">Fecha de Fin</label>
-          <input
-            type="date"
+          <label for="fecha_fin" class="block text-sm font-semibold text-gray-700">Fecha de Fin</label>
+          <p-calendar
             id="fecha_fin"
             formControlName="fecha_fin"
-            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          />
+            styleClass="w-full"
+            class="w-full mt-2"
+            dateFormat="dd/mm/yy"
+            [monthNavigator]="true"
+            [yearNavigator]="true">
+          </p-calendar>
         </div>
       </div>
-  
+
       <button
         type="submit"
-        class="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto"
-      >
+        class="mt-8 w-full bg-blue-600 text-white py-3 px-6 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
         Generar Reporte
       </button>
     </form>
   </div>
-  
 
-  <div *ngIf="dataUser?.rol === 'ADMINISTRADOR' || dataUser?.rol === 'JEFE_CARRERA' || dataUser?.rol === 'JEFE_DEPARTAMENTO'" class="p-6 w-full h-full shadow-lg rounded-lg bg-white">
-    <h2 class="text-lg sm:text-2xl font-semibold text-gray-900 mb-6">Generar Reporte Confidencial</h2>
-  
-    <form [formGroup]="reporteForm" (ngSubmit)="generarReporteConfidencial()">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label for="fecha_ini" class="block text-sm font-medium text-gray-700">Fecha de Inicio</label>
-          <input
-            id="fecha_ini"
-            type="date"
-            formControlName="fecha_ini"
-            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          />
+  <div *ngIf="dataUser?.rol === 'ADMINISTRADOR' || dataUser?.rol === 'JEFE_CARRERA' || dataUser?.rol === 'JEFE_DEPARTAMENTO'" 
+      class="p-6 shadow-lg rounded-lg bg-gradient-to-r from-white to-gray-50 border border-gray-200 mt-12 container mx-auto">
+      <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-8 border-b pb-4">Generar Reporte Confidencial</h2>
+
+      <form [formGroup]="reporteForm" (ngSubmit)="generarReporteConfidencial()">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <!-- Fecha de Inicio -->
+          <div>
+            <label for="fecha_ini" class="block text-sm font-semibold text-gray-700">Fecha de Inicio</label>
+            <p-calendar
+              id="fecha_ini"
+              formControlName="fecha_ini"
+              styleClass="w-full"
+              class="w-full mt-2"
+              dateFormat="dd/mm/yy"
+              [monthNavigator]="true"
+              [yearNavigator]="true">
+            </p-calendar>
+          </div>
+
+          <!-- Fecha de Fin -->
+          <div>
+            <label for="fecha_fin" class="block text-sm font-semibold text-gray-700">Fecha de Fin</label>
+            <p-calendar
+              id="fecha_fin"
+              formControlName="fecha_fin"
+              styleClass="w-full"
+              class="w-full mt-2"
+              dateFormat="dd/mm/yy"
+              [monthNavigator]="true"
+              [yearNavigator]="true">
+            </p-calendar>
+          </div>
         </div>
-        <div>
-          <label for="fecha_fin" class="block text-sm font-medium text-gray-700">Fecha de Fin</label>
-          <input
-            id="fecha_fin"
-            type="date"
-            formControlName="fecha_fin"
-            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          />
-        </div>
-      </div>
-      <button
-        type="submit"
-        class="mt-6 w-full bg-blue-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto"
-      >
-        Generar Reporte
-      </button>
-    </form>
+
+        <button
+          type="submit"
+          class="mt-8 w-full bg-blue-600 text-white py-3 px-6 rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          Generar Reporte
+        </button>
+      </form>
   </div>
-<!-- parte academico -->
 
 
-<div *ngIf="dataUser?.rol === 'ACADEMICO'" class="p-6 space-y-6 bg-gray-100 min-h-screen">
-  <!-- Título -->
-  <h1 class="text-2xl font-bold text-gray-800 text-center">Resultados de Práctica</h1>
+  <div *ngIf="dataUser?.rol === 'ACADEMICO'" class="p-6 space-y-12 min-h-screen">
+    <!-- Título -->
+    <h1 class="text-4xl font-bold text-gray-800 text-center border-b my-5 pb-4">Resultados de Práctica</h1>
 
-  <!-- Contador de Informes -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <!-- Aprobados -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold text-green-600 mb-4">Informes Aprobados</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="bg-green-100 p-4 rounded-lg flex flex-col items-center">
-          <span class="text-4xl font-bold text-green-600">{{datosConteoPractica.PRACTICA_UNO.aprobados}}</span>
-          <p class="text-gray-700 mt-2">Práctica Uno</p>
+    <!-- Contador de Informes -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Aprobados -->
+        <div class="bg-white p-8 rounded-xl border border-gray-100 shadow-lg">
+            <h2 class="text-2xl font-bold text-green-600 mb-6 border-b pb-2">Informes Aprobados</h2>
+            <div *ngIf="datosConteoPractica" class="grid grid-cols-2 gap-6">
+                <div class="bg-green-100 p-6 rounded-lg flex flex-col items-center shadow">
+                    <span class="text-5xl font-bold text-green-600">{{datosConteoPractica.PRACTICA_UNO.aprobados}}</span>
+                    <p class="text-lg text-gray-700 mt-4">Práctica Profesional Uno</p>
+                </div>
+                <div class="bg-green-100 p-6 rounded-lg flex flex-col items-center shadow">
+                    <span class="text-5xl font-bold text-green-600">{{datosConteoPractica.PRACTICA_DOS.aprobados}}</span>
+                    <p class="text-lg text-gray-700 mt-4">Práctica Profesional Dos</p>
+                </div>
+            </div>
         </div>
-        <div class="bg-green-100 p-4 rounded-lg flex flex-col items-center">
-          <span class="text-4xl font-bold text-green-600">{{datosConteoPractica.PRACTICA_DOS.aprobados}}</span>
-          <p class="text-gray-700 mt-2">Práctica Dos</p>
+
+        <!-- Desaprobados -->
+        <div class="bg-white p-8 rounded-xl border border-gray-100 shadow-lg">
+            <h2 class="text-2xl font-bold text-red-600 mb-6 border-b pb-2">Informes Desaprobados</h2>
+            <div *ngIf="datosConteoPractica" class="grid grid-cols-2 gap-6">
+                <div class="bg-red-100 p-6 rounded-lg flex flex-col items-center shadow">
+                    <span class="text-5xl font-bold text-red-600">{{datosConteoPractica.PRACTICA_UNO.reprobados}}</span>
+                    <p class="text-lg text-gray-700 mt-4">Práctica Profesional Uno</p>
+                </div>
+                <div class="bg-red-100 p-6 rounded-lg flex flex-col items-center shadow">
+                    <span class="text-5xl font-bold text-red-600">{{datosConteoPractica.PRACTICA_DOS.reprobados}}</span>
+                    <p class="text-lg text-gray-700 mt-4">Práctica Profesional Dos</p>
+                </div>
+            </div>
         </div>
       </div>
+
+    <!-- Gráfico de Barras -->
+    <div class="bg-white p-8 rounded-xl border border-gray-100 shadow-lg">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Informes Entregados por Mes</h2>
+        <canvas #barChart class="w-full"></canvas>
     </div>
-
-    <!-- Desaprobados -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold text-red-600 mb-4">Informes Desaprobados</h2>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="bg-red-100 p-4 rounded-lg flex flex-col items-center">
-          <span class="text-4xl font-bold text-red-600">{{datosConteoPractica.PRACTICA_UNO.reprobados}}</span>
-          <p class="text-gray-700 mt-2">Práctica Uno</p>
-        </div>
-        <div class="bg-red-100 p-4 rounded-lg flex flex-col items-center">
-          <span class="text-4xl font-bold text-red-600">{{datosConteoPractica.PRACTICA_DOS.reprobados}}</span>
-          <p class="text-gray-700 mt-2">Práctica Dos</p>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- Gráfico de Barras -->
-  <div class="bg-white p-6 rounded-lg shadow-md">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Informes Entregados por Mes</h2>
-    <canvas #barChart class="w-full"></canvas>
-  </div>
 </div>
+
+

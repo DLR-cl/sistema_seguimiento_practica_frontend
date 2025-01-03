@@ -86,11 +86,15 @@ export class DashboardService {
         });
     }
 
-    public obtenerReporteSemestral(tipo_practica: TipoPractica, fecha_in: string, fecha_fin: string): void {
+    public obtenerReporteSemestral(tipo_practica: TipoPractica, fecha_in: string | Date, fecha_fin: string | Date): void {
+        // Asegúrate de que las fechas sean cadenas ISO
+        const fechaInicioISO = fecha_in instanceof Date ? fecha_in.toISOString() : new Date(fecha_in).toISOString();
+        const fechaFinISO = fecha_fin instanceof Date ? fecha_fin.toISOString() : new Date(fecha_fin).toISOString();
+    
         const params = {
             practica: tipo_practica,
-            fecha_in: new Date(fecha_in).toISOString(), // Convertir a Date y luego a cadena ISO
-            fecha_fin: new Date(fecha_fin).toISOString(), // Convertir a Date y luego a cadena ISO
+            fecha_in: fechaInicioISO, // Convertir a formato ISO
+            fecha_fin: fechaFinISO,  // Convertir a formato ISO
         };
     
         this._http.get(`${enviroment.API_URL}/practicas/reportes/generar/semestral`, {
@@ -101,7 +105,10 @@ export class DashboardService {
                 const url = window.URL.createObjectURL(response); // Crear una URL temporal para el archivo
                 const link = document.createElement('a'); // Crear un elemento <a>
                 link.href = url;
-                link.download = `reporte_semestral_${tipo_practica}_${fecha_in.split('T')[0]}_to_${fecha_fin.split('T')[0]}.xlsx`; // Nombre del archivo basado en fechas y tipo de práctica
+                // Dividir la cadena ISO para extraer solo la parte de la fecha
+                const fechaInicioFormateada = fechaInicioISO.split('T')[0];
+                const fechaFinFormateada = fechaFinISO.split('T')[0];
+                link.download = `reporte_semestral_${tipo_practica}_${fechaInicioFormateada}_a_${fechaFinFormateada}.xlsx`; // Nombre del archivo basado en fechas y tipo de práctica
                 link.click(); // Disparar la descarga
                 window.URL.revokeObjectURL(url); // Liberar memoria
             },
@@ -110,6 +117,7 @@ export class DashboardService {
             },
         });
     }
+    
 
     generarReporteConfidencialPorPeriodo(fecha_ini: string, fecha_fin: string): Observable<Blob> {
         // Convertir las fechas a formato ISO para enviarlas como parámetros

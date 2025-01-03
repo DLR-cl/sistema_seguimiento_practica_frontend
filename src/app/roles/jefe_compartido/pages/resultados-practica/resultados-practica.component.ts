@@ -8,11 +8,13 @@ import { PayloadInterface } from '../../../../shared/interface/payload.interface
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 import Chart from 'chart.js/auto';
 import { ConteoPorMes, ConteoPracticas } from '../../../../shared/interface/reporte-practica.interface';
+import { CalendarModule } from 'primeng/calendar';
+import { DropdownModule } from 'primeng/dropdown';
 
 @Component({
   selector: 'app-resultados-practica',
   standalone: true,
-  imports: [HeaderComponent, ReactiveFormsModule, CommonModule],
+  imports: [HeaderComponent, ReactiveFormsModule, CommonModule, CalendarModule, DropdownModule],
   templateUrl: './resultados-practica.component.html',
   styleUrl: './resultados-practica.component.css'
 })
@@ -33,7 +35,15 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
   datosConteoPractica!: ConteoPracticas;
   datosConteoPracticaInformesByMes!: ConteoPorMes;
 
-  cargando = false;
+  tipoPracticaOptions = [
+    { label: 'Práctica Profesional I', value: 'PRACTICA_UNO' },
+    { label: 'Práctica Profesional II', value: 'PRACTICA_DOS' }
+  ];
+
+  aniosOptions!: any
+  mesesOptions!: any
+
+  cargando = true;
   anios = Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - i); // Últimos 10 años
   meses = [
     { nombre: 'enero', valor: 1 },
@@ -53,6 +63,15 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
     this.getData();
     this.obtenerDatosConteo();
     this.obtenerDatosInformeByMes();
+    this.mesesOptions = this.meses.map(mes => ({
+      label: mes.nombre.charAt(0).toUpperCase() + mes.nombre.slice(1), // Capitaliza el nombre
+      value: mes.valor,
+    }));
+  
+    this.aniosOptions = this.anios.map(anio => ({
+      label: anio.toString(),
+      value: anio,
+    }));
   }
 
   ngAfterViewInit(): void {
@@ -114,7 +133,6 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
   }
 
   obtenerRutasSecretaria(): void {
-    this.cargando = true;
     const { anio, tipoPractica, mes } = this.filtroForm.value;
     const mesNombre = this.meses.find((m) => m.valor === mes)?.nombre;
 
@@ -122,12 +140,10 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
       next: (rutas: any) => {
         this.listaRutas = rutas;
         console.log(rutas);
-        this.cargando = false;
       },
       error: (error: any) => {
         console.error('Error al obtener rutas:', error);
         this.listaRutas = [];
-        this.cargando = false;
       },
     });
   }
@@ -160,24 +176,30 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
 
   generarReporteConfidencial(): void {
     if (this.reporteForm.valid) {
-      const { fecha_ini, fecha_fin } = this.reporteForm.value;
-      this._dashboardService.generarReporteConfidencialPorPeriodo(new Date(fecha_ini) + '', new Date(fecha_fin) + '').subscribe({
-        next: (response: Blob) => {
-          const url = window.URL.createObjectURL(response);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `reporte_confidencial_${fecha_ini}_to_${fecha_fin}.xlsx`;
-          link.click();
-          window.URL.revokeObjectURL(url);
-        },
-        error: (error) => {
-          console.error('Error al generar el reporte confidencial:', error);
-        },
-      });
+        const { fecha_ini, fecha_fin } = this.reporteForm.value;
+
+        // Convertir las fechas a formato ISO y extraer la parte de la fecha
+        const fechaInicioFormateada = new Date(fecha_ini).toISOString().split('T')[0];
+        const fechaFinFormateada = new Date(fecha_fin).toISOString().split('T')[0];
+
+        this._dashboardService.generarReporteConfidencialPorPeriodo(fechaInicioFormateada, fechaFinFormateada).subscribe({
+            next: (response: Blob) => {
+                const url = window.URL.createObjectURL(response);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `reporte_confidencial_${fechaInicioFormateada}_a_${fechaFinFormateada}.xlsx`;
+                link.click();
+                window.URL.revokeObjectURL(url);
+            },
+            error: (error) => {
+                console.error('Error al generar el reporte confidencial:', error);
+            },
+        });
     } else {
-      console.error('Formulario inválido');
+        console.error('Formulario inválido');
     }
   }
+
 
   public obtenerDatosConteo() {
     this._dashboardService.obtenerDatosConteoPractica(this.dataUser?.id_usuario!).subscribe({
@@ -195,13 +217,16 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
     this._dashboardService.obtenerInformesPorMesPractica(this.dataUser?.id_usuario!).subscribe({
       next: (data) => {
         this.datosConteoPracticaInformesByMes = data;
+        console.log(data)
         this.procesarDatosParaGrafico();
         if (this.barChart) {
           this.initBarChart(); // Inicializar el gráfico si el elemento ya está disponible
         }
+        this.cargando = false;
       },
       error: (error) => {
         console.error('Error al obtener los datos del conteo:', error);
+        this.cargando = false;
       },
     });
   }
@@ -243,25 +268,29 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
   private initBarChart() {
     const ctx = this.barChart.nativeElement.getContext('2d');
     if (ctx) {
-      new Chart(ctx, {
-        type: 'bar',
-        data: this.datosGrafico,
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: true,
-              position: 'top',
+        new Chart(ctx, {
+            type: 'bar',
+            data: this.datosGrafico,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    },
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1, // Incrementos de 1 en 1
+                        },
+                    },
+                },
             },
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-            },
-          },
-        },
-      });
+        });
     }
-  }
+}
+
 
 }
