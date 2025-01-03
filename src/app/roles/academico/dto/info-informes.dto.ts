@@ -7,6 +7,7 @@ export interface InfoInformes {
     inicio_revision: Date;
     fin_revision:    Date;
     intentos: number;
+    id_informe_evaluacion: number;
 }
 
 export interface CantidadInformesPendientes {

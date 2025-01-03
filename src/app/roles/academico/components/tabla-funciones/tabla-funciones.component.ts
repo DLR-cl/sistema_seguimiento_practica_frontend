@@ -8,12 +8,13 @@ import { GenerarPDF } from '../../dto/revision-informes.dto';
 import { DatosPracticaService } from '../../services/datos-practica.service';
 import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
+import { PdfgeneratorComponent } from '../../../../shared/pdfgenerator/pdfgenerator.component';
 
 
 @Component({
   selector: 'app-tabla-funciones',
   standalone: true,
-  imports: [CommonModule, TableModule],
+  imports: [CommonModule, TableModule, PdfgeneratorComponent],
   templateUrl: './tabla-funciones.component.html',
   styleUrls: ['./tabla-funciones.component.css'], // Corregido a styleUrls
 })
@@ -54,21 +55,23 @@ export class TablaFuncionesComponent implements OnInit {
     PRACTICA_DOS: 'Práctica Profesional II'
   };
 
- 
-  public descargarPDF(idPractica: number, idInformeEvaluativo: number, tipoPractica: string, nombreAlumno: string){
-    this.cargandoDescarga = true;
-    const practica: GenerarPDF = {
-      id_practica: idPractica,
-      id_informe_evaluativo: idInformeEvaluativo,
-      id_docente: this.decodedToken.id_usuario
-    }
+  mostrarPdfComponent = false;
+  idPracticaSeleccionada!: number;
+  idInformeSeleccionado!: number;
+  idDocenteSeleccionado!: number;
 
-    const tipo = this.tipoPractica[tipoPractica].replace(/ /g, "").replace(/(Profesional)([IVXLCDM]+)/, '$1-$2');
-    const nombre = nombreAlumno.replace(/ /g, "")
+  public descargarPDF(idPractica: number, idInforme: number, tipoPractica: number): void {
+    this.cargandoDescarga = true
+    this.idPracticaSeleccionada = idPractica;
+    this.idInformeSeleccionado = idInforme;
+    this.idDocenteSeleccionado = tipoPractica;
+    this.mostrarPdfComponent = true;
+  }
 
-    console.log(tipo, nombre)
-
-    this.datosPracticaService.descargarPDF(practica)
+  public onPdfGenerado(): void {
+    console.log('si')
+    this.cargandoDescarga = false
+    this.mostrarPdfComponent = false;
   }
 
   private getInfoInformes() {

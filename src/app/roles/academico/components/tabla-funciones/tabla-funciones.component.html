@@ -51,7 +51,7 @@
                     *ngIf="informe.estado_informe === 'APROBADA' || informe.estado_informe === 'DESAPROBADA'"
                     class="w-full bg-red-500 text-white px-2 py-2 text-sm rounded-md hover:bg-red-600 transition flex items-center justify-center"
                   >
-                    <span class="truncate flex items-center justify-center" (click)="descargarPDF(informe.id_practica, 2, informe.tipo_practica, informe.nombre_alumno)">
+                    <span class="truncate flex items-center justify-center" (click)="descargarPDF(informe.id_practica, informe.id_informe_evaluacion, decodedToken.id_usuario)">
                       Descargar
                       <i class="pi pi-file-pdf ml-2 text-xl"></i>
                     </span>
@@ -71,5 +71,15 @@
         <p class="mt-4 text-gray-500">Actualmente no tiene informes asignados.</p>
       </div>
     </div>
-  </div>
-  
+  </div>  
+
+
+<app-pdfgenerator
+  *ngIf="mostrarPdfComponent"
+  [idPractica]="idPracticaSeleccionada"
+  [idInformeEvaluativo]="idInformeSeleccionado"
+  [idDocente]="idDocenteSeleccionado"
+  (pdfGenerado)="onPdfGenerado()"
+  [hidden]="true"
+  >
+</app-pdfgenerator>
