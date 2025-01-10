@@ -36,9 +36,73 @@ export class GestionarUsuariosComponent implements OnInit {
     private messageService: MessageService
   ) { }
 
+  ngOnInit(): void {
+    forkJoin({
+      academicos: this.usuariosService.getUsuariosRol('ACADEMICO'),
+      supervisores: this.usuariosService.getUsuariosRol('JEFE_EMPLEADOR'),
+      alumnos: this.usuariosService.getUsuariosRol('ALUMNO_PRACTICA'),
+      listadoAdministrador: this.usuariosService.listadoAdministrador() // Incluimos la nueva llamada
+    }).subscribe({
+      next: ({ academicos, supervisores, alumnos, listadoAdministrador }) => {
+        this.listaAcademicos = [...academicos];
+        this.listaSupervisores = [...supervisores];
+        this.listaAlumnos = [...alumnos];
+  
+        // Clasificamos los usuarios del listadoAdministrador en sus respectivas listas
+        listadoAdministrador.forEach((usuario: any) => {
+          switch (usuario.tipo_usuario) {
+            case 'JEFE_DEPARTAMENTO':
+            case 'JEFE_CARRERA':
+              this.listaJefesCarreraDepartamento.push(usuario); // Juntamos los dos tipos en una sola lista
+              break;
+            case 'SECRETARIA_DEPARTAMENTO':
+            case 'SECRETARIA_CARRERA':
+              this.listaSecretarias.push(usuario);
+              break;
+          }
+        });
+  
+        // Inicializamos las listas filtradas y términos de búsqueda
+        this.filteredListas = [
+          [...this.listaJefesCarreraDepartamento],
+          [...this.listaSecretarias],
+          [...this.listaAcademicos],
+          [...this.listaSupervisores],
+          [...this.listaAlumnos]
+        ];
+  
+        this.searchTerms = Array(this.filteredListas.length).fill('');
+  
+        this.cargando = false; // Finalizamos la carga
+      },
+      error: error => {
+        console.error("Error al obtener los datos de los usuarios", error);
+        this.cargando = false; // Aseguramos detener la carga en caso de error
+      }
+    });
+  }
+
+  listaSecretarias: any = [];
+  listaAcademicos: any = [];
+  listaAlumnos: any = [];
+  // listaJefeCarrera: any = [];
+  // listaJefeDepartamento: any = [];
+  listaSupervisores: any = [];
+  listaJefesCarreraDepartamento: any = []
+  listaAdministradores: any = []
+
+  searchTerms: string[] = []; // Array para los términos de búsqueda de cada lista
+  filteredListas: any[][] = []; // Array de listas filtradas
+
   // Verifica si el rol del usuario es permitido
   esRolPermitido(rol: string): boolean {
     return this.rolesConCambiarCorreo.includes(rol);
+  }
+
+  debeMostrarRut(lista: any[]): boolean {
+    // Especificar roles para los que se debe mostrar el RUT
+    const rolesConRut = ['ACADEMICO', 'JEFE_EMPLEADOR', 'ALUMNO_PRACTICA']; 
+    return lista.some((usuario) => rolesConRut.includes(usuario.tipo_usuario));
   }
 
   abrirModal(usuario: any) {
@@ -109,74 +173,17 @@ export class GestionarUsuariosComponent implements OnInit {
     });
   }
 
-
-  ngOnInit(): void {
-    forkJoin({
-      academicos: this.usuariosService.getUsuariosRol('ACADEMICO'),
-      supervisores: this.usuariosService.getUsuariosRol('JEFE_EMPLEADOR'),
-      alumnos: this.usuariosService.getUsuariosRol('ALUMNO_PRACTICA'),
-      listadoAdministrador: this.usuariosService.listadoAdministrador() // Incluimos la nueva llamada
-    }).subscribe({
-      next: ({ academicos, supervisores, alumnos, listadoAdministrador }) => {
-        this.listaAcademicos = [...academicos];
-        this.listaSupervisores = [...supervisores];
-        this.listaAlumnos = [...alumnos];
+  filterTable(index: number) {
+    const searchTermLower = this.searchTerms[index].toLowerCase(); // Convertimos a minúsculas para la comparación
   
-        // Clasificamos los usuarios del listadoAdministrador en sus respectivas listas
-        listadoAdministrador.forEach((usuario: any) => {
-          switch (usuario.tipo_usuario) {
-            case 'JEFE_DEPARTAMENTO':
-            case 'JEFE_CARRERA':
-              this.listaJefesCarreraDepartamento.push(usuario); // Juntamos los dos tipos en una sola lista
-              break;
-            case 'SECRETARIA_DEPARTAMENTO':
-            case 'SECRETARIA_CARRERA':
-              this.listaSecretarias.push(usuario);
-              break;
-          }
-        });
-  
-        // Inicializamos las listas filtradas y términos de búsqueda
-        this.filteredListas = [
-          [...this.listaJefesCarreraDepartamento],
-          [...this.listaSecretarias],
-          [...this.listaAcademicos],
-          [...this.listaSupervisores],
-          [...this.listaAlumnos]
-        ];
-  
-        this.searchTerms = Array(this.filteredListas.length).fill('');
-  
-        this.cargando = false; // Finalizamos la carga
-      },
-      error: error => {
-        console.error("Error al obtener los datos de los usuarios", error);
-        this.cargando = false; // Aseguramos detener la carga en caso de error
-      }
+    // Filtramos la lista de acuerdo al término de búsqueda (nombre o rut)
+    this.filteredListas[index] = this.getListaByIndex(index).filter((usuario: any) => {
+      // Comprobamos si el usuario tiene el campo 'rut' antes de intentar acceder a él
+      const hasRut = usuario.rut && usuario.rut.toLowerCase().startsWith(searchTermLower);
+      return usuario.nombre.toLowerCase().includes(searchTermLower) || hasRut;
     });
   }
-
-  listaSecretarias: any = [];
-  listaAcademicos: any = [];
-  listaAlumnos: any = [];
-  // listaJefeCarrera: any = [];
-  // listaJefeDepartamento: any = [];
-  listaSupervisores: any = [];
-  listaJefesCarreraDepartamento: any = []
-  listaAdministradores: any = []
-
-  searchTerms: string[] = []; // Array para los términos de búsqueda de cada lista
-  filteredListas: any[][] = []; // Array de listas filtradas
-
-   // Método para filtrar la lista por nombre o rut para cada lista
-   filterTable(index: number) {
-    const searchTermLower = this.searchTerms[index].toLowerCase(); // Convertimos a minúsculas para la comparación
-
-    // Filtramos la lista de acuerdo al término de búsqueda (nombre o rut)
-    this.filteredListas[index] = this.getListaByIndex(index).filter((usuario:any) =>
-      usuario.nombre.toLowerCase().includes(searchTermLower) || usuario.rut.toLowerCase().startsWith(searchTermLower)
-    );
-  }
+  
 
   // Método que devuelve la lista original según el índice
   getListaByIndex(index: number) {

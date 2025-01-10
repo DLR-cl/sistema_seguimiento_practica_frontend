@@ -21,7 +21,7 @@ export class InformesComponent implements OnInit {
   paginaActual = 1;
   elementosPorPagina = 1;
   listaPaginada: { nombreAcademico: string; correoAcademico: string; evaluaciones: InformeEvaluativo[] }[] = [];
-  totalPaginas: number = 0;
+  totalPaginas: number = 1;
 
   cargando: boolean = true;
   cargandoDescarga: boolean = false;

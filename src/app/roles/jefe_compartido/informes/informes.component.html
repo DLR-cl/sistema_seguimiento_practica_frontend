@@ -2,103 +2,114 @@
 
 <div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
     <div class="flex space-x-2">
-      <!-- Puntos animados con rebote e iluminación progresiva -->
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.2s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.4s"></div>
+        <!-- Puntos animados con rebote e iluminación progresiva -->
+        <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+             style="animation-delay: 0s"></div>
+        <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+             style="animation-delay: 0.2s"></div>
+        <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+             style="animation-delay: 0.4s"></div>
     </div>
 </div>
 
 <div *ngIf="!cargando" class="container mx-auto my-10 px-6">
     <!-- Título principal -->
     <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-10">
-      Evaluaciones realizadas por Académicos
+        Evaluaciones realizadas por Académicos
     </h1>
-  
+
+    <div *ngIf="!listaPaginada.length" class="flex flex-col items-center justify-center text-center bg-blue-50 border border-blue-200 rounded-lg p-10 shadow-lg">
+        <!-- Icono de carpeta abierta -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" class="w-16 h-16 text-blue-400 mb-4">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M3 4a2 2 0 0 1 2-2h5.586a2 2 0 0 1 1.414.586l1.414 1.414A2 2 0 0 0 13.414 5H19a2 2 0 0 1 2 2v1H3V4Zm18 3H3a1 1 0 0 0-1 1v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a1 1 0 0 0-1-1Zm-16.73 3.295A1 1 0 0 1 5.146 10h13.708a1 1 0 0 1 .976 1.295l-1.2 4.8A2 2 0 0 1 16.708 18H7.292a2 2 0 0 1-1.922-1.905l-1.2-4.8Z" />
+        </svg>
+    
+        <!-- Mensajes descriptivos -->
+        <h2 class="text-2xl font-semibold text-blue-600">No hay evaluaciones disponibles</h2>
+        <p class="text-gray-500 mt-2">Por el momento, no se han realizado evaluaciones por parte de los académicos.</p>
+    </div>
+    
+
     <!-- Lista de Académicos -->
     <div *ngFor="let grupo of listaPaginada" class="mb-10 p-6 bg-white border border-gray-100 rounded-lg shadow-lg">
-      <!-- Información del Académico -->
-      <div class="mb-6">
-        <h2 class="text-2xl font-semibold text-blue-700">
-          Académico: {{ grupo.nombreAcademico }}
-        </h2>
-        <p class="text-sm text-gray-500">Correo: {{ grupo.correoAcademico }}</p>
-      </div>
-  
-      <!-- Evaluaciones -->
-      <div *ngFor="let evaluacion of grupo.evaluaciones" class="mb-6 p-4 shadow-md rounded-lg bg-gray-50">
-        <!-- Resaltado del alumno y tipo de práctica -->
-        <div class="mb-4">
-          <p class="text-lg font-semibold text-gray-800">
-            {{tipoPractica[evaluacion.tipo_practica]}}
-          </p>
-          <p class="text-lg font-semibold text-gray-800">
-            Alumno: <span class="font-medium">{{ evaluacion.nombre_alumno }}</span>
-          </p>
-          
+        <!-- Información del Académico -->
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold text-blue-700">
+                Académico: {{ grupo.nombreAcademico }}
+            </h2>
+            <p class="text-sm text-gray-500">Correo: {{ grupo.correoAcademico }}</p>
         </div>
-  
-        <!-- Información agrupada en dos columnas -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-600">
-          <div>
-            <p><span class="font-bold">Correo Alumno:</span> {{ evaluacion.correo_alumno }}</p>
-            <p><span class="font-bold">Empresa:</span> {{ evaluacion.datos_empresa.nombre_razon_social }}</p>
-            <p><span class="font-bold">Ubicación:</span> {{ evaluacion.datos_empresa.ubicacion }}</p>
-          </div>
-          <div>
-            <p><span class="font-bold">Supervisor:</span> {{ evaluacion.nombre_jefe_empleador }}</p>
-            <p><span class="font-bold">Correo Supervisor:</span> {{ evaluacion.correo_jefe_empleador }}</p>
-          </div>
+
+        <!-- Evaluaciones -->
+        <div *ngFor="let evaluacion of grupo.evaluaciones" class="mb-6 p-4 shadow-md rounded-lg bg-gray-50">
+            <!-- Resaltado del alumno y tipo de práctica -->
+            <div class="mb-4">
+                <p class="text-lg font-semibold text-gray-800">
+                    {{ tipoPractica[evaluacion.tipo_practica] }}
+                </p>
+                <p class="text-lg font-semibold text-gray-800">
+                    Alumno: <span class="font-medium">{{ evaluacion.nombre_alumno }}</span>
+                </p>
+            </div>
+
+            <!-- Información agrupada en dos columnas -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm text-gray-600">
+                <div>
+                    <p><span class="font-bold">Correo Alumno:</span> {{ evaluacion.correo_alumno }}</p>
+                    <p><span class="font-bold">Empresa:</span> {{ evaluacion.datos_empresa.nombre_razon_social }}</p>
+                    <p><span class="font-bold">Ubicación:</span> {{ evaluacion.datos_empresa.ubicacion }}</p>
+                </div>
+                <div>
+                    <p><span class="font-bold">Supervisor:</span> {{ evaluacion.nombre_jefe_empleador }}</p>
+                    <p><span class="font-bold">Correo Supervisor:</span> {{ evaluacion.correo_jefe_empleador }}</p>
+                </div>
+            </div>
+
+            <!-- Botón de descarga -->
+            <div class="mt-4">
+                <button
+                    (click)="descargarPDF(evaluacion.id_practica, evaluacion.id_informe_evaluativo, evaluacion.id_docente)"
+                    class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg"
+                >
+                    Descargar Informe Evaluativo
+                </button>
+            </div>
         </div>
-  
-        <!-- Botón de descarga -->
-        <div class="mt-4">
-          <button
-            (click)="descargarPDF(evaluacion.id_practica, evaluacion.id_informe_evaluativo, evaluacion.id_docente)"
-            class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg"
-          >
-            Descargar Informe Evaluativo
-          </button>
-        </div>
-      </div>
     </div>
-  
+
     <!-- Controles de Paginación -->
     <div class="flex justify-between items-center mt-8">
-      <!-- Botón Anterior -->
-      <button
-        (click)="cambiarPagina(paginaActual - 1)"
-        [disabled]="paginaActual === 1"
-        class="px-4 py-2 border rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:hover:bg-gray-100"
-      >
-        Anterior
-      </button>
-  
-      <!-- Texto de Páginas -->
-      <span class="text-gray-500 text-sm">
-        Página {{ paginaActual }} de {{ totalPaginas }}
-      </span>
-  
-      <!-- Botón Siguiente -->
-      <button
-        (click)="cambiarPagina(paginaActual + 1)"
-        [disabled]="paginaActual === totalPaginas"
-        class="px-4 py-2 border rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:hover:bg-gray-100"
-      >
-        Siguiente
-      </button>
+        <!-- Botón Anterior -->
+        <button
+            (click)="cambiarPagina(paginaActual - 1)"
+            [disabled]="paginaActual === 1"
+            class="px-4 py-2 border rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:hover:bg-gray-100"
+        >
+            Anterior
+        </button>
+
+        <!-- Texto de Páginas -->
+        <span class="text-gray-500 text-sm">
+            Página {{ paginaActual }} de {{ totalPaginas == 0 ? 1 : totalPaginas }}
+        </span>
+
+        <!-- Botón Siguiente -->
+        <button
+            (click)="cambiarPagina(paginaActual + 1)"
+            [disabled]="paginaActual === totalPaginas"
+            class="px-4 py-2 border rounded-lg text-gray-600 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 disabled:text-gray-400 disabled:hover:bg-gray-100"
+        >
+            Siguiente
+        </button>
     </div>
-  </div>
-  
+</div>
+
 <app-pdfgenerator
-  *ngIf="mostrarPdfComponent"
-  [idPractica]="idPracticaSeleccionada"
-  [idInformeEvaluativo]="idInformeSeleccionado"
-  [idDocente]="idDocenteSeleccionado"
-  (pdfGenerado)="onPdfGenerado()"
-  [hidden]="true"
-  >
+    *ngIf="mostrarPdfComponent"
+    [idPractica]="idPracticaSeleccionada"
+    [idInformeEvaluativo]="idInformeSeleccionado"
+    [idDocente]="idDocenteSeleccionado"
+    (pdfGenerado)="onPdfGenerado()"
+    [hidden]="true"
+>
 </app-pdfgenerator>
