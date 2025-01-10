@@ -53,7 +53,7 @@ export class DashboardComponent implements OnInit{
   
   detallesPractica!: detallePractica[]
 
-  periodoSeleccionado: number = 2024
+  periodoSeleccionado: number = new Date().getFullYear();
 
   // selectedInforme: any;
 
