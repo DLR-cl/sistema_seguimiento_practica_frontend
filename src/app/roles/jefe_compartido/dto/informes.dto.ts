@@ -1,3 +1,5 @@
+import { TipoPractica } from "../../../enum/enumerables.enum";
+
 export interface InformeEvaluativo {
     id_practica: number;
     id_informe_evaluativo: number;
@@ -9,6 +11,7 @@ export interface InformeEvaluativo {
     datos_empresa: DatosEmpresa;
     nombre_jefe_empleador: string;
     correo_jefe_empleador: string;
+    tipo_practica: TipoPractica
 }
 
 export interface DatosEmpresa {

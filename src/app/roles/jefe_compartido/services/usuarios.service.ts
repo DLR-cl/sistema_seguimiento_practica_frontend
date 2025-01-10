@@ -16,6 +16,10 @@ export class UsuariosService {
     return this.http.get<usuario[]>(`${enviroment.API_URL}/users/lista-rol/${rol}`);
   }
 
+  public listadoAdministrador(){
+    return this.http.get<any>(`${enviroment.API_URL}/users/administradores/obtener/lista`)
+  }
+
   public cambiarCorreo(usuario: cambiarCorreo){
     return this.http.patch<any>(`${enviroment.API_URL}/users/cambiar-correo/administrador`, usuario)
   }

@@ -52,8 +52,17 @@ export class GestionarUsuariosComponent implements OnInit {
     this.modalVisible = false;
     this.usuarioSeleccionado = null;
     this.nuevoCorreo = '';
+    this.mostrarInputCorreo = false; // Reinicia el estado del input
   }
 
+  mostrarInputCorreo = false;  // Controla la visibilidad del input de correo
+
+  // Método que se llama cuando el usuario hace clic en "Editar Correo"
+  activarEdicionCorreo() {
+    this.mostrarInputCorreo = true;  // Mostrar el input de correo
+  }
+
+  // El resto del código se mantiene igual
   confirmarCambiarCorreo() {
     this.confirmationService.confirm({
       message: `¿Estás seguro de actualizar el correo a "${this.nuevoCorreo}"?`,
@@ -66,8 +75,6 @@ export class GestionarUsuariosComponent implements OnInit {
           correoAnterior: this.usuarioSeleccionado.correo,
           correoActual: this.nuevoCorreo
         }
-        console.log(this.usuarioSeleccionado)
-        console.log(usuario)
         this.usuariosService.cambiarCorreo(usuario).subscribe({
           next: result => {
             this.messageService.add({ severity: 'success', summary: 'Correo Actualizado', detail: 'El correo ha sido actualizado exitosamente.' });
@@ -84,70 +91,79 @@ export class GestionarUsuariosComponent implements OnInit {
   confirmarRestablecerContrasena() {
     this.confirmationService.confirm({
       message: `¿Estás seguro de restablecer la contraseña para ${this.usuarioSeleccionado.nombre}?`,
+      acceptButtonStyleClass: 'bg-red-600 border-none hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg',
+      rejectButtonStyleClass: 'bg-gray-300 border-none hover:bg-gray-400 text-black text-sm font-medium px-4 py-2 rounded-lg',
+      acceptLabel: 'Confirmar',
+      rejectLabel: 'Cancelar',
       accept: () => {
         this.usuariosService.restablecerContraseña(this.usuarioSeleccionado.id_usuario, this.usuarioSeleccionado.tipo_usuario).subscribe({
-          next: result =>{
+          next: result => {
             this.messageService.add({ severity: 'success', summary: 'Contraseña Restablecida', detail: 'La contraseña ha sido restablecida.' });
             this.cerrarModal();
           },
-          error: error =>{
+          error: error => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al restablecer la contraseña: ${error.message}` });
           }
         })
-
       }
     });
   }
 
 
   ngOnInit(): void {
-    // Usamos forkJoin para esperar que todas las peticiones se completen
-    forkJoin([
-      this.usuariosService.getUsuariosRol('SECRETARIA'),
-      this.usuariosService.getUsuariosRol('ACADEMICO'),
-      this.usuariosService.getUsuariosRol('JEFE_EMPLEADOR'),
-      this.usuariosService.getUsuariosRol('JEFE_CARRERA'),
-      this.usuariosService.getUsuariosRol('JEFE_DEPARTAMENTO'),
-      this.usuariosService.getUsuariosRol('ALUMNO_PRACTICA')
-    ]).subscribe({
-      next: ([secretarias, academicos, supervisores, jefeC, jefeD, alumnos]) => {
-        this.listaSecretarias = [...secretarias];
+    forkJoin({
+      academicos: this.usuariosService.getUsuariosRol('ACADEMICO'),
+      supervisores: this.usuariosService.getUsuariosRol('JEFE_EMPLEADOR'),
+      alumnos: this.usuariosService.getUsuariosRol('ALUMNO_PRACTICA'),
+      listadoAdministrador: this.usuariosService.listadoAdministrador() // Incluimos la nueva llamada
+    }).subscribe({
+      next: ({ academicos, supervisores, alumnos, listadoAdministrador }) => {
         this.listaAcademicos = [...academicos];
         this.listaSupervisores = [...supervisores];
-        this.listaJefeCarrera = [...jefeC];
-        this.listaJefeDepartamento = [...jefeD];
         this.listaAlumnos = [...alumnos];
-
-        this.cargando = false;
-
-        // Inicializamos filteredListas con las listas originales
+  
+        // Clasificamos los usuarios del listadoAdministrador en sus respectivas listas
+        listadoAdministrador.forEach((usuario: any) => {
+          switch (usuario.tipo_usuario) {
+            case 'JEFE_DEPARTAMENTO':
+            case 'JEFE_CARRERA':
+              this.listaJefesCarreraDepartamento.push(usuario); // Juntamos los dos tipos en una sola lista
+              break;
+            case 'SECRETARIA_DEPARTAMENTO':
+            case 'SECRETARIA_CARRERA':
+              this.listaSecretarias.push(usuario);
+              break;
+          }
+        });
+  
+        // Inicializamos las listas filtradas y términos de búsqueda
         this.filteredListas = [
+          [...this.listaJefesCarreraDepartamento],
           [...this.listaSecretarias],
           [...this.listaAcademicos],
           [...this.listaSupervisores],
-          [...this.listaAlumnos],
-          [...this.listaJefeCarrera],
-          [...this.listaJefeDepartamento]
+          [...this.listaAlumnos]
         ];
-
-        // Inicializamos searchTerms con valores vacíos (uno por lista)
+  
         this.searchTerms = Array(this.filteredListas.length).fill('');
-
+  
+        this.cargando = false; // Finalizamos la carga
       },
       error: error => {
-        console.log("Error al obtener los datos de los usuarios", error);
-        this.cargando = false; 
+        console.error("Error al obtener los datos de los usuarios", error);
+        this.cargando = false; // Aseguramos detener la carga en caso de error
       }
     });
-
   }
 
   listaSecretarias: any = [];
   listaAcademicos: any = [];
   listaAlumnos: any = [];
-  listaJefeCarrera: any = [];
-  listaJefeDepartamento: any = [];
+  // listaJefeCarrera: any = [];
+  // listaJefeDepartamento: any = [];
   listaSupervisores: any = [];
+  listaJefesCarreraDepartamento: any = []
+  listaAdministradores: any = []
 
   searchTerms: string[] = []; // Array para los términos de búsqueda de cada lista
   filteredListas: any[][] = []; // Array de listas filtradas
@@ -165,22 +181,21 @@ export class GestionarUsuariosComponent implements OnInit {
   // Método que devuelve la lista original según el índice
   getListaByIndex(index: number) {
     switch (index) {
-      case 0: return this.listaSecretarias;
-      case 1: return this.listaAcademicos;
-      case 2: return this.listaAlumnos;
-      case 3: return this.listaJefeCarrera;
-      case 4: return this.listaJefeDepartamento;
+      case 0: return this.listaJefesCarreraDepartamento;
+      case 1: return this.listaSecretarias;
+      case 2: return this.listaAcademicos;
+      case 3: return this.listaSupervisores;
+      case 4: return this.listaAlumnos;
       default: return [];
     }
   }
 
   // Función para obtener el nombre del rol de la lista
   getRolNombre(lista: any[]) {
+    if (lista === this.listaJefesCarreraDepartamento) return 'Jefes de Carrera y Departamento';
     if (lista === this.listaSecretarias) return 'Secretarias';
     if (lista === this.listaAcademicos) return 'Académicos';
     if (lista === this.listaAlumnos) return 'Alumnos';
-    if (lista === this.listaJefeCarrera) return 'Jefes de Carrera';
-    if (lista === this.listaJefeDepartamento) return 'Jefes de Departamento';
     if (lista === this.listaSupervisores) return 'Supervisores';
     return 'Usuarios';
   }
