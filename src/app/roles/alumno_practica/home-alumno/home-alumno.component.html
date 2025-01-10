@@ -9,7 +9,7 @@
     <!-- Spinner de carga -->
     <div
       *ngIf="cargando"
-      class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none z-15"
+      class="fixed inset-0 flex justify-center items-center bg-transparent pointer-events-none z-50"
     >
       <div class="flex space-x-2">
         <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>

@@ -15,7 +15,7 @@
 <div *ngIf="!cargando" class="container mx-auto my-10 p-10 bg-white rounded-lg shadow-md">
   
     <!-- Listado de usuarios por tipo -->
-    <div *ngFor="let lista of [listaSecretarias, listaAcademicos, listaSupervisores , listaAlumnos, listaJefeCarrera, listaJefeDepartamento]; let i = index">
+    <div *ngFor="let lista of [listaJefesCarreraDepartamento, listaSecretarias, listaAcademicos, listaSupervisores , listaAlumnos]; let i = index">
       
       <!-- Solo mostramos si hay usuarios en la lista -->
       <div *ngIf="lista.length > 0">
@@ -74,30 +74,55 @@
       </div>
     
     </div>
-  
-    <p-dialog header="Gestionar Usuario" [(visible)]="modalVisible" [modal]="true" [closable]="false" [style]="{ width: '50rem' }">
-        <div class="p-fluid">
-          <h4>Usuario: {{ usuarioSeleccionado?.nombre }}</h4>
+
+    <p-dialog header="Gestionar Usuario" [(visible)]="modalVisible" [modal]="true" [focusOnShow]="false" [draggable]="false" [closable]="false" [style]="{ width: '50rem' }">
+        <div class="p-fluid space-y-6">
+          <!-- Título del usuario -->
+          <h4 class="text-2xl font-bold text-gray-800 border-b pb-2">Usuario: {{ usuarioSeleccionado?.nombre }}</h4>
       
-          <!-- Cambiar correo: Solo para Jefe de Carrera y Jefe de Departamento -->
-          <div class="mb-4" *ngIf="esRolPermitido(usuarioSeleccionado?.tipo_usuario)">
-            <label for="nuevoCorreo">Nuevo Correo</label>
-            <input type="email" id="nuevoCorreo" [(ngModel)]="nuevoCorreo" class="p-inputtext p-component w-full" />
-            <button pButton label="Actualizar Correo" icon="pi pi-check" class="p-button-success mt-2"
-                    (click)="confirmarCambiarCorreo()"></button>
+          <!-- Sección de cambiar correo -->
+          <div *ngIf="esRolPermitido(usuarioSeleccionado?.tipo_usuario)">
+            <div class="space-y-2">
+              <label *ngIf="mostrarInputCorreo" for="nuevoCorreo" class="block text-sm font-medium text-gray-700">Nuevo Correo</label>
+              <input *ngIf="mostrarInputCorreo" type="email" id="nuevoCorreo" [(ngModel)]="nuevoCorreo" 
+                     class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
           </div>
       
-          <!-- Restablecer contraseña -->
-          <div class="mt-4">
-            <button pButton label="Restablecer Contraseña" icon="pi pi-refresh" class="p-button-danger"
-                    (click)="confirmarRestablecerContrasena()"></button>
+          <!-- Botones -->
+          <div class="flex flex-wrap gap-4">
+            <!-- Botones exclusivos para roles permitidos -->
+            <ng-container *ngIf="esRolPermitido(usuarioSeleccionado?.tipo_usuario)">
+              <!-- Botón para activar la edición del correo -->
+              <button *ngIf="!mostrarInputCorreo" (click)="activarEdicionCorreo()"
+                      class="flex-1 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+                Editar Correo
+              </button>
+      
+              <!-- Botón de actualización de correo -->
+              <button *ngIf="mostrarInputCorreo" (click)="confirmarCambiarCorreo()"
+                      class="flex-1 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all">
+                Actualizar Correo
+              </button>
+            </ng-container>
+      
+            <!-- Botón visible para todos los roles -->
+            <button (click)="confirmarRestablecerContrasena()"
+                    class="flex-1 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
+              Restablecer Contraseña
+            </button>
           </div>
         </div>
       
-        <footer class="mt-4">
-          <button pButton label="Cerrar" icon="pi pi-times" class="p-button-secondary" (click)="cerrarModal()"></button>
+        <!-- Footer del modal -->
+        <footer class="mt-6 flex justify-end space-x-4 border-t pt-4">
+          <button (click)="cerrarModal()"
+                  class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all">
+            Cerrar
+          </button>
         </footer>
       </p-dialog>
       
+
   </div>
   

@@ -60,11 +60,11 @@ export class TablaFuncionesComponent implements OnInit {
   idInformeSeleccionado!: number;
   idDocenteSeleccionado!: number;
 
-  public descargarPDF(idPractica: number, idInforme: number, tipoPractica: number): void {
+  public descargarPDF(idPractica: number, idInforme: number, idDocente: number): void {
     this.cargandoDescarga = true
     this.idPracticaSeleccionada = idPractica;
     this.idInformeSeleccionado = idInforme;
-    this.idDocenteSeleccionado = tipoPractica;
+    this.idDocenteSeleccionado = idDocente;
     this.mostrarPdfComponent = true;
   }
 
