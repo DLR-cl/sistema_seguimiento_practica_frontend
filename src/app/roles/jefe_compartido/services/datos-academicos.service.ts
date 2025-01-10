@@ -8,14 +8,14 @@ import { Academico, AcademicoSolo, NuevoAcademico, ResponseNuevo } from "../dto/
 })
 export class DatosAcademicosService {
 
-    private readonly _http = inject(HttpClient);
+    constructor(
+        private _http: HttpClient
+    ){}
 
-    // Obtener información de académicos
     public getInfoAcademicos() {
         return this._http.get<Academico[]>(`${enviroment.API_URL}/academicos`);
     }
 
-    // Crear un nuevo académico
     public crearAcademico(nuevoAcademico: NuevoAcademico) {
         return this._http.post<ResponseNuevo>(`${enviroment.API_URL}/academicos`, nuevoAcademico);
     }

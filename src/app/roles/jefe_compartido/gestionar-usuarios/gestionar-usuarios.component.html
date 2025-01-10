@@ -1,0 +1,103 @@
+<app-header></app-header>
+
+<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
+    <div class="flex space-x-2">
+      <!-- Puntos animados con rebote e iluminación progresiva -->
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+           style="animation-delay: 0s"></div>
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+           style="animation-delay: 0.2s"></div>
+      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
+           style="animation-delay: 0.4s"></div>
+    </div>
+</div>
+
+<div *ngIf="!cargando" class="container mx-auto my-10 p-10 bg-white rounded-lg shadow-md">
+  
+    <!-- Listado de usuarios por tipo -->
+    <div *ngFor="let lista of [listaSecretarias, listaAcademicos, listaSupervisores , listaAlumnos, listaJefeCarrera, listaJefeDepartamento]; let i = index">
+      
+      <!-- Solo mostramos si hay usuarios en la lista -->
+      <div *ngIf="lista.length > 0">
+        <!-- Titulo dinámico dependiendo de la lista -->
+        <h3 class="text-2xl font-bold text-gray-800 mt-10 mb-6">{{ getRolNombre(lista) }}</h3>
+        
+        <!-- Campo de búsqueda global -->
+        <div class="mb-4">
+          <input type="text" [(ngModel)]="searchTerms[i]" (input)="filterTable(i)" placeholder="Buscar por nombre o rut" 
+                 class="px-4 py-2 border rounded-lg shadow-sm w-full">
+        </div>
+  
+        <!-- Paginación y Búsqueda con PrimeNG -->
+        <p-table [value]="filteredListas[i]" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" 
+                 currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}">
+          
+          <ng-template pTemplate="header">
+            <tr>
+              <th pSortableColumn="nombre" style="width: 30%;">
+                Nombre
+                <p-sortIcon field="nombre"></p-sortIcon>
+              </th>
+              <th pSortableColumn="correo" style="width: 30%;">
+                Correo
+                <p-sortIcon field="correo"></p-sortIcon>
+              </th>
+              <th pSortableColumn="rut" style="width: 20%;">
+                Rut
+                <p-sortIcon field="rut"></p-sortIcon>
+              </th>
+              <th style="width: 20%;">
+                Acción
+              </th>
+            </tr>
+          </ng-template>
+          
+          <ng-template pTemplate="body" let-usuario>
+            <tr>
+              <td class="truncate" style="max-width: 250px;" title="{{ usuario.nombre }}">
+                {{ usuario.nombre }}
+              </td>
+              <td class="truncate" style="max-width: 250px;" title="{{ usuario.correo }}">
+                {{ usuario.correo }}
+              </td>
+              <td class="truncate" style="max-width: 150px;" title="{{ usuario.rut }}">
+                {{ usuario.rut }}
+              </td>
+              <td>
+                <button (click)="abrirModal(usuario)" class="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-200">
+                  Gestionar
+                </button>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    
+    </div>
+  
+    <p-dialog header="Gestionar Usuario" [(visible)]="modalVisible" [modal]="true" [closable]="false" [style]="{ width: '50rem' }">
+        <div class="p-fluid">
+          <h4>Usuario: {{ usuarioSeleccionado?.nombre }}</h4>
+      
+          <!-- Cambiar correo: Solo para Jefe de Carrera y Jefe de Departamento -->
+          <div class="mb-4" *ngIf="esRolPermitido(usuarioSeleccionado?.tipo_usuario)">
+            <label for="nuevoCorreo">Nuevo Correo</label>
+            <input type="email" id="nuevoCorreo" [(ngModel)]="nuevoCorreo" class="p-inputtext p-component w-full" />
+            <button pButton label="Actualizar Correo" icon="pi pi-check" class="p-button-success mt-2"
+                    (click)="confirmarCambiarCorreo()"></button>
+          </div>
+      
+          <!-- Restablecer contraseña -->
+          <div class="mt-4">
+            <button pButton label="Restablecer Contraseña" icon="pi pi-refresh" class="p-button-danger"
+                    (click)="confirmarRestablecerContrasena()"></button>
+          </div>
+        </div>
+      
+        <footer class="mt-4">
+          <button pButton label="Cerrar" icon="pi pi-times" class="p-button-secondary" (click)="cerrarModal()"></button>
+        </footer>
+      </p-dialog>
+      
+  </div>
+  

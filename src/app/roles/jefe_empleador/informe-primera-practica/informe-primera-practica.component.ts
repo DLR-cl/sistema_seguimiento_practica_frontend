@@ -15,11 +15,12 @@ import { respuestaInformeConfidencial } from '../dto/informe-confidencial.dto';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { MessageService } from 'primeng/api';
 import { Pregunta } from '../../alumno_practica/dto/informe-alumno.dto';
+import { HeaderComponent } from "../../jefe_compartido/header-jefes/header.component";
 
 @Component({
   selector: 'app-informe-primera-practica',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, HeaderJefeEmpleadorComponent, FormsModule, ReactiveFormsModule, CalendarModule, RadioButtonModule, ButtonModule ,InputTextareaModule, InputNumberModule, FloatLabelModule],
+  imports: [CommonModule, NgxPaginationModule, HeaderComponent, FormsModule, ReactiveFormsModule, CalendarModule, RadioButtonModule, ButtonModule, InputTextareaModule, InputNumberModule, FloatLabelModule, HeaderComponent],
   templateUrl: './informe-primera-practica.component.html',
   styleUrl: './informe-primera-practica.component.css'
 })
@@ -79,8 +80,8 @@ export class InformePrimeraPracticaComponent implements OnInit{
     fecha_fin_practica: new FormControl(null, Validators.required),
     horas_semanales: new FormControl(null, [Validators.required, Validators.min(1)]),
     horas_practicas_regulares: new FormControl(null, [Validators.required, Validators.min(1)]),
-    horas_practicas_extraordinarias: new FormControl(null, [Validators.required, Validators.min(1)]),
-    horas_inasistencia: new FormControl(null, [Validators.required, Validators.min(1)])
+    horas_practicas_extraordinarias: new FormControl(null, [Validators.required, Validators.min(0)]),
+    horas_inasistencia: new FormControl(null, [Validators.required, Validators.min(0)])
   })
 
   idAlumno!: number

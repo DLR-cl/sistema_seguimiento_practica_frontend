@@ -30,4 +30,8 @@ export class AsignacionInformesService {
     return this._http.patch<any>(`${enviroment.API_URL}/practicas/extender`, extension)
   }
 
+  public eliminarPractica(idPractica: number){
+    return this._http.delete<any>(`${enviroment.API_URL}/practicas/eliminar-practica/${idPractica}`)
+  }
+
 }

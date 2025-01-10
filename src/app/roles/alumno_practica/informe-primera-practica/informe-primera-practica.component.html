@@ -230,3 +230,35 @@
         <button type="button" class="bg-blue-600 hover:bg-blue-700 ms-4 px-3 py-2 text-white rounded-lg" (click)="guardarAsignaturas()">Seleccionar</button>
     </ng-template>
 </p-dialog>
+
+<p-dialog
+  [(visible)]="electivasDialogVisible"
+  [modal]="true"
+  [draggable]="false"
+  [closable]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '600px' }"
+>
+  <ng-template pTemplate="header">
+    <h3 class="text-xl font-bold text-center">Selecciona una asignatura electiva</h3>
+  </ng-template>
+
+  <div class="flex flex-col gap-3 p-5">
+    <div
+      *ngFor="let electiva of asignaturasElectivas"
+      class="cursor-pointer p-3 text-center border rounded transition-transform hover:scale-105"
+      [ngClass]="{
+        'bg-blue-600 text-white': isElectivaSelected(electiva),
+        'bg-gray-100': !isElectivaSelected(electiva)
+      }"
+      (click)="toggleSeleccionElectiva(electiva)"
+    >
+      {{ electiva.nombre }}
+       <!-- ({{ electiva.codigo }}) NO TENGO EL CODIGO REAL -->
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-2 rounded-lg" (click)="cerrarElectiva()">Cerrar</button>
+  </ng-template>
+</p-dialog>

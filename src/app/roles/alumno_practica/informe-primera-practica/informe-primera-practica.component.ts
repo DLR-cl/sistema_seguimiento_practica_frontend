@@ -65,6 +65,10 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
   asignaturas_seleccionadas: Asignatura[] = [];  
   asignaturas_seleccionadasRespaldo: Asignatura[] = [];  
 
+  electivasDialogVisible = false;
+  asignaturasElectivas: Asignatura[] = [];
+  selectedElectiva = null;
+
   respuestasAlumno: Respuesta[] = []  
   
   uploadedFile: File | null = null;
@@ -87,44 +91,53 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
 
   public obtenerAsignaturas() {
     this.asignaturasService.obtenerAsignaturas().subscribe((result: AsignaturaBack[]) => {
-      console.log(result); // Ver los datos que llegan del backend
+        console.log(result); // Ver los datos que llegan del backend
+        // Creamos un objeto para agrupar por semestre
+        const semestresMap: { [key: number]: Semestre } = {};
 
-      // Creamos un objeto para agrupar por semestre
-      const semestresMap: { [key: number]: Semestre } = {};
+        // Iteramos sobre las asignaturas y las agrupamos por semestre (sin tener en cuenta la parte decimal)
+        result.forEach(asignatura =>  {
+          if (asignatura.nombre.startsWith('E.F.G.') || (asignatura.nombre.startsWith('E.F.P.') && !/^[A-Za-z\.]+\s*[IVXLCDM]+$/.test(asignatura.nombre))) {
+            this.asignaturasElectivas.push({
+                nombre: asignatura.nombre,
+                codigo: asignatura.codigo,
+                tipo: this.obtenerTipoAsignatura(asignatura.tipo_asignatura),
+            });
+            console.log(this.asignaturasElectivas)
+            return; // No procesamos más esta asignatura en el listado principal
+          }
 
-      // Iteramos sobre las asignaturas y las agrupamos por semestre (sin tener en cuenta la parte decimal)
-      result.forEach(asignatura => {
-        const semestreEntero = Math.floor(asignatura.semestre); // Usamos solo la parte entera del semestre
+          const semestreEntero = Math.floor(asignatura.semestre); // Usamos solo la parte entera del semestre
 
-        // Si no existe el semestre, lo inicializamos
-        if (!semestresMap[semestreEntero]) {
-          semestresMap[semestreEntero] = {
-            nombre: `Semestre ${semestreEntero}`,
-            asignaturas: []
-          };
-        }
+          // Si no existe el semestre, lo inicializamos
+          if (!semestresMap[semestreEntero]) {
+              semestresMap[semestreEntero] = {
+                  nombre: `Semestre ${semestreEntero}`,
+                  asignaturas: []
+              };
+          }
 
-        // Mapeamos el tipo de asignatura a una forma más corta (FB, FP, FG)
-        const tipo = this.obtenerTipoAsignatura(asignatura.tipo_asignatura);
+          // Mapeamos el tipo de asignatura a una forma más corta (FB, FP, FG)
+          const tipo = this.obtenerTipoAsignatura(asignatura.tipo_asignatura);
 
-        // Agregamos la asignatura al semestre correspondiente
-        semestresMap[semestreEntero].asignaturas.push({
-          nombre: asignatura.nombre,
-          codigo: asignatura.codigo,
-          tipo: tipo
+          // Agregamos la asignatura al semestre correspondiente
+          semestresMap[semestreEntero].asignaturas.push({
+              nombre: asignatura.nombre,
+              codigo: asignatura.codigo,
+              tipo: tipo
+          });
         });
-      });
 
-      // Convertimos el objeto semestresMap a un arreglo de semestres y lo ordenamos
-      this.semestres = Object.values(semestresMap).sort((a, b) => {
-        const semestreA = parseInt(a.nombre.split(' ')[1]);
-        const semestreB = parseInt(b.nombre.split(' ')[1]);
-        return semestreA - semestreB; // Ordenamos por el número del semestre
-      });
+        // Convertimos el objeto semestresMap a un arreglo de semestres y lo ordenamos
+        this.semestres = Object.values(semestresMap).sort((a, b) => {
+            const semestreA = parseInt(a.nombre.split(' ')[1]);
+            const semestreB = parseInt(b.nombre.split(' ')[1]);
+            return semestreA - semestreB; // Ordenamos por el número del semestre
+        });
 
-      console.log(this.semestres); // Ver el resultado final
+        console.log(this.semestres); // Ver el resultado final
     });
-  }
+}
   
   // Método para convertir tipo de asignatura
   private obtenerTipoAsignatura(tipo: string): string {
@@ -268,16 +281,56 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     return this.asignaturas_seleccionadas.some(a => a.codigo == asignatura.codigo);
   }
 
-  // Alterna la selección de una asignatura
   toggleSeleccion(asignatura: Asignatura): void {
-    if (this.isSelected(asignatura)) {
-      // Si ya está seleccionada, la elimina
-      this.asignaturas_seleccionadas = this.asignaturas_seleccionadas.filter(a => a.codigo != asignatura.codigo);
+    if (asignatura.tipo === 'FP' && asignatura.nombre.startsWith('E.F.P.')) {
+      const electivasDisponibles = this.getElectivas(asignatura.codigo);
+  
+      if (electivasDisponibles.length === 0) {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Aviso',
+          detail: 'No hay asignaturas electivas disponibles para seleccionar.',
+        });
+      } else {
+        this.asignaturasElectivas = electivasDisponibles;
+        this.electivasDialogVisible = true;
+      }
     } else {
-      // Si no está seleccionada, la agrega
-      this.asignaturas_seleccionadas.push(asignatura);
+      if (this.isSelected(asignatura)) {
+        this.asignaturas_seleccionadas = this.asignaturas_seleccionadas.filter((a) => a.codigo !== asignatura.codigo);
+      } else {
+        this.asignaturas_seleccionadas.push(asignatura);
+      }
     }
+  }
+
+  toggleSeleccionElectiva(electiva: Asignatura): void {
+    const index = this.asignaturas_seleccionadas.findIndex((a) => a.codigo === electiva.codigo);
+    if (index !== -1) {
+      // Si ya está seleccionada, la quitamos
+      this.asignaturas_seleccionadas.splice(index, 1);
+    } else {
+      // Si no está seleccionada, la agregamos
+      this.asignaturas_seleccionadas.push(electiva);
+    }
+  }
+
+  isElectivaSelected(electiva: Asignatura): boolean {
+  return this.asignaturas_seleccionadas.some((a) => a.codigo === electiva.codigo);
+}
+
+  getElectivas(codigo: string): Asignatura[] {
+    return this.asignaturasElectivas;
+  }
+  
+  seleccionarElectiva(asignatura: Asignatura): void {
+    this.asignaturas_seleccionadas.push(asignatura);
     console.log(this.asignaturas_seleccionadas)
+    this.electivasDialogVisible = false;
+  }
+
+  cerrarElectiva(): void {
+    this.electivasDialogVisible = false;
   }
 
   enviarInforme(){
@@ -359,7 +412,6 @@ export class InformePrimeraPracticaAlumnoComponent implements OnInit {
     return false; // Si ninguno de los campos relevantes está incompleto
   }
   
-
   public existeRespuesta(){
     this.respuestasService.existeRespuesta(this.idInforme).subscribe((result: any) => {
       console.log(result)

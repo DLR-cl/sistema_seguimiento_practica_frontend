@@ -11,7 +11,7 @@ import { AuthStateService } from '../../../shared/data-access/auth-state.service
 import { PayloadInterface } from '../../../shared/interface/payload.interface';
 import { TipoUsuario } from '../../../enum/enumerables.enum';
 import { AcademicoInformes, PracticaInfo } from '../dto/asignacion-informes.dto';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { HeaderComponent } from "../../jefe_compartido/header-jefes/header.component";
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
@@ -30,7 +30,8 @@ export class PracticasSecretariaComponent implements OnInit {
   constructor(
     private asignacionService: AsignacionInformesService,
     private dataUserService: AuthStateService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService 
   ){}
 
   ngOnInit(): void {
@@ -48,6 +49,7 @@ export class PracticasSecretariaComponent implements OnInit {
   cargando: boolean = true
   cargandoAsignacion: boolean = false
   cargandoExtension: boolean = false
+  cargandoEliminacion: boolean = false;
 
   buscador: string = ''
 
@@ -87,6 +89,40 @@ export class PracticasSecretariaComponent implements OnInit {
   elementosPorPagina: number = 6; // Número de elementos por página
 
   fechaExtension: Date | null = null;
+
+  mostrarConfirmacion(): void {
+    this.confirmationService.confirm({
+      message: '¿Está seguro de que desea eliminar la práctica del alumno?',
+      header: 'Confirmación de Eliminación',
+      icon: 'pi pi-exclamation-triangle',
+      acceptButtonStyleClass: 'bg-red-600 border-none hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg',
+      rejectButtonStyleClass: 'bg-gray-300 border-none hover:bg-gray-400 text-black text-sm font-medium px-4 py-2 rounded-lg',
+      acceptLabel: 'Eliminar',
+      rejectLabel: 'Cancelar',
+      accept: () => {
+        this.eliminarPractica();
+      },
+      reject: () => {
+        this.messageService.add({ severity: 'warn', summary: 'Cancelado', detail: `Se canceló la eliminación de la práctica` });
+      }
+    });
+  }
+
+  eliminarPractica(): void {
+    this.cargandoEliminacion = true;
+    this.asignacionService.eliminarPractica(this.practicaSeleccionada!.id_practica).subscribe({
+      next: result => {
+        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Práctica eliminada con éxito.' });
+        this.cargandoEliminacion = false;
+        this.getPracticas()
+        this.cerrarModalDetalles()
+      },
+      error: error => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al eliminar la práctica: ${error.message}` });
+        this.cargandoEliminacion = false;
+      }
+    })
+  }
 
   confirmarFechaExtension() {
     this.cargandoExtension = true;

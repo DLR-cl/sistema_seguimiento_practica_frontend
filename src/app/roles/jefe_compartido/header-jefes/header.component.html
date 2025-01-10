@@ -44,7 +44,7 @@
             <div 
               *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR'"
               class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
-              <a href="#" class="block font-semibold cursor-pointer text-gray-900">Estado de los informes</a>
+              <a (click)="goToInformes()" class="block font-semibold cursor-pointer text-gray-900">Estado de los informes</a>
             </div>
             <div
               *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'"
@@ -56,6 +56,11 @@
               *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'"
               class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
               <a (click)="goToPracticas()" class="block font-semibold cursor-pointer text-gray-900">Ver Prácticas</a>
+            </div>
+            <div 
+              *ngIf="dataUser?.rol == 'ADMINISTRADOR'"
+              class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
+              <a (click)="goToGestionar()" class="block font-semibold cursor-pointer text-gray-900">Gestionar Usuarios</a>
             </div>
           </div>
         </div>

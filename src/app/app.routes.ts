@@ -27,6 +27,8 @@ import { CargarUsuariosNominaComponent } from './roles/secretaria/cargar-usuario
 import { EstadoAcademicosComponent } from './roles/secretaria/estado-academicos/estado-academicos.component';
 import { ResultadosPracticaComponent } from './roles/jefe_compartido/pages/resultados-practica/resultados-practica.component';
 import { PdfgeneratorComponent } from './shared/pdfgenerator/pdfgenerator.component';
+import { GestionarUsuariosComponent } from './roles/jefe_compartido/gestionar-usuarios/gestionar-usuarios.component';
+import { InformesComponent } from './roles/jefe_compartido/informes/informes.component';
 
 
 export const routes: Routes = [
@@ -46,6 +48,14 @@ export const routes: Routes = [
     {
         path: 'home-administracion', component: HomeAdministracionComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.JEFE_CARRERA, TipoUsuario.ADMINISTRADOR])]
+    },
+    {
+        path: 'informes', component: InformesComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.ADMINISTRADOR])]
+    },
+    {
+        path: 'gestionar-usuarios', component: GestionarUsuariosComponent,
+        canActivate: [privateGuard, roleGuard([TipoUsuario.ADMINISTRADOR])]
     },
     {
         path: 'home-academicos', component: AcademicoComponent,

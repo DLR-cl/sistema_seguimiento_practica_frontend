@@ -119,7 +119,7 @@ export class DashboardService {
     }
     
 
-    generarReporteConfidencialPorPeriodo(fecha_ini: string, fecha_fin: string): Observable<Blob> {
+    public generarReporteConfidencialPorPeriodo(fecha_ini: string, fecha_fin: string): Observable<Blob> {
         // Convertir las fechas a formato ISO para enviarlas como parámetros
         const params = {
           fecha_ini: fecha_ini,
@@ -133,7 +133,7 @@ export class DashboardService {
         });
       }
 
-    obtenerDatosConteoPractica(id_academico: number){
+    public obtenerDatosConteoPractica(id_academico: number){
         console.log(id_academico)
         const params = {
             id_academico: id_academico,
@@ -141,7 +141,7 @@ export class DashboardService {
         return this._http.get<ConteoPracticas>(`${enviroment.API_URL}/academicos/data/resultados-practica/conteo`, { params });
     }
 
-    obtenerInformesPorMesPractica(id_academico: number){
+    public obtenerInformesPorMesPractica(id_academico: number){
         const params = {
             id_academico: id_academico,
         }

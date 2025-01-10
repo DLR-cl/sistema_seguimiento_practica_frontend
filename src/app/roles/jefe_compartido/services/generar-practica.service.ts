@@ -27,7 +27,6 @@ export class GenerarPracticaService {
     return this.http.post<ResponseSupervisor>(`${enviroment.API_URL}/jefe-alumno`, datosSupervisor)
   }
 
-  //CAMBIAR ANY RESPONSE
   public crearAlumno(datosAlumno: nuevoAlumno){
     return this.http.post<any>(`${enviroment.API_URL}/alumno-practica/registro`, datosAlumno)
   }
