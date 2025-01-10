@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ImagePreloaderService } from './images-preloader.service';
 
 @Component({
   selector: 'app-home',
@@ -22,17 +23,30 @@ export class HomeComponent implements OnInit {
 
   currentImageIndex: number = 0;
   intervalId: any;
+  isImagesLoaded: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,  private imagePreloader: ImagePreloaderService) {}
 
   ngOnInit(): void {
-    this.startImageRotation();
+    this.imagePreloader
+      .preload(this.imageUrls)
+      .then(() => {
+        this.isImagesLoaded = true;
+        this.startImageRotation();
+      })
+      .catch((err) => console.error('Error loading images', err));
   }
 
   startImageRotation(): void {
     this.intervalId = setInterval(() => {
       this.currentImageIndex = (this.currentImageIndex + 1) % this.imageUrls.length;
     }, 4000); // Cambiar cada 4 segundos
+  }
+  
+  ngOnDestroy(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   toLogin(): void {
