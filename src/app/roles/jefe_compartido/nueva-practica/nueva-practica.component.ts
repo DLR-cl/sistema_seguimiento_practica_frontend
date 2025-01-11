@@ -94,6 +94,12 @@ export class NuevaPracticaComponent implements OnInit{
   modalTitle = '';
 
   pasoActual = 1;  
+  pasos = [
+    { texto: 'Ingresar Empresa' },
+    { texto: 'Ingresar Supervisor' },
+    { texto: 'Ingresar Alumno' },
+    { texto: 'Ingresar Datos de Práctica' }
+  ];
 
   rutBusqueda: string = ''
   modalAlumno: boolean = false;
