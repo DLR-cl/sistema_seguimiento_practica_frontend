@@ -49,36 +49,39 @@
           >
             <!-- Encabezados de la tabla -->
             <ng-template pTemplate="header">
-              <tr>
-                <th pSortableColumn="nombre" class="text-left">
-                  Nombre <p-sortIcon field="nombre"></p-sortIcon>
+                <tr>
+                <th pSortableColumn="nombre" class="w-1/3 text-left whitespace-nowrap overflow-hidden text-ellipsis">
+                    Nombre <p-sortIcon field="nombre"></p-sortIcon>
                 </th>
-                <th pSortableColumn="correo" class="text-left">
-                  Correo <p-sortIcon field="correo"></p-sortIcon>
+                <th pSortableColumn="correo" class="w-1/3 text-left whitespace-nowrap overflow-hidden text-ellipsis">
+                    Correo <p-sortIcon field="correo"></p-sortIcon>
                 </th>
                 <!-- Mostrar columna "Rut" solo si aplica -->
-                <th *ngIf="debeMostrarRut(lista)" pSortableColumn="rut" class="text-left">
-                  Rut <p-sortIcon field="rut"></p-sortIcon>
+                <th *ngIf="debeMostrarRut(lista)" pSortableColumn="rut" class="w-1/6 text-left whitespace-nowrap overflow-hidden text-ellipsis">
+                    Rut <p-sortIcon field="rut"></p-sortIcon>
                 </th>
-                <th class="text-center">Acción</th>
-              </tr>
+                <th class="w-1/4 text-center whitespace-nowrap">Acción</th>
+                </tr>
             </ng-template>
-  
+            
             <!-- Cuerpo de la tabla -->
             <ng-template pTemplate="body" let-usuario>
-              <tr>
-                <td class="truncate max-w-md" title="{{ usuario.nombre }}">{{ usuario.nombre }}</td>
-                <td class="truncate max-w-md" title="{{ usuario.correo }}">{{ usuario.correo }}</td>
-                <td *ngIf="debeMostrarRut(lista)" class="truncate max-w-sm" title="{{ usuario.rut }}">{{ usuario.rut }}</td>
-                <td class="text-center">
-                  <button
-                    (click)="abrirModal(usuario)"
-                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-150"
-                  >
-                    Gestionar
-                  </button>
+                <tr>
+                <td class="truncate" title="{{ usuario.nombre }}">
+                    {{ usuario.nombre }}
                 </td>
-              </tr>
+                <td class="truncate"title="{{ usuario.correo }}">
+                    {{ usuario.correo }}
+                </td>
+                <td *ngIf="debeMostrarRut(lista)" class="truncate" title="{{ usuario.rut }}">
+                    {{ usuario.rut }}
+                </td>
+                <td class="text-center">
+                    <button (click)="abrirModal(usuario)" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
+                        Gestionar
+                    </button>
+                </td>
+                </tr>
             </ng-template>
           </p-table>
         </div>
