@@ -269,32 +269,51 @@
             </div>
         </div>
         <div class="w-full flex justify-center space-x-10 mt-5">
-            <button *ngIf="pasoActual === 1"
-                class="my-5 w-2/12 px-3 py-2 bg-gray-400 text-lg text-white font-semibold rounded hover:bg-gray-500"
-                type="button" (click)="practicaSeleccionada = false">
-                Escoger Práctica
-            </button>
-            <button *ngIf="pasoActual > 1"
-                class="my-5 w-2/12 px-3 py-2 bg-gray-400 text-lg text-white font-semibold rounded hover:bg-gray-500"
-                type="button" (click)="pasoAnterior()">
-                Paso Anterior
-            </button>
-            <button *ngIf="pasoActual < 4"
-                class="my-5 w-2/12 px-3 py-2 bg-blue-600 text-lg text-white font-semibold rounded hover:bg-blue-700"
-                type="button" (click)="siguientePaso()">
-                Siguiente Paso
-            </button>
-            <button *ngIf="pasoActual === 4"
-                class="my-5 w-2/12 px-3 py-2 text-lg font-semibold rounded 
-                    bg-green-600 text-white hover:bg-green-700 
-                    disabled:bg-green-500 disabled:text-gray-200 disabled:hover:bg-green-500"
-                type="submit" [disabled]="!formPractica.valid">
-                Crear práctica
-            </button>
+          <!-- Botón: Escoger Práctica -->
+          <button
+            *ngIf="pasoActual === 1"
+            class="my-5 w-2/12 px-3 py-2 bg-gray-400 text-lg text-white font-semibold rounded hover:bg-gray-500 transition"
+            type="button"
+            (click)="practicaSeleccionada = false"
+          >
+            Escoger Práctica
+          </button>
+        
+          <!-- Botón: Paso Anterior -->
+          <button
+            *ngIf="pasoActual > 1"
+            class="my-5 w-2/12 px-3 py-2 bg-gray-400 text-lg text-white font-semibold rounded hover:bg-gray-500 transition"
+            type="button"
+            (click)="pasoAnterior()"
+          >
+            Paso Anterior
+          </button>
+        
+          <!-- Botón: Siguiente Paso -->
+          <button
+            *ngIf="pasoActual < 4"
+            class="my-5 w-2/12 px-3 py-2 bg-blue-600 text-lg text-white font-semibold rounded hover:bg-blue-700 transition"
+            type="button"
+            (click)="siguientePaso()"
+          >
+            Siguiente Paso
+          </button>
+        
+          <!-- Botón: Crear Práctica -->
+          <button
+            *ngIf="pasoActual === 4"
+            class="my-5 w-2/12 px-3 py-2 text-lg font-semibold rounded 
+                   bg-green-700 text-white hover:bg-green-800 transition
+                   disabled:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-green-400"
+            type="submit"
+            [disabled]="!formPractica.valid"
+          >
+            Crear Práctica
+          </button>
         </div>
     </form>
 
-    <p-dialog [(visible)]="showModal" [modal]="true" (onHide)="closeModal()" [draggable]="false" [closable]="true" [style]="{ width: '50vw' }"
+    <p-dialog [(visible)]="showModal" [modal]="true" (onHide)="closeModal()" [focusOnShow]="false" [draggable]="false" [closable]="true" [style]="{ width: '50vw' }"
         class="rounded-lg shadow-lg">
 
         <ng-template pTemplate="header">
@@ -424,8 +443,10 @@
 
                 <!-- Campo de búsqueda (Reactivo) -->
                 <div class="flex gap-4 items-center">
-                    <input type="text" [formControl]="rutControl" placeholder="Ingrese el RUT (12345678-k)" maxlength="10"
-                        class="flex-1 bg-gray-100 p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                  <input type="text" [formControl]="rutControl" placeholder="Ingrese el RUT (12345678-k)" maxlength="10"
+                  class="flex-1 bg-gray-100 p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+                
 
                     <button [disabled]="rutControl.invalid" (click)="obtenerDatosAlumno()"
                         class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">

@@ -26,7 +26,7 @@
           id="nombre"
           type="text"
           formControlName="nombre"
-          class="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+          class="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           placeholder="Ingrese el nombre"
         />
       </div>
@@ -38,7 +38,7 @@
           id="correo"
           type="email"
           formControlName="correo"
-          class="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+          class="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           placeholder="Ingrese el correo"
         />
       </div>
@@ -50,7 +50,7 @@
           id="rut"
           type="text"
           formControlName="rut"
-          class="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"
+          class="mt-1 block w-full rounded-md p-2 border-gray-300 shadow-sm focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-500 focus:ring-opacity-50"
           placeholder="Ingrese el rut"
           maxlength="10"
         />
@@ -69,11 +69,12 @@
 
         <button
           type="submit"
-          class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          class="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:bg-blue-300 disabled:hover:bg-blue-300"
           [disabled]="formAcademico.invalid || cargandoCrear"
         >
           Crear Académico
         </button>
+
       </div>
     </form>
   </div>
