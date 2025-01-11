@@ -32,9 +32,9 @@ export class DetallesInformesComponent implements OnInit {
   informeConfidencial: any;
 
   archivoSeleccionado: File | null = null;
-  
+
   observaciones: string = '';
-  
+
   paginaActual: number = 0;
   preguntasPorPagina: number = 3;
 
@@ -72,7 +72,7 @@ export class DetallesInformesComponent implements OnInit {
     private router: Router,
     private dataAccessService: DataAccessService,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   fileName: string = '';
   selectedFile: File | null = null; // Almacena el archivo seleccionado
@@ -157,6 +157,16 @@ export class DetallesInformesComponent implements OnInit {
     }));
   }
 
+  get evaluacionGeneralAlumno() {
+    return this.preguntasBackend.filter(
+      (item) => item.pregunta.dimension.nombre === 'Evaluación General Informe Alumno'
+    ).map((item) => ({
+      id: item.pregunta.id_pregunta,
+      pregunta: item.pregunta.enunciado_pregunta,
+      tipo: item.pregunta.tipo_pregunta
+    }));
+  }
+
   // Selección de una respuesta
   selectOne(id: number, opcion: string) {
     // Mapea la abreviatura a su nombre completo
@@ -174,26 +184,30 @@ export class DetallesInformesComponent implements OnInit {
   }
 
   enviarEvaluacion() {
-  
+
     const respuestas = Object.keys(this.respuestasEvaluacion).map((preguntaId) => {
       return {
         respuesta_texto: this.respuestasEvaluacion[+preguntaId],
-        pregunta_id: +preguntaId, 
-        informe_id: this.idInforme, 
+        pregunta_id: +preguntaId,
+        informe_id: this.idInforme,
       };
     });
-
+    respuestas.push({
+      respuesta_texto: this.observaciones,
+      pregunta_id: 13,
+      informe_id: this.idInforme,
+    })
     const revision = {
       id_academico: this.practica.informe_confidencial?.id_academico,
       id_informe_alumno: this.idInforme,
-      id_informe_confidencial:  this.practica.informe_confidencial?.id_informe_confidencial,
+      id_informe_confidencial: this.practica.informe_confidencial?.id_informe_confidencial,
       fecha_revision: new Date(),
       respuestas: respuestas,
       observacion: this.observaciones
     }
 
-    if (revision.respuestas.length < this.agrupadosAspectos[0].preguntas.length + this.agrupadosAspectos[1].preguntas.length + this.evaluacionGeneralConfidencial.length){
-      this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe responder todas las preguntas`});
+    if (revision.respuestas.length < this.agrupadosAspectos[0].preguntas.length + this.agrupadosAspectos[1].preguntas.length + this.evaluacionGeneralConfidencial.length) {
+      this.messageService.add({ severity: 'warn', summary: 'Precaución', detail: `Debe responder todas las preguntas` });
       return
     }
     console.log('Respuestas de Evaluación:', revision);
@@ -203,20 +217,20 @@ export class DetallesInformesComponent implements OnInit {
         console.log(result)
         this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas registradas con éxito.' });
         this.router.navigate(['home-academicos'])
-        if(this.selectedFile){
+        if (this.selectedFile) {
           const formData: FormData = new FormData();
           formData.append('id_informe', '' + this.idInforme);
           formData.append('id_academico', '' + this.practica.informe_alumno.id_academico);
           formData.append('nombre_alumno', '' + this.practica.informe_alumno.alumno.usuario.nombre);
           formData.append('tipo_practica', this.practica.tipo_practica);
           formData.append('file', this.selectedFile); // Usar el archivo seleccionado
-    
+
           // Simulación de la carga del archivo
           formData.forEach((value, key) => {
             console.log(`${key}:`, value);
           });
           console.log('Subiendo corrección...');
-    
+
           this.practicaService.enviarCorreccionInforme(formData).subscribe({
             next: result => {
               console.log(result)
@@ -233,7 +247,7 @@ export class DetallesInformesComponent implements OnInit {
         this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al registrar las respuestas: ${error.message}` });
       }
     })
-    
+
   }
 
   onFileSelected(event: any): void {
@@ -361,7 +375,7 @@ export class DetallesInformesComponent implements OnInit {
 
   checkCargandoFinalizado() {
     if (this.cargandoSolicitudes === 0) {
-        this.cargando = false;
+      this.cargando = false;
     }
   }
 

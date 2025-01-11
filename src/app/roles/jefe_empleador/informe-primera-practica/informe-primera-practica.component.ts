@@ -53,6 +53,17 @@ export class InformePrimeraPracticaComponent implements OnInit{
     "ERP específico de la Empresa"
   ];
   
+  caracter = [
+    "Pública",
+    "Privada"
+  ]
+
+  tamanoEmpresa = [
+    "200 funcionarios o más",
+    "Entre 50 a 199 funcionarios",
+    "49 funcionarios o menos"
+  ]
+
   private readonly _router = inject(Router);
   public datos_listo = false;
   public page: number=1;
@@ -101,8 +112,9 @@ export class InformePrimeraPracticaComponent implements OnInit{
       // Si no existe, agrega la nueva respuesta
       this.respuestasSupervisor.push(respuesta);
     }
+    console.log(this.datos_listo, 'datos listo')
   
-    console.log(this.respuestasSupervisor);
+    console.log("respuestas registradas", this.respuestasSupervisor);
   }
   
   public actualizarInputText(preguntaId: number, texto: string) {
@@ -114,7 +126,7 @@ export class InformePrimeraPracticaComponent implements OnInit{
       this.respuestasSupervisor.push({
         id_informe: this.idInforme,
         id_pregunta: preguntaId,
-        respuesta_texto: texto,
+        respuesta_texto: texto === 'Privada' ? 'PRIVADA' : texto || texto === 'Pública' ? 'PUBLICA' : texto,
       });
     }
   
@@ -132,10 +144,10 @@ export class InformePrimeraPracticaComponent implements OnInit{
           id_pregunta: preg.id_pregunta,
           id_informe: this.idInforme,
         };       
-        if (preg.tipo_pregunta === 'ABIERTA' || preg.tipo_pregunta === 'VINCULACION_MEDIO' || preg.tipo_pregunta === 'HABILIDADES_TECNICAS') {
+        if (preg.tipo_pregunta === 'ABIERTA' || preg.tipo_pregunta === 'VINCULACION_MEDIO' || preg.tipo_pregunta === 'HABILIDADES_TECNICAS' || preg.dimension.nombre === 'Antecedentes de la Empresa') {
           respuesta.respuesta_texto = '';
         }    
-        if (preg.tipo_pregunta === 'CERRADA') {
+        if (preg.tipo_pregunta === 'CERRADA' && preg.dimension.nombre != 'Antecedentes de la Empresa') {
           respuesta.puntos = 0;
         }
         return respuesta;

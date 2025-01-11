@@ -208,6 +208,41 @@
       <!-- Tabla: Evaluación General Informe Confidencial -->
       <div *ngIf="evaluacionGeneralConfidencial.length > 0" class="mb-6">
         <h3 class="text-sm font-semibold text-gray-700 mb-2 border-b pb-1">
+          Evaluación General Informe Alumno
+        </h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm table-auto border-collapse">
+            <thead>
+              <tr class="bg-gray-100">
+                <th class="px-2 py-1 text-left border">Pregunta</th>
+                <th class="px-2 py-1 text-left border">Respuesta</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let pregunta of evaluacionGeneralAlumno">
+                <td class="border px-2 py-1">{{ pregunta.pregunta }}</td>
+                <td class="border px-2 py-1">
+                  <div class="flex gap-1">
+                    <button
+                      *ngFor="let opcion of opcionesCumple"
+                      class="py-1 px-2 rounded text-xs cursor-pointer transition"
+                      [ngClass]="{
+                        'bg-blue-500 text-white': respuestasEvaluacion[pregunta.id] === opcion,
+                        'bg-gray-100 text-gray-700': respuestasEvaluacion[pregunta.id] !== opcion
+                      }"
+                      (click)="selectOne(pregunta.id, opcion)"
+                    >
+                      {{ opcion }}
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div *ngIf="evaluacionGeneralConfidencial.length > 0" class="mb-6">
+        <h3 class="text-sm font-semibold text-gray-700 mb-2 border-b pb-1">
           Evaluación General Informe Confidencial
         </h3>
         <div class="overflow-x-auto">

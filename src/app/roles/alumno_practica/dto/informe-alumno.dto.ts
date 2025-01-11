@@ -9,8 +9,14 @@ export interface Pregunta{
     id_pregunta: number,
     enunciado_pregunta:string,
     tipo_pregunta: TipoPregunta,
+    dimension: Dimension
 }
 
+interface Dimension {
+    id_dimension: number;
+    nombre: string;
+    descripcion: string;
+}
 export interface ListaRespuestas{
     respuestas: Respuesta[]
 }

@@ -34,7 +34,7 @@ export class PdfgeneratorComponent implements OnChanges {
           console.log('Datos obtenidos para el PDF:', this.dataPdf);
 
           // Esperar a que el DOM se actualice con los datos
-          setTimeout(() => this.generarPDF(), 300); // Retraso de 300ms para asegurar el render
+          setTimeout(() => this.generarPDF(this.dataPdf.datosIdentificacion.nombre_alumno, this.dataPdf.datosIdentificacion.tipo_practica), 300); // Retraso de 300ms para asegurar el render
         },
         error: (error: any) => {
           console.error('Error al obtener los datos para el PDF:', error);
@@ -43,8 +43,8 @@ export class PdfgeneratorComponent implements OnChanges {
       });
   }
 
-  generarPDF(): void {
-    const fileName = `evaluacion_practica_${new Date().toISOString().slice(0, 10)}.pdf`;
+  generarPDF(nombre_alumno: string, practica: string): void {
+    const fileName = `evaluacion_practica_${nombre_alumno}_${practica}${new Date().toISOString().slice(0, 10)}.pdf`;
 
     this.pdfGeneratorService
       .generarPdfDesdeHtml('contenidoPdf', fileName)

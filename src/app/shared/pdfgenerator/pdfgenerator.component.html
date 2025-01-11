@@ -2,7 +2,7 @@
     <div class="flex items-center mb-[1rem]">
         <!-- Logo UTA -->
         <div class="flex-shrink-0">
-            <img  alt="Logo UTA" class="w-[3rem] h-auto" />
+            <img  alt="Logo UTA" class="w-[3rem] h-auto" src="logo-uta.png" />
         </div>
 
         <!-- Línea con Textos en los Extremos -->
@@ -27,7 +27,7 @@
         <!-- Logo Ingeniería -->
         <div class="flex-shrink-0">
             <img  alt="Logo Ingeniería"
-                class="w-[3rem] h-auto" />
+                class="w-[3rem] h-auto" src="logo_industria.png"/>
         </div>
     </div>
 
@@ -246,6 +246,6 @@
     </div>
 </div>
 
-<button (click)="generarPDF()" class="mt-4 p-2 bg-blue-500 text-white rounded">
+<button (click)="generarPDF(dataPdf.datosIdentificacion.nombre_alumno, dataPdf.datosIdentificacion.tipo_practica)" class="mt-4 p-2 bg-blue-500 text-white rounded">
 Generar PDF
 </button>
