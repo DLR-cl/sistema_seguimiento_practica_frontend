@@ -12,69 +12,80 @@
     </div>
 </div>
 
-<div *ngIf="!cargando" class="container mx-auto my-10 p-10 bg-white rounded-lg shadow-md">
+<div *ngIf="!cargando" class="container mx-auto mt-5 mb-10 px-6 py-6">
+    <!-- Título de la sección -->
+    <h2 class="text-4xl font-extrabold text-center w-full mb-10">Gestionar Usuarios</h2>
   
     <!-- Listado de usuarios por tipo -->
-    <div *ngFor="let lista of [listaJefesCarreraDepartamento, listaSecretarias, listaAcademicos, listaSupervisores , listaAlumnos]; let i = index">
-      
-      <!-- Solo mostramos si hay usuarios en la lista -->
-      <div *ngIf="lista.length > 0">
-        <!-- Titulo dinámico dependiendo de la lista -->
-        <h3 class="text-2xl font-bold text-gray-800 mt-10 mb-6">{{ getRolNombre(lista) }}</h3>
-        
-        <!-- Campo de búsqueda global -->
-        <div class="mb-4">
-          <input type="text" [(ngModel)]="searchTerms[i]" (input)="filterTable(i)" placeholder="Buscar por nombre o rut" 
-                 class="px-4 py-2 border rounded-lg shadow-sm w-full">
-        </div>
+    <div *ngFor="let lista of [listaJefesCarreraDepartamento, listaSecretarias, listaAcademicos, listaSupervisores, listaAlumnos]; let i = index">
+      <!-- Mostrar solo si hay usuarios en la lista -->
+      <div *ngIf="lista.length > 0" class="mt-8">
+        <!-- Contenedor con fondo gris y sombra para cada lista -->
+        <div class="p-6 border border-gray-100 rounded-lg shadow-lg">
+          <!-- Título dinámico -->
+          <h3 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-gray-500 pb-2">
+            {{ getRolNombre(lista) }}
+          </h3>
   
-        <!-- Paginación y Búsqueda con PrimeNG -->
-        <p-table [value]="filteredListas[i]" [paginator]="true" [rows]="5" [showCurrentPageReport]="true" 
-                 currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}">
-          
-          <ng-template pTemplate="header">
-            <tr>
-              <th pSortableColumn="nombre" style="width: 30%;">
-                Nombre
-                <p-sortIcon field="nombre"></p-sortIcon>
-              </th>
-              <th pSortableColumn="correo" style="width: 30%;">
-                Correo
-                <p-sortIcon field="correo"></p-sortIcon>
-              </th>
-              <th pSortableColumn="rut" style="width: 20%;">
-                Rut
-                <p-sortIcon field="rut"></p-sortIcon>
-              </th>
-              <th style="width: 20%;">
-                Acción
-              </th>
-            </tr>
-          </ng-template>
-          
-          <ng-template pTemplate="body" let-usuario>
-            <tr>
-              <td class="truncate" style="max-width: 250px;" title="{{ usuario.nombre }}">
-                {{ usuario.nombre }}
-              </td>
-              <td class="truncate" style="max-width: 250px;" title="{{ usuario.correo }}">
-                {{ usuario.correo }}
-              </td>
-              <td class="truncate" style="max-width: 150px;" title="{{ usuario.rut }}">
-                {{ usuario.rut }}
-              </td>
-              <td>
-                <button (click)="abrirModal(usuario)" class="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-200">
-                  Gestionar
-                </button>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
+          <!-- Campo de búsqueda -->
+          <div class="mb-4">
+            <input
+              type="text"
+              [(ngModel)]="searchTerms[i]"
+              (input)="filterTable(i)"
+              [placeholder]="(i === 0 || i === 1) ? 'Buscar por nombre' : 'Buscar por nombre o rut'"
+              class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            />
+          </div>
+  
+          <!-- Tabla con paginación -->
+          <p-table
+            [value]="filteredListas[i]"
+            [paginator]="true"
+            [rows]="5"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}"
+            class="p-datatable-sm"
+          >
+            <!-- Encabezados de la tabla -->
+            <ng-template pTemplate="header">
+              <tr>
+                <th pSortableColumn="nombre" class="text-left">
+                  Nombre <p-sortIcon field="nombre"></p-sortIcon>
+                </th>
+                <th pSortableColumn="correo" class="text-left">
+                  Correo <p-sortIcon field="correo"></p-sortIcon>
+                </th>
+                <!-- Mostrar columna "Rut" solo si aplica -->
+                <th *ngIf="debeMostrarRut(lista)" pSortableColumn="rut" class="text-left">
+                  Rut <p-sortIcon field="rut"></p-sortIcon>
+                </th>
+                <th class="text-center">Acción</th>
+              </tr>
+            </ng-template>
+  
+            <!-- Cuerpo de la tabla -->
+            <ng-template pTemplate="body" let-usuario>
+              <tr>
+                <td class="truncate max-w-md" title="{{ usuario.nombre }}">{{ usuario.nombre }}</td>
+                <td class="truncate max-w-md" title="{{ usuario.correo }}">{{ usuario.correo }}</td>
+                <td *ngIf="debeMostrarRut(lista)" class="truncate max-w-sm" title="{{ usuario.rut }}">{{ usuario.rut }}</td>
+                <td class="text-center">
+                  <button
+                    (click)="abrirModal(usuario)"
+                    class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-150"
+                  >
+                    Gestionar
+                  </button>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
       </div>
-    
     </div>
-
+  
+    <!-- Modal de gestión de usuario -->
     <p-dialog header="Gestionar Usuario" [(visible)]="modalVisible" [modal]="true" [focusOnShow]="false" [draggable]="false" [closable]="false" [style]="{ width: '50rem' }">
         <div class="p-fluid space-y-6">
           <!-- Título del usuario -->
@@ -122,7 +133,5 @@
           </button>
         </footer>
       </p-dialog>
-      
-
   </div>
   
