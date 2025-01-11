@@ -82,6 +82,7 @@
                       <td class="px-6 py-4">{{ formatDescripcion(ruta) }}</td>
                       <td class="px-6 py-4 text-center">
                           <button
+                          (click)="descargarArchivo(ruta)"
                               class="py-2 px-4 bg-green-600 text-white rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
                               Descargar
                           </button>

@@ -73,9 +73,6 @@ export class NuevaPracticaComponent implements OnInit{
   formEmpresa: FormGroup = new FormGroup({
     nombre_razon_social: new FormControl ('', Validators.required),
     ubicacion: new FormControl ('', Validators.required),
-    rubro: new FormControl ('', Validators.required),
-    caracter_empresa: new FormControl('', Validators.required),
-    tamano_empresa: new FormControl('', Validators.required)
   });
 
   formSupervisor: FormGroup = new FormGroup({

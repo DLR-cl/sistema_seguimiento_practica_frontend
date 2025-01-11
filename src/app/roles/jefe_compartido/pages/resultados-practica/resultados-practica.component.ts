@@ -160,6 +160,7 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
   }
 
   descargarArchivo(ruta: string): void {
+    console.log('Cargando')
     this._dashboardService.reportesArchivosExcelDescargar(ruta);
   }
 

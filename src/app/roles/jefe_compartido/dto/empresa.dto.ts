@@ -3,9 +3,9 @@ import { Usuario } from "./practicas.dto";
 export interface NuevaEmpresa {
     nombre_razon_social: string;
     ubicacion: string;
-    rubro: string;
-    caracter_empresa: string;
-    tamano_empresa: string;
+    rubro?: string;
+    caracter_empresa?: string;
+    tamano_empresa?: string;
 }
 
 export interface NuevoSupervisor {
@@ -40,9 +40,9 @@ export interface ResponseEmpresa {
     id_empresa:          number;
     nombre_razon_social: string;
     ubicacion:           string;
-    rubro:               string;
-    caracter_empresa:    string;
-    tamano_empresa:      string;
+    rubro?:               string;
+    caracter_empresa?:    string;
+    tamano_empresa?:      string;
 }
 
 export interface ResponseSupervisor {
