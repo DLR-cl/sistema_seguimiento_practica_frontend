@@ -10,12 +10,10 @@ export class DatosSecretariaService {
 
     private readonly _http = inject(HttpClient);
 
-    // Obtener información de académicos
     public getInfoSecretarias() {
         return this._http.get<Secretaria[]>(`${enviroment.API_URL}/users/lista-rol/SECRETARIA`);
     }
 
-    // Crear un nuevo académico
     public crearSecretaria(nuevaSecretaria: NuevaSecretaria) {
         return this._http.post<ResponseNueva>(`${enviroment.API_URL}/users`, nuevaSecretaria);
     }

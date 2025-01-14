@@ -3,11 +3,14 @@ import { inject } from "@angular/core";
 import { Router } from "@angular/router";
 import { catchError, throwError } from "rxjs";
 import { AuthStateService } from "../../shared/data-access/auth-state.service";
+import { MessageService } from "primeng/api";
 
 
 export const combinedInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
     const authState = inject(AuthStateService);
     const router = inject(Router);
+
+    const messageService = inject(MessageService)
 
     // Obtener el token desde el estado de autenticación
     const token = authState.getSession()?.access_token;
@@ -33,9 +36,15 @@ export const combinedInterceptor: HttpInterceptorFn = (req: HttpRequest<any>, ne
                 switch (error.status) {
                     case 401: // No autorizado
                         errorMessage = error.error.message;
-                        authState.signOut(); // Cerrar sesión
-                        router.navigate(['/login']); // Redirigir al login
-                        break;
+                        if(errorMessage != 'La contraseña actual no es correcta'){
+                            authState.signOut(); // Cerrar sesión
+                            router.navigate(['/login']); // Redirigir al login
+                            break;
+                        }
+                        else{
+                            messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al cambiar la contraseña: ${errorMessage}` });
+                            break
+                        }
 
                     case 403: // Prohibido
                         errorMessage = "Acceso prohibido. Es posible que necesite cambiar su contraseña.";

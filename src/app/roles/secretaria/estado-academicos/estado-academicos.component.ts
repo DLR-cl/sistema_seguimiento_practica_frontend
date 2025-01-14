@@ -69,7 +69,7 @@ export class EstadoAcademicosComponent implements OnInit{
   obtenerDatosPaginados(): SeguimientoData[] {
     const datosFiltrados = this.filtroRut
       ? this.dataSeguimiento.filter((data) =>
-          data.rut_alumno.toLowerCase().includes(this.filtroRut.toLowerCase())
+          data.rut_alumno.toLowerCase().startsWith(this.filtroRut.toLowerCase())
         )
       : this.dataSeguimiento;
   
