@@ -151,7 +151,7 @@ export class EstadoPracticaComponent implements OnInit {
         this.detallesPractica = result;
         console.log(result, 'PRACTICA')
 
-        if(result.informe_alumno.archivo_correccion){
+        if(result.informe_alumno && result.informe_alumno.archivo_correccion){
           this.informeService.obtenerArchivoCorreccion(result.informe_alumno.id_informe).subscribe(
             (result) => {
               // Crear un objeto URL para el Blob recibido
