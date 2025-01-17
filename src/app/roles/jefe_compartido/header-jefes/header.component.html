@@ -41,8 +41,9 @@
               class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
               <a (click)="goToResultadosPractica()" class="block font-semibold cursor-pointer text-gray-900">Resultados de Práctica</a>
             </div>
+            <!-- dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || -->
             <div 
-              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR'"
+              *ngIf=" dataUser?.rol == 'ADMINISTRADOR'" 
               class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
               <a (click)="goToInformes()" class="block font-semibold cursor-pointer text-gray-900">Informes Evaluativos</a>
             </div>
@@ -108,8 +109,8 @@
       Resultados de práctica
     </a>
   </div>
-
-  <div *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR'">
+<!-- dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento ||  -->
+  <div *ngIf="dataUser?.rol == 'ADMINISTRADOR'">
     <a (click)="goToInformes()" class="block text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer py-2">
       Informes Evaluativos
     </a>
