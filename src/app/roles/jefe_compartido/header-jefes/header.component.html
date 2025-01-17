@@ -53,8 +53,9 @@
               <a (click)="goToCrearPractica()" class="block font-semibold cursor-pointer text-gray-900">Crear
                 Práctica</a>
             </div>
+            <!-- || dataUser?.rol == tipoJefeDepartamento -->
             <div 
-              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'"
+              *ngIf="dataUser?.rol == tipoJefeCarrera  || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'"
               class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
               <a (click)="goToPracticas()" class="block font-semibold cursor-pointer text-gray-900">Ver Prácticas</a>
             </div>
@@ -121,8 +122,8 @@
       Crear Práctica
     </a>
   </div>
-
-  <div *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'">
+<!-- || dataUser?.rol == tipoJefeDepartamento -->
+  <div *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'">
     <a (click)="goToPracticas()" class="block text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer py-2">
       Ver Prácticas
     </a>
