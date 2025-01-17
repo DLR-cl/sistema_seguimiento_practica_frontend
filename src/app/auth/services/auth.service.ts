@@ -108,6 +108,9 @@ export class AuthService {
         case TipoUsuario.JEFE_CARRERA:
           this._router.navigate(['home-administracion']);
           break;
+        case TipoUsuario.JEFE_DEPARTAMENTO:
+        this._router.navigate(['home-administracion']);
+        break;
         case TipoUsuario.SECRETARIA_CARRERA:
           this._router.navigate(['home-secretaria']);
           break;
