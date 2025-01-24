@@ -63,7 +63,7 @@ export const routes: Routes = [
     },
     {
         path: 'lista-academicos', component: InfoAcademicosComponent, 
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_DEPARTAMENTO])]
     },
     {
         path: 'revision-informe/:idPractica', component: DetallesInformesComponent,
@@ -135,7 +135,7 @@ export const routes: Routes = [
     },
     {
         path: 'resultados-practica', component: ResultadosPracticaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.ACADEMICO ])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.ACADEMICO, TipoUsuario.SECRETARIA_DEPARTAMENTO ])]
     },
     {
         path: 'informe-pdf', component: PdfgeneratorComponent,

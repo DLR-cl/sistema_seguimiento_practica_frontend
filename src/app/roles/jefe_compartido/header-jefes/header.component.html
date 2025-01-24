@@ -37,7 +37,7 @@
           class="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
           <div class="p-4">
             <div
-              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol === 'ACADEMICO'"
+              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol === 'ACADEMICO' || dataUser?.rol==='SECRETARIA_DEPARTAMENTO'"
               class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
               <a (click)="goToResultadosPractica()" class="block font-semibold cursor-pointer text-gray-900">Resultados de Práctica</a>
             </div>
@@ -48,14 +48,14 @@
               <a (click)="goToInformes()" class="block font-semibold cursor-pointer text-gray-900">Informes Evaluativos</a>
             </div>
             <div
-              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'"
+              *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA'"
               class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
               <a (click)="goToCrearPractica()" class="block font-semibold cursor-pointer text-gray-900">Crear
                 Práctica</a>
             </div>
             <!-- || dataUser?.rol == tipoJefeDepartamento -->
             <div 
-              *ngIf="dataUser?.rol == tipoJefeCarrera  || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'"
+              *ngIf="dataUser?.rol == tipoJefeCarrera  || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA'"
               class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-gray-50">
               <a (click)="goToPracticas()" class="block font-semibold cursor-pointer text-gray-900">Ver Prácticas</a>
             </div>
@@ -75,7 +75,7 @@
         Estado Práctica
       </a>
       <a 
-        *ngIf="dataUser?.rol === tipoJefeCarrera || dataUser?.rol === tipoJefeDepartamento || dataUser?.rol === 'ADMINISTRADOR'" 
+        *ngIf="dataUser?.rol === tipoJefeCarrera || dataUser?.rol === tipoJefeDepartamento || dataUser?.rol === 'ADMINISTRADOR' || dataUser?.rol === 'SECRETARIA_DEPARTAMENTO'" 
         (click)="goToInfoAcademicos()" class="text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer">
         Académicos
       </a>
@@ -105,7 +105,7 @@
 </button>
 <div class="mt-6 space-y-2">
   <!-- Opciones específicas según rol -->
-  <div *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol === 'ACADEMICO'">
+  <div *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_CARRERA' || dataUser?.rol === 'ACADEMICO' || dataUser?.rol === 'SECRETARIA_DEPARTAMENTO'">
     <a (click)="goToResultadosPractica()" class="block text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer py-2">
       Resultados de práctica
     </a>
@@ -117,7 +117,7 @@
     </a>
   </div>
 
-  <div *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR' || dataUser?.rol == 'SECRETARIA_DEPARTAMENTO'">
+  <div *ngIf="dataUser?.rol == tipoJefeCarrera || dataUser?.rol == tipoJefeDepartamento || dataUser?.rol == 'ADMINISTRADOR'">
     <a (click)="goToCrearPractica()" class="block text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer py-2">
       Crear Práctica
     </a>
@@ -136,7 +136,7 @@
     </a>
   </div>
 
-  <div *ngIf="dataUser?.rol === tipoJefeCarrera || dataUser?.rol === tipoJefeDepartamento || dataUser?.rol === 'ADMINISTRADOR'">
+  <div *ngIf="dataUser?.rol === tipoJefeCarrera || dataUser?.rol === tipoJefeDepartamento || dataUser?.rol === 'ADMINISTRADOR' || dataUser?.rol === 'SECRETARIA_DEPARTAMENTO'">
     <a (click)="goToInfoAcademicos()" class="block text-sm font-semibold text-gray-900 hover:text-blue-600 cursor-pointer py-2">
       Académicos
     </a>

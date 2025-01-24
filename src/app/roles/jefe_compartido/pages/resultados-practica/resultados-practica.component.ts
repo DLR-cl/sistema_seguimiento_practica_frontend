@@ -3,13 +3,14 @@ import { HeaderComponent } from "../../header-jefes/header.component";
 import { DashboardService } from '../../services/dashboard.service';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { TipoPractica } from '../../../../enum/enumerables.enum';
+import { TipoPractica, TipoUsuario } from '../../../../enum/enumerables.enum';
 import { PayloadInterface } from '../../../../shared/interface/payload.interface';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 import Chart from 'chart.js/auto';
 import { ConteoPorMes, ConteoPracticas } from '../../../../shared/interface/reporte-practica.interface';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
+import { DatosSecretariaService } from '../../services/datos-secretaria.service';
 
 @Component({
   selector: 'app-resultados-practica',
@@ -21,10 +22,13 @@ import { DropdownModule } from 'primeng/dropdown';
 export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
   private readonly _dataUserService = inject(AuthStateService);
   private readonly _dashboardService = inject(DashboardService);
+  private readonly _secretariaService = inject(DatosSecretariaService);
+  
   dataUser?: PayloadInterface | null
-  filtroForm: FormGroup;
-  reporteForm: FormGroup;
-  reporteSemestralForm: FormGroup;
+  filtroForm!: FormGroup;
+  reporteForm!: FormGroup;
+  reporteSemestralForm!: FormGroup;
+  reporteAnualAcademicos!: FormGroup;
   listaRutas: string[] = [];
   errorMessage: string | null = null; // Manejo de errores
 
@@ -60,18 +64,22 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
     { nombre: 'diciembre', valor: 12 },
   ];
   ngOnInit(): void {
-    this.getData();
-    this.obtenerDatosConteo();
-    this.obtenerDatosInformeByMes();
-    this.mesesOptions = this.meses.map(mes => ({
-      label: mes.nombre.charAt(0).toUpperCase() + mes.nombre.slice(1), // Capitaliza el nombre
-      value: mes.valor,
-    }));
-  
-    this.aniosOptions = this.anios.map(anio => ({
-      label: anio.toString(),
-      value: anio,
-    }));
+    if(this.dataUser?.rol !== 'SECRETARIA_DEPARTAMENTO'){
+      this.getData();
+      this.obtenerDatosConteo();
+      this.obtenerDatosInformeByMes();
+      this.mesesOptions = this.meses.map(mes => ({
+        label: mes.nombre.charAt(0).toUpperCase() + mes.nombre.slice(1), // Capitaliza el nombre
+        value: mes.valor,
+      }));
+    
+      this.aniosOptions = this.anios.map(anio => ({
+        label: anio.toString(),
+        value: anio,
+      }));
+    }
+    // 
+
   }
 
   ngAfterViewInit(): void {
@@ -85,8 +93,10 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
 
 
   constructor(private fb: FormBuilder) {
-    this.filtroForm = this.fb.group({
-      anio: [new Date().getFullYear(), Validators.required],
+    if(this.dataUser?.rol !== TipoUsuario.SECRETARIA_DEPARTAMENTO){
+
+      this.filtroForm = this.fb.group({
+        anio: [new Date().getFullYear(), Validators.required],
       tipoPractica: ['PRACTICA_UNO', [Validators.required, this.validarTipoPractica()]], // Validación personalizada
       mes: [new Date().getMonth() + 1, Validators.required],
     });
@@ -106,6 +116,14 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
       fecha_ini: ['', Validators.required],
       fecha_fin: ['', Validators.required],
     });
+  }
+  this.reporteAnualAcademicos = this.fb.group(
+    {
+      practica: [TipoPractica.PRACTICA_UNO, [Validators.required]]
+    }
+  )
+
+
 
   }
 
@@ -293,5 +311,23 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
     }
 }
 
+  generarReporteSemestralAcademico(){
+    if (this.reporteSemestralForm.valid) {
+      // Obtén los valores del formulario
+      const { practica, fecha_in, fecha_fin } = this.reporteSemestralForm.value;
+
+
+      // Llama al servicio con los datos corregidos
+      this._dashboardService.obtenerReporteSemestral(practica, fecha_in, fecha_fin)
+    }
+  }
+
+  generarReporteAnualAcademico(){
+    if(this.reporteAnualAcademicos.valid){
+      const { practica } = this.reporteAnualAcademicos.value;
+
+      this
+    }
+  }
 
 }

@@ -71,4 +71,8 @@ export class HomeSecretariaComponent {
   public goToEstadoAcademicos(){
     this.router.navigate(['seguimiento-academicos'])
   }
+
+  public goToGenerarReportes(){
+    this.router.navigate(['resultados-practica'])
+  }
 }
