@@ -27,6 +27,7 @@
     "jspdf": "^2.5.2",
     "jwt-decode": "^4.0.0",
     "ngx-pagination": "^6.0.3",
+    "ngx-spinner": "^18.0.0",
     "postcss": "^8.4.47",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.11",

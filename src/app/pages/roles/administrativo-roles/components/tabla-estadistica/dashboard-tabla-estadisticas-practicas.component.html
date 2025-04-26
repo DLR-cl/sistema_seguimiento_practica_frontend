@@ -1,0 +1,45 @@
+<div class="md:col-span-4 lg:col-span-1 space-y-6">
+    <!-- Nueva Tabla Mejorada con Estadísticas -->
+    <div class="bg-white shadow-xl rounded-lg p-4">
+      <h2 class="text-lg font-semibold text-gray-700 mb-2">Estadísticas de Prácticas</h2>
+      <div class="overflow-x-auto bg-white shadow-md rounded-lg p-4">
+        <table class="min-w-full table-auto border-collapse rounded-md">
+          <thead class="bg-blue-600 text-white">
+            <tr>
+              <th class="py-4 px-6 text-left text-sm uppercase font-semibold">Cantidad</th>
+              <th class="py-4 px-6 text-left text-sm uppercase font-semibold">Categoría</th>
+            </tr>
+          </thead>
+          <tbody *ngIf="estadisticasPractica" class="text-gray-800">
+            <tr class="border-b hover:bg-blue-50 transition-colors duration-300">
+              <td class="py-4 text-center border-r px-6 font-medium">{{ this.dashboardService.datosEstadisticaPractica()?.estudiantes_practica }}
+              </td>
+              <td class="py-4 px-6 font-medium">Estudiantes en Práctica</td>
+            </tr>
+            <tr class="border-b hover:bg-blue-50 transition-colors duration-300">
+              <td class="py-4 text-center border-r px-6 font-medium">{{ this.dashboardService.datosEstadisticaPractica()?.estudiantes_revision }}
+              </td>
+              <td class="py-4 px-6 font-medium">Estudiantes en Revisión</td>
+            </tr>
+            <tr class="border-b hover:bg-blue-50 transition-colors duration-300">
+              <td class="py-4 text-center border-r px-6 font-medium">{{ this.dashboardService.datosEstadisticaPractica()?.total_asignados }}</td>
+              <td class="py-4 px-6 font-medium">Informes Asignados</td>
+            </tr>
+            <tr class="border-b hover:bg-blue-50 transition-colors duration-300">
+              <td class="py-4 text-center border-r px-6 font-medium">{{ this.dashboardService.datosEstadisticaPractica()?.informes_sin_enviar }}
+              </td>
+              <td class="py-4 px-6 font-medium">Informes de alumno sin enviar</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="flex justify-end mt-4">
+          <button pButton
+            class="p-button p-button-primary px-6 py-2 rounded-md shadow hover:bg-blue-700 transition-colors duration-300"
+            (click)="abrirCerrarModal()">
+            Ver detalles
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>

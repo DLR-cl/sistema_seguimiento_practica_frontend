@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { map } from 'rxjs';
-import { AlumnoService } from '../../roles/alumno_practica/data-access/alumno.service';
+import { AlumnoService } from '../../pages/roles/alumno_practica/data-access/alumno.service';
 
 export const practicasGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);

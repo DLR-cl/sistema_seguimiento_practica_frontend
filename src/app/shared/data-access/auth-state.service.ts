@@ -27,7 +27,7 @@ export class AuthStateService {
         }
     }
 
-    public getRole(): TipoUsuario | null {
+    public getRole(): TipoUsuario | null{
         const session = this.getSession();
         if (session) {
           const decodedToken: any = jwt_decode.jwtDecode(session.access_token);

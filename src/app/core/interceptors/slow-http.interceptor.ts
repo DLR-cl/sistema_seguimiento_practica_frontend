@@ -5,7 +5,6 @@ export const SlowHttpInterceptor: HttpInterceptorFn = (
   req: HttpRequest<any>,
   next: HttpHandlerFn // Usamos HttpHandlerFn en lugar de HttpHandler
 ): Observable<HttpEvent<any>> => {
-  console.log('Interceptando solicitud:', req);
 
   // Simula un retraso en la solicitud (ejemplo de prueba de carga lenta)
   return new Observable<HttpEvent<any>>(observer => {

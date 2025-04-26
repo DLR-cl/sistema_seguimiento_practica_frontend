@@ -1,0 +1,19 @@
+<div class="relative min-h-screen bg-cover bg-center text-gray-900"
+     [style.backgroundImage]="'url(' + imagenFondo + ')'" style="overflow: hidden;">
+
+  <!-- Fondo con sombreado difuso -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-gray-900/90"></div>
+
+  <!-- Contenido Principal -->
+  <div class="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
+    <!-- Contenedor con dos columnas separadas -->
+    <div class="flex flex-col lg:flex-row w-full gap-12 justify-center">
+      <!-- Contenido Izquierdo con fondo blanco, bordes redondeados y tamaño ajustado -->
+      <app-solicitar-practicante-contact-page />
+
+      <!-- Contenido Derecho con Visualizador de PDF sin fondo y bordes redondeados, más grande -->
+      <app-solicitar-practicante-documentformat-page />
+
+    </div>
+  </div>
+</div>

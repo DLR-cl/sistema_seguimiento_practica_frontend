@@ -87,49 +87,29 @@ export class AuthService {
   
         // Actualiza el token decodificado y redirige
         this.refreshDecodedToken();
-        this.redirectUserByRol();
+        //this.redirectUserByRol();
       })
     );
   }
   
   // Redirige al usuario según su rol
-  public redirectUserByRol(): void {
-    const session = this._authService.getSession();
-    if (session) {
-      const userRole = this._authService.getRole();
-
-      switch (userRole) {
-        case TipoUsuario.JEFE_EMPLEADOR:
-          this._router.navigate(['home-jefe-alumno']);
-          break;
-        case TipoUsuario.ALUMNO_PRACTICA:
-          this._router.navigate(['home-alumno']);
-          break;
-        case TipoUsuario.JEFE_CARRERA:
-          this._router.navigate(['home-administracion']);
-          break;
-        case TipoUsuario.JEFE_DEPARTAMENTO:
-        this._router.navigate(['home-administracion']);
-        break;
-        case TipoUsuario.SECRETARIA_CARRERA:
-          this._router.navigate(['home-secretaria']);
-          break;
-        case TipoUsuario.SECRETARIA_DEPARTAMENTO:
-          this._router.navigate(['home-secretaria']);
-          break;
-        case TipoUsuario.ACADEMICO:
-          this._router.navigate(['home-academicos']);
-          break;
-        case TipoUsuario.ADMINISTRADOR:
-          this._router.navigate(['home-administracion']);
-          break;
-        default:
-          console.warn('Rol desconocido, redirigiendo a home');
-          this._router.navigate(['home']);
-      }
-    } else {
-      console.warn('Sesión no encontrada, redirigiendo al login');
-      this._router.navigate(['/login']);
+  public getRedirectUrlByRole(role: TipoUsuario | null): string {
+    switch(role) {
+      case TipoUsuario.JEFE_EMPLEADOR:
+        return '/home-jefe-alumno';
+      case TipoUsuario.ALUMNO_PRACTICA:
+        return '/home-alumno';
+      case TipoUsuario.JEFE_CARRERA:
+      case TipoUsuario.JEFE_DEPARTAMENTO:
+      case TipoUsuario.ADMINISTRADOR:
+        return '/home-administracion';
+      case TipoUsuario.SECRETARIA_CARRERA:
+      case TipoUsuario.SECRETARIA_DEPARTAMENTO:
+        return '/home-secretaria';
+      case TipoUsuario.ACADEMICO:
+        return '/home-academicos';
+      default:
+        return '/home';
     }
   }
 

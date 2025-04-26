@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class ImagePreloaderService {
   preload(images: string[]): Promise<void[]> {
+    console.log('Me ejecute antes que el loaded')
     return Promise.all(
       images.map((image) =>
         new Promise<void>((resolve, reject) => {

@@ -1,0 +1,42 @@
+<div class="w-full lg:w-[650px] bg-white bg-opacity-95 shadow-lg rounded-lg flex flex-col p-10 lg:p-12 min-h-[70vh]">
+        
+    <!-- Título dentro del cuadro blanco con mejor visibilidad -->
+    <h1 class="text-4xl font-bold mt-14 mb-6 text-center drop-shadow-lg">
+      Solicitar Practicante
+    </h1>
+
+    <!-- Contenedor de Texto Justificado -->
+    <p class="text-justify text-lg leading-relaxed mb-8">
+      Para solicitar la actividad de práctica profesional para un estudiante de la carrera, por favor, complete la carta de solicitud que se encuentra a continuación.
+    </p>
+
+    <!-- Contenedor para los correos y botones, alineado al fondo -->
+    <div class="flex flex-col mt-auto space-y-4 mb-10">
+      <!-- Texto de los correos -->
+      <h2 class="text-gray-800 text-base font-bold mb-2">Puede enviar la solicitud por medio de estos correos:</h2>
+      <ul class="space-y-2">
+        <li class="flex items-center">
+          <div class="bg-gray-200 h-12 w-12 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" fill="#007bff" viewBox="0 0 479.058 479.058">
+              <path d="M434.146 59.882H44.912C20.146 59.882 0 80.028 0 104.794v269.47c0 24.766 20.146 44.912 44.912 44.912h389.234c24.766 0 44.912-20.146 44.912-44.912v-269.47c0-24.766-20.146-44.912-44.912-44.912zm0 29.941c2.034 0 3.969.422 5.738 1.159L239.529 264.631 39.173 90.982a14.902 14.902 0 0 1 5.738-1.159zm0 299.411H44.912c-8.26 0-14.971-6.71-14.971-14.971V122.615l199.778 173.141c2.822 2.441 6.316 3.655 9.81 3.655s6.988-1.213 9.81-3.655l199.778-173.141v251.649c-.001 8.26-6.711 14.97-14.971 14.97z"/>
+            </svg>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600">Correo Secretaria Carrera:</p>
+            <p class="text-blue-600 font-semibold">{{correo}}</p>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Botones alineados al fondo y centrados -->
+      <div class="flex gap-4 justify-center mt-4 flex-wrap">
+        <a
+          class="py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md font-semibold transition duration-300 w-full sm:w-auto"
+          routerLink="/home">Volver</a>
+        <a href="formato-solicitud.docx" download
+          class="py-3 px-6 bg-green-600 hover:bg-green-700 text-white rounded-lg shadow-md font-semibold transition duration-300 w-full sm:w-auto">
+          Descargar Formato
+        </a>
+      </div>
+    </div>
+  </div>

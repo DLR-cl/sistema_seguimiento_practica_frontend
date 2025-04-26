@@ -25,7 +25,7 @@ export class NotFoundComponent {
   private redirectUserByRol(rol: TipoUsuario | null) {
     if (!rol) {
       console.warn('Rol no encontrado, redirigiendo al home genérico');
-      this._router.navigate(['home']);
+      this._router.navigate(['/home']);
       return;
     }
   

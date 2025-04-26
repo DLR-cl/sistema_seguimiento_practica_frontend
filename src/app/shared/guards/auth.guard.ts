@@ -24,17 +24,17 @@ export const privateGuard =  (): CanActivateFn => {
 
 export const publicGuard = (): CanActivateFn => {
     return () => {
-        const authState = inject(AuthStateService);
-        const router = inject(Router);
-        const authService = inject(AuthService);
 
+
+        const authState = inject(AuthStateService);
+        const authService = inject(AuthService);
+        const router = inject(Router);
         const session = authState.getSession();
-        console.log(session);
         // hay que redigir dependiendo del rol que tengan.
         if(session) {
-            console.log('hola');
-            authService.redirectUserByRol();
-            return false;
+
+            const redirectUrl = authService.getRedirectUrlByRole(authState.getRole());
+            return router.parseUrl(redirectUrl);
         }
         return true;
     }

@@ -22,13 +22,15 @@
       </p>
       <!-- Botones -->
       <div class="mt-6 flex justify-center space-x-4">
-        <button class="py-3 px-6 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition duration-300"
-                (click)="toLogin()">Iniciar Sesión</button>
-        <button class="py-3 px-6 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg transition duration-300"
-                (click)="toLetter()">Solicitar Practicante</button>
+        <a  
+        class="py-3 px-6 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition duration-300"
+        routerLink="/login"        
+        >Iniciar Sesión</a>
+        <a class="py-3 px-6 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg transition duration-300"
+        routerLink="/solicitar-practicante">Solicitar Practicante</a>
       </div>
     </div>
-  
+    
     <!-- Footer -->
     <footer class="absolute bottom-4 left-0 right-0 text-center text-gray-500 text-sm">
       <p>&copy; 2024 Departamento ICI. Todos los derechos reservados.</p>
