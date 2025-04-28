@@ -2,10 +2,11 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { enviroment } from "../../../../environment/environment";
 import { map, Observable } from "rxjs";
-import { AlumnosActivosPractica, AprobacionPracticas, CantidadAlumnosEnPractica, CantidadEmpresasPorTipo, detallePractica, estadisticasPractica, practicasMes } from "../dto/dashboard-practicas.dto";
+import type { AlumnosActivosPractica, CantidadAlumnosEnPractica, CantidadEmpresasPorTipo, detallePractica, estadisticasPractica, practicasMes } from "../dto/dashboard-practicas.dto";
 import type { PracticaAlumno } from "../../administrativo-roles/interfaces/practica-alumno.interface";
 import { TipoPractica } from "../../../../enum/enumerables.enum";
 import { ConteoPorMes, ConteoPracticas } from "../../../../shared/interface/reporte-practica.interface";
+import { AprobacionPracticas } from "../../administrativo-roles/interfaces/estadistica-praactica.interface";
 
 
 @Injectable({

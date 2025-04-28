@@ -30,7 +30,7 @@ cargando()
 
 
 
-<app-dashboard [hidden]="cargando()" (estadoCargando)="finalizoCarga($event)" />
+<app-dashboard [hidden]="this.dataEstadisticaService.cargandoDatosDashboard()" (estadoCargando)="finalizoCarga($event)" />
 
 <!-- <app-perfil-data></app-perfil-data>
 <app-tabla-funciones></app-tabla-funciones> -->

@@ -1,6 +1,8 @@
-import { Component, signal } from '@angular/core';
-import { DashboardComponent } from "../../../jefe_compartido/dashboard/dashboard.component";
+import { Component, inject, signal } from '@angular/core';
+
 import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
+import { DashboardComponent } from '../../components/dashboard/dashboard.component';
+import { DataEstadisticaPracticaService } from '../../services/data-estadistica-practica.service';
 
 @Component({
   selector: 'app-home-administrativo',
@@ -12,6 +14,7 @@ import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.co
 export class HomeAdministrativoComponent {
 
   cargando = signal<boolean>(true);
+  dataEstadisticaService = inject(DataEstadisticaPracticaService);
 
   finalizoCarga(estado: boolean){
     this.cargando.set(estado);

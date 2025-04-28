@@ -17,11 +17,14 @@ import { ModalAlumnosPracticaComponent } from "./modal-alumnos-practica/modal-al
 import { PracticaAlumno } from '../../interfaces/practica-alumno.interface';
 import { ModalDetallesPracticaAlumnoComponent } from "./modal-detalles-practica-alumno/modal-detalles-practica-alumno.component";
 import { DataEstadisticaPracticaService } from '../../services/data-estadistica-practica.service';
+import { DashboardCantidadEstudiantesPracticasComponent } from "../dashboard-cantidad-estudiantes-practicas/dashboard-cantidad-estudiantes-practicas.component";
+import { DashboardCantidadReprobadosAprobadosComponent } from "../dashboard-cantidad-reprobados-aprobados/dashboard-cantidad-reprobados-aprobados.component";
+import { DashboardCantidadAprobacionSegundaPracticaComponent } from "../dashboard-cantidad-aprobacion-segunda-practica/dashboard-cantidad-aprobacion-segunda-practica.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, ListboxModule, ChartModule, TableModule, ButtonModule, DialogModule, DashboardTablaEstadisticasPracticasComponent, ModalAlumnosPracticaComponent, ModalDetallesPracticaAlumnoComponent],
+  imports: [CommonModule, FormsModule, ListboxModule, ChartModule, TableModule, ButtonModule, DialogModule, DashboardTablaEstadisticasPracticasComponent, ModalAlumnosPracticaComponent, ModalDetallesPracticaAlumnoComponent, DashboardCantidadEstudiantesPracticasComponent, DashboardCantidadReprobadosAprobadosComponent, DashboardCantidadAprobacionSegundaPracticaComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -39,7 +42,6 @@ export class DashboardComponent implements OnInit{
   @Output() estadoCargando = new EventEmitter<boolean>();
   
   cargando: boolean = true;
-  modalDetallePractica= false;
   cantidadEmpresasPorTipo!: CantidadEmpresasPorTipo;
 
   cargandoSolicitudes: number = 0;
@@ -47,24 +49,17 @@ export class DashboardComponent implements OnInit{
   ngOnInit(): void {
     this.dataUser = this.authService.getData();
     this.getAprobacionPracticas()
-    this.getAlumnosActivosPracticas()
-    this.getDetallesPractica()
     this.getPracticasMeses()
-    this.getEstadisticasPracticas()
     this.getCantidadEmpresasPorTipos();
-    console.log("estadisticas, practica", this.estadisticasPractica)
   }
 
-  estadisticasPractica!: estadisticasPractica
   
-  detallesPractica!: detallePractica[]
 
   periodoSeleccionado: number = new Date().getFullYear();
 
   // selectedInforme: any;
 
-  // **Gráfico de Cantidad Estudiantes por Práctica** (No cambia a porcentaje)
-  cantidadEstudiantesTipoPracticaChartData: any
+ 
 
   cantidadEstudiantesTipoPracticaChartOptions = {
     responsive: true,
@@ -178,44 +173,6 @@ export class DashboardComponent implements OnInit{
   
   
 
-  public getEstadisticasPracticas(){
-    this.cargandoSolicitudes++;
-    this.dashboardService.getEstadisticasPracticas().subscribe({
-      next: result => {
-        console.log('estadisticas result', result)
-        this.estadisticasPractica = result 
-        console.log(this.estadisticasPractica)
-
-
-        const totalAsignados = this.estadisticasPractica.total_asignados; // Ejemplo: 25
-        const maxInformes = this.estadisticasPractica.max_informes; // Ejemplo: 20
-
-        // Calcular el porcentaje de carga académica
-        const porcentajeCargaAcademica = (totalAsignados / maxInformes) * 100;
-
-        // Calcular el porcentaje restante
-        let porcentajeRestante = 100 - porcentajeCargaAcademica;
-        if (porcentajeRestante < 0) {
-          porcentajeRestante = 0; // No mostrar un valor negativo
-        }
-      },
-      error: error =>{
-        console.log(error)
-      },
-      complete: () => {
-        this.cargandoSolicitudes--;
-        this.checkCargandoFinalizado();
-      }
-    })
-  }
-  cerrarModal() {
-    this.modalDetallePractica = false;
-  }
-
-  abrirModal() {
-    this.modalDetallePractica = true;
-  }
-
   getCantidadEmpresasPorTipos(){
     this.cargandoSolicitudes++;
     this.dashboardService.getCantidadEmpresasPorTipo().subscribe({
@@ -295,54 +252,7 @@ export class DashboardComponent implements OnInit{
     })
   }
 
-  public getAlumnosActivosPracticas() {
-    this.cargandoSolicitudes++;
-    this.dashboardService.getAlumnosActivosPracticas().subscribe({
-      next: (result) => {
   
-        if(result.length > 0){
-          // Buscar prácticas y asignar 0 si no existen
-        const practicaUno = result.find(practica => practica.tipo_practica === "PRACTICA_UNO")?.cantidad_estudiantes || 0;
-        const practicaDos = result.find(practica => practica.tipo_practica === "PRACTICA_DOS")?.cantidad_estudiantes || 0;
-  
-        // Configuración del gráfico con valores asegurados
-        this.cantidadEstudiantesTipoPracticaChartData = {
-          labels: ['Práctica 1', 'Práctica 2'],
-          datasets: [
-            {
-              data: [practicaUno, practicaDos],
-              backgroundColor: ['#1565c0', '#42aaff'],
-            }
-          ]
-        };
-  
-        console.log(this.cantidadEstudiantesTipoPracticaChartData);
-        }
-        
-      },
-      error: (error) => {
-        console.log(error);      
-      },
-      complete: () => {
-        this.cargandoSolicitudes--;
-        this.checkCargandoFinalizado();
-      }
-    });
-  }
-  
-  public getDetallesPractica(){
-    this.cargandoSolicitudes++;
-    this.dashboardService.getDetallesPracticas().subscribe({
-      next: result => {
-        this.detallesPractica = result
-      },
-      complete: () => {
-        this.cargandoSolicitudes--;
-        this.checkCargandoFinalizado();
-      }
-    })
-  }
-
   public getPracticasMeses() {
     this.cargandoSolicitudes++;
     this.dashboardService.getPracticasMeses(this.periodoSeleccionado).subscribe({
@@ -418,75 +328,8 @@ export class DashboardComponent implements OnInit{
     return monthsMap[month] || month;
   } 
 
-  modalDetalles = false;
-
-  practicaSeleccionada!: PracticaAlumno | null
-  academicoPractica!: AcademicoSolo | null
-
-  textoEstadoInforme: Record<string, string> = {
-    ENVIADA: 'Enviado',
-    REVISION: 'Revisión',
-    CORRECCION: 'Corrección',
-    ESPERA: 'Espera',
-    APROBADA: 'Aprobada',
-    DESAPROBADA: 'Desaprobada'
-  };
-
-  textoEstadoPractica: Record<string, string> = {
-    CURSANDO: 'Cursando',
-    REVISION_GENERAL: 'Revisión General',
-    ESPERA_INFORMES: 'Espera Informes',
-    FINALIZADA: 'Finalizada',
-    INFORMES_RECIBIDOS: 'Informes Recibidos'
-  };
-
-
-  textoModalidad: Record<string, string> = {
-    PRESENCIAL: 'Presencial',
-    REMOTO: 'Remoto',
-    SEMI_PRESENCIAL: 'Semipresencial'
-  };
-
   cargandoPracticas: Set<number> = new Set<number>();
 
-  cerrarModalDetalles() {
-    this.modalDetalles = false;
-    this.practicaSeleccionada = null;
-    this.academicoPractica = null;
-  }
-
-  // Función para ver detalles de informes
-  verInforme(practica: any) {
-    const idPractica = practica.id_practica;
-    if (!this.cargandoPracticas.has(idPractica)) {
-      this.cargandoPracticas.add(idPractica); // Agrega el ID al conjunto de "cargando"
-
-      this.dashboardService.obtenerPractica(idPractica).subscribe({
-        next: result => {
-          console.log(result)
-          this.practicaSeleccionada = result
-          if(result.informe_alumno && result.informe_alumno.id_academico){
-            this.academicoService.getInfoAcademico(result.informe_alumno.id_academico).subscribe({
-              next: academico => {
-                this.academicoPractica = academico[0]
-                console.log(this.academicoPractica, 'ola')
-                this.modalDetalles = true
-                this.cargandoPracticas.delete(idPractica);
-              },
-            })
-          } else {
-            this.modalDetalles = true
-            this.cargandoPracticas.delete(idPractica);
-          }
-          
-        },
-        error: error => {
-          console.log(error)
-          this.cargandoPracticas.delete(idPractica);
-        }
-      })
-    }
-  }
 
   checkCargandoFinalizado() {
     if (this.cargandoSolicitudes === 0) {

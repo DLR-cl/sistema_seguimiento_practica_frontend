@@ -25,10 +25,7 @@ export interface practicasMes {
     total_practicas: number;
 }
 
-export interface AprobacionPracticas {
-    primerPractica:  PrimerPractica[];
-    segundaPractica: SegundaPractica[];
-}
+
 
 export interface PrimerPractica {
     practica?: string;

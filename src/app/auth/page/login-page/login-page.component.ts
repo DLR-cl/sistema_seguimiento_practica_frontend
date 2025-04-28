@@ -65,7 +65,7 @@ export class LoginPageComponent implements OnInit {
         this.cargandoLogin.set(false);
 
         if (response.primerInicioSesion) {
-          this.router.navigate(['/change-password']); // Redirige al cambio de contraseña
+          this.router.navigate(['/cambiar-clave']); // Redirige al cambio de contraseña
         } else {
           // Redirige según el rol del usuario
           setTimeout(() => {
