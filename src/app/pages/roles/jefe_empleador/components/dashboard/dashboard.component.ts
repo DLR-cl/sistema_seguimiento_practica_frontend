@@ -13,7 +13,7 @@ import { AuthStateService } from '../../../../../shared/data-access/auth-state.s
 import { DialogModule } from 'primeng/dialog';
 import { DetallesInformes } from '../../dto/informe-confidencial.dto';
 import { Empresa } from '../../../jefe_compartido/dto/empresa.dto';
-import { Practicas } from '../../../secretaria/dto/practicas.dto';
+import type { PracticaAlumno } from '../../../administrativo-roles/interfaces/practica-alumno.interface';
 
 @Component({
   selector: 'app-dashboard',
@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit {
   
   modalDetalles = false;
 
-  practicaSeleccionada!: Practicas | null
+  practicaSeleccionada!: PracticaAlumno | null
 
   tipoPractica: Record<string, string> = {
     PRACTICA_DOS: 'Práctica Profesional II',

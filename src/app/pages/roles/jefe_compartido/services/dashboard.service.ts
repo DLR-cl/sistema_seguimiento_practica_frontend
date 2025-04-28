@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { enviroment } from "../../../../environment/environment";
 import { map, Observable } from "rxjs";
 import { AlumnosActivosPractica, AprobacionPracticas, CantidadAlumnosEnPractica, CantidadEmpresasPorTipo, detallePractica, estadisticasPractica, practicasMes } from "../dto/dashboard-practicas.dto";
-import { Practicas } from "../../secretaria/dto/practicas.dto";
+import type { PracticaAlumno } from "../../administrativo-roles/interfaces/practica-alumno.interface";
 import { TipoPractica } from "../../../../enum/enumerables.enum";
 import { ConteoPorMes, ConteoPracticas } from "../../../../shared/interface/reporte-practica.interface";
 
@@ -50,7 +50,7 @@ export class DashboardService {
         return this._http.get<CantidadEmpresasPorTipo>(`${enviroment.API_URL}/dashboard/empresa/estadisticas/tipo-empresas`)
     }
     public obtenerPractica(idPractica: number) {
-        return this._http.get<Practicas>(`${enviroment.API_URL}/practicas/${idPractica}`)
+        return this._http.get<PracticaAlumno>(`${enviroment.API_URL}/practicas/${idPractica}`)
     }
 
     public obtenerReportesByYearyPractica(tipo_practica: TipoPractica, year: number, mes: string) {

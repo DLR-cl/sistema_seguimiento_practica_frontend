@@ -1,0 +1,35 @@
+<p-dialog [visible]="this.dataEstadisticaAlumno.verDetallePractica()" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true"
+  [style]="{ width: '47rem' }">
+  <!-- Header -->
+  <ng-template pTemplate="header">
+    <div class="text-center mx-auto py-4">
+      <h2 class="text-2xl font-semibold text-blue-700">Detalles de la Práctica</h2>
+    </div>
+  </ng-template>
+
+  <!-- Content -->
+  <ng-template pTemplate="content">
+    <div class="space-y-8">
+      <!-- Información General  Recibir practica-->
+      <app-modal-detalles-informacion-general [practicaAlumno]="practicaAlumno()" />
+      <!-- Cierre componente información general -->
+
+      <!-- Componente info academico -->
+      <app-modal-detalles-info-academico-practica [data]="{
+        practica: practicaAlumno()!,
+        academico: academico()!
+      }"/>
+      <!-- Cierr componente info academico-->
+    </div>
+  </ng-template>
+
+  <!-- Footer -->
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end space-x-6">
+      <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-medium px-4 py-2 rounded-lg"
+        (click)="this.dataPracticaAlumnoService.mostrarModalListaPractica()"> <!-- output, sale al padre y se entrega el hijo (o puede ser un valor de un servicio also)-->
+        Cerrar
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

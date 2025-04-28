@@ -5,7 +5,7 @@ import { AuthStateService } from '../../../../shared/data-access/auth-state.serv
 import { Secretaria, SeguimientoData } from '../dto/secretaria-data.dto';
 import { enviroment } from '../../../../environment/environment';
 import { jwtDecode } from "jwt-decode";
-import { Practicas } from '../dto/practicas.dto';
+import type { PracticaAlumno } from '../../administrativo-roles/interfaces/practica-alumno.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -66,7 +66,7 @@ export class DataSecretariaService {
   }
 
   public getPractica() {
-    return this._http.get<Practicas[]>(`${enviroment.API_URL}/practicas`)
+    return this._http.get<PracticaAlumno[]>(`${enviroment.API_URL}/practicas`)
     .pipe(
       map( (response) => {
           return response;

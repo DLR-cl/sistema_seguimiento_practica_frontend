@@ -3,12 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PracticasAlumnoService } from '../services/practicas-alumno.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Practicas } from '../../secretaria/dto/practicas.dto';
+import { PracticaAlumno } from '../../administrativo-roles/interfaces/practica-alumno.interface';
 import { RespuestasInformeService } from '../services/respuestas-informe.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { Empresa } from '../../jefe_compartido/dto/empresa.dto';
 import { HeaderComponent } from '../../jefe_compartido/header-jefes/header.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DetallePractica } from '../../administrativo-roles/interfaces/detalle-practica.interface';
 
 @Component({
   selector: 'app-estado-practica',
@@ -22,7 +23,7 @@ export class EstadoPracticaComponent implements OnInit {
   practicas: any[] = [];
   datosEmpresa: Empresa | null = null; 
   practicaSeleccionada!: number;
-  detallesPractica: Practicas | null = null;
+  detallesPractica: PracticaAlumno | null = null;
   respuestasAlumno: any
   pasos: string[] = ['Cursando', 'En espera de informe', 'Informe recibido', 'Revisión general', 'Finalizada'];
   pasoActual: number = 0;

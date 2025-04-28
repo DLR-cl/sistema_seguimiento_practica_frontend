@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
 import { DataAccessService } from '../../services/data-access.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { Practicas } from '../../../secretaria/dto/practicas.dto';
+import { PracticaAlumno } from '../../../administrativo-roles/interfaces/practica-alumno.interface';
 import { PreguntaEvaluacion } from '../../dto/revision-informes.dto';
 import { MessageService } from 'primeng/api';
 
@@ -21,7 +21,7 @@ import { MessageService } from 'primeng/api';
 export class DetallesInformesComponent implements OnInit {
 
   idPractica!: number;
-  practica!: Practicas;
+  practica!: PracticaAlumno;
   respuestasConfidenciales: any[] = [];
 
   idInforme!: number;

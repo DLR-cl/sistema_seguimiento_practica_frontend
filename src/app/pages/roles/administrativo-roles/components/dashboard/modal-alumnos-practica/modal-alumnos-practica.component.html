@@ -1,0 +1,71 @@
+<p-dialog [visible]="dataEstadisticaService.modalViewDetallesPractica()" [modal]="true" [draggable]="false"
+    [closable]="false" [dismissableMask]="true" [style]="{ width: '70rem' }">
+    <ng-template pTemplate="header">
+        <div class="text-center mx-auto py-4">
+            <h2 class="text-2xl font-semibold text-blue-700">Detalles de Prácticas</h2>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="content">
+        <!-- Mostrar el mensaje si no hay datos -->
+        @if (
+        this.dataEstadisticaService.detallesPracticaAlumnos().length === 0
+        ) {
+
+        <div class="text-center flex flex-col items-center justify-center h-64">
+            <i class="pi pi-info-circle text-blue-500 text-6xl mb-4"></i>
+            <p class="text-gray-700 text-xl font-semibold">No se han realizado prácticas aún.</p>
+            <p class="text-gray-500 text-md">Por favor, revisa más tarde.</p>
+        </div>
+        }
+        @else {
+        <!-- Mostrar la tabla si hay datos -->
+        <p-table [value]="listaPracticas()" [paginator]="true" [rows]="5">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Alumno</th>
+                    <th>Práctica</th>
+                    <th>Estado</th>
+                    <th>Accion</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-practica>
+                <tr>
+                    <td>{{ practica.nombre_alumno }}</td>
+                    <td>{{ practica.tipo_practica }}</td>
+                    <td>
+                        <span [ngClass]="{
+                      'text-green-600': practica.estado_practica === 'FINALIZADA',
+                      'text-red-600': practica.estado_practica === 'CURSANDO',
+                      'text-yellow-600': practica.estado_practica === 'ESPERA_INFORMES',
+                      'text-blue-600': practica.estado_practica === 'REVISION-GENERAL'
+                  }">
+                            {{ textoEstadoPractica[practica.estado_practica]}}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="flex items-center space-x-5">
+                            <button 
+                            pButton 
+                            label="Ver" 
+                            class="p-button-text"
+                            (click)="seleccionarPractica(practica)"
+                            ></button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        }
+
+    </ng-template>
+
+    <!-- Emitir el id de la práctica seleccionada-->
+    <ng-template pTemplate="footer">
+        <div class="mt-4 text-end">
+            <button class="px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded-md"
+                (click)="this.dataEstadisticaService.showModalDetallesPractica()">Cerrar</button>
+        </div>
+    </ng-template>
+
+</p-dialog>

@@ -1,0 +1,26 @@
+@if (isPracticaEnEstadoValido()) {
+<div class="space-y-6">
+    <div class="border-b pb-4">
+        <h3 class="text-xl font-semibold text-gray-800">Profesor Asignado</h3>
+    </div>
+    <div class="grid grid-cols-2 gap-6 text-sm">
+        <div>
+            <p class="text-gray-500">Profesor</p>
+            <p class="font-medium" [ngClass]="this.data()?.academico">
+                {{ this.data()?.academico ? this.data()?.academico!.nombre : 'Sin asignar' }}
+            </p>
+        </div>
+        @if (
+        this.data()?.academico
+        ) {
+
+            <div>
+                <p class="text-gray-500">Correo Profesor</p>
+                <p class="font-medium" [ngClass]="this.data()?.academico ? 'text-gray-900' : 'text-red-600'">
+                    {{ this.data()?.academico!.correo}}
+                </p>
+            </div>
+        }
+    </div>
+</div>
+}

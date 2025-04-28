@@ -4,7 +4,7 @@ import { enviroment } from '../../../../environment/environment';
 import { DetallesInformes, ListaInformes } from '../dto/informe-confidencial.dto';
 import { AlumnosAsignados } from '../dto/dashboard.dto';
 import { Empresa } from '../../jefe_compartido/dto/empresa.dto';
-import { Practicas } from '../../secretaria/dto/practicas.dto';
+import type { PracticaAlumno } from '../../administrativo-roles/interfaces/practica-alumno.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,7 @@ export class InformeConfidencialService {
   }
   
   public obtenerPractica(idPractica: number){
-    return this.http.get<Practicas>(`${enviroment.API_URL}/practicas/${idPractica}`)
+    return this.http.get<PracticaAlumno>(`${enviroment.API_URL}/practicas/${idPractica}`)
   }
 
   public obtenerDatosEmpresas(){

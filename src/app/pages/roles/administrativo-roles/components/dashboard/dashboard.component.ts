@@ -11,13 +11,17 @@ import { AuthStateService } from '../../../../../shared/data-access/auth-state.s
 import { DashboardService } from '../../../jefe_compartido/services/dashboard.service';
 import { DatosAcademicosService } from '../../../jefe_compartido/services/datos-academicos.service';
 import type { CantidadEmpresasPorTipo, detallePractica, estadisticasPractica } from '../../../jefe_compartido/dto/dashboard-practicas.dto';
-import type { Practicas } from '../../../secretaria/dto/practicas.dto';
 import type { AcademicoSolo } from '../../../jefe_compartido/dto/academicos.dto';
+import { DashboardTablaEstadisticasPracticasComponent } from "../tabla-estadistica/dashboard-tabla-estadisticas-practicas.component";
+import { ModalAlumnosPracticaComponent } from "./modal-alumnos-practica/modal-alumnos-practica.component";
+import { PracticaAlumno } from '../../interfaces/practica-alumno.interface';
+import { ModalDetallesPracticaAlumnoComponent } from "./modal-detalles-practica-alumno/modal-detalles-practica-alumno.component";
+import { DataEstadisticaPracticaService } from '../../services/data-estadistica-practica.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, ListboxModule, ChartModule, TableModule, ButtonModule, DialogModule],
+  imports: [CommonModule, FormsModule, ListboxModule, ChartModule, TableModule, ButtonModule, DialogModule, DashboardTablaEstadisticasPracticasComponent, ModalAlumnosPracticaComponent, ModalDetallesPracticaAlumnoComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
@@ -26,11 +30,14 @@ export class DashboardComponent implements OnInit{
   constructor(
     private authService: AuthStateService,
     private dashboardService: DashboardService,
-    private academicoService: DatosAcademicosService
+    private academicoService: DatosAcademicosService,
+    public dataEstadisticaService: DataEstadisticaPracticaService,
   ){}
+
 
   dataUser!:any;
   @Output() estadoCargando = new EventEmitter<boolean>();
+  
   cargando: boolean = true;
   modalDetallePractica= false;
   cantidadEmpresasPorTipo!: CantidadEmpresasPorTipo;
@@ -413,7 +420,7 @@ export class DashboardComponent implements OnInit{
 
   modalDetalles = false;
 
-  practicaSeleccionada!: Practicas | null
+  practicaSeleccionada!: PracticaAlumno | null
   academicoPractica!: AcademicoSolo | null
 
   textoEstadoInforme: Record<string, string> = {

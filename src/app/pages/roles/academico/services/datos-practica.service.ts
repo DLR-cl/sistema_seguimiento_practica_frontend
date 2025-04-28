@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { enviroment } from '../../../../environment/environment';
-import { Practicas } from '../../secretaria/dto/practicas.dto';
+import { PracticaAlumno } from '../../administrativo-roles/interfaces/practica-alumno.interface';
 import { Observable } from 'rxjs';
 import { GenerarPDF, PreguntaEvaluacion } from '../dto/revision-informes.dto';
 import { TipoPractica } from '../../../../enum/enumerables.enum';
@@ -16,7 +16,7 @@ export class DatosPracticaService {
   ) { }
 
   public obtenerInfoPractica(idPractica: number){
-    return this.http.get<Practicas>(`${enviroment.API_URL}/practicas/${idPractica}`)
+    return this.http.get<PracticaAlumno>(`${enviroment.API_URL}/practicas/${idPractica}`)
   }
 
   public getArchivoInforme(id_informe: number): Observable<Blob> {
