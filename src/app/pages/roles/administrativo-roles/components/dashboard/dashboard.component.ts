@@ -48,7 +48,6 @@ export class DashboardComponent implements OnInit{
 
   ngOnInit(): void {
     this.dataUser = this.authService.getData();
-    this.getAprobacionPracticas()
     this.getPracticasMeses()
     this.getCantidadEmpresasPorTipos();
   }
@@ -74,45 +73,10 @@ export class DashboardComponent implements OnInit{
     cutout: '70%'
   };
 
-  // **Gráfico de Práctica I**
-  practicaIChartData: any
 
-  practicaIChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: any) => {
-            const total = 100; // Total de la categoría (100%)
-            const percentage = (tooltipItem.raw / total) * 100;
-            return `${percentage.toFixed(1)}% Estudiantes`;
-          }
-        }
-      }
-    },
-    cutout: '70%'
-  };
 
   // **Gráfico de Práctica II** (Convertido a porcentaje)
-  practicaIIChartData:any
-
-  practicaIIChartOptions = {
-    responsive: true,
-    plugins: {
-      legend: { position: 'top' },
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem: any) => {
-            const total = 100; // Total de la categoría (100%)
-            const percentage = (tooltipItem.raw / total) * 100;
-            return `${percentage.toFixed(1)}% Estudiantes`;
-          }
-        }
-      }
-    },
-    cutout: '70%'
-  };
+  
 
   // **Gráfico de Percepción de Empresas** (Convertido a porcentaje)
   tipoEmpresasChartData: any
@@ -196,63 +160,7 @@ export class DashboardComponent implements OnInit{
       }
     })
   };
-  public getAprobacionPracticas(){
-    this.cargandoSolicitudes++;
-    this.dashboardService.getAprobacionPracticas().subscribe({
-      next: result => {
-        const primerPractica = result.primerPractica;
-        if(primerPractica.length != 0 && primerPractica[0].cantidad){
-          const aprobadosI = primerPractica
-            .filter(practica => practica.estado === 'APROBADOS')
-            .reduce((sum: number, practica) => sum + practica.cantidad, 0);
-          const total = primerPractica.reduce((sum: number, practica) => sum + practica.cantidad, 0);
-          const aprobadosPorcentajeI = total > 0 ? (aprobadosI / total) * 100 : 0;
-          const reprobadosPorcentajeI = 100 - aprobadosPorcentajeI;
 
-          this.practicaIChartData = {
-            labels: ['Aprobados', 'Reprobados'],
-            datasets: [
-              {
-                data: [aprobadosPorcentajeI.toFixed(2), reprobadosPorcentajeI.toFixed(2)],
-                backgroundColor: ['#1565c0', '#42aaff'],
-              }
-            ]
-          };
-        }
-        
-
-        const segundaPractica = result.segundaPractica;
-        console.log(segundaPractica, "lol")
-        if(segundaPractica.length != 0 && segundaPractica[0].cantidad){
-          const aprobadosII = segundaPractica
-            .filter(practica => practica.estado === 'APROBADOS')
-            .reduce((sum: number, practica) => sum + practica.cantidad, 0);
-          const totalII = segundaPractica.reduce((sum: number, practica) => sum + practica.cantidad, 0);
-          const aprobadosPorcentajeII = totalII > 0 ? (aprobadosII / totalII) * 100 : 0;
-          const reprobadosPorcentajeII = 100 - aprobadosPorcentajeII;
-
-          this.practicaIIChartData = {
-            labels: ['Aprobados', 'Reprobados'],
-            datasets: [
-              {
-                data: [aprobadosPorcentajeII.toFixed(2), reprobadosPorcentajeII.toFixed(2)],
-                backgroundColor: ['#1565c0', '#42aaff'],
-              }
-            ]
-          };
-        } 
-      },
-      error: error =>{
-        console.log(error)
-      },
-      complete: () => {
-        this.cargandoSolicitudes--;
-        this.checkCargandoFinalizado();
-      }
-    })
-  }
-
-  
   public getPracticasMeses() {
     this.cargandoSolicitudes++;
     this.dashboardService.getPracticasMeses(this.periodoSeleccionado).subscribe({
@@ -329,7 +237,6 @@ export class DashboardComponent implements OnInit{
   } 
 
   cargandoPracticas: Set<number> = new Set<number>();
-
 
   checkCargandoFinalizado() {
     if (this.cargandoSolicitudes === 0) {
