@@ -9,7 +9,7 @@
     <ng-template pTemplate="content">
         <!-- Mostrar el mensaje si no hay datos -->
         @if (
-        this.dataEstadisticaService.detallesPracticaAlumnos().length === 0
+        this.listaPracticas().length === 0
         ) {
 
         <div class="text-center flex flex-col items-center justify-center h-64">

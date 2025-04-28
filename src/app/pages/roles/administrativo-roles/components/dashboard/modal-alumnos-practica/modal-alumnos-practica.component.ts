@@ -5,7 +5,7 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { DataEstadisticaPracticaService } from '../../../services/data-estadistica-practica.service';
-import { TEXTO_ESTADO_PRACTICA, TEXTO_MODALIDAD } from '../constants/estados-practica.constants';
+import { TEXTO_ESTADO_PRACTICA, TEXTO_MODALIDAD } from '../../../constants/estados-practica.constants';
 import type { DetallePractica } from '../../../interfaces/detalle-practica.interface';
 
 @Component({
@@ -18,7 +18,7 @@ import type { DetallePractica } from '../../../interfaces/detalle-practica.inter
 export class ModalAlumnosPracticaComponent implements OnInit{
   // COMPONENTE QUE MUESTRA LOS ALUMNOS EN PRACTICA pero no se puede ver el detalle: Emite el id de la practica al padre
   dataEstadisticaService = inject(DataEstadisticaPracticaService);
-  id_practica = output<DetallePractica>();
+  practica = output<DetallePractica>();
 
   listaPracticas = signal<DetallePractica[]>([]);
   textoEstadoPractica = TEXTO_ESTADO_PRACTICA;
@@ -32,10 +32,13 @@ export class ModalAlumnosPracticaComponent implements OnInit{
     this.dataEstadisticaService.obtenerDetallesAlumnosEnPractica().subscribe(
       (resp) => {
         this.listaPracticas.set(resp);
+        console.log("detalles practica",resp);
       }
     );
   }
   seleccionarPractica(practica: DetallePractica): void {
-    this.id_practica.emit(practica);
+    console.log("practica seleccionada: ",practica);
+    this.practica.emit(practica);
+    this.dataEstadisticaService.mostrarPractica()
   }
 }

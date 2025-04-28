@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TEXTO_ESTADO_INFORME, TEXTO_ESTADO_PRACTICA, TEXTO_MODALIDAD } from '../constants/estados-practica.constants';
+import { TEXTO_ESTADO_INFORME, TEXTO_ESTADO_PRACTICA, TEXTO_MODALIDAD } from '../../../constants/estados-practica.constants';
 import type { AcademicoData } from '../../../interfaces/academico-info.interface';
 import type { PracticaAlumno } from '../../../interfaces/practica-alumno.interface';
 

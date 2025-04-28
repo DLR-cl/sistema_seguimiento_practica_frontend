@@ -1,8 +1,8 @@
 import { inject, Injectable, signal } from '@angular/core';
-import type { PracticaAlumno } from '../../../interfaces/practica-alumno.interface';
-import type { AcademicoData } from '../../../interfaces/academico-info.interface';
+import type { PracticaAlumno } from '../interfaces/practica-alumno.interface';
+import type { AcademicoData } from '../interfaces/academico-info.interface';
 import { HttpClient } from '@angular/common/http';
-import { enviroment } from '../../../../../../environment/environment';
+import { enviroment } from '../../../../environment/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -23,6 +23,7 @@ export class DataPracticaAlumnoService {
   }
 
   getDataAcademico(id_academico: number) {
+    console.log(id_academico)
     return this._httpClient.get<AcademicoData>(`${enviroment.API_URL}/academicos/${id_academico}`);
   }
 

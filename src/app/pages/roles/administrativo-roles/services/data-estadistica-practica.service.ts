@@ -28,6 +28,9 @@ export class DataEstadisticaPracticaService {
   showModalDetallesPractica() {
     console.log(this.modalViewDetallesPractica())
     this.modalViewDetallesPractica.update( (current) => !current);
+    if(this.modalViewDetallesPractica()){
+      this.obtenerDetallesAlumnosEnPractica();
+    }
   }
 
   obtenerEstadisticaPracticas() {
@@ -47,6 +50,7 @@ export class DataEstadisticaPracticaService {
 
   seleccionarPractica(practica: DetallePractica ) {
     this.practicaSeleccionada.set(practica);
+    console.log("practica cambiada en servicio", this.practicaSeleccionada())
   }
 
   mostrarPractica() {

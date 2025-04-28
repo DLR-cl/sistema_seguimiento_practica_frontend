@@ -114,7 +114,7 @@
 <!-- Modal a Mostrar detalle practica: Envia la practica al padre-->
  @if (this.dataEstadisticaService.modalViewDetallesPractica()) {
 
-   <app-modal-alumnos-practica (id_practica)="this.dataEstadisticaService.seleccionarPractica($event)"/>
+   <app-modal-alumnos-practica (practica)="this.dataEstadisticaService.seleccionarPractica($event)"/>
    
    <!-- Solo se abre si se selecciona la practica -->
   @if (this.dataEstadisticaService.practicaSeleccionada()) {

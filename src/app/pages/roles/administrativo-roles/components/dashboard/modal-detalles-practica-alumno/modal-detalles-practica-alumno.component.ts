@@ -9,7 +9,7 @@ import { PracticaAlumno } from '../../../interfaces/practica-alumno.interface';
 import { AcademicoData } from '../../../interfaces/academico-info.interface';
 import { ModalDetallesInformacionGeneralComponent } from "../modal-detalles-informacion-general/modal-detalles-informacion-general.component";
 import { ModalDetallesInfoAcademicoPracticaComponent } from "../modal-detalles-info-academico-practica/modal-detalles-info-academico-practica.component";
-import { DataPracticaAlumnoService } from '../services/data-practica-alumno.service';
+import { DataPracticaAlumnoService } from '../../../services/data-practica-alumno.service';
 import { DetallePractica } from '../../../interfaces/detalle-practica.interface';
 import { DataEstadisticaPracticaService } from '../../../services/data-estadistica-practica.service';
 
@@ -41,7 +41,9 @@ export class ModalDetallesPracticaAlumnoComponent implements OnInit{
   // Llamar datos solo cuando el modal es creado
   ngOnInit(): void {
     this.getDataAlumno();
-    this.getDataAcademico();
+    if(this.practicaAlumno()?.informe_alumno){
+      this.getDataAcademico();
+    }
   }
 
   getDataAlumno() {

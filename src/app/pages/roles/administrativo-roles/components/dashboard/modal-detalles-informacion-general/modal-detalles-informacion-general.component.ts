@@ -1,8 +1,8 @@
 import { Component, inject, input, OnInit, output, signal } from '@angular/core';
 import { PracticaAlumno } from '../../../interfaces/practica-alumno.interface';
-import { TEXTO_ESTADO_INFORME, TEXTO_MODALIDAD, TEXTO_ESTADO_PRACTICA} from '../constants/estados-practica.constants';
+import { TEXTO_ESTADO_INFORME, TEXTO_MODALIDAD, TEXTO_ESTADO_PRACTICA} from '../../../constants/estados-practica.constants';
 import { CommonModule } from '@angular/common';
-import { DataPracticaAlumnoService } from '../services/data-practica-alumno.service';
+import { DataPracticaAlumnoService } from '../../../services/data-practica-alumno.service';
 import { AcademicoData } from '../../../interfaces/academico-info.interface';
 @Component({
   selector: 'app-modal-detalles-informacion-general',
