@@ -7,7 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HeaderComponent } from "../../../jefe_compartido/header-jefes/header.component";
 import { DataAccessService } from '../../services/data-access.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { PracticaAlumno } from '../../../administrativo-roles/interfaces/practica-alumno.interface';
+import { PracticaAlumno } from '../../../../../gestion-practicas/interfaces/practica-alumno.interface';
 import { PreguntaEvaluacion } from '../../dto/revision-informes.dto';
 import { MessageService } from 'primeng/api';
 

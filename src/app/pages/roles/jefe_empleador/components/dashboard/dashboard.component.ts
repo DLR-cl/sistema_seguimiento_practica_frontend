@@ -13,7 +13,7 @@ import { AuthStateService } from '../../../../../shared/data-access/auth-state.s
 import { DialogModule } from 'primeng/dialog';
 import { DetallesInformes } from '../../dto/informe-confidencial.dto';
 import { Empresa } from '../../../jefe_compartido/dto/empresa.dto';
-import type { PracticaAlumno } from '../../../administrativo-roles/interfaces/practica-alumno.interface';
+import type { PracticaAlumno } from '../../../../../gestion-practicas/interfaces/practica-alumno.interface';
 
 @Component({
   selector: 'app-dashboard',

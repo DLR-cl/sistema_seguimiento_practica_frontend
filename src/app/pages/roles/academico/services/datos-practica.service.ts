@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { enviroment } from '../../../../environment/environment';
-import { PracticaAlumno } from '../../administrativo-roles/interfaces/practica-alumno.interface';
+import { PracticaAlumno } from '../../../../gestion-practicas/interfaces/practica-alumno.interface';
 import { Observable } from 'rxjs';
 import { GenerarPDF, PreguntaEvaluacion } from '../dto/revision-informes.dto';
 import { TipoPractica } from '../../../../enum/enumerables.enum';

@@ -3,13 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PracticasAlumnoService } from '../services/practicas-alumno.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PracticaAlumno } from '../../administrativo-roles/interfaces/practica-alumno.interface';
+import { PracticaAlumno } from '../../../../gestion-practicas/interfaces/practica-alumno.interface';
 import { RespuestasInformeService } from '../services/respuestas-informe.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { Empresa } from '../../jefe_compartido/dto/empresa.dto';
 import { HeaderComponent } from '../../jefe_compartido/header-jefes/header.component';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { DetallePractica } from '../../administrativo-roles/interfaces/detalle-practica.interface';
+import { DetallePractica } from '../../../../gestion-practicas/interfaces/detalle-practica.interface';
 
 @Component({
   selector: 'app-estado-practica',

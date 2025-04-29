@@ -6,7 +6,7 @@ import { TablaFuncionesComponent } from "../../academico/components/tabla-funcio
 import { CommonModule } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
-import { DashboardComponent } from '../../administrativo-roles/components/dashboard/dashboard.component';
+import { DashboardComponent } from '../../../../gestion-practicas/components/dashboard-elements/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-home-administracion',

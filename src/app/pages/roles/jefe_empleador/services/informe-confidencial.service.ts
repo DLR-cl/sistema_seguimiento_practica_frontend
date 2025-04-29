@@ -4,7 +4,7 @@ import { enviroment } from '../../../../environment/environment';
 import { DetallesInformes, ListaInformes } from '../dto/informe-confidencial.dto';
 import { AlumnosAsignados } from '../dto/dashboard.dto';
 import { Empresa } from '../../jefe_compartido/dto/empresa.dto';
-import type { PracticaAlumno } from '../../administrativo-roles/interfaces/practica-alumno.interface';
+import type { PracticaAlumno } from '../../../../gestion-practicas/interfaces/practica-alumno.interface';
 
 @Injectable({
   providedIn: 'root'

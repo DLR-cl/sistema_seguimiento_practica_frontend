@@ -131,7 +131,7 @@ export class AuthService {
     this._storage.remove('session');
     this.decodedTokenSubject.next(null); // Resetea el token decodificado
     this._authService.signOut();
-    this._router.navigate(['/login']);
+    this._router.navigate(['/home']);
   }
 
   // Almacena el token en el almacenamiento local

@@ -5,7 +5,7 @@ import { AuthStateService } from '../../../../shared/data-access/auth-state.serv
 import { Secretaria, SeguimientoData } from '../dto/secretaria-data.dto';
 import { enviroment } from '../../../../environment/environment';
 import { jwtDecode } from "jwt-decode";
-import type { PracticaAlumno } from '../../administrativo-roles/interfaces/practica-alumno.interface';
+import type { PracticaAlumno } from '../../../../gestion-practicas/interfaces/practica-alumno.interface';
 
 @Injectable({
   providedIn: 'root'

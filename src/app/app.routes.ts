@@ -37,29 +37,16 @@ export const routes: Routes = [
         path: '',
         component: PublicLayoutComponent,
         canActivate: [publicGuard()],
-        children: [
-            { path: 'home', component: HomeComponent },
-            { 
-                path: 'solicitar-practicante', 
-                loadComponent: () => 
-                    import('./pages/solicitar-practicante/solicitar-practicante.component')
-                    .then(c => c.SolicitarPracticanteComponent )
-            },
-            { path: '', redirectTo: '/home', pathMatch: 'full' },
-            { path: 'login', loadComponent:() => import('./auth/page/login-page/login-page.component').then( c => c.LoginPageComponent ) },
-            { path: 'cambiar-clave', loadComponent: () => import('./pages/general/change-password/change-password.component').then( c => c.ChangePasswordComponent)},
-        ]
+        loadChildren: () => import('./pages/general/general.route').then(r => r.routes)
     },
     //PROTEGIDO POR AUTENTICACIÓN
     {
-        path: 'test-navbar',
-        loadComponent: () => import('./shared/navbar/navbar.component').then(c => c.NavbarComponent),
-        canActivate: [privateGuard]
+        path: '',
+        loadComponent: () => import('./gestion-practicas/pages/menu-general-page/menu-general-page.component').then(c => c.MenuGeneralPageComponent),
+        canActivate: [privateGuard()],
+        loadChildren: () => import('./gestion-practicas/gestion-practicas.routes').then(r => r.routes) 
     },
-    {
-        path: 'home-administracion', component: HomeAdministracionComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.JEFE_CARRERA, TipoUsuario.ADMINISTRADOR])]
-    },
+
     {
         path: 'informes', component: InformesComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.ADMINISTRADOR])]
