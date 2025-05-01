@@ -1,12 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header-jefes/header.component";
 
-import { PerfilDataComponent } from "../../academico/components/perfil-data/perfil-data.component";
-import { TablaFuncionesComponent } from "../../academico/components/tabla-funciones/tabla-funciones.component";
+import { PerfilDataComponent } from "../../../../roles/academico/components/perfil-data/perfil-data.component";
+import { TablaFuncionesComponent } from "../../../../roles/academico/components/tabla-funciones/tabla-funciones.component";
 import { CommonModule } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
-import { DashboardComponent } from '../../../../gestion-practicas/components/dashboard-elements/dashboard/dashboard.component';
+import { DashboardComponent } from '../../../../features/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-home-administracion',

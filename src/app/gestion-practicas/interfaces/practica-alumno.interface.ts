@@ -1,5 +1,5 @@
 import type { EstadoPractica } from "../../enum/enumerables.enum";
-import type { InformeAlumno, InformeConfidencial } from "../../pages/roles/secretaria/dto/practicas.dto";
+import type { InformeAlumno, InformeConfidencial } from "../../roles/secretaria/dto/practicas.dto";
 
 export interface PracticaAlumno {
     id_practica:          number;

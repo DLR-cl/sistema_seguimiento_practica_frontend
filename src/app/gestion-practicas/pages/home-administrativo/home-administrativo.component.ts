@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 
 import { HeaderComponent } from "../../../pages/roles/jefe_compartido/header-jefes/header.component";
-import { DashboardComponent } from '../../components/dashboard-elements/dashboard/dashboard.component';
+import { DashboardComponent } from '../../../features/dashboard/dashboard.component';
 import { DataEstadisticaPracticaService } from '../../services/data-estadistica-practica.service';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HeaderComponent } from "../../pages/roles/jefe_compartido/header-jefes/header.component";
-import { NavbarComponent } from "../../shared/navbar/navbar.component";
+import { NavbarComponent } from "../../shared/components/navbar/navbar.component";
 
 @Component({
   selector: 'app-auth-layout',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { NavbarComponent } from "../../../shared/navbar/navbar.component";
-import { DashboardComponent } from "../../components/dashboard-elements/dashboard/dashboard.component";
+import { NavbarComponent } from "../../../shared/components/navbar/navbar.component";
+import { DashboardComponent } from "../../../features/dashboard/dashboard.component";
 import { RouterOutlet } from '@angular/router';
 
 @Component({

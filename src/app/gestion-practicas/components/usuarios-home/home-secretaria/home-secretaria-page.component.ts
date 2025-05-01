@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../../../auth/services/auth.service';
-import { DataSecretariaService } from '../../../../pages/roles/secretaria/services/data-secretaria.service';
-import { TipoSecretaria } from '../../../constants/tipo-usuarios.constants';
+import { TipoSecretaria } from '../../../../core/constants/tipo-usuarios.constants';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 import { RouterLink } from '@angular/router';
 
