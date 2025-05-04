@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { HeaderJefeEmpleadorComponent } from "../header-jefe-empleador/header-jefe-empleador.component";
+
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -11,11 +11,11 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ButtonModule } from 'primeng/button';
 import { PreguntasInformeService } from '../../../../pages/roles/jefe_compartido/services/preguntas-informe.service';
-import { respuestaInformeConfidencial } from '../../../../pages/roles/jefe_empleador/dto/informe-confidencial.dto';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { MessageService } from 'primeng/api';
 import { Pregunta } from '../../dto/informe-alumno.dto';
 import { HeaderComponent } from "../../../../pages/roles/jefe_compartido/header-jefes/header.component";
+import { respuestaInformeConfidencial } from '../../dto/informe-confidencial.dto';
 
 @Component({
   selector: 'app-informe-primera-practica',

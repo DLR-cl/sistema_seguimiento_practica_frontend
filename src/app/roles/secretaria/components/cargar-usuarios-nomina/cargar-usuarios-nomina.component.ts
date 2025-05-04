@@ -2,15 +2,16 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { MessageService } from 'primeng/api';
-import { HeaderComponent } from '../../alumno/components/header/header.component';
-import { enviroment } from '../../../environment/environment';
+import { HeaderComponent } from '../../../alumno/components/header/header.component';
+import { enviroment } from '../../../../environment/environment';
 
 @Component({
   selector: 'app-cargar-usuarios-nomina',
   standalone: true,
   templateUrl: './cargar-usuarios-nomina.component.html',
   styleUrl: './cargar-usuarios-nomina.component.css',
-  imports: [CommonModule, HeaderComponent]
+  imports: [CommonModule, HeaderComponent
+  ]
 })
 export class CargarUsuariosNominaComponent {
   selectedFile: File | null = null;

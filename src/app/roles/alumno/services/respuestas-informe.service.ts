@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { enviroment } from '../../../environment/environment';
 import { existeRespuesta, ListaRespuestas } from '../../supervisor/dto/informe-alumno.dto';
-import { respuestaInformeConfidencial } from '../../../pages/roles/jefe_empleador/dto/informe-confidencial.dto';
+import { respuestaInformeConfidencial } from '../../supervisor/dto/informe-confidencial.dto';
 
 @Injectable({
   providedIn: 'root'

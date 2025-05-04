@@ -1,4 +1,4 @@
-import { EstadoInforme } from "../../../../enum/enumerables.enum";
+import { EstadoInforme } from "../../../enum/enumerables.enum";
 
 export interface respuestaInformeConfidencial {
     id_informe: number;

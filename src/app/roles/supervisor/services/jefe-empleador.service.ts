@@ -1,9 +1,9 @@
 import { HttpClient } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { JefeAlumnoInterface } from "./interface/jefe-alumno.interface";
 import { map, Observable } from "rxjs";
-import { enviroment } from "../../../../environment/environment";
-import { AuthStateService } from "../../../../shared/data-access/auth-state.service";
+import { AuthStateService } from "../../../shared/data-access/auth-state.service";
+import type { JefeAlumnoInterface } from "../interface/jefe-alumno.interface";
+import { enviroment } from "../../../environment/environment";
 
 @Injectable({
     providedIn: 'root',

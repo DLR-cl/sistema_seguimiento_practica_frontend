@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { DataSecretariaService } from '../services/data-secretaria.service';
-import { SeguimientoData } from '../dto/secretaria-data.dto';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from "../../../pages/roles/jefe_compartido/header-jefes/header.component";
 import { FormsModule, NgModel } from '@angular/forms';
+import { HeaderComponent } from '../../../alumno/components/header/header.component';
+import { DataSecretariaService } from '../../services/data-secretaria.service';
+import { SeguimientoData } from '../../dto/secretaria-data.dto';
 
 @Component({
   selector: 'app-estado-academicos',

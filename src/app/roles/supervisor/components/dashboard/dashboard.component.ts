@@ -11,9 +11,10 @@ import { InformeConfidencialService } from '../../services/informe-confidencial.
 import { Router } from '@angular/router';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 import { DialogModule } from 'primeng/dialog';
-import { DetallesInformes } from '../../../../pages/roles/jefe_empleador/dto/informe-confidencial.dto';
+
 import { Empresa } from '../../../../pages/roles/jefe_compartido/dto/empresa.dto';
 import type { PracticaAlumno } from '../../../../gestion-practicas/interfaces/practica-alumno.interface';
+import { DetallesInformes } from '../../dto/informe-confidencial.dto';
 
 @Component({
   selector: 'app-dashboard',

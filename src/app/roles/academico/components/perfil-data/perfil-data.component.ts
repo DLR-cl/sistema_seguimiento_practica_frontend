@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { DataAccessService } from '../../../../pages/roles/academico/services/data-access.service';
 import { CantidadInformesPendientes, InfoInformes, ResumenConteoInformes } from '../../interfaces/info-informes.dto';
 import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
 import { Router } from '@angular/router';
+import { DataAccessService } from '../../services/data-access.service';
 
 @Component({
   selector: 'app-perfil-data',

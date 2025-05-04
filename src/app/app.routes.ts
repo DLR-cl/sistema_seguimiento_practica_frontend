@@ -18,16 +18,16 @@ import { NotFoundComponent } from './pages/general/not-found/not-found.component
 import { TipoUsuario } from './enum/enumerables.enum';
 import { InfoAcademicosComponent } from './pages/roles/jefe_compartido/pages/info-academicos/info-academicos.component';
 import { practicasGuard } from './shared/guards/practicas.guard';
-import { AcademicoComponent } from './pages/roles/academico/academico.component';
 import { DetallesInformesComponent } from './features/evaluaciones/detalles-informes/detalles-informes.component';
 
-import { EstadoAcademicosComponent } from './roles/secretaria/estado-academicos/estado-academicos.component';
 import { ResultadosPracticaComponent } from './pages/roles/jefe_compartido/pages/resultados-practica/resultados-practica.component';
 import { PdfgeneratorComponent } from './shared/pdfgenerator/pdfgenerator.component';
 import { GestionarUsuariosComponent } from './pages/roles/jefe_compartido/gestionar-usuarios/gestionar-usuarios.component';
 import { InformesComponent } from './pages/roles/jefe_compartido/informes/informes.component';
 import { PublicLayoutComponent } from './layout/public-layout/public-layout.component';
 import { SolicitarPracticanteComponent } from './pages/solicitar-practicante/solicitar-practicante.component';
+import { AcademicoComponent } from './roles/academico/components/home/academico.component';
+import { EstadoAcademicosComponent } from './roles/secretaria/components/estado-academicos/estado-academicos.component';
 
 
 export const routes: Routes = [
@@ -78,7 +78,7 @@ export const routes: Routes = [
     },
     {
         path: 'cargar-alumnos-nomina', 
-        loadComponent: () => import('./pages/roles/secretaria/cargar-usuarios-nomina/cargar-usuarios-nomina.component').then( c => c.CargarUsuariosNominaComponent),
+        loadComponent: () => import('./roles/secretaria/components/cargar-usuarios-nomina/cargar-usuarios-nomina.component').then( c => c.CargarUsuariosNominaComponent),
         canActivate: [privateGuard()]
     },
     {

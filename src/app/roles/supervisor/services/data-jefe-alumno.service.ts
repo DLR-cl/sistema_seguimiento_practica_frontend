@@ -1,8 +1,9 @@
 import { inject, Injectable } from "@angular/core";
-import { JefeEmpleadorService } from "../../../pages/roles/jefe_empleador/data-access/jefe-empleador.service";
+
 import { JefeAlumnoInterface } from "../interface/jefe-alumno.interface";
 import { BehaviorSubject, Observable } from "rxjs";
 import { jwtDecode } from "jwt-decode";
+import { JefeEmpleadorService } from "./jefe-empleador.service";
 
 @Injectable({
     providedIn: 'root',
