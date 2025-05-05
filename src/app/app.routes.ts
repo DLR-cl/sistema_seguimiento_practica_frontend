@@ -37,14 +37,14 @@ export const routes: Routes = [
         path: '',
         component: PublicLayoutComponent,
         canActivate: [publicGuard()],
-        loadChildren: () => import('./pages/general/general.route').then(r => r.routes)
+        loadChildren: () => import('./pages/general/general.route').then(r => r.routes),
     },
     //PROTEGIDO POR AUTENTICACIÓN
     {
         path: '',
         loadComponent: () => import('./gestion-practicas/pages/menu-general-page/menu-general-page.component').then(c => c.MenuGeneralPageComponent),
         canActivate: [privateGuard()],
-        loadChildren: () => import('./gestion-practicas/gestion-practicas.routes').then(r => r.routes) 
+        loadChildren: () => import('./gestion-practicas/gestion-practicas.routes').then(r => r.routes),
     },
 
     {

@@ -69,7 +69,7 @@ export class LoginPageComponent implements OnInit {
         } else {
           // Redirige según el rol del usuario
           setTimeout(() => {
-            this.router.navigate([this.authService.getRedirectUrlByRole(this.authState.getRole())]);
+            this.router.navigate(['menu']);
           }, 50); // Retraso opcional
         }
       },
