@@ -110,7 +110,7 @@ export class ChangePasswordComponent {
               this.errorMessage = '';
               this.cargando = false;
               setTimeout(() => {
-                this.router.navigate(['/home']);
+                this.router.navigate(['/menu']);
               }, 2000);
             },
             error: (err) => {
