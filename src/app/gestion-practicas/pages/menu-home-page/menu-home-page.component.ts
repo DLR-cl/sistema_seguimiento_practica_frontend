@@ -3,7 +3,8 @@ import { CarouselModule } from 'primeng/carousel';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { TipoUsuario } from '../../../enum/enumerables.enum';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-menu-home-page',
@@ -26,7 +27,9 @@ import { RouterLink } from '@angular/router';
 export class MenuHomePageComponent implements OnInit {
 
   private usuarioService = inject(AuthStateService);
+  private authService = inject(AuthService);
   userRole = signal<TipoUsuario | null>(null);
+  private router = inject(Router);
 
   images = signal([
     'images/departamento/imagen-departamento-vista-arriba.webp',
@@ -67,4 +70,10 @@ export class MenuHomePageComponent implements OnInit {
     }
   }
 
+  goToHomeByRol() {
+    console.log(this.userRole());
+    const path = this.authService.getRedirectUrlByRole(this.userRole());
+    this.router.navigate([path])
+    console.log("hola")
+  }
 }
