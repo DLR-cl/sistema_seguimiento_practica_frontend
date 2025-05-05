@@ -2,6 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../../auth/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { AuthStateService } from '../../data-access/auth-state.service';
+import { MenuItem } from 'primeng/api';
 
 @Component({
   selector: 'app-navbar',
@@ -17,6 +18,10 @@ export class NavbarComponent implements OnInit{
   authStateService = inject(AuthStateService);
   usuarioRole?: string | null;
 
+
+  menuItems = signal<MenuItem>([
+    { label: 'Inicio' path: ''}
+  ])
   ngOnInit(): void {
     this.usuarioRole = this.authStateService.getRole();
   }
