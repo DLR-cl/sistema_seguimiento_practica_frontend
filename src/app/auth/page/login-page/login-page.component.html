@@ -17,8 +17,8 @@
     <div class="w-full max-w-lg lg:max-w-3xl p-6 sm:p-10 bg-white/95 backdrop-blur-sm shadow-2xl rounded-2xl sm:rounded-3xl relative my-3 transform transition-all duration-500 hover:shadow-blue-500/20">
       
       <!-- Botón de Volver al Menú -->
-      <div class="absolute top-4 left-4 sm:top-7 sm:left-7">
-        <a routerLink="/home"
+      <div class="absolute top-4 left-4 sm:top-7 sm:left-7 z-10">
+        <a (click)="goToHome()"
            class="p-2 hover:bg-gray-100 text-gray-700 font-medium rounded-lg transition-all duration-300 flex items-center hover:scale-110">
           <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
@@ -27,7 +27,7 @@
       </div>
 
       <!-- Logo -->
-      <div class="flex justify-center mb-8 transform transition-all duration-500 hover:scale-105">
+      <div class="flex justify-center mb-8 transform transition-all duration-500 hover:scale-105 relative z-0">
         <img src="logo_industria.png" alt="logo_dici" class="w-20 h-20 sm:w-28 sm:h-28 drop-shadow-lg" />
       </div>
 

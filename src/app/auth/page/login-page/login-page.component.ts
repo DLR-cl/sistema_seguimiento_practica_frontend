@@ -102,4 +102,8 @@ export class LoginPageComponent implements OnInit {
       life: 5000
     });
   }
+
+  goToHome() {
+    this.router.navigate(['/home']);
+  }
 }

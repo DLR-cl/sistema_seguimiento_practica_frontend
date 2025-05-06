@@ -1,27 +1,36 @@
 <app-header></app-header>
 
-<div class="flex flex-col md:flex-row gap-4 p-4">
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+  <div class="container mx-auto px-4 py-6">
+    <!-- Spinner de carga mejorado -->
+    @if (cargando) {
+      <div class="fixed inset-0 bg-black/30 dark:bg-gray-900/50 backdrop-blur-sm flex justify-center items-center z-50">
+        <div class="flex space-x-3">
+          <div class="w-5 h-5 bg-blue-500 dark:bg-blue-400 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>
+          <div class="w-5 h-5 bg-blue-500 dark:bg-blue-400 rounded-full animate-bounce-bright" style="animation-delay: 0.2s"></div>
+          <div class="w-5 h-5 bg-blue-500 dark:bg-blue-400 rounded-full animate-bounce-bright" style="animation-delay: 0.4s"></div>
+        </div>
+      </div>
+    }
 
-     <div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
-          <div class="flex space-x-2">
-            <!-- Puntos animados con rebote e iluminación progresiva -->
-            <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-                 style="animation-delay: 0s"></div>
-            <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-                 style="animation-delay: 0.2s"></div>
-            <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-                 style="animation-delay: 0.4s"></div>
-          </div>
+    <!-- Contenedor principal con grid responsivo -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Perfil Data -->
+      <div class="md:col-span-1">
+        <app-perfil-data
+          [hidden]="cargando"
+          class="h-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl"
+        ></app-perfil-data>
       </div>
 
-     <!-- Subcomponentes -->
-     <app-perfil-data
-        [hidden]="cargando"
-        class="flex-shrink-0 md:w-1/3 w-full"></app-perfil-data>
-
-     <!-- Tabla Funciones -->
-     <app-tabla-funciones
+      <!-- Tabla Funciones -->
+      <div class="md:col-span-2">
+        <app-tabla-funciones
           [hidden]="cargando"
           (estadoCargando)="finalizoCarga($event)"
-          class="flex-grow md:w-2/3 w-full"></app-tabla-funciones>
+          class="h-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl"
+        ></app-tabla-funciones>
+      </div>
+    </div>
+  </div>
 </div>

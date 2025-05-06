@@ -1,286 +1,331 @@
-<div class="p-6 bg-gray-100 min-h-screen">
-    <!-- Encabezado -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <h1 class="text-2xl bg-white shadow rounded px-5 py-3 font-bold text-gray-800">Bienvenido {{dataJefe?.nombre}}</h1>
+<!-- Fondo con gradiente institucional -->
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <!-- Encabezado con logo y título -->
+    <div class="bg-white dark:bg-gray-800 shadow-md border-b border-blue-100 dark:border-gray-700">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <i class="fas fa-university text-3xl text-blue-800 dark:text-blue-400"></i>
+                    <h1 class="text-2xl font-bold text-blue-900 dark:text-white">Bienvenido, {{dataJefe?.nombre}}</h1>
+                </div>
+                <div class="text-sm text-blue-600 dark:text-blue-400">
+                    <i class="fas fa-building mr-2"></i>
+                    {{dataEmpresa.nombre_razon_social}}
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Contenido Principal -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <!-- Columna Izquierda -->
-        <div class="col-span-1 space-y-6">
-            <!-- Información del Usuario y Empresa -->
-            <div class="bg-white shadow rounded-lg p-6">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4">Información del Usuario</h2>
-                <div *ngIf="dataEmpresa" class="space-y-4">
-                    <div class="flex justify-between items-center">
-                        <span class="font-medium text-gray-600">Empresa:</span>
-                        <span class="text-gray-900 font-semibold break-words">{{dataEmpresa.nombre_razon_social}}</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="font-medium text-gray-600">Rubro:</span>
-                        <span class="text-gray-900 font-semibold">{{dataEmpresa.rubro}}</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="font-medium text-gray-600">Cargo:</span>
-                        <span class="text-gray-900 font-semibold">{{dataJefe?.cargo}}</span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="font-medium text-gray-600">Dirección:</span>
-                        <span class="text-gray-900 font-semibold break-words">{{dataEmpresa.ubicacion}}</span>
-                    </div>
-                </div>
-            </div>
-            
-            
-
-            <!-- Listado de Informes Pendientes -->
-            <div class="bg-white shadow rounded p-6 h-[500px]">
-                <h2 class="text-lg font-semibold text-gray-700 mb-4">Informes Pendientes</h2>
-
-                <!-- Mostrar mensaje si no hay informes -->
-                <div *ngIf="informesPendientesList.length === 0" class="flex items-center space-x-5 my-5">
-                  <i class="pi pi-info-circle text-blue-500 text-3xl"></i>
-                  <p class="text-gray-500">No hay informes pendientes por enviar.</p>
-                </div>
-
-                <p-listbox 
-                    *ngIf="informesPendientesList.length > 0"
-                    [options]="informesPendientesList" 
-                    [(ngModel)]="selectedInforme"
-                    optionLabel="nombre" 
-                    (onChange)="realizarInforme(selectedInforme.id_practica)"
-                    [listStyle]="{'max-height': '400px'}">
-                  <ng-template let-informe pTemplate="item">
-                    <div class="flex flex-col">
-                      <span class="text-gray-800 font-medium">{{ tipoPractica[informe.tipo_practica]}}</span>
-                      <small class="text-gray-500">Alumno: {{ informe.nombre_alumno }}</small>
-                      <small class="text-gray-500">Días restantes: {{ informe.dias_restantes }}</small>
-                    </div>
-                  </ng-template>
-                </p-listbox>
-            </div>
-        </div>
-
-        <!-- Estadísticas, Gráficos y Detalles -->
-        <div class="col-span-3 grid grid-cols-4 gap-6">
-            <!-- Paneles Resumidos -->
-            <div class="col-span-4 grid grid-cols-1 md:grid-cols-3 gap-6">
-              <!-- Cuadro 1: Alumnos Asignados -->
-              <div class="bg-white shadow-lg rounded-lg p-6 flex flex-col justify-center items-center">
-                <ng-container *ngIf="alumnosAsignados > 0; else noAlumnosAsignados">
-                  <h2 class="text-lg font-semibold text-gray-700">Alumnos Asignados</h2>
-                  <p class="text-3xl text-blue-600 font-bold">{{ alumnosAsignados }}</p>
-                </ng-container>
-                <ng-template #noAlumnosAsignados>
-                  <div class="flex flex-col items-center text-center">
-                    <i class="pi pi-user text-blue-300 text-4xl mb-2"></i>
-                    <p class="text-gray-500 text-sm font-semibold">Aún no hay alumnos asignados.</p>
-                  </div>
-                </ng-template>
-              </div>
-            
-              <!-- Cuadro 2: Informes Pendientes -->
-              <div class="bg-white shadow-lg rounded-lg p-6 flex flex-col justify-center items-center">
-                <ng-container *ngIf="informesPendientes > 0; else noInformesPendientes">
-                  <h2 class="text-lg font-semibold text-gray-700">Informes Pendientes</h2>
-                  <p class="text-3xl text-red-600 font-bold">{{ informesPendientes }}</p>
-                </ng-container>
-                <ng-template #noInformesPendientes>
-                  <div class="flex flex-col items-center text-center">
-                    <i class="pi pi-file text-red-300 text-4xl mb-2"></i>
-                    <p class="text-gray-500 text-sm font-semibold">No hay informes pendientes por enviar.</p>
-                  </div>
-                </ng-template>
-              </div>
-            
-              <!-- Cuadro 3: Informes Totales -->
-              <div class="bg-white shadow-lg rounded-lg p-6 flex flex-col justify-center items-center">
-                <ng-container *ngIf="totalInformes > 0; else noInformesTotales">
-                  <h2 class="text-lg font-semibold text-gray-700">Informes Totales</h2>
-                  <p class="text-3xl text-green-600 font-bold">{{ totalInformes }}</p>
-                </ng-container>
-                <ng-template #noInformesTotales>
-                  <div class="flex flex-col items-center text-center">
-                    <i class="pi pi-database text-green-300 text-4xl mb-2"></i>
-                    <p class="text-gray-500 text-sm font-semibold">No se han revisado informes todavía.</p>
-                  </div>
-                </ng-template>
-              </div>
-            </div>
-            
-
-            <!-- Tabla de Detalles de Informes -->
-            <div class="col-span-4 bg-white shadow rounded p-6 min-h-[600px]">
-              <h2 class="text-lg font-semibold text-gray-700 mb-4">Detalles de Informes</h2>
-            
-              <ng-container *ngIf="detalleInformes && detalleInformes.length > 0; else noInformes">
-                <p-table [value]="detalleInformes" [paginator]="true" [rows]="5">
-                  <ng-template pTemplate="header">
-                    <tr>
-                      <th>Alumno</th>
-                      <th>Práctica</th>
-                      <th>Estado</th>
-                      <th>Días Restantes</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </ng-template>
-                  <ng-template pTemplate="body" let-informe>
-                    <tr>
-                      <td>{{ informe.nombre_alumno }}</td>
-                      <td>{{ tipoPractica[informe.tipo_practica] }}</td>
-                      <td>
-                        <span [ngClass]="{
-                          'text-green-600': informe.estado_informe === 'APROBADA',
-                          'text-yellow-600': informe.estado_informe === 'ENVIADA',
-                          'text-red-600': informe.estado_informe === 'ESPERA'
-                        }">
-                          {{ textoEstadoInforme[informe.estado_informe] }}
-                        </span>
-                      </td>
-                      <td>{{ informe.dias_restantes }} días</td>
-                      <td>
-                        <div class="flex items-center space-x-5">
-                          <button
-                            pButton
-                            label="{{ informe.estado_informe === 'ESPERA' ? 'Realizar' : 'Ver' }}"
-                            class="p-button-text"
-                            (click)="informe.estado_informe === 'ESPERA' ? realizarInforme(informe.id_informe_confidencial) : verInforme(informe)"
-                          ></button>
-                          <div
-                            *ngIf="cargandoPracticas.has(informe.id_informe_confidencial)"
-                            class="w-5 h-5 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"
-                          ></div>
+    <div class="container mx-auto px-6 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- Columna Izquierda -->
+            <div class="space-y-8">
+                <!-- Información del Usuario y Empresa -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700">
+                    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-user-tie mr-2"></i>
+                        Información del Usuario
+                    </h2>
+                    <div *ngIf="dataEmpresa" class="space-y-4">
+                        <div class="flex justify-between items-center p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            <span class="font-medium text-gray-600 dark:text-gray-300">Empresa:</span>
+                            <span class="text-blue-900 dark:text-white font-semibold break-words">{{dataEmpresa.nombre_razon_social}}</span>
                         </div>
-                      </td>
-                    </tr>
-                  </ng-template>
-                </p-table>
-              </ng-container>
-            
-              <ng-template #noInformes>
-                <div class="flex items-center space-x-3">
-                  <i class="pi pi-info-circle text-blue-500 text-4xl"></i>
-                  <p class="text-gray-700 text-lg">
-                    No hay informes que mostrar aún, espera a que un alumno finalice su práctica.
-                  </p>
+                        <div class="flex justify-between items-center p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            <span class="font-medium text-gray-600 dark:text-gray-300">Rubro:</span>
+                            <span class="text-blue-900 dark:text-white font-semibold">{{dataEmpresa.rubro}}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            <span class="font-medium text-gray-600 dark:text-gray-300">Cargo:</span>
+                            <span class="text-blue-900 dark:text-white font-semibold">{{dataJefe?.cargo}}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            <span class="font-medium text-gray-600 dark:text-gray-300">Dirección:</span>
+                            <span class="text-blue-900 dark:text-white font-semibold break-words">{{dataEmpresa.ubicacion}}</span>
+                        </div>
+                    </div>
                 </div>
-              </ng-template>
+
+                <!-- Listado de Informes Pendientes -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 h-[500px]">
+                    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4 flex items-center">
+                        <i class="fas fa-clock mr-2"></i>
+                        Informes Pendientes
+                    </h2>
+
+                    <!-- Mostrar mensaje si no hay informes -->
+                    <div *ngIf="informesPendientesList.length === 0" class="flex items-center space-x-4 my-5 p-4 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <i class="fas fa-info-circle text-blue-500 dark:text-blue-400 text-2xl"></i>
+                        <p class="text-blue-700 dark:text-blue-300">No hay informes pendientes por enviar.</p>
+                    </div>
+
+                    <p-listbox 
+                        *ngIf="informesPendientesList.length > 0"
+                        [options]="informesPendientesList" 
+                        [(ngModel)]="selectedInforme"
+                        optionLabel="nombre" 
+                        (onChange)="realizarInforme(selectedInforme.id_practica)"
+                        [listStyle]="{'max-height': '400px'}"
+                        class="border border-blue-100 dark:border-gray-700 rounded-lg">
+                        <ng-template let-informe pTemplate="item">
+                            <div class="flex flex-col p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                                <span class="text-blue-900 dark:text-white font-medium">{{ tipoPractica[informe.tipo_practica]}}</span>
+                                <div class="flex justify-between items-center mt-1">
+                                    <small class="text-gray-600 dark:text-gray-300">Alumno: {{ informe.nombre_alumno }}</small>
+                                    <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs">
+                                        {{ informe.dias_restantes }} días
+                                    </span>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </p-listbox>
+                </div>
             </div>
-            
+
+            <!-- Estadísticas y Detalles -->
+            <div class="lg:col-span-3 space-y-8">
+                <!-- Paneles Resumidos -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Cuadro 1: Alumnos Asignados -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                        <ng-container *ngIf="alumnosAsignados > 0; else noAlumnosAsignados">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Alumnos Asignados</h2>
+                                <i class="fas fa-users text-blue-500 dark:text-blue-400 text-2xl"></i>
+                            </div>
+                            <p class="text-4xl text-blue-600 dark:text-blue-400 font-bold mt-4">{{ alumnosAsignados }}</p>
+                        </ng-container>
+                        <ng-template #noAlumnosAsignados>
+                            <div class="flex flex-col items-center text-center">
+                                <i class="fas fa-user-graduate text-blue-300 dark:text-blue-500 text-4xl mb-2"></i>
+                                <p class="text-blue-700 dark:text-blue-300 text-sm font-semibold">Aún no hay alumnos asignados.</p>
+                            </div>
+                        </ng-template>
+                    </div>
+
+                    <!-- Cuadro 2: Informes Pendientes -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                        <ng-container *ngIf="informesPendientes > 0; else noInformesPendientes">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Informes Pendientes</h2>
+                                <i class="fas fa-file-alt text-red-500 dark:text-red-400 text-2xl"></i>
+                            </div>
+                            <p class="text-4xl text-red-600 dark:text-red-400 font-bold mt-4">{{ informesPendientes }}</p>
+                        </ng-container>
+                        <ng-template #noInformesPendientes>
+                            <div class="flex flex-col items-center text-center">
+                                <i class="fas fa-check-circle text-green-300 dark:text-green-500 text-4xl mb-2"></i>
+                                <p class="text-green-700 dark:text-green-300 text-sm font-semibold">No hay informes pendientes.</p>
+                            </div>
+                        </ng-template>
+                    </div>
+
+                    <!-- Cuadro 3: Informes Totales -->
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                        <ng-container *ngIf="totalInformes > 0; else noInformesTotales">
+                            <div class="flex items-center justify-between">
+                                <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Informes Totales</h2>
+                                <i class="fas fa-chart-bar text-green-500 dark:text-green-400 text-2xl"></i>
+                            </div>
+                            <p class="text-4xl text-green-600 dark:text-green-400 font-bold mt-4">{{ totalInformes }}</p>
+                        </ng-container>
+                        <ng-template #noInformesTotales>
+                            <div class="flex flex-col items-center text-center">
+                                <i class="fas fa-database text-green-300 dark:text-green-500 text-4xl mb-2"></i>
+                                <p class="text-green-700 dark:text-green-300 text-sm font-semibold">No hay informes revisados.</p>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+
+                <!-- Tabla de Detalles de Informes -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700">
+                    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-6 flex items-center">
+                        <i class="fas fa-list-alt mr-2"></i>
+                        Detalles de Informes
+                    </h2>
+
+                    <ng-container *ngIf="detalleInformes && detalleInformes.length > 0; else noInformes">
+                        <p-table [value]="detalleInformes" [paginator]="true" [rows]="5" 
+                                class="border border-blue-100 dark:border-gray-700 rounded-lg">
+                            <ng-template pTemplate="header">
+                                <tr class="bg-blue-50 dark:bg-gray-700">
+                                    <th class="text-blue-900 dark:text-white">Alumno</th>
+                                    <th class="text-blue-900 dark:text-white">Práctica</th>
+                                    <th class="text-blue-900 dark:text-white">Estado</th>
+                                    <th class="text-blue-900 dark:text-white">Días Restantes</th>
+                                    <th class="text-blue-900 dark:text-white">Acciones</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-informe>
+                                <tr class="hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+                                    <td class="font-medium text-gray-900 dark:text-white">{{ informe.nombre_alumno }}</td>
+                                    <td class="text-gray-700 dark:text-gray-300">{{ tipoPractica[informe.tipo_practica] }}</td>
+                                    <td>
+                                        <span class="px-3 py-1 rounded-full text-sm font-medium"
+                                            [ngClass]="{
+                                                'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300': informe.estado_informe === 'APROBADA',
+                                                'bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300': informe.estado_informe === 'ENVIADA',
+                                                'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300': informe.estado_informe === 'ESPERA'
+                                            }">
+                                            {{ textoEstadoInforme[informe.estado_informe] }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-sm">
+                                            {{ informe.dias_restantes }} días
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="flex items-center space-x-3">
+                                            <button
+                                                pButton
+                                                [label]="informe.estado_informe === 'ESPERA' ? 'Realizar' : 'Ver'"
+                                                class="p-button-rounded p-button-text"
+                                                (click)="informe.estado_informe === 'ESPERA' ? realizarInforme(informe.id_informe_confidencial) : verInforme(informe)"
+                                            ></button>
+                                            <div
+                                                *ngIf="cargandoPracticas.has(informe.id_informe_confidencial)"
+                                                class="w-5 h-5 border-4 border-t-transparent border-blue-500 dark:border-blue-400 border-solid rounded-full animate-spin"
+                                            ></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-container>
+
+                    <ng-template #noInformes>
+                        <div class="flex items-center justify-center space-x-4 p-8 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                            <i class="fas fa-info-circle text-blue-500 dark:text-blue-400 text-3xl"></i>
+                            <p class="text-blue-700 dark:text-blue-300 text-lg">
+                                No hay informes que mostrar aún.
+                            </p>
+                        </div>
+                    </ng-template>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Modal de Detalles -->
-<p-dialog [(visible)]="modalDetalles" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" [style]="{ width: '750px' }">
+<p-dialog [(visible)]="modalDetalles" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" 
+          [style]="{ width: '750px' }" class="rounded-xl">
     <!-- Header -->
     <ng-template pTemplate="header">
-      <div class="text-center mx-auto py-4">
-        <h2 class="text-2xl font-semibold text-blue-700">Detalles de la Práctica</h2>
-      </div>
+        <div class="text-center mx-auto py-4">
+            <h2 class="text-2xl font-semibold text-blue-900 dark:text-white">Detalles de la Práctica</h2>
+        </div>
     </ng-template>
-  
+
     <!-- Content -->
     <ng-template pTemplate="content">
-      <div class="space-y-8">
-        <!-- Información General -->
-        <div class="space-y-6">
-          <div class="border-b pb-4">
-            <h3 class="text-xl font-semibold text-gray-800">Información General</h3>
-          </div>
-          <div class="grid grid-cols-2 gap-6 text-sm">
-            <div>
-              <p class="text-gray-500">Tipo de Práctica</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada!.tipo_practica == 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
+        <div class="space-y-8">
+            <!-- Información General -->
+            <div class="space-y-6">
+                <div class="border-b border-blue-100 dark:border-gray-700 pb-4">
+                    <h3 class="text-xl font-semibold text-blue-900 dark:text-white flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Información General
+                    </h3>
+                </div>
+                <div class="grid grid-cols-2 gap-6 text-sm">
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Tipo de Práctica</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada!.tipo_practica == 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Alumno</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada!.informe_alumno.alumno.usuario.nombre }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Modalidad</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ textoModalidad[practicaSeleccionada!.modalidad] }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg" *ngIf="!['CURSANDO'].includes(practicaSeleccionada!.estado)">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Estado Informe Confidencial</p>
+                        <p class="font-semibold"
+                            [ngClass]="{
+                                'text-blue-700 dark:text-blue-300': selectedInforme.estado_informe === 'ENVIADA',
+                                'text-red-700 dark:text-red-300': selectedInforme.estado_informe === 'ESPERA',
+                                'text-green-700 dark:text-green-300': selectedInforme.estado_informe === 'APROBADA',
+                                'text-yellow-700 dark:text-yellow-300': selectedInforme.estado_informe === 'REVISION'
+                            }">
+                            {{ textoEstadoInforme[selectedInforme.estado_informe] }}
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div>
-              <p class="text-gray-500">Alumno</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada!.informe_alumno.alumno.usuario.nombre }}</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Modalidad</p>
-              <p class="font-medium text-gray-900">{{ textoModalidad[practicaSeleccionada!.modalidad] }}</p>
-            </div>
-        
-            <!-- Estado Informe Confidencial -->
-            <div *ngIf="!['CURSANDO'].includes(practicaSeleccionada!.estado)">
-              <p class="text-sm text-gray-500">Estado Informe Confidencial</p>
-              <p class="text-base font-medium truncate"
-                [ngClass]="{
-                  'text-blue-600': selectedInforme.estado_informe === 'ENVIADA',
-                  'text-red-600': selectedInforme.estado_informe === 'ESPERA',
-                  'text-green-600': selectedInforme.estado_informe === 'APROBADA',
-                  'text-yellow-600': selectedInforme.estado_informe === 'REVISION'
 
-                }">
-                {{ textoEstadoInforme[selectedInforme.estado_informe] }}
-              </p>
+            <!-- Fechas y Horas -->
+            <div class="space-y-6">
+                <div class="border-b border-blue-100 dark:border-gray-700 pb-4">
+                    <h3 class="text-xl font-semibold text-blue-900 dark:text-white flex items-center">
+                        <i class="fas fa-calendar-alt mr-2"></i>
+                        Fechas y Horas
+                    </h3>
+                </div>
+                <div class="grid grid-cols-2 gap-6 text-sm">
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Fecha de Inicio</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.fecha_inicio | date: 'dd/MM/yyyy' }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Fecha de Finalización</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.fecha_termino | date: 'dd/MM/yyyy' }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Cantidad de Horas</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.cantidad_horas }} horas</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Horas Semanales</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.horas_semanales }} horas/semana</p>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <!-- Horas Realizadas -->
+            <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO'">
+                <div class="border-b border-blue-100 dark:border-gray-700 pb-4">
+                    <h3 class="text-xl font-semibold text-blue-900 dark:text-white flex items-center">
+                        <i class="fas fa-clock mr-2"></i>
+                        Horas Realizadas
+                    </h3>
+                </div>
+                <div class="grid grid-cols-2 gap-6 text-sm">
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Total de Horas</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.informe_confidencial?.total_horas }} horas</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Horas extraordinarias</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_extraordinarias }} horas</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Horas regulares</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_regulares }} horas</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Horas de Inasistencia</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.informe_confidencial?.horas_inasistencia }} horas</p>
+                    </div>
+                </div>
+            </div>
         </div>
-  
-        <!-- Fechas y Horas -->
-        <div class="space-y-6">
-          <div class="border-b pb-4">
-            <h3 class="text-xl font-semibold text-gray-800">Fechas y Horas</h3>
-          </div>
-          <div class="grid grid-cols-2 gap-6 text-sm">
-            <div>
-              <p class="text-gray-500">Fecha de Inicio</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.fecha_inicio | date: 'dd/MM/yyyy' }}</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Fecha de Finalización</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.fecha_termino | date: 'dd/MM/yyyy' }}</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Cantidad de Horas</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.cantidad_horas }} horas</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Horas Semanales</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.horas_semanales }} horas/semana</p>
-            </div>
-          </div>
-        </div>
-    
-        <!-- Horas Realizadas -->
-        <div class="space-y-6" *ngIf="practicaSeleccionada?.estado !== 'CURSANDO'">
-          <div class="border-b pb-4">
-            <h3 class="text-xl font-semibold text-gray-800">Horas Realizadas</h3>
-          </div>
-          <div class="grid grid-cols-2 gap-6 text-sm">
-            <div>
-              <p class="text-gray-500">Total de Horas</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.total_horas }} horas</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Horas extraordinarias</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_extraordinarias }} horas</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Horas regulares</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_practicas_regulares }} horas</p>
-            </div>
-            <div>
-              <p class="text-gray-500">Horas de Inasistencia</p>
-              <p class="font-medium text-gray-900">{{ practicaSeleccionada?.informe_confidencial?.horas_inasistencia }} horas</p>
-            </div>
-          </div>
-        </div>
-  
-  
-      </div>
     </ng-template>
-  
+
     <!-- Footer -->
     <ng-template pTemplate="footer">
-      <div class="flex justify-end space-x-6">
-        <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white text-sm font-medium px-4 py-2 rounded-lg"
-          (click)="cerrarModalDetalles()">
-          Cerrar
-        </button>
-      </div>
+        <div class="flex justify-end space-x-4">
+            <button type="button" 
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
+                    (click)="cerrarModalDetalles()">
+                Cerrar
+            </button>
+        </div>
     </ng-template>
 </p-dialog>
   

@@ -1,92 +1,85 @@
-<!-- Icon Blocks -->
-<div class="bg-gray-800 max-w-full h-screen px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+<!-- Main Container -->
+<div class="bg-gray-800 max-w-full min-h-screen px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+    <!-- Introduction Section -->
+    <div class="max-w-3xl mx-auto text-center mb-16">
+        <h1 class="text-3xl font-bold text-white mb-6">Sistema de Gestión de Prácticas Profesionales</h1>
+        <p class="text-gray-200 dark:text-neutral-300 text-lg leading-relaxed">
+            El sistema de gestión de práctica surge como una respuesta a la necesidad del departamento de Ingeniería Industrial y de Sistemas de optimizar y centralizar el seguimiento de las prácticas profesionales, facilitando la comunicación, el control y la evaluación de los estudiantes en sus procesos de aprendizaje práctico.
+        </p>
+    </div>
+
+    <!-- Context Section -->
+    <div class="max-w-4xl mx-auto bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 mb-16">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Contexto Institucional</h2>
+        <p class="text-gray-600 dark:text-neutral-400 mb-6 leading-relaxed">
+            El Departamento de Ingeniería Industrial y de Sistemas, con una trayectoria de más de 40 años, se originó en 1970 como la Sección Gestión de la Producción dentro del Departamento de Ingeniería Mecánica. En 1979 ingresó la primera promoción de Ingeniería Civil Industrial, y en 1982 se estableció como unidad autónoma.
+        </p>
+        <p class="text-gray-600 dark:text-neutral-400 leading-relaxed">
+            Actualmente, el departamento cuenta con un equipo multidisciplinario de profesionales y administrativos que, bajo procesos de calidad y transferencia de conocimiento, forman ingenieros industriales capaces de enfrentar los desafíos organizacionales con éxito.
+        </p>
+    </div>
+
+    <!-- Problem Statement Section -->
+    <div class="max-w-4xl mx-auto bg-white dark:bg-neutral-900 rounded-xl shadow-lg p-8 mb-16">
+        <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-6">Problemática Abordada</h2>
+        <div class="space-y-6">
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-red-100 dark:bg-red-900">
+                    <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-2">Gestión Ineficiente</h3>
+                    <p class="text-gray-600 dark:text-neutral-400">La falta de un sistema centralizado ha generado inconvenientes en la gestión de tiempos de entrega y recopilación de información sobre el rendimiento de los alumnos.</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-900">
+                    <svg class="w-6 h-6 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-2">Demoras en Informes</h3>
+                    <p class="text-gray-600 dark:text-neutral-400">Los procesos de entrega y revisión de informes pueden extenderse por meses, dificultando la gestión oportuna de los documentos.</p>
+                </div>
+            </div>
+            <div class="flex items-start gap-4">
+                <div class="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
+                    <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-2">Procesos Manuales</h3>
+                    <p class="text-gray-600 dark:text-neutral-400">Durante los procesos de acreditación, la obtención de datos se realizaba manualmente, complicando el análisis y presentación de la información.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
     <div class="text-center text-gray-200 dark:text-neutral-300 mb-10">
-        El sistema de gestión de práctica surge como una respuesta a la necesidad del departamento de Ingeniería Industrial y de Sistemas de optimizar y centralizar el seguimiento de las prácticas profesionales, facilitando la comunicación, el control y la evaluación de los estudiantes en sus procesos de aprendizaje práctico.
+        <h2 class="text-2xl font-semibold mb-6">Funcionalidades por Rol</h2>
+        <p class="text-lg">Descubre las herramientas específicas disponibles para tu rol en el sistema</p>
     </div>
     <div class="grid sm:grid-cols-2 lg:grid-cols-3 items-center gap-6 md:gap-10 my-[10%] w-[70%] mx-auto">
       <!-- Card -->
-      <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900">
+      <div *ngFor="let feature of getRoleFeatures()" class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
         <div class="flex items-center gap-x-4 mb-3">
           <div class="inline-flex justify-center items-center size-15.5 rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
-            <svg class="shrink-0 size-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+            <svg class="shrink-0 size-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path [attr.d]="feature.icon"/>
+            </svg>
           </div>
           <div class="shrink-0">
-            <h3 class="block text-lg font-semibold text-gray-800 dark:text-white">Build your portfolio</h3>
+            <h3 class="block text-lg font-semibold text-gray-800 dark:text-white">{{ feature.title }}</h3>
           </div>
         </div>
-        <p class="text-gray-600 dark:text-neutral-400">The simplest way to keep your portfolio always up-to-date.</p>
-      </div>
-      <!-- End Card -->
-  
-      <!-- Card -->
-      <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900">
-        <div class="flex items-center gap-x-4 mb-3">
-          <div class="inline-flex justify-center items-center size-15.5 rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
-            <svg class="shrink-0 size-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>
-          </div>
-          <div class="shrink-0">
-            <h3 class="block text-lg font-semibold text-gray-800 dark:text-white">Get freelance work</h3>
-          </div>
-        </div>
-        <p class="text-gray-600 dark:text-neutral-400">New design projects delivered to your inbox each morning.</p>
-      </div>
-      <!-- End Card -->
-  
-      <!-- Card -->
-      <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900">
-        <div class="flex items-center gap-x-4 mb-3">
-          <div class="inline-flex justify-center items-center size-15.5 rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
-            <svg class="shrink-0 size-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/><path d="M22 7v3a2 2 0 0 1-2 2v0a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 16 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 12 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 8 12a2.7 2.7 0 0 1-1.59-.63.7.7 0 0 0-.82 0A2.7 2.7 0 0 1 4 12v0a2 2 0 0 1-2-2V7"/></svg>
-          </div>
-          <div class="shrink-0">
-            <h3 class="block text-lg font-semibold text-gray-800 dark:text-white">Sell your goods</h3>
-          </div>
-        </div>
-        <p class="text-gray-600 dark:text-neutral-400">Get your goods in front of millions of potential customers with ease.</p>
-      </div>
-      <!-- End Card -->
-  
-      <!-- Card -->
-      <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900">
-        <div class="flex items-center gap-x-4 mb-3">
-          <div class="inline-flex justify-center items-center size-15.5 rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
-            <svg class="shrink-0 size-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.5 9 12l-3.5 3.5L2 12l3.5-3.5Z"/><path d="m12 2 3.5 3.5L12 9 8.5 5.5 12 2Z"/><path d="M18.5 8.5 22 12l-3.5 3.5L15 12l3.5-3.5Z"/><path d="m12 15 3.5 3.5L12 22l-3.5-3.5L12 15Z"/></svg>
-          </div>
-          <div class="shrink-0">
-            <h3 class="block text-lg font-semibold text-gray-800 dark:text-white">Get freelance work</h3>
-          </div>
-        </div>
-        <p class="text-gray-600 dark:text-neutral-400">New design projects delivered to your inbox each morning.</p>
-      </div>
-      <!-- End Card -->
-  
-      <!-- Card -->
-      <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900">
-        <div class="flex items-center gap-x-4 mb-3">
-          <div class="inline-flex justify-center items-center size-15.5 rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
-            <svg class="shrink-0 size-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.466 7.5C15.643 4.237 13.952 2 12 2 9.239 2 7 6.477 7 12s2.239 10 5 10c.342 0 .677-.069 1-.2"/><path d="m15.194 13.707 3.814 1.86-1.86 3.814"/><path d="M19 15.57c-1.804.885-4.274 1.43-7 1.43-5.523 0-10-2.239-10-5s4.477-5 10-5c4.838 0 8.873 1.718 9.8 4"/></svg>
-          </div>
-          <div class="shrink-0">
-            <h3 class="block text-lg font-semibold text-gray-800 dark:text-white">Sell your goods</h3>
-          </div>
-        </div>
-        <p class="text-gray-600 dark:text-neutral-400">Get your goods in front of millions of potential customers with ease.</p>
-      </div>
-      <!-- End Card -->
-  
-      <!-- Card -->
-      <div class="size-full bg-white shadow-lg rounded-lg p-5 dark:bg-neutral-900">
-        <div class="flex items-center gap-x-4 mb-3">
-          <div class="inline-flex justify-center items-center size-15.5 rounded-full border-4 border-blue-50 bg-blue-100 dark:border-blue-900 dark:bg-blue-800">
-            <svg class="shrink-0 size-6 text-blue-600 dark:text-blue-400" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/></svg>
-          </div>
-          <div class="shrink-0">
-            <h3 class="block text-lg font-semibold text-gray-800 dark:text-white">Build your portfolio</h3>
-          </div>
-        </div>
-        <p class="text-gray-600 dark:text-neutral-400">The simplest way to keep your portfolio always up-to-date.</p>
+        <p class="text-gray-600 dark:text-neutral-400">{{ feature.description }}</p>
       </div>
       <!-- End Card -->
     </div>
-  </div>
-  <!-- End Icon Blocks -->
+</div>
+<!-- End Main Container -->

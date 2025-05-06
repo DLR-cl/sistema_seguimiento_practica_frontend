@@ -1,29 +1,29 @@
-<div class="shadow-lg rounded-lg h-auto w-full bg-white p-4">
+<div class="h-auto w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
     <!-- Cabecera -->
     <div class="data p-3">
         <div class="mt-5 h-auto p-4 text-center sm:text-left">
-            <h2 class="text-xl sm:text-2xl font-semibold">
+            <h2 class="text-xl sm:text-2xl font-semibold text-gray-800 dark:text-white">
                 Bienvenido,
-                <span class="text-xl sm:text-2xl text-blue-600 font-semibold">
+                <span class="text-xl sm:text-2xl text-blue-600 dark:text-blue-400 font-semibold">
                     {{ dataUser?.nombre }}
                 </span>
             </h2>
-            <small class="opacity-50 text-gray-600">Académico</small>
+            <small class="opacity-50 text-gray-600 dark:text-gray-400">Académico</small>
         </div>
 
         <!-- Resumen -->
-        <div class="estado mt-6 h-auto grid grid-cols-1 sm:grid-cols-2 p-4 divide-y-2 sm:divide-y-0 sm:divide-x-2">
+        <div class="estado mt-6 h-auto grid grid-cols-1 sm:grid-cols-2 p-4 divide-y-2 sm:divide-y-0 sm:divide-x-2 divide-gray-200 dark:divide-gray-700">
             <div class="text-center p-2">
-                <p class="text-5xl sm:text-6xl font-semibold text-gray-800">
+                <p class="text-5xl sm:text-6xl font-semibold text-gray-800 dark:text-white">
                     {{ resumenConteoInformes?.porRevisar }}
                 </p>
-                <span class="opacity-50 text-sm text-gray-600">Informes por revisar</span>
+                <span class="opacity-50 text-sm text-gray-600 dark:text-gray-400">Informes por revisar</span>
             </div>
             <div class="text-center p-2">
-                <p class="text-5xl sm:text-6xl font-semibold text-gray-800">
+                <p class="text-5xl sm:text-6xl font-semibold text-gray-800 dark:text-white">
                     {{ resumenConteoInformes?.revisados }}
                 </p>
-                <span class="opacity-50 text-sm text-gray-600">Informes revisados</span>
+                <span class="opacity-50 text-sm text-gray-600 dark:text-gray-400">Informes revisados</span>
             </div>
         </div>
     </div>
@@ -31,12 +31,12 @@
     <!-- Listado de informes a vencer -->
     <div class="p-3">
         <div class="p-4" *ngIf="informesCriticos?.length !== 0">
-            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 mb-4">
+            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-white mb-4">
                 Listado Informes a vencer
             </h2>
             <div class="relative overflow-x-auto rounded-lg">
-                <table class="w-full text-sm text-left text-gray-500 border border-gray-200 rounded-lg">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-100">
+                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <thead class="text-xs text-gray-700 dark:text-gray-300 uppercase bg-gray-100 dark:bg-gray-700">
                         <tr>
                             <th scope="col" class="px-6 py-3">Alumno</th>
                             <th scope="col" class="px-6 py-3">Días Restantes</th>
@@ -44,8 +44,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let informe of informesCriticos" class="bg-white border-b hover:bg-gray-50">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        <tr *ngFor="let informe of informesCriticos" class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
                                 {{ informe.nombre_alumno }}
                             </th>
                             <td class="px-6 py-4 text-center">
@@ -53,7 +53,7 @@
                             </td>
                             <td class="px-6 py-4 text-center">
                                 <button (click)="revision(informe.id_practica)"
-                                    class="text-blue-600 hover:underline focus:outline-none">
+                                    class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:underline focus:outline-none transition-colors duration-200">
                                     Revisar
                                 </button>
                             </td>
@@ -64,9 +64,9 @@
         </div>
 
         <!-- Mensaje alternativo -->
-        <div *ngIf="informesCriticos?.length === 0" class="flex flex-col items-center justify-center h-[15rem] bg-gray-50 px-4 py-6 rounded-lg shadow-lg">
+        <div *ngIf="informesCriticos?.length === 0" class="flex flex-col items-center justify-center h-[15rem] bg-gray-50 dark:bg-gray-700/50 px-4 py-6 rounded-lg shadow-lg">
             <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" width="80px" height="80px" viewBox="0 0 100 100"
-                class="text-gray-500">
+                class="text-gray-500 dark:text-gray-400">
                 <path
                     d="M46.6,23.7l-2.1-2.1c-0.6-0.6-1.5-0.6-2.1,0L29.2,34.8l-5.3-5.3c-0.6-0.6-1.5-0.6-2.1,0l-2.1,2.1
                 c-0.6,0.6-0.6,1.5,0,2.1l7.4,7.4c0.6,0.6,1.4,0.9,2.1,0.9c0.8,0,1.5-0.3,2.1-0.9l15.3-15.3C47.1,25.3,47.1,24.3,46.6,23.7z" />
@@ -76,8 +76,8 @@
                 <path d="M33,74h-4c-1.1,0-2-0.9-2-2v-4c0-1.1,0.9-2,2-2h4c1.1,0,2-0.9,2,2v4C35,73.1,34.1,74,33,74z" />
                 <path d="M77,74H45c-1.1,0-2-0.9-2-2v-4c0-1.1,0.9-2,2-2h32c1.1,0,2,0.9,2,2v4C79,73.1,78.1,74,77,74z" />
             </svg>
-            <h1 class="mt-4 text-2xl font-semibold text-gray-800 sm:text-4xl">Muy bien</h1>
-            <p class="mt-2 text-gray-600 text-center">Actualmente no tiene informes a vencer</p>
+            <h1 class="mt-4 text-2xl font-semibold text-gray-800 dark:text-white sm:text-4xl">Muy bien</h1>
+            <p class="mt-2 text-gray-600 dark:text-gray-300 text-center">Actualmente no tiene informes a vencer</p>
         </div>
     </div>
 </div>

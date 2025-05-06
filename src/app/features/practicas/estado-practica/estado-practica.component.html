@@ -1,291 +1,384 @@
 <app-header></app-header>
 
-<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
-    <div class="flex space-x-2">
-      <!-- Puntos animados con rebote e iluminación progresiva -->
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.2s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.4s"></div>
-    </div>
-</div>
-
-<div *ngIf="!cargando" class="container mx-auto my-10 p-5 bg-white rounded-lg shadow-md">
-    <h2 class="text-4xl justify-center text-center font-semibold text-blue-700">Estado de Revisión</h2>
-    <p class="text-lg text-center text-gray-700 mt-2">Seleccione una práctica para ver su estado de revisión.</p>
-
-    <!-- Selector de práctica -->
-    <div class="flex justify-center items-center space-x-4 mt-4">
-        <select
-            [(ngModel)]="practicaSeleccionada"
-            class="p-2 border border-blue-300 rounded-md focus:ring focus:ring-blue-500 focus:border-blue-500"
-        >
-            <option [value]="null" disabled selected>Seleccione una práctica</option>
-            <option *ngFor="let practica of practicas" [value]="practica.id_practica">
-                {{ tipoPractica[practica.tipo_practica] }}
-            </option>
-        </select>
-        <button
-            (click)="obtenerDetallePractica()"
-            class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-700 transition duration-100"
-        >
-            Revisar estado
-        </button>
-    </div>
-
-    <!-- Pasos dinámicos siempre visibles -->
-    <div class="flex flex-col md:flex-row justify-between items-center mt-8 space-y-4 md:space-y-0 md:space-x-6">
-        <ol class="flex flex-wrap items-center w-full justify-center p-3 space-x-4 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm sm:text-base">
-          <li
-            class="flex items-center"
-            *ngFor="let paso of pasos; let index = index"
-            [ngClass]="{'text-blue-600': resaltarPasos[index]}"
-          >
-            <!-- Número del paso -->
-            <span
-              class="flex items-center justify-center w-8 h-8 me-2 text-xs font-semibold text-white rounded-full transition-colors duration-500 ease-in-out"
-              [ngClass]="{
-                'bg-blue-600': resaltarPasos[index],
-                'bg-gray-200': !resaltarPasos[index]
-              }"
-            >
-              {{ index + 1 }}
-            </span>
-            <!-- Texto del paso (oculto en pantallas pequeñas) -->
-            <span class="hidden sm:inline text-base font-semibold">{{ paso }}</span>
-            <!-- Flecha entre pasos -->
-            <svg
-              *ngIf="index < pasos.length - 1"
-              class="w-4 h-4 ms-2 transition-colors duration-500 ease-in-out"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 12 10"
-              [ngClass]="{
-                'text-blue-600': resaltarPasos[index + 1],
-                'text-gray-300': !resaltarPasos[index + 1]
-              }"
-            >
-              <path
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="m7 9 4-4-4-4M1 9l4-4-4-4"
-              />
-            </svg>
-          </li>
-        </ol>
+<div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-8">
+  <!-- Spinner de carga -->
+  @if (cargando) {
+    <div class="fixed inset-0 bg-black/30 dark:bg-gray-900/50 backdrop-blur-sm flex justify-center items-center z-50">
+      <div class="flex space-x-3">
+        <div class="w-5 h-5 bg-blue-500 dark:bg-blue-400 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>
+        <div class="w-5 h-5 bg-blue-500 dark:bg-blue-400 rounded-full animate-bounce-bright" style="animation-delay: 0.2s"></div>
+        <div class="w-5 h-5 bg-blue-500 dark:bg-blue-400 rounded-full animate-bounce-bright" style="animation-delay: 0.4s"></div>
       </div>
-      
-      <!-- Descripción de los pasos visible solo en pantallas pequeñas -->
-      <div class="block sm:hidden mt-4 bg-blue-50 p-4 rounded-lg border border-blue-200">
-        <h2 class="text-lg font-semibold text-blue-600 mb-2">Descripción de los Pasos</h2>
-        <ul class="list-disc list-inside text-sm text-gray-700 space-y-2">
-          <li *ngFor="let paso of pasos; let index = index">
-            <span class="font-semibold">Paso {{ index + 1 }}:</span> {{ paso }}
-          </li>
-        </ul>
-      </div>
-      
+    </div>
+  }
 
-    <!-- Mensaje si no hay práctica seleccionada -->
-    <div *ngIf="!detallesPractica && !cargandoDetalle" class="mt-8 text-center">
-        <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold text-blue-700">Sin práctica seleccionada</h3>
-            <p class="text-gray-700 mt-2">Seleccione una práctica del menú desplegable y haga clic en "Revisar estado" para ver los detalles de la práctica.</p>
+  @if (!cargando) {
+    <div class="container mx-auto px-4">
+      <!-- Encabezado -->
+      <div class="text-center mb-8">
+        <div class="inline-block p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full mb-4">
+          <i class="fas fa-clipboard-check text-3xl text-blue-600 dark:text-blue-400"></i>
         </div>
-    </div>
+        <h2 class="text-4xl font-bold text-gray-800 dark:text-white mb-2">Estado de Revisión</h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300">Seleccione una práctica para ver su estado de revisión.</p>
+      </div>
 
-    <div *ngIf="cargandoDetalle" class="relative flex justify-center items-center h-32">
-        <!-- Spinner centrado en el contenedor -->
-        <div class="w-12 h-12 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
-    </div>
+      <!-- Selector de práctica -->
+      <div class="max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+        <div class="flex flex-col sm:flex-row gap-4 items-center">
+          <select
+            [(ngModel)]="practicaSeleccionada"
+            class="w-full sm:w-2/3 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+          >
+            <option [value]="null" disabled selected>Seleccione una práctica</option>
+            @for (practica of practicas; track practica.id_practica) {
+              <option [value]="practica.id_practica">
+                {{ tipoPractica[practica.tipo_practica] }}
+              </option>
+            }
+          </select>
+          <button
+            (click)="obtenerDetallePractica()"
+            class="w-full sm:w-auto bg-blue-600 dark:bg-blue-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition duration-200 flex items-center justify-center gap-2"
+          >
+            <i class="fas fa-search"></i>
+            Revisar estado
+          </button>
+        </div>
+      </div>
 
-    <!-- Detalles de la práctica -->
-    <div *ngIf="detallesPractica && !cargandoDetalle" class="mt-8">
-        <div *ngIf="pasoActual >= 1">
-            <h3 class="text-2xl font-semibold text-blue-600 mb-6">Detalles de la Práctica</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Pasos de progreso -->
+      <div class="w-full max-w-5xl mx-auto mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+          <ol class="flex items-center justify-between w-full p-3 text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm sm:text-base">
+            @for (paso of pasos; track paso; let index = $index) {
+              <li class="flex items-center flex-1" [ngClass]="{'text-blue-600 dark:text-blue-400': resaltarPasos[index]}">
+                <div class="flex items-center w-full">
+                  <span
+                    class="flex items-center justify-center w-8 h-8 me-2 text-xs font-semibold text-white rounded-full transition-colors duration-500 ease-in-out"
+                    [ngClass]="{
+                      'bg-blue-600 dark:bg-blue-500': resaltarPasos[index],
+                      'bg-gray-200 dark:bg-gray-600': !resaltarPasos[index]
+                    }"
+                  >
+                    {{ index + 1 }}
+                  </span>
+                  <span class="hidden sm:inline text-sm font-semibold truncate">{{ paso }}</span>
+                </div>
+                @if (index < pasos.length - 1) {
+                  <svg
+                    class="w-4 h-4 mx-2 flex-shrink-0 transition-colors duration-500 ease-in-out"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 12 10"
+                    [ngClass]="{
+                      'text-blue-600 dark:text-blue-400': resaltarPasos[index + 1],
+                      'text-gray-300 dark:text-gray-600': !resaltarPasos[index + 1]
+                    }"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m7 9 4-4-4-4M1 9l4-4-4-4"
+                    />
+                  </svg>
+                }
+              </li>
+            }
+          </ol>
+        </div>
+      </div>
+
+      <!-- Descripción de pasos para móvil -->
+      <div class="block sm:hidden mb-8">
+        <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border border-blue-200 dark:border-blue-700">
+          <h2 class="text-lg font-semibold text-blue-600 dark:text-blue-400 mb-2">Descripción de los Pasos</h2>
+          <ul class="list-disc list-inside text-sm text-gray-700 dark:text-gray-300 space-y-2">
+            @for (paso of pasos; track paso; let index = $index) {
+              <li>
+                <span class="font-semibold">Paso {{ index + 1 }}:</span> {{ paso }}
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+
+      <!-- Mensaje sin práctica seleccionada -->
+      @if (!detallesPractica && !cargandoDetalle) {
+        <div class="max-w-2xl mx-auto text-center">
+          <div class="p-6 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-xl shadow-md">
+            <div class="w-16 h-16 bg-blue-100 dark:bg-blue-800 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-info-circle text-2xl text-blue-600 dark:text-blue-400"></i>
+            </div>
+            <h3 class="text-xl font-semibold text-blue-700 dark:text-blue-400 mb-2">Sin práctica seleccionada</h3>
+            <p class="text-gray-600 dark:text-gray-300">Seleccione una práctica del menú desplegable y haga clic en "Revisar estado" para ver los detalles.</p>
+          </div>
+        </div>
+      }
+
+      <!-- Spinner de carga de detalles -->
+      @if (cargandoDetalle) {
+        <div class="flex justify-center items-center h-32">
+          <div class="w-12 h-12 border-4 border-t-transparent border-blue-500 dark:border-blue-400 border-solid rounded-full animate-spin"></div>
+        </div>
+      }
+
+      <!-- Detalles de la práctica -->
+      @if (detallesPractica && !cargandoDetalle) {
+        <div class="max-w-6xl mx-auto">
+          @if (pasoActual >= 1) {
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+              <h3 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6 flex items-center gap-2">
+                <i class="fas fa-info-circle"></i>
+                Detalles de la Práctica
+              </h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Columna izquierda -->
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Nombre Alumno:</strong> {{ detallesPractica.nombre_alumno }}</p>
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Tipo de Práctica:</strong> {{ tipoPractica[detallesPractica.tipo_practica] }}</p>
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Empresa:</strong> {{ detallesPractica.nombre_empresa }}</p>
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Supervisor:</strong> {{ detallesPractica.nombre_supervisor }}</p>
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Modalidad:</strong> {{ textoModalidad[detallesPractica.modalidad] }}</p>
+                <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-sm">
+                  <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-user text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200"><strong>Nombre Alumno:</strong> {{ detallesPractica.nombre_alumno }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-briefcase text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200"><strong>Tipo de Práctica:</strong> {{ tipoPractica[detallesPractica.tipo_practica] }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-building text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200"><strong>Empresa:</strong> {{ detallesPractica.nombre_empresa }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-user-tie text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200"><strong>Supervisor:</strong> {{ detallesPractica.nombre_supervisor }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-clock text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200"><strong>Modalidad:</strong> {{ textoModalidad[detallesPractica.modalidad] }}</p>
+                    </div>
+                  </div>
                 </div>
                 <!-- Columna derecha -->
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
-                    <p class="text-lg font-medium text-gray-700 mb-2">
+                <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-sm">
+                  <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-chart-line text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200">
                         <strong>Estado de Práctica:</strong>
                         <span
                           [ngClass]="{
-                            'text-blue-600': detallesPractica.estado === 'CURSANDO',
-                            'text-red-600': detallesPractica.estado === 'ESPERA_INFORMES',
-                            'text-green-500': detallesPractica.estado === 'INFORMES_RECIBIDOS',
-                            'text-yellow-600': detallesPractica.estado === 'REVISION_GENERAL',
-                            'text-green-600': detallesPractica.estado === 'FINALIZADA'
+                            'text-blue-600 dark:text-blue-400': detallesPractica.estado === 'CURSANDO',
+                            'text-red-600 dark:text-red-400': detallesPractica.estado === 'ESPERA_INFORMES',
+                            'text-green-500 dark:text-green-400': detallesPractica.estado === 'INFORMES_RECIBIDOS',
+                            'text-yellow-600 dark:text-yellow-400': detallesPractica.estado === 'REVISION_GENERAL',
+                            'text-green-600 dark:text-green-400': detallesPractica.estado === 'FINALIZADA'
                           }"
                         >
                           {{ textoEstadoPractica[detallesPractica.estado] }}
                         </span>
                       </p>
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Cantidad de Horas:</strong> {{ detallesPractica.cantidad_horas }}</p>
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Horas Semanales:</strong> {{ detallesPractica.horas_semanales }}</p>
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Fecha de Inicio:</strong> {{ detallesPractica.fecha_inicio | date:'dd/MM/yyyy' }}</p>
-                    <p class="text-lg font-medium text-gray-700 mb-2"><strong>Fecha de Término:</strong> {{ detallesPractica.fecha_termino | date:'dd/MM/yyyy' }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-hourglass-half text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200"><strong>Cantidad de Horas:</strong> {{ detallesPractica.cantidad_horas }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-calendar-week text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200"><strong>Horas Semanales:</strong> {{ detallesPractica.horas_semanales }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-calendar-plus text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200"><strong>Fecha de Inicio:</strong> {{ detallesPractica.fecha_inicio | date:'dd/MM/yyyy' }}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <i class="fas fa-calendar-check text-blue-600 dark:text-blue-400"></i>
+                      <p class="text-lg font-medium text-gray-700 dark:text-gray-200"><strong>Fecha de Término:</strong> {{ detallesPractica.fecha_termino | date:'dd/MM/yyyy' }}</p>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
+          }
 
-        <div *ngIf="pasoActual >= 2" class="mt-8">
-            <div>
-              <!-- Título principal -->
-              <h3 class="text-2xl font-semibold text-blue-600 mb-6">Datos del Informe</h3>
-          
-              <!-- Contenido en dos columnas -->
+          @if (pasoActual >= 2) {
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-8">
+              <h3 class="text-2xl font-semibold text-blue-600 dark:text-blue-400 mb-6 flex items-center gap-2">
+                <i class="fas fa-file-alt"></i>
+                Datos del Informe
+              </h3>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Intentos restantes -->
-                <div class="flex items-center">
-                  <h4 class="text-lg font-semibold text-gray-700 mr-4">Intentos Restantes:</h4>
-                  <p
-                    class="text-2xl font-medium"
-                    [ngClass]="{
-                      'text-green-600': detallesPractica.informe_alumno.intentos === 3,
-                      'text-yellow-600': detallesPractica.informe_alumno.intentos === 2,
-                      'text-red-600': detallesPractica.informe_alumno.intentos === 1
-                    }"
-                  >
-                    {{ detallesPractica.informe_alumno.intentos }}
-                  </p>
-                </div>
-          
-                <!-- Informe asignado -->
-                <div class="flex items-center">
-                  <h4 class="text-lg font-semibold text-gray-700 mr-4">¿Asignado a un académico?</h4>
-                  <p class="text-xl font-medium" [ngClass]="detallesPractica.informe_alumno.id_academico ? 'text-green-600' : 'text-red-600'">
-                    {{ detallesPractica.informe_alumno.id_academico ? 'Sí' : 'No' }}
-                  </p>
-                </div>
-          
-                <!-- Estado del informe -->
-                <div class="flex items-center">
-                  <h4 class="text-lg font-semibold text-gray-700 mr-4">Estado del Informe:</h4>
-                  <p
-                    class="text-xl font-medium"
-                    [ngClass]="{
-                      'text-blue-600': detallesPractica.informe_alumno.estado === 'ENVIADA',
-                      'text-red-600': detallesPractica.informe_alumno.estado === 'ESPERA',
-                      'text-red-800': detallesPractica.informe_alumno.estado === 'DESAPROBADA',
-                      'text-yellow-600': detallesPractica.informe_alumno.estado === 'REVISION',
-                      'text-orange-600': detallesPractica.informe_alumno.estado === 'CORRECCION',
-                      'text-green-600': detallesPractica.informe_alumno.estado === 'APROBADA'
-                    }"
-                  >
-                    {{ textoEstadoInforme[detallesPractica.informe_alumno.estado] }}
-                  </p>
-                </div>
-              </div>
-          
-              <!-- Corrección del informe (visualizador de PDF en ancho completo) -->
-              <div *ngIf="detallesPractica.informe_alumno.archivo_correccion && detallesPractica.estado != 'FINALIZADA'" class="mt-8">
-                <h4 class="text-lg font-semibold text-gray-700 mb-4">Corrección del Informe</h4>
-                <div class="border rounded-lg shadow-md h-[800px]">
-                  <embed
-                    *ngIf="correccionURL"
-                    [src]="correccionURL"
-                    type="application/pdf"
-                    class="w-full h-full rounded-lg"
-                  />
-                  <p *ngIf="!correccionURL" class="text-gray-600">Cargando el archivo...</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-
-        <div *ngIf="pasoActual >= 3" class="mt-8">
-            <!-- Respuestas Informe Alumno -->
-            <div class="col-span-full mt-6 p-6 rounded-lg shadow-md">
-                <h2 class="text-lg font-bold text-gray-700 mb-4">Respuestas Alumno</h2>
-                <div class="preguntas-container flex flex-col gap-4">
-                  <div *ngIf="respuestasAlumno.respuestas.length > 0">
-                    <!-- Iterar sobre preguntas -->
-                    <div
-                      *ngFor="let respuesta of obtenerTandaPreguntas(); let i = index"
-                      class="pregunta bg-blue-50 p-4 shadow-sm"
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Intentos Restantes:</h4>
+                    <span
+                      class="text-2xl font-bold px-4 py-2 rounded-full"
+                      [ngClass]="{
+                        'bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400': detallesPractica.informe_alumno.intentos === 3,
+                        'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-600 dark:text-yellow-400': detallesPractica.informe_alumno.intentos === 2,
+                        'bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400': detallesPractica.informe_alumno.intentos === 1
+                      }"
                     >
-                      <p class="text-sm font-semibold text-gray-700">
-                        Pregunta {{ paginaActual * preguntasPorPagina + i + 1 }}:
-                      </p>
-                      <p class="text-gray-600 text-sm mb-2">{{ respuesta.pregunta }}</p>
-                      <div class="respuestas mt-2 space-y-2">
-                        <p class="text-gray-600 font-medium text-sm">Respuesta</p>
-                        <div *ngIf="respuesta.respuesta_texto">
-                          <textarea
-                            pInputTextarea
-                            id="message"
-                            rows="3"
-                            class="w-full text-xs p-2 border border-gray-300 rounded"
-                            readonly
-                          >{{ respuesta.respuesta_texto }}</textarea>
+                      {{ detallesPractica.informe_alumno.intentos }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Informe asignado -->
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-200">¿Asignado a un académico?</h4>
+                    <span
+                      class="text-xl font-medium px-4 py-2 rounded-full"
+                      [ngClass]="detallesPractica.informe_alumno.id_academico ? 'bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400'"
+                    >
+                      {{ detallesPractica.informe_alumno.id_academico ? 'Sí' : 'No' }}
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Estado del informe -->
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm md:col-span-2">
+                  <div class="flex items-center justify-between">
+                    <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-200">Estado del Informe:</h4>
+                    <span
+                      class="text-xl font-medium px-4 py-2 rounded-full"
+                      [ngClass]="{
+                        'bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400': detallesPractica.informe_alumno.estado === 'ENVIADA',
+                        'bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400': detallesPractica.informe_alumno.estado === 'ESPERA',
+                        'bg-red-200 dark:bg-red-900/50 text-red-800 dark:text-red-300': detallesPractica.informe_alumno.estado === 'DESAPROBADA',
+                        'bg-yellow-100 dark:bg-yellow-900/50 text-yellow-600 dark:text-yellow-400': detallesPractica.informe_alumno.estado === 'REVISION',
+                        'bg-orange-100 dark:bg-orange-900/50 text-orange-600 dark:text-orange-400': detallesPractica.informe_alumno.estado === 'CORRECCION',
+                        'bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400': detallesPractica.informe_alumno.estado === 'APROBADA'
+                      }"
+                    >
+                      {{ textoEstadoInforme[detallesPractica.informe_alumno.estado] }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Corrección del informe -->
+              @if (detallesPractica.informe_alumno.archivo_correccion && detallesPractica.estado != 'FINALIZADA') {
+                <div class="mt-8">
+                  <h4 class="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-4 flex items-center gap-2">
+                    <i class="fas fa-file-pdf text-red-600 dark:text-red-400"></i>
+                    Corrección del Informe
+                  </h4>
+                  <div class="border dark:border-gray-700 rounded-lg shadow-md h-[800px] bg-gray-50 dark:bg-gray-700">
+                    @if (correccionURL) {
+                      <embed
+                        [src]="correccionURL"
+                        type="application/pdf"
+                        class="w-full h-full rounded-lg"
+                      />
+                    } @else {
+                      <div class="flex items-center justify-center h-full">
+                        <div class="text-center">
+                          <i class="fas fa-spinner fa-spin text-3xl text-blue-600 dark:text-blue-400 mb-2"></i>
+                          <p class="text-gray-600 dark:text-gray-300">Cargando el archivo...</p>
                         </div>
-                        <div *ngIf="respuesta.puntaje" class="flex items-center">
-                          <span
-                            class="px-4 py-1 bg-white text-gray-600 rounded-md text-center text-xs font-medium shadow-sm"
-                          >
-                            {{ convertirPuntaje(respuesta.puntaje) || 'Sin calificación' }}
-                          </span>
-                        </div>
-                        <div *ngIf="!respuesta.puntaje && !respuesta.respuesta_texto">
-                          <div
-                            *ngIf="respuestasAlumno.asignaturas.length > 0"
-                            class="bg-white rounded shadow-md p-3 border border-gray-200"
-                          >
-                            <h3 class="text-sm font-semibold text-blue-600 mb-2">
-                              Asignaturas seleccionadas:
-                            </h3>
-                            <ul class="list-disc pl-4">
-                              <li
-                                *ngFor="let asignatura of respuestasAlumno.asignaturas"
-                                class="text-xs text-gray-700 bg-blue-100 p-2 rounded mb-2"
-                              >
-                                {{ asignatura.nombre_asignatura }} ({{ asignatura.codigo }})
-                              </li>
-                            </ul>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          @if (pasoActual >= 3) {
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+              <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
+                <i class="fas fa-comments text-blue-600 dark:text-blue-400"></i>
+                Respuestas Alumno
+              </h2>
+              <div class="preguntas-container flex flex-col gap-4">
+                @if (respuestasAlumno.respuestas.length > 0) {
+                  @for (respuesta of obtenerTandaPreguntas(); track respuesta; let i = $index) {
+                    <div class="pregunta bg-blue-50 dark:bg-blue-900/30 p-6 rounded-lg shadow-sm">
+                      <div class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-8 h-8 bg-blue-600 dark:bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-semibold">
+                          {{ paginaActual * preguntasPorPagina + i + 1 }}
+                        </span>
+                        <div class="flex-grow">
+                          <p class="text-gray-700 dark:text-gray-200 font-medium mb-3">{{ respuesta.pregunta }}</p>
+                          <div class="respuestas space-y-4">
+                            @if (respuesta.respuesta_texto) {
+                              <div>
+                                <p class="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">Respuesta:</p>
+                                <textarea
+                                  pInputTextarea
+                                  rows="3"
+                                  class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 text-sm"
+                                  readonly
+                                >{{ respuesta.respuesta_texto }}</textarea>
+                              </div>
+                            }
+                            @if (respuesta.puntaje) {
+                              <div class="flex items-center gap-2">
+                                <span class="text-sm font-semibold text-gray-600 dark:text-gray-300">Calificación:</span>
+                                <span class="px-4 py-2 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg text-sm font-medium shadow-sm">
+                                  {{ convertirPuntaje(respuesta.puntaje) }}
+                                </span>
+                              </div>
+                            }
+                            @if (!respuesta.puntaje && !respuesta.respuesta_texto) {
+                              @if (respuestasAlumno.asignaturas.length > 0) {
+                                <div class="bg-white dark:bg-gray-700 rounded-lg shadow-sm p-4 border border-gray-200 dark:border-gray-600">
+                                  <h3 class="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-3">
+                                    Asignaturas seleccionadas:
+                                  </h3>
+                                  <ul class="space-y-2">
+                                    @for (asignatura of respuestasAlumno.asignaturas; track asignatura) {
+                                      <li class="text-sm text-gray-700 dark:text-gray-200 bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg">
+                                        {{ asignatura.nombre_asignatura }} ({{ asignatura.codigo }})
+                                      </li>
+                                    }
+                                  </ul>
+                                </div>
+                              }
+                            }
                           </div>
                         </div>
                       </div>
                     </div>
-                    <!-- Navegador -->
-                    <div class="flex justify-between mt-4">
-                      <button
-                        (click)="paginaAnterior()"
-                        [disabled]="paginaActual === 0"
-                        class="px-3 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 disabled:opacity-50 text-sm"
-                      >
-                        Anterior
-                      </button>
-                      <button
-                        (click)="paginaSiguiente()"
-                        [disabled]="(paginaActual + 1) * preguntasPorPagina >= respuestasAlumno!.respuestas.length"
-                        class="px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50 text-sm"
-                      >
-                        Siguiente
-                      </button>
-                    </div>
+                  }
+
+                  <!-- Navegador -->
+                  <div class="flex justify-between mt-6">
+                    <button
+                      (click)="paginaAnterior()"
+                      [disabled]="paginaActual === 0"
+                      class="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 flex items-center gap-2"
+                    >
+                      <i class="fas fa-chevron-left"></i>
+                      Anterior
+                    </button>
+                    <button
+                      (click)="paginaSiguiente()"
+                      [disabled]="(paginaActual + 1) * preguntasPorPagina >= respuestasAlumno!.respuestas.length"
+                      class="px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200 flex items-center gap-2"
+                    >
+                      Siguiente
+                      <i class="fas fa-chevron-right"></i>
+                    </button>
                   </div>
-                  <!-- Mensaje si no hay respuestas -->
-                  <p *ngIf="respuestasAlumno.respuestas.length === 0" class="text-gray-600 text-sm">
-                    No hay respuestas disponibles.
-                  </p>
-                </div>
+                } @else {
+                  <div class="text-center py-8">
+                    <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <i class="fas fa-inbox text-2xl text-gray-400 dark:text-gray-500"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">No hay respuestas disponibles.</p>
+                  </div>
+                }
               </div>
-              
-              
+            </div>
+          }
         </div>
+      }
     </div>
+  }
 </div>

@@ -10,16 +10,14 @@ import { PdfgeneratorComponent } from '../../../../shared/pdfgenerator/pdfgenera
 import { DataAccessService } from '../../services/data-access.service';
 import { DatosPracticaService } from '../../services/datos-practica.service';
 
-
 @Component({
   selector: 'app-tabla-funciones',
   standalone: true,
   imports: [CommonModule, TableModule, PdfgeneratorComponent],
   templateUrl: './tabla-funciones.component.html',
-  styleUrls: ['./tabla-funciones.component.css'], // Corregido a styleUrls
+  styleUrls: ['./tabla-funciones.component.css'],
 })
 export class TablaFuncionesComponent implements OnInit {
-
   asignado: boolean = false;
   @Output() estadoCargando = new EventEmitter<boolean>();
   cargando: boolean = true;
@@ -31,7 +29,7 @@ export class TablaFuncionesComponent implements OnInit {
     private authService: AuthService,
     private datosPracticaService: DatosPracticaService,
     private messageService: MessageService
-  ){}
+  ) {}
 
   ngOnInit(): void {
     this.decodedToken = this.authService.getDecodedToken();
@@ -61,7 +59,7 @@ export class TablaFuncionesComponent implements OnInit {
   idDocenteSeleccionado!: number;
 
   public descargarPDF(idPractica: number, idInforme: number, idDocente: number): void {
-    this.cargandoDescarga = true
+    this.cargandoDescarga = true;
     this.idPracticaSeleccionada = idPractica;
     this.idInformeSeleccionado = idInforme;
     this.idDocenteSeleccionado = idDocente;
@@ -69,24 +67,30 @@ export class TablaFuncionesComponent implements OnInit {
   }
 
   public onPdfGenerado(): void {
-    console.log('si')
-    this.cargandoDescarga = false
+    this.cargandoDescarga = false;
     this.mostrarPdfComponent = false;
   }
 
   private getInfoInformes() {
-    const token = this.decodedToken?.access_token; // Opcionalmente puedes validar el token aquí
-    console.log(token)
+    const token = this.decodedToken?.access_token;
     this.dataAccessService.getInformacionInformes(token).subscribe({
       next: (r) => {
-        console.log("data para tabla",r)
         this.data = r;
         this.asignado = this.data.length > 0;
-        this.cargando = false
-        this.estadoCargando.emit(this.cargando);
+        this.cargando = false;
+        this.estadoCargando.emit(false);
       },
-      error: (err) =>
-        console.error('Error al obtener información de informes:', err),
+      error: (err) => {
+        this.data = [];
+        this.asignado = false;
+        this.cargando = false;
+        this.estadoCargando.emit(false);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'No se pudieron cargar los informes'
+        });
+      },
     });
   }
 
@@ -95,7 +99,7 @@ export class TablaFuncionesComponent implements OnInit {
     return cant;
   }
 
-  public revision(idPractica: number){
-    this.router.navigate(['revision-informe/'+idPractica])
+  public revision(idPractica: number) {
+    this.router.navigate(['/academico/revision', idPractica]);
   }
 }

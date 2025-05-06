@@ -11,13 +11,13 @@ import { TablaFuncionesComponent } from '../tabla-funciones/tabla-funciones.comp
   templateUrl: './academico.component.html',
   styleUrl: './academico.component.css'
 })
-export class AcademicoComponent{
+export class AcademicoComponent {
+  cargando: boolean = true;
 
-  cargando: boolean = true
-
-  finalizoCarga(estado: boolean){
-    this.cargando = estado
+  finalizoCarga(estado: boolean) {
+    if (!estado) {
+      this.cargando = false;
+    }
   }
-
 }
 
