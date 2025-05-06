@@ -4,14 +4,14 @@ import { CommonModule, JsonPipe } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { HeaderComponent } from '../../../alumno/components/header/header.component';
 import { enviroment } from '../../../../environment/environment';
+import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-cargar-usuarios-nomina',
   standalone: true,
   templateUrl: './cargar-usuarios-nomina.component.html',
   styleUrl: './cargar-usuarios-nomina.component.css',
-  imports: [CommonModule, HeaderComponent
-  ]
+  imports: [CommonModule, NavbarComponent]
 })
 export class CargarUsuariosNominaComponent {
   selectedFile: File | null = null;

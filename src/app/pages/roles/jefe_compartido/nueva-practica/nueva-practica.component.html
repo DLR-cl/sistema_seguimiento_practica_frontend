@@ -1,466 +1,428 @@
-<app-header></app-header>
+<app-navbar />
 
-<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
-    <div class="flex space-x-2">
-      <!-- Puntos animados con rebote e iluminación progresiva -->
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.2s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.4s"></div>
-    </div>
+<!-- Pantalla de carga moderna -->
+<div *ngIf="cargando"
+  class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-200 dark:from-gray-900 dark:to-gray-800">
+  <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600 mb-6"></div>
+  <span class="text-base md:text-lg font-semibold text-blue-900 dark:text-blue-200 tracking-wide drop-shadow">
+    Cargando, por favor espere...
+  </span>
 </div>
 
-<div *ngIf="!cargando" class="container mx-auto my-10 p-10 bg-white rounded-lg shadow-md">
+<div *ngIf="!cargando"
+  class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-8">
+  <div class="container mx-auto px-4">
     <button
-        class="my-5 w-fit border border-blue-600 rounded-2xl px-5 py-1 text-md text-blue-600 font-semibold rounded hover:bg-blue-600 hover:text-white"
-        type="button" routerLink="/">
-        Volver al menú
+      class="mb-8 w-fit border border-blue-600 rounded-2xl px-5 py-2 text-md text-blue-600 font-semibold hover:bg-blue-600 hover:text-white transition"
+      type="button" routerLink="/">
+      Volver al menú
     </button>
 
-    <h1 class="text-4xl font-bold">Generar Práctica</h1>
+    <!-- Título principal -->
+    <h1 class="text-3xl md:text-4xl font-bold text-blue-900 dark:text-blue-200 mb-10 text-center drop-shadow">
+      Generar Práctica
+    </h1>
 
-    <div *ngIf="!practicaSeleccionada" class="flex flex-col items-center gap-8 my-14 py-20">
-      <!-- Contenedor que se ajusta a tamaños pequeños -->
+    <!-- Selección de tipo de práctica -->
+    <div *ngIf="!practicaSeleccionada" class="flex flex-col items-center gap-8 my-14 py-10">
       <div class="flex flex-wrap gap-8 justify-center w-full">
-          <button
-              class="w-full sm:w-[20rem] md:w-[30rem] h-[12rem] sm:h-[16rem] bg-white border-2 border-gray-500 text-gray-700 text-2xl sm:text-3xl md:text-4xl font-bold rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:border-blue-500 hover:text-blue-500"
-              (click)="seleccionarPractica('PRACTICA_UNO')"
-          >
-              Práctica Profesional I
-          </button>
-          <button
-              class="w-full sm:w-[20rem] md:w-[30rem] h-[12rem] sm:h-[16rem] bg-white border-2 border-gray-500 text-gray-700 text-2xl sm:text-3xl md:text-4xl font-bold rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:border-blue-500 hover:text-blue-500"
-              (click)="seleccionarPractica('PRACTICA_DOS')"
-          >
-              Práctica Profesional II
-          </button>
+        <button
+          class="w-full sm:w-[20rem] md:w-[28rem] h-[10rem] sm:h-[14rem] bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-2xl sm:text-3xl md:text-4xl font-bold rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400"
+          (click)="seleccionarPractica('PRACTICA_UNO')">
+          Práctica Profesional I
+        </button>
+        <button
+          class="w-full sm:w-[20rem] md:w-[28rem] h-[10rem] sm:h-[14rem] bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 text-2xl sm:text-3xl md:text-4xl font-bold rounded-xl shadow-lg transition duration-300 ease-in-out transform hover:scale-105 hover:border-blue-600 hover:text-blue-600 dark:hover:text-blue-400"
+          (click)="seleccionarPractica('PRACTICA_DOS')">
+          Práctica Profesional II
+        </button>
       </div>
     </div>
-  
 
-    <div *ngIf="practicaSeleccionada" class="flex flex-col md:flex-row justify-between items-center mt-8 space-y-4 md:space-y-0 md:space-x-6">
-      <!-- Pasos dinámicos siempre visibles -->
-      <ol class="flex flex-wrap items-center w-full justify-center p-3 space-x-4 text-sm font-medium text-center text-gray-500 bg-white border border-gray-200 rounded-lg shadow-sm sm:text-base">
-        <li *ngFor="let paso of pasos; let index = index" class="flex items-center" [ngClass]="{'text-blue-600': pasoActual >= index + 1}">
-          <!-- Número del paso -->
-          <span class="flex items-center justify-center w-8 h-8 me-2 text-xs font-semibold text-white rounded-full transition-colors duration-500 ease-in-out" 
-                [ngClass]="{'bg-blue-600': pasoActual >= index + 1, 'bg-gray-200': pasoActual < index + 1}">
+    <!-- Pasos visuales -->
+    <div *ngIf="practicaSeleccionada"
+      class="flex flex-col md:flex-row justify-between items-center mt-8 space-y-4 md:space-y-0 md:space-x-6">
+      <ol
+        class="flex flex-wrap items-center w-full justify-center p-3 space-x-4 text-sm font-medium text-center text-gray-500 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm sm:text-base">
+        <li *ngFor="let paso of pasos; let index = index" class="flex items-center"
+          [ngClass]="{'text-blue-600 dark:text-blue-400': pasoActual >= index + 1}">
+          <span
+            class="flex items-center justify-center w-8 h-8 me-2 text-xs font-semibold text-white rounded-full transition-colors duration-500 ease-in-out"
+            [ngClass]="{'bg-blue-600 dark:bg-blue-500': pasoActual >= index + 1, 'bg-gray-200 dark:bg-gray-700': pasoActual < index + 1}">
             {{ index + 1 }}
           </span>
-          <!-- Texto del paso (oculto en pantallas pequeñas) -->
           <span class="hidden sm:inline text-base font-semibold">{{ paso.texto }}</span>
-          <!-- Flecha entre pasos -->
-          <svg *ngIf="index < pasos.length - 1" class="w-4 h-4 ms-2 transition-colors duration-500 ease-in-out" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10" [ngClass]="{'text-blue-600': pasoActual > index + 1, 'text-gray-300': pasoActual <= index + 1}">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m7 9 4-4-4-4M1 9l4-4-4-4"/>
+          <svg *ngIf="index < pasos.length - 1" class="w-4 h-4 ms-2 transition-colors duration-500 ease-in-out"
+            aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 12 10"
+            [ngClass]="{'text-blue-600 dark:text-blue-400': pasoActual > index + 1, 'text-gray-300 dark:text-gray-600': pasoActual <= index + 1}">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m7 9 4-4-4-4M1 9l4-4-4-4" />
           </svg>
         </li>
       </ol>
     </div>
-      
-    <!-- Descripción de los pasos visible solo en pantallas pequeñas -->
-    <div *ngIf="practicaSeleccionada" class="block sm:hidden mt-4 bg-blue-50 p-4 rounded-lg border border-blue-200">
-      <h2 class="text-lg font-semibold text-blue-600 mb-2">Descripción de los Pasos</h2>
-      <ul class="list-disc list-inside text-sm text-gray-700 space-y-2">
+
+    <!-- Descripción de los pasos en móviles -->
+    <div *ngIf="practicaSeleccionada"
+      class="block sm:hidden mt-4 bg-blue-50 dark:bg-gray-900 p-4 rounded-lg border border-blue-200 dark:border-blue-700">
+      <h2 class="text-lg font-semibold text-blue-600 dark:text-blue-300 mb-2">Descripción de los Pasos</h2>
+      <ul class="list-disc list-inside text-sm text-gray-700 dark:text-gray-200 space-y-2">
         <li *ngFor="let paso of pasos; let index = index">
           <span class="font-semibold">Paso {{ index + 1 }}:</span> {{ paso.texto }}
         </li>
       </ul>
     </div>
-    
+
     <form *ngIf="practicaSeleccionada" [formGroup]="formPractica" (ngSubmit)="onSubmit()">
-      <div *ngIf="pasoActual === 1" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8 py-6">
-        <h2 class="text-2xl font-semibold mb-4">Seleccionar empresa</h2>
-        <p class="text-gray-600">
-            Seleccione una empresa asociada para la práctica desde el listado.
-            Si la empresa no está en la lista, haga clic en el botón
-            <span class="font-semibold text-blue-600">"Nueva empresa"</span> para registrarla.
+      <!-- Paso 1: Seleccionar empresa -->
+      <div *ngIf="pasoActual === 1" class="mt-14 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm px-8 py-6 bg-white dark:bg-gray-800">
+        <h2 class="text-2xl font-semibold mb-4 text-blue-800 dark:text-blue-300">Seleccionar empresa</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Seleccione una empresa asociada para la práctica desde el listado.
+          Si la empresa no está en la lista, haga clic en el botón
+          <span class="font-semibold text-blue-600 dark:text-blue-400">"Nueva empresa"</span> para registrarla.
         </p>
-    
         <div class="mt-6 w-full sm:w-full md:w-1/2 lg:w-5/12 xl:w-1/3">
-            <label for="id_empresa" class="block text-sm font-medium text-gray-700 mb-2">
-                Empresa asociada
-            </label>
-            <p-dropdown [options]="empresas" optionLabel="nombre_razon_social" optionValue="id_empresa" emptyMessage="No hay empresas registradas"
-                placeholder="Seleccione una Empresa" formControlName="id_empresa"
-                class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full">
-            </p-dropdown>
+          <label for="id_empresa" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Empresa asociada
+          </label>
+          <p-dropdown [options]="empresas" optionLabel="nombre_razon_social" optionValue="id_empresa" emptyMessage="No hay empresas registradas"
+            placeholder="Seleccione una Empresa" formControlName="id_empresa"
+            class="bg-gray-100 dark:bg-gray-900 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full">
+          </p-dropdown>
         </div>
-    
         <button
-            class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
-            (click)="openModal('empresa')">
-            Nueva empresa
+          class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
+          (click)="openModal('empresa')" type="button">
+          Nueva empresa
         </button>
       </div>
-      
-      <div *ngIf="pasoActual === 2" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8 py-6">
-        <h2 class="text-2xl font-semibold mb-4">Seleccionar jefe supervisor de práctica</h2>
-        <p class="text-gray-600">
-            Seleccione al supervisor asignado al alumno en la empresa seleccionada para la práctica desde el listado
-            disponible.
-            Si el supervisor no aparece en la lista, haga clic en el botón
-            <span class="font-semibold text-blue-600">"Nuevo supervisor"</span> para registrarlo.
+
+      <!-- Paso 2: Seleccionar supervisor -->
+      <div *ngIf="pasoActual === 2" class="mt-14 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm px-8 py-6 bg-white dark:bg-gray-800">
+        <h2 class="text-2xl font-semibold mb-4 text-blue-800 dark:text-blue-300">Seleccionar jefe supervisor de práctica</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Seleccione al supervisor asignado al alumno en la empresa seleccionada para la práctica desde el listado disponible.
+          Si el supervisor no aparece en la lista, haga clic en el botón
+          <span class="font-semibold text-blue-600 dark:text-blue-400">"Nuevo supervisor"</span> para registrarlo.
         </p>
-    
         <div class="mt-6 w-full sm:w-full md:w-1/2 lg:w-5/12 xl:w-1/3">
-            <label for="id_supervisor" class="block text-sm font-medium text-gray-700 mb-2">
-                Supervisor de práctica
-            </label>
-            <p-dropdown [options]="supervisoresFiltrados" optionLabel="usuario.nombre" optionValue="id_user"
-                placeholder="{{ formPractica.get('id_empresa')?.value ? 'Seleccione supervisor' : 'Seleccione primero una empresa' }}"
-                formControlName="id_supervisor" [disabled]="!formPractica.get('id_empresa')?.value"
-                class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full">
-            </p-dropdown>
+          <label for="id_supervisor" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Supervisor de práctica
+          </label>
+          <p-dropdown [options]="supervisoresFiltrados" optionLabel="usuario.nombre" optionValue="id_user"
+            placeholder="{{ formPractica.get('id_empresa')?.value ? 'Seleccione supervisor' : 'Seleccione primero una empresa' }}"
+            formControlName="id_supervisor" [disabled]="!formPractica.get('id_empresa')?.value"
+            class="bg-gray-100 dark:bg-gray-900 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full">
+          </p-dropdown>
         </div>
-    
         <div *ngIf="formPractica.get('id_empresa')?.value && supervisoresFiltrados.length === 0"
-            class="text-red-500 font-semibold mt-4">
-            No hay supervisores en esta empresa. Por favor, agrega uno.
+          class="text-red-500 font-semibold mt-4">
+          No hay supervisores en esta empresa. Por favor, agrega uno.
         </div>
-    
         <button [disabled]="!formPractica.get('id_empresa')?.value"
-            [ngClass]="{'hover:bg-blue-700': formPractica.get('id_empresa')?.value, 'bg-gray-300': !formPractica.get('id_empresa')?.value}"
-            class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
-            (click)="openModal('supervisor')">
-            Nuevo supervisor
+          [ngClass]="{'hover:bg-blue-700': formPractica.get('id_empresa')?.value, 'bg-gray-300': !formPractica.get('id_empresa')?.value}"
+          class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md transition duration-300"
+          (click)="openModal('supervisor')" type="button">
+          Nuevo supervisor
         </button>
       </div>
-  
-      <div *ngIf="pasoActual === 3" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8 py-6">
-        <h2 class="text-2xl font-semibold mb-4">Seleccionar alumno que realizará la práctica</h2>
-        <p class="text-gray-600">
-            Seleccione al alumno que realizará la práctica desde el listado.
-            Si el alumno no se encuentra en la lista, haga clic en el botón
-            <span class="font-semibold text-blue-600">"Registrar por RUT"</span> para registrarlo.
+
+      <!-- Paso 3: Seleccionar alumno -->
+      <div *ngIf="pasoActual === 3" class="mt-14 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm px-8 py-6 bg-white dark:bg-gray-800">
+        <h2 class="text-2xl font-semibold mb-4 text-blue-800 dark:text-blue-300">Seleccionar alumno que realizará la práctica</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Seleccione al alumno que realizará la práctica desde el listado.
+          Si el alumno no se encuentra en la lista, haga clic en el botón
+          <span class="font-semibold text-blue-600 dark:text-blue-400">"Registrar por RUT"</span> para registrarlo.
         </p>
-
         <div class="mt-6 w-full sm:w-full md:w-1/2 lg:w-5/12 xl:w-1/3">
-            <label for="id_alumno" class="block text-sm font-medium text-gray-700 mb-2">
-                Alumno
-            </label>
-            <p-dropdown
-                [options]="listadoAlumnos"
-                formControlName="id_alumno"
-                optionLabel="usuario.nombre"
-                optionValue="id_user"
-                emptyMessage="No existen alumnos disponibles"
-                [filter]="true"
-                filterBy="usuario.nombre"
-                [showClear]="true"
-                placeholder="Seleccione un Alumno"
-                appendTo="body"
-                class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full">
-                <ng-template pTemplate="selectedItem">
-                    <div class="flex items-center space-x-2" *ngIf="getNombreAlumnoSeleccionado()">
-                        <div>{{ getNombreAlumnoSeleccionado() }}</div>
-                    </div>
-                </ng-template>
-
-                <ng-template let-alumno pTemplate="item">
-                    <div class="flex items-center space-x-2">
-                        <div>{{ alumno.usuario.nombre }}</div>
-                    </div>
-                </ng-template>
-            </p-dropdown>
+          <label for="id_alumno" class="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Alumno
+          </label>
+          <p-dropdown
+            [options]="listadoAlumnos"
+            formControlName="id_alumno"
+            optionLabel="usuario.nombre"
+            optionValue="id_user"
+            emptyMessage="No existen alumnos disponibles"
+            [filter]="true"
+            filterBy="usuario.nombre"
+            [showClear]="true"
+            placeholder="Seleccione un Alumno"
+            appendTo="body"
+            class="bg-gray-100 dark:bg-gray-900 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full">
+            <ng-template pTemplate="selectedItem">
+              <div class="flex items-center space-x-2" *ngIf="getNombreAlumnoSeleccionado()">
+                <div>{{ getNombreAlumnoSeleccionado() }}</div>
+              </div>
+            </ng-template>
+            <ng-template let-alumno pTemplate="item">
+              <div class="flex items-center space-x-2">
+                <div>{{ alumno.usuario.nombre }}</div>
+              </div>
+            </ng-template>
+          </p-dropdown>
         </div>
-
         <button
-            class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
-            (click)="openModal('alumno')">
-            Registrar por RUT
+          class="mt-6 px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition duration-300"
+          (click)="openModal('alumno')" type="button">
+          Registrar por RUT
         </button>
       </div>
 
-      <div *ngIf="pasoActual === 4" class="mt-14 border border-gray-200 rounded-lg shadow-sm px-8 py-6">
-          <h2 class="text-2xl font-semibold my-5">Completar formulario de práctica</h2>
-          <p class="text-gray-600">
-            Complete todos los campos del formulario de práctica. Una vez que haya ingresado todos los datos requeridos, presione el botón
-              <span class="font-semibold text-green-600">"Crear Práctica"</span> 
-              para registrarla en el sistema.
-          </p>
-      
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-5 mb-10">
-              <!-- Fecha de inicio -->
-              <div>
-                  <label for="fecha_inicio" class="block text-sm font-medium text-gray-700">Fecha de inicio</label>
-                  <p-calendar formControlName="fecha_inicio" id="fechaInicio" dateFormat="dd/mm/yy"
-                      class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl font-medium"
-                      appendTo="body"></p-calendar>
-              </div>
-      
-              <!-- Fecha de término -->
-              <div>
-                  <label for="fecha_termino" class="block text-sm font-medium text-gray-700">Fecha de término</label>
-                  <p-calendar formControlName="fecha_termino" id="fechaTermino" dateFormat="dd/mm/yy"
-                      class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl font-medium"
-                      appendTo="body"></p-calendar>
-              </div>
-      
-              <!-- Tipo de práctica -->
-              <div>
-                  <label for="tipo_practica" class="block text-sm font-medium text-gray-700">Tipo de práctica</label>
-                  <p-dropdown formControlName="tipo_practica" id="tipoPractica" [options]="tipoPracticas"
-                      optionLabel="titulo" optionValue="tipo" readonly dropdownIcon="-"
-                      class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full sm:w-1/4"></p-dropdown>
-              </div>
-      
-              <!-- Modalidad de práctica -->
-              <div>
-                  <label for="modalidad" class="block text-sm font-medium text-gray-700">Seleccione modalidad de práctica</label>
-                  <p-dropdown formControlName="modalidad" id="modalidad" [options]="modalidades" optionLabel="titulo"
-                      optionValue="tipo" placeholder="Seleccione..."
-                      class="bg-gray-100 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full sm:w-1/4"></p-dropdown>
-              </div>
-      
-              <!-- Horas totales -->
-              <div>
-                  <label for="cantidad_horas" class="block text-sm font-medium text-gray-700">Horas totales</label>
-                  <input type="number" id="cantidad_horas" formControlName="cantidad_horas" min="1"
-                      class="bg-gray-100 focus:outline-none w-full px-3 py-2 border-2 shadow-lg rounded-2xl font-medium">
-              </div>
-      
-              <!-- Horas semanales -->
-              <div>
-                  <label for="horas_semanales" class="block text-sm font-medium text-gray-700">Horas semanales</label>
-                  <input type="number" id="horas_semanales" formControlName="horas_semanales" min="1"
-                      class="bg-gray-100 focus:outline-none w-full px-3 py-2 border-2 shadow-lg rounded-2xl font-medium">
-              </div>
+      <!-- Paso 4: Formulario de práctica -->
+      <div *ngIf="pasoActual === 4" class="mt-14 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm px-8 py-6 bg-white dark:bg-gray-800">
+        <h2 class="text-2xl font-semibold my-5 text-blue-800 dark:text-blue-300">Completar formulario de práctica</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Complete todos los campos del formulario de práctica. Una vez que haya ingresado todos los datos requeridos, presione el botón
+          <span class="font-semibold text-green-600 dark:text-green-400">"Crear Práctica"</span> 
+          para registrarla en el sistema.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-5 mb-10">
+          <!-- Fecha de inicio -->
+          <div>
+            <label for="fecha_inicio" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Fecha de inicio</label>
+            <p-calendar formControlName="fecha_inicio" id="fechaInicio" dateFormat="dd/mm/yy"
+              class="bg-gray-100 dark:bg-gray-900 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl font-medium"
+              appendTo="body"></p-calendar>
           </div>
-          <div class="flex justify-center mt-4" *ngIf="cargandoCrear">
-              <div class="w-12 h-12 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
+          <!-- Fecha de término -->
+          <div>
+            <label for="fecha_termino" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Fecha de término</label>
+            <p-calendar formControlName="fecha_termino" id="fechaTermino" dateFormat="dd/mm/yy"
+              class="bg-gray-100 dark:bg-gray-900 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl font-medium"
+              appendTo="body"></p-calendar>
           </div>
+          <!-- Tipo de práctica -->
+          <div>
+            <label for="tipo_practica" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Tipo de práctica</label>
+            <p-dropdown formControlName="tipo_practica" id="tipoPractica" [options]="tipoPracticas"
+              optionLabel="titulo" optionValue="tipo" readonly dropdownIcon="-"
+              class="bg-gray-100 dark:bg-gray-900 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full sm:w-1/4"></p-dropdown>
+          </div>
+          <!-- Modalidad de práctica -->
+          <div>
+            <label for="modalidad" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Seleccione modalidad de práctica</label>
+            <p-dropdown formControlName="modalidad" id="modalidad" [options]="modalidades" optionLabel="titulo"
+              optionValue="tipo" placeholder="Seleccione..."
+              class="bg-gray-100 dark:bg-gray-900 focus:outline-none focus:border-sky-700 py-3 border-2 shadow-lg rounded-2xl w-full sm:w-1/4"></p-dropdown>
+          </div>
+          <!-- Horas totales -->
+          <div>
+            <label for="cantidad_horas" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Horas totales</label>
+            <input type="number" id="cantidad_horas" formControlName="cantidad_horas" min="1"
+              class="bg-gray-100 dark:bg-gray-900 focus:outline-none w-full px-3 py-2 border-2 shadow-lg rounded-2xl font-medium">
+          </div>
+          <!-- Horas semanales -->
+          <div>
+            <label for="horas_semanales" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Horas semanales</label>
+            <input type="number" id="horas_semanales" formControlName="horas_semanales" min="1"
+              class="bg-gray-100 dark:bg-gray-900 focus:outline-none w-full px-3 py-2 border-2 shadow-lg rounded-2xl font-medium">
+          </div>
+        </div>
+        <div class="flex justify-center mt-4" *ngIf="cargandoCrear">
+          <div class="w-12 h-12 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
+        </div>
       </div>
-    
+
+      <!-- Botones de navegación -->
       <div class="w-full flex flex-wrap justify-center space-x-0 sm:space-x-4 mt-5">
         <!-- Botón: Escoger Práctica -->
-        <button
-          *ngIf="pasoActual === 1"
+        <button *ngIf="pasoActual === 1"
           class="my-5 w-full sm:w-5/12 md:w-4/12 lg:w-3/12 xl:w-2/12 px-3 py-2 bg-gray-400 text-lg text-white font-semibold rounded hover:bg-gray-500 transition"
-          type="button"
-          (click)="practicaSeleccionada = false"
-        >
+          type="button" (click)="practicaSeleccionada = false">
           Escoger Práctica
         </button>
-      
+
         <!-- Botón: Paso Anterior -->
-        <button
-          *ngIf="pasoActual > 1"
+        <button *ngIf="pasoActual > 1"
           class="my-5 w-full sm:w-5/12 md:w-4/12 lg:w-3/12 xl:w-2/12 px-3 py-2 bg-gray-400 text-lg text-white font-semibold rounded hover:bg-gray-500 transition"
-          type="button"
-          (click)="pasoAnterior()"
-        >
+          type="button" (click)="pasoAnterior()">
           Paso Anterior
         </button>
-      
+
         <!-- Botón: Siguiente Paso -->
-        <button
-          *ngIf="pasoActual < 4"
+        <button *ngIf="pasoActual < 4"
           class="my-5 w-full sm:w-5/12 md:w-4/12 lg:w-3/12 xl:w-2/12 px-3 py-2 bg-blue-600 text-lg text-white font-semibold rounded hover:bg-blue-700 transition"
-          type="button"
-          (click)="siguientePaso()"
-        >
+          type="button" (click)="siguientePaso()">
           Siguiente Paso
         </button>
-      
+
         <!-- Botón: Crear Práctica -->
-        <button
-          *ngIf="pasoActual === 4"
-          class="my-5 w-full sm:w-5/12 md:w-4/12 lg:w-3/12 xl:w-2/12 px-3 py-2 text-lg font-semibold rounded 
+        <button *ngIf="pasoActual === 4" class="my-5 w-full sm:w-5/12 md:w-4/12 lg:w-3/12 xl:w-2/12 px-3 py-2 text-lg font-semibold rounded 
                   bg-green-700 text-white hover:bg-green-800 transition
-                  disabled:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-green-400"
-          type="submit"
-          [disabled]="!formPractica.valid"
-        >
+                  disabled:bg-green-400 disabled:cursor-not-allowed disabled:hover:bg-green-400" type="submit"
+          [disabled]="!formPractica.valid">
           Crear Práctica
         </button>
       </div>
-          
+
     </form>
 
-    <p-dialog [(visible)]="showModal" [modal]="true" (onHide)="closeModal()" [focusOnShow]="false" [draggable]="false" [closable]="true" [style]="{ width: '50vw' }"
-        class="rounded-lg shadow-lg">
+    <!-- Modales -->
+    <p-dialog [(visible)]="showModal" [modal]="true" (onHide)="closeModal()" [focusOnShow]="false" [draggable]="false"
+      [closable]="true" [style]="{ width: '50vw' }" class="rounded-lg shadow-lg">
 
-        <ng-template pTemplate="header">
-            <h2 class="text-3xl font-bold text-center text-blue-600 w-full">{{modalTitle}}</h2>
-        </ng-template>
+      <ng-template pTemplate="header">
+        <h2 class="text-3xl font-bold text-center text-blue-600 w-full">{{modalTitle}}</h2>
+      </ng-template>
 
-        <div class="p-6">
-            <!-- Formulario para Empresa -->
-            <ng-container *ngIf="modalType === 'empresa'">
-                <h3 class="font-semibold text-xl text-white bg-blue-600 px-4 py-2 rounded-md mb-6">
-                  Detalles de la Empresa
-                </h3>
-                <form [formGroup]="formEmpresa" (ngSubmit)="submitModal()" class="space-y-6">
-                  <!-- Nombre de la Empresa -->
-                  <div class="field">
-                    <div class="p-float-label">
-                      <input
-                        id="nombreEmpresa"
-                        pInputText
-                        formControlName="nombre_razon_social"
-                        class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                      />
-                      <label for="nombreEmpresa">Nombre de la Empresa</label>
-                    </div>
-                  </div>
-              
-                  <!-- Ubicación de la Empresa -->
-                  <div class="field">
-                    <div class="p-float-label">
-                      <input
-                        id="ubicacionEmpresa"
-                        pInputText
-                        formControlName="ubicacion"
-                        class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
-                      />
-                      <label for="ubicacionEmpresa">Ubicación de la Empresa</label>
-                    </div>
-                  </div>
-              
-                  
-                  
-                  
-              
-                  <!-- Botones de acción -->
-                  <div class="flex justify-end gap-4 mt-6 items-center">
-                    <div *ngIf="cargandoCrear" class="w-5 h-5 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
+      <div class="p-6">
+        <!-- Formulario para Empresa -->
+        <ng-container *ngIf="modalType === 'empresa'">
+          <h3 class="font-semibold text-xl text-white bg-blue-600 px-4 py-2 rounded-md mb-6">
+            Detalles de la Empresa
+          </h3>
+          <form [formGroup]="formEmpresa" (ngSubmit)="submitModal()" class="space-y-6">
+            <!-- Nombre de la Empresa -->
+            <div class="field">
+              <div class="p-float-label">
+                <input id="nombreEmpresa" pInputText formControlName="nombre_razon_social"
+                  class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                <label for="nombreEmpresa">Nombre de la Empresa</label>
+              </div>
+            </div>
+            <!-- Ubicación de la Empresa -->
+            <div class="field">
+              <div class="p-float-label">
+                <input id="ubicacionEmpresa" pInputText formControlName="ubicacion"
+                  class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                <label for="ubicacionEmpresa">Ubicación de la Empresa</label>
+              </div>
+            </div>
+            <!-- Botones de acción -->
+            <div class="flex justify-end gap-4 mt-6 items-center">
+              <div *ngIf="cargandoCrear"
+                class="w-5 h-5 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin">
+              </div>
+              <button type="button"
+                class="px-4 py-2 bg-gray-200 border border-gray-300 text-black font-semibold rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                (click)="closeModal()">
+                Cancelar
+              </button>
+              <button type="submit" [disabled]="!formEmpresa.valid"
+                class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 disabled:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                Guardar
+              </button>
+            </div>
+          </form>
+        </ng-container>
 
-                    <button
-                      type="button"
-                      class="px-4 py-2 bg-gray-200 border border-gray-300 text-black font-semibold rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                      (click)="closeModal()"
-                    >
-                      Cancelar
-                    </button>
-                    <button
-                      type="submit"
-                      [disabled]="!formEmpresa.valid"
-                      class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 disabled:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      Guardar
-                    </button>
-                  </div>
-                </form>
-              </ng-container>
-              
+        <!-- Formulario para Supervisor -->
+        <ng-container *ngIf="modalType === 'supervisor'">
+          <h3 class="font-semibold text-xl w-full text-white rounded-md bg-blue-600 ps-3 py-2 mb-8">Detalles del
+            supervisor</h3>
+          <form [formGroup]="formSupervisor" (ngSubmit)="submitModal()" class="space-y-7">
+            <div class="field">
+              <div class="p-float-label">
+                <input id="nombreSupervisor" pInputText formControlName="nombre"
+                  class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                <label for="nombreSupervisor">Nombre Completo</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="p-float-label">
+                <input id="rutSupervisor" pInputText formControlName="rut" maxlength="10"
+                  class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                <label for="rutSupervisor">RUT</label>
+              </div>
+              <div *ngIf="formSupervisor.get('rut')?.invalid && formSupervisor.get('rut')?.touched"
+                class="text-red-500 text-sm">
+                <span *ngIf="formSupervisor.get('rut')?.errors?.['required']">El RUT es obligatorio.</span>
+                <span *ngIf="formSupervisor.get('rut')?.errors?.['pattern']">El formato debe ser 12345678-9 o
+                  12345678-k.</span>
+                <span *ngIf="formSupervisor.get('rut')?.errors?.['invalidDV']">El dígito verificador es
+                  incorrecto.</span>
+              </div>
+            </div>
+            <div class="field">
+              <div class="p-float-label">
+                <input id="correoSupervisor" type="email" pInputText formControlName="correo"
+                  class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                <label for="correoSupervisor">Correo Electrónico</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="p-float-label">
+                <input id="cargoSupervisor" pInputText formControlName="cargo"
+                  class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                <label for="cargoSupervisor">Cargo</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="p-float-label">
+                <input id="telefonoSupervisor" pInputText formControlName="numero_telefono"
+                  class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
+                <label for="cargoSupervisor">Número Telefono</label>
+              </div>
+            </div>
+            <div class="flex justify-end gap-4 mt-6 items-center">
+              <div *ngIf="cargandoCrear"
+                class="w-5 h-5 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin">
+              </div>
+              <button type="button"
+                class="px-4 py-2 bg-gray-200 border border-gray-300 text-black font-semibold rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                (click)="closeModal()">Cancelar</button>
+              <button type="submit" [disabled]="!formSupervisor.valid"
+                class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 disabled:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500">Guardar</button>
+            </div>
+          </form>
+        </ng-container>
 
-            <!-- Formulario para Supervisor -->
-            <ng-container *ngIf="modalType === 'supervisor'">
-                <h3 class="font-semibold text-xl w-full text-white rounded-md bg-blue-600 ps-3 py-2 mb-8">Detalles del
-                    supervisor</h3>
-                <form [formGroup]="formSupervisor" (ngSubmit)="submitModal()" class="space-y-7">
-                    <div class="field">
-                        <div class="p-float-label">
-                            <input id="nombreSupervisor" pInputText formControlName="nombre"
-                                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
-                            <label for="nombreSupervisor">Nombre Completo</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="p-float-label">
-                            <input id="rutSupervisor" pInputText formControlName="rut" maxlength="10"
-                                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
-                            <label for="rutSupervisor">RUT</label>
-                        </div>
-                        <div *ngIf="formSupervisor.get('rut')?.invalid && formSupervisor.get('rut')?.touched" class="text-red-500 text-sm">
-                            <span *ngIf="formSupervisor.get('rut')?.errors?.['required']">El RUT es obligatorio.</span>
-                            <span *ngIf="formSupervisor.get('rut')?.errors?.['pattern']">El formato debe ser 12345678-9 o 12345678-k.</span>
-                            <span *ngIf="formSupervisor.get('rut')?.errors?.['invalidDV']">El dígito verificador es incorrecto.</span>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="p-float-label">
-                            <input id="correoSupervisor" type="email" pInputText formControlName="correo"
-                                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
-                            <label for="correoSupervisor">Correo Electrónico</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="p-float-label">
-                            <input id="cargoSupervisor" pInputText formControlName="cargo"
-                                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
-                            <label for="cargoSupervisor">Cargo</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="p-float-label">
-                            <input id="telefonoSupervisor" pInputText formControlName="numero_telefono"
-                                class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500" />
-                            <label for="cargoSupervisor">Número Telefono</label>
-                        </div>
-                    </div>
-                    <div class="flex justify-end gap-4 mt-6 items-center">
-                        <div *ngIf="cargandoCrear" class="w-5 h-5 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
-
-                        <button type="button"
-                            class="px-4 py-2 bg-gray-200 border border-gray-300 text-black font-semibold rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
-                            (click)="closeModal()">Cancelar</button>
-                        <button type="submit" [disabled]="!formSupervisor.valid"
-                            class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 disabled:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500">Guardar</button>
-                    </div>
-                </form>
-            </ng-container>
-
-            <!-- Formulario para Alumno -->
-            <ng-container *ngIf="modalType === 'alumno'">
-                <h2 class="font-semibold text-xl text-white bg-blue-600 px-4 py-2 rounded-md mb-6">Registrar Alumno por RUT</h2>
-
-                <!-- Campo de búsqueda (Reactivo) -->
-                <div class="flex gap-4 items-center">
-                  <input type="text" [formControl]="rutControl" placeholder="Ingrese el RUT (12345678-k)" maxlength="10"
-                  class="flex-1 bg-gray-100 p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                />
-                
-
-                    <button [disabled]="rutControl.invalid" (click)="obtenerDatosAlumno()"
-                        class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
-                        Buscar
-                    </button>
-                </div>
-                <div *ngIf="rutControl.invalid && rutControl.touched" class="text-red-500 text-sm">
-                    <span *ngIf="rutControl.errors?.['required']">El RUT es obligatorio.</span>
-                    <span *ngIf="rutControl.errors?.['pattern']">El formato debe ser 12345678-9 o 12345678-k.</span>
-                    <span *ngIf="rutControl.errors?.['invalidDV']">El dígito verificador es incorrecto.</span>
-                </div>
-                
-                <!-- Resultados del alumno -->
-
-                <div *ngIf="cargandoBuscar" class="flex justify-center items-center w-full mt-10">
-                    <div class="w-12 h-12 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
-                </div>
-
-                <div *ngIf="alumno" class="space-y-4 text-gray-600 text-lg mt-6">
-                    <div class="flex justify-between">
-                        <span class="font-semibold">Nombre:</span>
-                        <span>{{ alumno.nombre }}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="font-semibold">Correo:</span>
-                        <span>{{ alumno.email }}</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="font-semibold">RUT:</span>
-                        <span>{{ alumno.rut }}</span>
-                    </div>
-                </div>
-
-                <!-- Botones de acción -->
-                <div class="flex justify-end gap-4 mt-6 items-center">
-                    <div *ngIf="cargandoCrear" class="w-5 h-5 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
-
-                    <button (click)="closeModal()"
-                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-300">
-                        Cerrar
-                    </button>
-                    <button *ngIf="alumno" (click)="confirmarAlumno()"
-                        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300">
-                        Confirmar Alumno
-                    </button>                
-                </div>
-            </ng-container>
-        </div>
+        <!-- Formulario para Alumno -->
+        <ng-container *ngIf="modalType === 'alumno'">
+          <h2 class="font-semibold text-xl text-white bg-blue-600 px-4 py-2 rounded-md mb-6">Registrar Alumno por RUT
+          </h2>
+          <!-- Campo de búsqueda (Reactivo) -->
+          <div class="flex gap-4 items-center">
+            <input type="text" [formControl]="rutControl" placeholder="Ingrese el RUT (12345678-k)" maxlength="10"
+              class="flex-1 bg-gray-100 p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            <button [disabled]="rutControl.invalid" (click)="obtenerDatosAlumno()"
+              class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">
+              Buscar
+            </button>
+          </div>
+          <div *ngIf="rutControl.invalid && rutControl.touched" class="text-red-500 text-sm">
+            <span *ngIf="rutControl.errors?.['required']">El RUT es obligatorio.</span>
+            <span *ngIf="rutControl.errors?.['pattern']">El formato debe ser 12345678-9 o 12345678-k.</span>
+            <span *ngIf="rutControl.errors?.['invalidDV']">El dígito verificador es incorrecto.</span>
+          </div>
+          <!-- Resultados del alumno -->
+          <div *ngIf="cargandoBuscar" class="flex justify-center items-center w-full mt-10">
+            <div class="w-12 h-12 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin">
+            </div>
+          </div>
+          <div *ngIf="alumno" class="space-y-4 text-gray-600 text-lg mt-6">
+            <div class="flex justify-between">
+              <span class="font-semibold">Nombre:</span>
+              <span>{{ alumno.nombre }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-semibold">Correo:</span>
+              <span>{{ alumno.email }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="font-semibold">RUT:</span>
+              <span>{{ alumno.rut }}</span>
+            </div>
+          </div>
+          <!-- Botones de acción -->
+          <div class="flex justify-end gap-4 mt-6 items-center">
+            <div *ngIf="cargandoCrear"
+              class="w-5 h-5 border-4 border-t-transparent border-blue-500 border-solid rounded-full animate-spin">
+            </div>
+            <button (click)="closeModal()"
+              class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-300">
+              Cerrar
+            </button>
+            <button *ngIf="alumno" (click)="confirmarAlumno()"
+              class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-300">
+              Confirmar Alumno
+            </button>
+          </div>
+        </ng-container>
+      </div>
     </p-dialog>
+  </div>
 </div>
-

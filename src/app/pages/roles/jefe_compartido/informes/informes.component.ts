@@ -4,11 +4,12 @@ import { InformeEvaluativo } from '../dto/informes.dto';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header-jefes/header.component';
 import { PdfgeneratorComponent } from '../../../../shared/pdfgenerator/pdfgenerator.component';
+import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-informes',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, PdfgeneratorComponent],
+  imports: [CommonModule, NavbarComponent, PdfgeneratorComponent],
   templateUrl: './informes.component.html',
   styleUrls: ['./informes.component.css'],
 })

@@ -1,19 +1,32 @@
-<div class="relative min-h-screen bg-cover bg-center text-gray-900"
+<!-- Spinner de carga -->
+<div *ngIf="!imagenCargada" class="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-gray-800 z-50">
+  <div class="w-20 h-20 border-4 border-blue-600 border-t-transparent border-solid rounded-full animate-spin mb-4"></div>
+  <p class="text-blue-500 text-lg font-medium">Cargando recursos...</p>
+</div>
+
+<!-- Contenido principal -->
+<div *ngIf="imagenCargada" class="relative min-h-screen bg-cover bg-center text-gray-900"
      [style.backgroundImage]="'url(' + imagenFondo + ')'" style="overflow: hidden;">
 
-  <!-- Fondo con sombreado difuso -->
-  <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-gray-900/90"></div>
+  <!-- Overlay con gradiente mejorado -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-gray-900/95"></div>
 
   <!-- Contenido Principal -->
-  <div class="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 text-center">
+  <div class="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8 md:px-6 text-center">
+    <!-- Logo o ícono académico -->
+    <div class="mb-8">
+      <svg class="w-16 h-16 mx-auto text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+      </svg>
+    </div>
+
     <!-- Contenedor con dos columnas separadas -->
-    <div class="flex flex-col lg:flex-row w-full gap-12 justify-center">
-      <!-- Contenido Izquierdo con fondo blanco, bordes redondeados y tamaño ajustado -->
-      <app-solicitar-practicante-contact-page />
+    <div class="flex flex-col lg:flex-row w-full max-w-7xl mx-auto gap-8 lg:gap-12 justify-center px-4">
+      <!-- Contenido Izquierdo -->
+      <app-solicitar-practicante-contact-page class="w-full lg:w-1/2 transform transition-all duration-500 hover:scale-[1.02]"/>
 
-      <!-- Contenido Derecho con Visualizador de PDF sin fondo y bordes redondeados, más grande -->
-      <app-solicitar-practicante-documentformat-page />
-
+      <!-- Contenido Derecho -->
+      <app-solicitar-practicante-documentformat-page class="w-full lg:w-1/2 transform transition-all duration-500 hover:scale-[1.02]"/>
     </div>
   </div>
 </div>

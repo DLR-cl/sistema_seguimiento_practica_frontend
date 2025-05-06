@@ -7,11 +7,12 @@ import { AuthService } from '../../../auth/services/auth.service';
 import { DataSecretariaService } from '../services/data-secretaria.service';
 import { HeaderComponent } from "../../../pages/roles/jefe_compartido/header-jefes/header.component";
 import { CommonModule } from '@angular/common';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-home-secretaria',
   standalone: true,
-  imports: [HeaderComponent, CommonModule],
+  imports: [NavbarComponent, CommonModule],
   templateUrl: './home-secretaria.component.html',
   styleUrl: './home-secretaria.component.css'
 })

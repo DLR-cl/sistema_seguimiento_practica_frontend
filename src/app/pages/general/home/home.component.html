@@ -1,39 +1,63 @@
-<div class="relative min-h-screen bg-gray-900 text-white flex items-center justify-center overflow-hidden">
+<!-- Spinner de carga -->
+<div *ngIf="!isImagesLoaded" class="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-gray-800 z-50">
+  <div class="w-20 h-20 border-4 border-blue-600 border-t-transparent border-solid rounded-full animate-spin mb-4"></div>
+  <p class="text-blue-500 text-lg font-medium">Cargando recursos...</p>
+</div>
+
+<!-- Contenido principal -->
+<div *ngIf="isImagesLoaded" class="relative min-h-screen bg-gray-900 text-white flex items-center justify-center overflow-hidden">
     <!-- Fondo de imágenes rotativas -->
     <div *ngFor="let image of imageUrls; let i = index"
-         class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out"
+         class="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out filter brightness-75"
          [ngStyle]="{ 'background-image': 'url(' + image + ')' }"
          [class.opacity-100]="currentImageIndex === i"
          [class.opacity-0]="currentImageIndex !== i">
     </div>
   
-    <!-- Overlay oscuro para legibilidad -->
-    <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-gray-900/90"></div>
+    <!-- Overlay con gradiente mejorado -->
+    <div class="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-gray-900/95"></div>
   
-    <!-- Contenido principal -->
-    <div class="relative z-10 text-center px-6 max-w-4xl">
-      <!-- Título del sistema -->
-      <h1 class="text-3xl md:text-5xl font-bold leading-snug tracking-normal text-white drop-shadow-lg">
-        Sistema de Seguimiento de Prácticas Profesionales
+    <!-- Contenido principal con mejor espaciado y tipografía -->
+    <div class="relative z-10 text-center px-8 py-12 max-w-5xl mx-auto">
+      <!-- Logo o ícono académico (opcional) -->
+      <div class="mb-8">
+        <svg class="w-20 h-20 mx-auto text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+        </svg>
+      </div>
+
+      <!-- Título del sistema con mejor tipografía -->
+      <h1 class="text-4xl md:text-6xl font-bold leading-tight tracking-tight text-white drop-shadow-lg mb-6">
+        Sistema de Seguimiento de<br>Prácticas Profesionales
       </h1>
-      <!-- Descripción -->
-      <p class="mt-4 text-lg md:text-xl text-gray-300 leading-relaxed">
+
+      <!-- Descripción mejorada -->
+      <p class="mt-6 text-xl md:text-2xl text-gray-200 leading-relaxed max-w-3xl mx-auto">
         Gestiona informes, realiza seguimiento de resultados y brinda acceso a estudiantes, jefes de empleados, académicos y secretarías de manera sencilla y eficiente.
       </p>
-      <!-- Botones -->
-      <div class="mt-6 flex justify-center space-x-4">
-        <a  
-        class="py-3 px-6 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg transition duration-300"
-        routerLink="/login"        
-        >Iniciar Sesión</a>
-        <a class="py-3 px-6 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg transition duration-300"
-        routerLink="/solicitar-practicante">Solicitar Practicante</a>
+
+      <!-- Botones con mejor diseño -->
+      <div class="mt-10 flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+        <a routerLink="/login" 
+           class="py-4 px-8 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center">
+           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+           </svg>
+           Iniciar Sesión
+        </a>
+        <a routerLink="/solicitar-practicante"
+           class="py-4 px-8 rounded-xl bg-green-600 hover:bg-green-700 text-white text-lg font-semibold shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center">
+           <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+           </svg>
+           Solicitar Practicante
+        </a>
       </div>
     </div>
     
-    <!-- Footer -->
-    <footer class="absolute bottom-4 left-0 right-0 text-center text-gray-500 text-sm">
-      <p>&copy; 2024 Departamento ICI. Todos los derechos reservados.</p>
+    <!-- Footer mejorado -->
+    <footer class="absolute bottom-6 left-0 right-0 text-center">
+      <p class="text-gray-400 text-sm font-medium">&copy; 2024 Departamento ICI. Todos los derechos reservados.</p>
     </footer>
   </div>
   

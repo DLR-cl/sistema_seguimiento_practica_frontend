@@ -14,12 +14,13 @@ import { Empresa, JefeSupervisor, NuevoSupervisor } from '../dto/empresa.dto';
 import { AlumnosDataDto, nuevoAlumno } from '../dto/alumno.dto';
 import { MessageService } from 'primeng/api';
 import { checkRunValidator } from '../../../../core/util/validator-rut.function';
+import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
 
 
 @Component({
   selector: 'app-nueva-practica',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, RouterLink, ReactiveFormsModule, DialogModule, FormsModule, FloatLabelModule, InputTextModule, DropdownModule, CalendarModule],
+  imports: [NavbarComponent, CommonModule, RouterLink, ReactiveFormsModule, DialogModule, FormsModule, FloatLabelModule, InputTextModule, DropdownModule, CalendarModule],
   templateUrl: './nueva-practica.component.html',
   styleUrl: './nueva-practica.component.css'
 })

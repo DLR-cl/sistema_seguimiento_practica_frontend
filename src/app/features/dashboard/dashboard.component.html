@@ -1,63 +1,134 @@
-<div class="p-6 bg-gray-100 min-h-screen">
-  <!-- Encabezado -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-    <h1 class="text-2xl bg-white shadow rounded px-5 py-3 font-bold text-gray-800">Bienvenido {{dataUser.nombre}}</h1>
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
+  <!-- Encabezado con Bienvenida -->
+  <div class="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+    <div class="container mx-auto px-6 py-4">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div class="space-y-1">
+          <h1 class="text-2xl font-bold text-gray-800 dark:text-white">
+            Bienvenido, {{dataUser.nombre}}
+          </h1>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            Panel de Control - Departamento ICI
+          </p>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm font-medium">
+            {{dataUser.rol}}
+          </span>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Contenido Principal -- Component Table-view "EStadísticas de prácticas " -->
-  <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-    <!-- Columna Izquierda -->
-    <app-dashboard-tabla-estadisticas-practicas />
-    <!-- Estadísticas, Gráficos y Detalles -->
-    <div class="lg:col-span-3 md:col-span-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Gráfico de la Cantidad de Estudiantes por Tipo de Práctica -->
-      <app-dashboard-cantidad-estudiantes-practicas />
-
-
-
-      <app-dashboard-cantidad-reprobados-aprobados />
-      
-      <app-dashboard-cantidad-aprobacion-segunda-practica />
-      <!-- Gráfico de tipo de las Empresas -->
-      <div *ngIf="tipoEmpresasChartData" class="col-span-1 bg-white shadow rounded p-4">
-        <h2 class="text-lg font-semibold text-gray-700 mb-2 truncate" title="Tipos de Empresas">Tipos de Empresas</h2>
-        <p-chart [data]="tipoEmpresasChartData" [options]="tipoEmpresaChartOptions" [type]="'doughnut'" height="230px">
-        </p-chart>
-      </div>
-
-      <div *ngIf="!tipoEmpresasChartData"
-        class="flex flex-col items-center justify-center bg-white shadow-lg rounded-lg p-6 border border-gray-200">
-        <p class="text-lg text-center font-medium text-gray-700 mb-4">Aún no hay empresas registradas en el sistema</p>
-        <div class="bg-gray-100 p-4 rounded-full shadow-sm animate-pulse">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48"
-            stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" class="text-gray-500">
-            <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
-            <path d="M4 6v6c0 1.657 3.582 3 8 3c1.118 0 2.182 -.086 3.148 -.241m4.852 -2.759v-6"></path>
-            <path d="M4 12v6c0 1.657 3.582 3 8 3c1.064 0 2.079 -.078 3.007 -.22"></path>
-            <path d="M19 16v3"></path>
-            <path d="M19 22v.01"></path>
-          </svg>
+  <!-- Contenido Principal -->
+  <div class="container mx-auto px-6 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <!-- Columna Izquierda - Tabla de Estadísticas -->
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+          <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-white">
+              Estadísticas de Prácticas
+            </h2>
+          </div>
+          <app-dashboard-tabla-estadisticas-practicas />
         </div>
       </div>
 
-      <!-- Gráfico de Barras: Cantidad de Prácticas por Mes -->
-      <div class="col-span-2 bg-white shadow rounded p-4">
-        <h2 class="text-lg font-semibold text-gray-700 mb-4 truncate" title="Prácticas por Mes">Prácticas por Mes</h2>
-        <p-chart [data]="mesChartData" [options]="mesChartOptions" [type]="'bar'" height="300px">
-        </p-chart>
+      <!-- Columna Derecha - Gráficos -->
+      <div class="lg:col-span-3 space-y-6">
+        <!-- Primera Fila de Gráficos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Gráfico de Estudiantes por Tipo de Práctica -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center md:text-left break-words">
+              Estudiantes por Tipo de Práctica
+            </h3>
+            <app-dashboard-cantidad-estudiantes-practicas />
+          </div>
+
+          <!-- Gráfico de Aprobados/Reprobados -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center md:text-left break-words">
+              Estado de Prácticas
+            </h3>
+            <app-dashboard-cantidad-reprobados-aprobados />
+          </div>
+
+          <!-- Gráfico de Segunda Práctica -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center md:text-left break-words">
+              Segunda Práctica
+            </h3>
+            <app-dashboard-cantidad-aprobacion-segunda-practica />
+          </div>
+        </div>
+
+        <!-- Segunda Fila de Gráficos -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Gráfico de Tipos de Empresas -->
+          <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center md:text-left break-words">
+              Tipos de Empresas
+            </h3>
+            <div *ngIf="tipoEmpresasChartData" class="h-[300px]">
+              <p-chart 
+                [data]="tipoEmpresasChartData" 
+                [options]="tipoEmpresaChartOptions" 
+                [type]="'doughnut'"
+                class="w-full h-full">
+              </p-chart>
+            </div>
+            <div *ngIf="!tipoEmpresasChartData" 
+                 class="flex flex-col items-center justify-center h-[300px]">
+              <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-full shadow-sm animate-pulse">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="48" height="48"
+                     stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" 
+                     class="text-gray-500 dark:text-gray-400">
+                  <path d="M4 6c0 1.657 3.582 3 8 3s8 -1.343 8 -3s-3.582 -3 -8 -3s-8 1.343 -8 3"></path>
+                  <path d="M4 6v6c0 1.657 3.582 3 8 3c1.118 0 2.182 -.086 3.148 -.241m4.852 -2.759v-6"></path>
+                  <path d="M4 12v6c0 1.657 3.582 3 8 3c1.064 0 2.079 -.078 3.007 -.22"></path>
+                  <path d="M19 16v3"></path>
+                  <path d="M19 22v.01"></path>
+                </svg>
+              </div>
+              <p class="mt-4 text-gray-600 dark:text-gray-400 text-center">
+                Aún no hay empresas registradas en el sistema
+              </p>
+            </div>
+          </div>
+
+          <!-- Gráfico de Prácticas por Mes -->
+          <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-base md:text-lg font-semibold text-gray-800 dark:text-white mb-4 text-center md:text-left break-words">
+              Prácticas por Mes
+            </h3>
+            <div class="h-[300px]">
+              <p-chart 
+                [data]="mesChartData" 
+                [options]="mesChartOptions" 
+                [type]="'bar'"
+                class="w-full h-full">
+              </p-chart>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-
   </div>
 </div>
 
-<!-- Modal a Mostrar detalle practica: Envia la practica al padre-->
- @if (this.dataEstadisticaService.modalViewDetallesPractica()) {
-
-   <app-modal-alumnos-practica (practica)="this.dataEstadisticaService.seleccionarPractica($event)"/>
-   
-   <!-- Solo se abre si se selecciona la practica -->
+<!-- Modales -->
+@if (this.dataEstadisticaService.modalViewDetallesPractica()) {
+  <app-modal-alumnos-practica 
+    (practica)="this.dataEstadisticaService.seleccionarPractica($event)"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  </app-modal-alumnos-practica>
+  
   @if (this.dataEstadisticaService.practicaSeleccionada()) {
-    <app-modal-detalles-practica-alumno [practica]="this.dataEstadisticaService.practicaSeleccionada()!"/>
+    <app-modal-detalles-practica-alumno 
+      [practica]="this.dataEstadisticaService.practicaSeleccionada()!"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    </app-modal-detalles-practica-alumno>
   }
-  }
+}

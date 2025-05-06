@@ -16,12 +16,13 @@ import { HeaderComponent } from "../../../../pages/roles/jefe_compartido/header-
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
 import { ExtensionDto } from '../../dto/practicas.dto';
+import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
 
 
 @Component({
   selector: 'app-practicas-secretaria',
   standalone: true,
-  imports: [CommonModule, DropdownModule, FormsModule, DialogModule, InputTextModule, HeaderComponent, CalendarModule, ButtonModule],
+  imports: [CommonModule, DropdownModule, FormsModule, DialogModule, InputTextModule, NavbarComponent, CalendarModule, ButtonModule],
   templateUrl: './practicas-secretaria.component.html',
   styleUrl: './practicas-secretaria.component.css'
 })

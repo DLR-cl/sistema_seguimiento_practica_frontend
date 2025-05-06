@@ -19,17 +19,16 @@ export class LoginPageComponent implements OnInit {
     private authService: AuthService,
     private messageService: MessageService,
     private authState: AuthStateService,
-
   ) { }
 
   ngOnInit(): void {
+    this.cargarImagenFondo();
   }
 
   imagenFondo: string = '/departamento_ici/transicion_5.webp';
+  imagenCargada = signal<boolean>(false);
   showPassword = signal<boolean>(false);
   errorMessage: string | null = null;
-  backgroundImage: string = '';
-
   cargandoLogin = signal<boolean>(false);
 
   loginForm = this.formBuilder.group({
@@ -40,46 +39,67 @@ export class LoginPageComponent implements OnInit {
     password: this.formBuilder.nonNullable.control('', Validators.required),
   });
 
+  cargarImagenFondo() {
+    const img = new Image();
+    img.src = this.imagenFondo;
+    img.onload = () => {
+      this.imagenCargada.set(true);
+    };
+    img.onerror = () => {
+      console.error('Error al cargar la imagen de fondo');
+      this.imagenCargada.set(true); // Mostrar el contenido aunque falle la carga
+    };
+  }
+
   togglePasswordVisibility() {
     this.showPassword.update((current: boolean): boolean => !current);
   }
 
   submit() {
-    this.cargandoLogin.set(true);
     if (this.loginForm.invalid) {
-      this.errorMessage = 'Ingrese los datos requeridos';
+      this.mostrarError('Por favor, complete todos los campos correctamente');
       return;
     }
 
+    this.cargandoLogin.set(true);
     const { email, password } = this.loginForm.getRawValue();
 
     this.authService.logIn(email!, password!).subscribe({
       next: (response: any) => {
         console.log('Login exitoso:', response);
-
-        // Asegúrate de que el token esté listo antes de redirigir
         this.authService.refreshDecodedToken();
-
-        this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Inicio de sesión exitoso.' });
+        this.messageService.add({ 
+          severity: 'success', 
+          summary: 'Éxito', 
+          detail: 'Inicio de sesión exitoso.',
+          life: 3000
+        });
 
         this.cargandoLogin.set(false);
 
         if (response.primerInicioSesion) {
-          this.router.navigate(['/cambiar-clave']); // Redirige al cambio de contraseña
+          this.router.navigate(['/cambiar-clave']);
         } else {
-          // Redirige según el rol del usuario
           setTimeout(() => {
             this.router.navigate(['menu']);
-          }, 50); // Retraso opcional
+          }, 100);
         }
       },
       error: (error: any) => {
-        this.errorMessage = error.error?.message || 'Error en el inicio de sesión.';
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: `Ocurrió un error al iniciar sesión: ${error.message}` });
+        this.mostrarError(error.error?.message || 'Error en el inicio de sesión');
         this.cargandoLogin.set(false);
         console.error('Error en el inicio de sesión:', error);
       },
     });
   }
 
+  private mostrarError(mensaje: string) {
+    this.errorMessage = mensaje;
+    this.messageService.add({ 
+      severity: 'error', 
+      summary: 'Error', 
+      detail: mensaje,
+      life: 5000
+    });
+  }
 }

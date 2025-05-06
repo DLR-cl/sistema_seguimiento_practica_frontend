@@ -1,7 +1,15 @@
-<div class="w-full lg:w-[650px] bg-transparent shadow-lg rounded-lg overflow-hidden min-h-[70vh] lg:h-full mt-6 lg:mt-0 h-full">
-    <embed
-      [src]="urlPDF"
-      type="application/pdf"
-      class="w-full h-full"
-    />
+<div class="w-full lg:w-[650px] bg-white bg-opacity-95 backdrop-blur-lg shadow-xl rounded-2xl overflow-hidden min-h-[70vh] lg:h-full mt-6 lg:mt-0 h-full transform transition-all duration-500">
+    <!-- Título del visualizador -->
+    <div class="bg-gray-50 p-4 border-b border-gray-200">
+      <h2 class="text-xl font-semibold text-gray-800">Vista Previa del Formato</h2>
+    </div>
+    
+    <!-- Contenedor del PDF con sombra interna -->
+    <div class="h-[calc(100%-4rem)] shadow-inner bg-gray-100">
+      <embed
+        [src]="urlPDF"
+        type="application/pdf"
+        class="w-full h-full"
+      />
+    </div>
   </div>

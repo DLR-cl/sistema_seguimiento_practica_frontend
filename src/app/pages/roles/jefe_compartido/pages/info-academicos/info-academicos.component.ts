@@ -5,6 +5,7 @@ import { HeaderComponent } from "../../header-jefes/header.component";
 import { CommonModule } from '@angular/common';
 import { checkRunValidator } from '../../../../../core/util/validator-rut.function';
 import { MessageService } from 'primeng/api';
+import { NavbarComponent } from '../../../../../shared/components/navbar/navbar.component';
 
 
 @Component({
@@ -12,7 +13,7 @@ import { MessageService } from 'primeng/api';
   standalone: true,
   templateUrl: './info-academicos.component.html',
   styleUrls: ['./info-academicos.component.css'],
-  imports: [HeaderComponent, ReactiveFormsModule, CommonModule, FormsModule],
+  imports: [NavbarComponent, ReactiveFormsModule, CommonModule, FormsModule],
 })
 export class InfoAcademicosComponent implements OnInit {
   academicosData?: any[]; // Lista de académicos

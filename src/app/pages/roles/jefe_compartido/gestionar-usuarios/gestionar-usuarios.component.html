@@ -1,140 +1,267 @@
-<app-header></app-header>
+<app-navbar/>
 
-<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
-    <div class="flex space-x-2">
-      <!-- Puntos animados con rebote e iluminación progresiva -->
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.2s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.4s"></div>
-    </div>
+<div *ngIf="cargando" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-200 dark:from-gray-900 dark:to-gray-800 transition-all duration-300">
+  <div class="flex space-x-2">
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0.2s"></div>
+    <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0.4s"></div>
+  </div>
+  <span class="mt-4 text-base md:text-lg font-semibold text-blue-900 dark:text-blue-200 tracking-wide drop-shadow">Cargando usuarios...</span>
 </div>
 
-<div *ngIf="!cargando" class="container mx-auto mt-5 mb-10 px-6 py-6">
+<div *ngIf="!cargando" class="min-h-screen bg-gradient-to-br from-blue-50 via-blue-100 to-blue-200 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 px-4">
+  <div class="max-w-7xl mx-auto">
     <!-- Título de la sección -->
-    <h2 class="text-4xl font-extrabold text-center w-full mb-10">Gestionar Usuarios</h2>
-  
-    <!-- Listado de usuarios por tipo -->
-    <div *ngFor="let lista of [listaJefesCarreraDepartamento, listaSecretarias, listaAcademicos, listaSupervisores, listaAlumnos]; let i = index">
-      <!-- Mostrar solo si hay usuarios en la lista -->
-      <div *ngIf="lista.length > 0" class="mt-8">
-        <!-- Contenedor con fondo gris y sombra para cada lista -->
-        <div class="p-6 border border-gray-100 rounded-lg shadow-lg">
-          <!-- Título dinámico -->
-          <h3 class="text-3xl font-semibold text-gray-800 mb-6 border-b-2 border-gray-500 pb-2">
-            {{ getRolNombre(lista) }}
-          </h3>
-  
-          <!-- Campo de búsqueda -->
-          <div class="mb-4">
-            <input
-              type="text"
-              [(ngModel)]="searchTerms[i]"
-              (input)="filterTable(i)"
-              [placeholder]="(i === 0 || i === 1) ? 'Buscar por nombre' : 'Buscar por nombre o rut'"
-              class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            />
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-blue-900 dark:text-blue-200 mb-2 drop-shadow-lg">Gestionar Usuarios</h2>
+      <div class="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Tarjeta: Jefes de Carrera y Departamento -->
+      <div *ngIf="listaJefesCarreraDepartamento.length > 0" class="bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-900 shadow-2xl rounded-3xl p-10 mb-12 transition-all duration-300">
+        <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-8 border-b-2 border-blue-200 dark:border-blue-700 pb-3 tracking-wide flex items-center gap-2">
+          <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m13-6.13V7a4 4 0 00-3-3.87M6 10V7a4 4 0 013-3.87m6 0A4 4 0 0118 7v3m-6 0V7a4 4 0 013-3.87"/></svg>
+          Jefes de Carrera y Departamento
+        </h3>
+        <div class="mb-6 bg-blue-50 dark:bg-gray-900 rounded-xl shadow-inner p-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h.01M12 16h.01M16 16h.01M9 20h6a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 002 2z"/></svg>
+          <input type="text" [(ngModel)]="searchTerms[0]" (input)="filterTable(0)" placeholder="Buscar por nombre" class="w-full px-4 py-3 border border-blue-200 dark:border-blue-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all" />
+        </div>
+        <div class="overflow-x-auto rounded-2xl shadow-lg">
+          <table class="w-full text-base text-left text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-2xl">
+            <thead class="text-sm uppercase bg-blue-100 dark:bg-gray-900 border-b-2 border-blue-200 dark:border-blue-800">
+              <tr>
+                <th class="px-6 py-4 font-semibold">Nombre</th>
+                <th class="px-6 py-4 font-semibold">Correo</th>
+                <th class="px-6 py-4 font-semibold text-center">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of filteredListas[0]" class="border-b border-blue-50 dark:border-blue-900 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                <td class="px-6 py-4 font-medium">{{ usuario.nombre }}</td>
+                <td class="px-6 py-4">{{ usuario.correo }}</td>
+                <td class="px-6 py-4 text-center">
+                  <button (click)="abrirModal(usuario)" class="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-xl shadow-md hover:scale-105 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all text-base">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Gestionar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="flex justify-between items-center px-6 py-4 bg-blue-50 dark:bg-gray-900 rounded-b-2xl">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Mostrando 1 a {{ filteredListas[0].length }} de {{ filteredListas[0].length }}</span>
+            <div class="flex items-center gap-2">
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&lt;</button>
+              <span class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-200 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-bold">1</span>
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&gt;</button>
+            </div>
           </div>
-  
-          <!-- Tabla con paginación -->
-          <p-table
-            [value]="filteredListas[i]"
-            [paginator]="true"
-            [rows]="5"
-            [showCurrentPageReport]="true"
-            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords}"
-            class="p-datatable-sm"
-          >
-            <!-- Encabezados de la tabla -->
-            <ng-template pTemplate="header">
-                <tr>
-                <th pSortableColumn="nombre" class="w-1/3 text-left whitespace-nowrap overflow-hidden text-ellipsis">
-                    Nombre <p-sortIcon field="nombre"></p-sortIcon>
-                </th>
-                <th pSortableColumn="correo" class="w-1/3 text-left whitespace-nowrap overflow-hidden text-ellipsis">
-                    Correo <p-sortIcon field="correo"></p-sortIcon>
-                </th>
-                <!-- Mostrar columna "Rut" solo si aplica -->
-                <th *ngIf="debeMostrarRut(lista)" pSortableColumn="rut" class="w-1/6 text-left whitespace-nowrap overflow-hidden text-ellipsis">
-                    Rut <p-sortIcon field="rut"></p-sortIcon>
-                </th>
-                <th class="w-1/4 text-center whitespace-nowrap">Acción</th>
-                </tr>
-            </ng-template>
-            
-            <!-- Cuerpo de la tabla -->
-            <ng-template pTemplate="body" let-usuario>
-                <tr>
-                <td class="truncate" title="{{ usuario.nombre }}">
-                    {{ usuario.nombre }}
+        </div>
+      </div>
+
+      <!-- Tarjeta: Secretarias -->
+      <div *ngIf="listaSecretarias.length > 0" class="bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-900 shadow-2xl rounded-3xl p-10 mb-12 transition-all duration-300">
+        <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-8 border-b-2 border-blue-200 dark:border-blue-700 pb-3 tracking-wide flex items-center gap-2">
+          <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+          Secretarias
+        </h3>
+        <div class="mb-6 bg-blue-50 dark:bg-gray-900 rounded-xl shadow-inner p-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h.01M12 16h.01M16 16h.01M9 20h6a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 002 2z"/></svg>
+          <input type="text" [(ngModel)]="searchTerms[1]" (input)="filterTable(1)" placeholder="Buscar por nombre" class="w-full px-4 py-3 border border-blue-200 dark:border-blue-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all" />
+        </div>
+        <div class="overflow-x-auto rounded-2xl shadow-lg">
+          <table class="w-full text-base text-left text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-2xl">
+            <thead class="text-sm uppercase bg-blue-100 dark:bg-gray-900 border-b-2 border-blue-200 dark:border-blue-800">
+              <tr>
+                <th class="px-6 py-4 font-semibold">Nombre</th>
+                <th class="px-6 py-4 font-semibold">Correo</th>
+                <th class="px-6 py-4 font-semibold text-center">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of filteredListas[1]" class="border-b border-blue-50 dark:border-blue-900 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                <td class="px-6 py-4 font-medium">{{ usuario.nombre }}</td>
+                <td class="px-6 py-4">{{ usuario.correo }}</td>
+                <td class="px-6 py-4 text-center">
+                  <button (click)="abrirModal(usuario)" class="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-xl shadow-md hover:scale-105 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all text-base">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Gestionar
+                  </button>
                 </td>
-                <td class="truncate"title="{{ usuario.correo }}">
-                    {{ usuario.correo }}
+              </tr>
+            </tbody>
+          </table>
+          <div class="flex justify-between items-center px-6 py-4 bg-blue-50 dark:bg-gray-900 rounded-b-2xl">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Mostrando 1 a {{ filteredListas[1].length }} de {{ filteredListas[1].length }}</span>
+            <div class="flex items-center gap-2">
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&lt;</button>
+              <span class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-200 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-bold">1</span>
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&gt;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta: Académicos -->
+      <div *ngIf="listaAcademicos.length > 0" class="bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-900 shadow-2xl rounded-3xl p-10 mb-12 transition-all duration-300 md:col-span-2">
+        <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-8 border-b-2 border-blue-200 dark:border-blue-700 pb-3 tracking-wide flex items-center gap-2">
+          <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14a4 4 0 100-8 4 4 0 000 8zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          Académicos
+        </h3>
+        <div class="mb-6 bg-blue-50 dark:bg-gray-900 rounded-xl shadow-inner p-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h.01M12 16h.01M16 16h.01M9 20h6a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 002 2z"/></svg>
+          <input type="text" [(ngModel)]="searchTerms[2]" (input)="filterTable(2)" placeholder="Buscar por nombre o rut" class="w-full px-4 py-3 border border-blue-200 dark:border-blue-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all" />
+        </div>
+        <div class="overflow-x-auto rounded-2xl shadow-lg">
+          <table class="w-full text-base text-left text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-2xl">
+            <thead class="text-sm uppercase bg-blue-100 dark:bg-gray-900 border-b-2 border-blue-200 dark:border-blue-800">
+              <tr>
+                <th class="px-6 py-4 font-semibold">Nombre</th>
+                <th class="px-6 py-4 font-semibold">Correo</th>
+                <th class="px-6 py-4 font-semibold">Rut</th>
+                <th class="px-6 py-4 font-semibold text-center">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of filteredListas[2]" class="border-b border-blue-50 dark:border-blue-900 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                <td class="px-6 py-4 font-medium">{{ usuario.nombre }}</td>
+                <td class="px-6 py-4">{{ usuario.correo }}</td>
+                <td class="px-6 py-4">{{ usuario.rut }}</td>
+                <td class="px-6 py-4 text-center">
+                  <button (click)="abrirModal(usuario)" class="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-xl shadow-md hover:scale-105 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all text-base">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Gestionar
+                  </button>
                 </td>
-                <td *ngIf="debeMostrarRut(lista)" class="truncate" title="{{ usuario.rut }}">
-                    {{ usuario.rut }}
+              </tr>
+            </tbody>
+          </table>
+          <div class="flex justify-between items-center px-6 py-4 bg-blue-50 dark:bg-gray-900 rounded-b-2xl">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Mostrando 1 a {{ filteredListas[2].length }} de {{ filteredListas[2].length }}</span>
+            <div class="flex items-center gap-2">
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&lt;</button>
+              <span class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-200 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-bold">1</span>
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&gt;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta: Supervisores -->
+      <div *ngIf="listaSupervisores.length > 0" class="bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-900 shadow-2xl rounded-3xl p-10 mb-12 transition-all duration-300">
+        <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-8 border-b-2 border-blue-200 dark:border-blue-700 pb-3 tracking-wide flex items-center gap-2">
+          <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 21v-2a4 4 0 00-3-3.87M4 21v-2a4 4 0 013-3.87m13-6.13V7a4 4 0 00-3-3.87M7 10V7a4 4 0 013-3.87m6 0A4 4 0 0119 7v3m-6 0V7a4 4 0 013-3.87"/></svg>
+          Supervisores
+        </h3>
+        <div class="mb-6 bg-blue-50 dark:bg-gray-900 rounded-xl shadow-inner p-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h.01M12 16h.01M16 16h.01M9 20h6a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 002 2z"/></svg>
+          <input type="text" [(ngModel)]="searchTerms[3]" (input)="filterTable(3)" placeholder="Buscar por nombre o rut" class="w-full px-4 py-3 border border-blue-200 dark:border-blue-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all" />
+        </div>
+        <div class="overflow-x-auto rounded-2xl shadow-lg">
+          <table class="w-full text-base text-left text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-2xl">
+            <thead class="text-sm uppercase bg-blue-100 dark:bg-gray-900 border-b-2 border-blue-200 dark:border-blue-800">
+              <tr>
+                <th class="px-6 py-4 font-semibold">Nombre</th>
+                <th class="px-6 py-4 font-semibold">Correo</th>
+                <th class="px-6 py-4 font-semibold">Rut</th>
+                <th class="px-6 py-4 font-semibold text-center">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of filteredListas[3]" class="border-b border-blue-50 dark:border-blue-900 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                <td class="px-6 py-4 font-medium">{{ usuario.nombre }}</td>
+                <td class="px-6 py-4">{{ usuario.correo }}</td>
+                <td class="px-6 py-4">{{ usuario.rut }}</td>
+                <td class="px-6 py-4 text-center">
+                  <button (click)="abrirModal(usuario)" class="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-xl shadow-md hover:scale-105 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all text-base">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Gestionar
+                  </button>
                 </td>
-                <td class="text-center">
-                    <button (click)="abrirModal(usuario)" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
-                        Gestionar
-                    </button>
+              </tr>
+            </tbody>
+          </table>
+          <div class="flex justify-between items-center px-6 py-4 bg-blue-50 dark:bg-gray-900 rounded-b-2xl">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Mostrando 1 a {{ filteredListas[3].length }} de {{ filteredListas[3].length }}</span>
+            <div class="flex items-center gap-2">
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&lt;</button>
+              <span class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-200 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-bold">1</span>
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&gt;</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta: Alumnos -->
+      <div *ngIf="listaAlumnos.length > 0" class="bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-900 shadow-2xl rounded-3xl p-10 mb-12 transition-all duration-300">
+        <h3 class="text-2xl font-bold text-blue-700 dark:text-blue-300 mb-8 border-b-2 border-blue-200 dark:border-blue-700 pb-3 tracking-wide flex items-center gap-2">
+          <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14a4 4 0 100-8 4 4 0 000 8zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          Alumnos
+        </h3>
+        <div class="mb-6 bg-blue-50 dark:bg-gray-900 rounded-xl shadow-inner p-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16h.01M12 16h.01M16 16h.01M9 20h6a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 002 2z"/></svg>
+          <input type="text" [(ngModel)]="searchTerms[4]" (input)="filterTable(4)" placeholder="Buscar por nombre o rut" class="w-full px-4 py-3 border border-blue-200 dark:border-blue-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500 transition-all" />
+        </div>
+        <div class="overflow-x-auto rounded-2xl shadow-lg">
+          <table class="w-full text-base text-left text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 rounded-2xl">
+            <thead class="text-sm uppercase bg-blue-100 dark:bg-gray-900 border-b-2 border-blue-200 dark:border-blue-800">
+              <tr>
+                <th class="px-6 py-4 font-semibold">Nombre</th>
+                <th class="px-6 py-4 font-semibold">Correo</th>
+                <th class="px-6 py-4 font-semibold">Rut</th>
+                <th class="px-6 py-4 font-semibold text-center">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of filteredListas[4]" class="border-b border-blue-50 dark:border-blue-900 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                <td class="px-6 py-4 font-medium">{{ usuario.nombre }}</td>
+                <td class="px-6 py-4">{{ usuario.correo }}</td>
+                <td class="px-6 py-4">{{ usuario.rut }}</td>
+                <td class="px-6 py-4 text-center">
+                  <button (click)="abrirModal(usuario)" class="inline-flex items-center gap-2 px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white font-semibold rounded-xl shadow-md hover:scale-105 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all text-base">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    Gestionar
+                  </button>
                 </td>
-                </tr>
-            </ng-template>
-          </p-table>
+              </tr>
+            </tbody>
+          </table>
+          <div class="flex justify-between items-center px-6 py-4 bg-blue-50 dark:bg-gray-900 rounded-b-2xl">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Mostrando 1 a {{ filteredListas[4].length }} de {{ filteredListas[4].length }}</span>
+            <div class="flex items-center gap-2">
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&lt;</button>
+              <span class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-200 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-bold">1</span>
+              <button class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-gray-800 text-blue-600 dark:text-blue-300 hover:bg-blue-200 dark:hover:bg-gray-700 transition" disabled>&gt;</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  
+
     <!-- Modal de gestión de usuario -->
     <p-dialog header="Gestionar Usuario" [(visible)]="modalVisible" [modal]="true" [focusOnShow]="false" [draggable]="false" [closable]="false" [style]="{ width: '50rem' }">
-        <div class="p-fluid space-y-6">
-          <!-- Título del usuario -->
-          <h4 class="text-2xl font-bold text-gray-800 border-b pb-2">Usuario: {{ usuarioSeleccionado?.nombre }}</h4>
-      
-          <!-- Sección de cambiar correo -->
-          <div *ngIf="esRolPermitido(usuarioSeleccionado?.tipo_usuario)">
-            <div class="space-y-2">
-              <label *ngIf="mostrarInputCorreo" for="nuevoCorreo" class="block text-sm font-medium text-gray-700">Nuevo Correo</label>
-              <input *ngIf="mostrarInputCorreo" type="email" id="nuevoCorreo" [(ngModel)]="nuevoCorreo" 
-                     class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-            </div>
-          </div>
-      
-          <!-- Botones -->
-          <div class="flex flex-wrap gap-4">
-            <!-- Botones exclusivos para roles permitidos -->
-            <ng-container *ngIf="esRolPermitido(usuarioSeleccionado?.tipo_usuario)">
-              <!-- Botón para activar la edición del correo -->
-              <button *ngIf="!mostrarInputCorreo" (click)="activarEdicionCorreo()"
-                      class="flex-1 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
-                Editar Correo
-              </button>
-      
-              <!-- Botón de actualización de correo -->
-              <button *ngIf="mostrarInputCorreo" (click)="confirmarCambiarCorreo()"
-                      class="flex-1 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all">
-                Actualizar Correo
-              </button>
-            </ng-container>
-      
-            <!-- Botón visible para todos los roles -->
-            <button (click)="confirmarRestablecerContrasena()"
-                    class="flex-1 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">
-              Restablecer Contraseña
-            </button>
+      <div class="p-fluid space-y-6">
+        <h4 class="text-2xl font-bold text-blue-900 dark:text-blue-200 border-b pb-2">Usuario: {{ usuarioSeleccionado?.nombre }}</h4>
+        <div *ngIf="esRolPermitido(usuarioSeleccionado?.tipo_usuario)">
+          <div class="space-y-2">
+            <label *ngIf="mostrarInputCorreo" for="nuevoCorreo" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nuevo Correo</label>
+            <input *ngIf="mostrarInputCorreo" type="email" id="nuevoCorreo" [(ngModel)]="nuevoCorreo" class="w-full p-3 border border-blue-200 dark:border-blue-700 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200" />
           </div>
         </div>
-      
-        <!-- Footer del modal -->
-        <footer class="mt-6 flex justify-end space-x-4 border-t pt-4">
-          <button (click)="cerrarModal()"
-                  class="px-5 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all">
-            Cerrar
-          </button>
-        </footer>
-      </p-dialog>
+        <div class="flex flex-wrap gap-4">
+          <ng-container *ngIf="esRolPermitido(usuarioSeleccionado?.tipo_usuario)">
+            <button *ngIf="!mostrarInputCorreo" (click)="activarEdicionCorreo()" class="flex-1 px-5 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">Editar Correo</button>
+            <button *ngIf="mostrarInputCorreo" (click)="confirmarCambiarCorreo()" class="flex-1 px-5 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 transition-all">Actualizar Correo</button>
+          </ng-container>
+          <button (click)="confirmarRestablecerContrasena()" class="flex-1 px-6 py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all">Restablecer Contraseña</button>
+        </div>
+      </div>
+      <footer class="mt-6 flex justify-end space-x-4 border-t pt-4">
+        <button (click)="cerrarModal()" class="px-5 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold rounded-lg shadow-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 transition-all">Cerrar</button>
+      </footer>
+    </p-dialog>
   </div>
+</div>
   

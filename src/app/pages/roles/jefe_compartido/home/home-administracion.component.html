@@ -1,41 +1,12 @@
 <app-header></app-header>
-<!-- <div class="p-6 bg-gray-100 min-h-screen">
-    <div class="flex justify-start pb-6">
-        <h1 class="text-3xl font-bold">Bienvenido {{nombre}}</h1>
-    </div>
 
-    <div class="flex gap-6">
-        <div class="flex-2 bg-white shadow rounded p-6">
-            <app-resumen-data></app-resumen-data>
-        </div>
-
-        <div class="flex-1 bg-white shadow rounded p-6">
-            <app-indicadores></app-indicadores>
-        </div>
-    </div>
-</div> -->
-
-<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
-    <div class="flex space-x-2">
-      <!-- Puntos animados con rebote e iluminación progresiva -->
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.2s"></div>
-      <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
-           style="animation-delay: 0.4s"></div>
-    </div>
+<div *ngIf="true" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-200 dark:from-gray-900 dark:to-gray-800">
+  <div class="flex space-x-2 mb-4">
+    <div class="w-4 h-4 bg-blue-600 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>
+    <div class="w-4 h-4 bg-blue-600 rounded-full animate-bounce-bright" style="animation-delay: 0.2s"></div>
+    <div class="w-4 h-4 bg-blue-600 rounded-full animate-bounce-bright" style="animation-delay: 0.4s"></div>
+  </div>
+  <span class="text-base md:text-lg font-semibold text-blue-900 dark:text-blue-200 tracking-wide drop-shadow">Cargando, por favor espere...</span>
 </div>
-  
 
-
-<app-dashboard [hidden]="cargando" (estadoCargando)="finalizoCarga($event)"></app-dashboard>
-
-<!-- <app-perfil-data></app-perfil-data>
-<app-tabla-funciones></app-tabla-funciones> -->
-
-<!-- Alumnos en practica -->
-<!-- Alumnos sin entregar informes -->
-<!-- Docentes sin entregar informes -->
-
-<!-- Footer -->
+<app-dashboard [hidden]="true" (estadoCargando)="finalizoCarga(false)"></app-dashboard>

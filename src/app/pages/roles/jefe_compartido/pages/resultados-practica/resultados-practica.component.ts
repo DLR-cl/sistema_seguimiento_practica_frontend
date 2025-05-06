@@ -11,11 +11,12 @@ import { ConteoPorMes, ConteoPracticas } from '../../../../../shared/interface/r
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
 import { DatosSecretariaService } from '../../services/datos-secretaria.service';
+import { NavbarComponent } from '../../../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-resultados-practica',
   standalone: true,
-  imports: [HeaderComponent, ReactiveFormsModule, CommonModule, CalendarModule, DropdownModule],
+  imports: [NavbarComponent, ReactiveFormsModule, CommonModule, CalendarModule, DropdownModule],
   templateUrl: './resultados-practica.component.html',
   styleUrl: './resultados-practica.component.css'
 })

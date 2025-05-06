@@ -25,6 +25,39 @@ export class DashboardCantidadEstudiantesPracticasComponent {
   
   cantidadAlumnosPractica = signal<ChartData | null>(null);
   
+  chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: {
+          usePointStyle: true,
+          padding: 20,
+          font: {
+            size: 12
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        titleColor: '#1e293b',
+        bodyColor: '#1e293b',
+        borderColor: '#e2e8f0',
+        borderWidth: 1,
+        padding: 12,
+        boxPadding: 6,
+        usePointStyle: true,
+        callbacks: {
+          label: (context: any) => {
+            const value = context.raw as number;
+            return `${value} estudiantes`;
+          }
+        }
+      }
+    }
+  };
+
   public getAlumnosActivosPracticas() {
     this.dataEstadisticaService.sumarContadorDeCarga();
 

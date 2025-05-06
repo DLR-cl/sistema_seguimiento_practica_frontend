@@ -4,11 +4,12 @@ import { FormsModule, NgModel } from '@angular/forms';
 import { HeaderComponent } from '../../../alumno/components/header/header.component';
 import { DataSecretariaService } from '../../services/data-secretaria.service';
 import { SeguimientoData } from '../../dto/secretaria-data.dto';
+import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-estado-academicos',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent],
   templateUrl: './estado-academicos.component.html',
   styleUrl: './estado-academicos.component.css'
 })

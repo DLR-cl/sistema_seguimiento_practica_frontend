@@ -1,66 +1,89 @@
-<div
-class="relative min-h-screen bg-cover bg-center text-gray-900 overflow-auto"
-[style.backgroundImage]="'url(' + imagenFondo + ')'"
->
-  <!-- Superponer el gradiente oscuro -->
-  <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-gray-900/90"></div>
+<!-- Spinner de carga -->
+<div *ngIf="!imagenCargada()" class="fixed inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-gray-800 z-50">
+  <div class="w-20 h-20 border-4 border-blue-600 border-t-transparent border-solid rounded-full animate-spin mb-4"></div>
+  <p class="text-blue-500 text-lg font-medium">Cargando recursos...</p>
+</div>
+
+<!-- Contenido principal -->
+<div *ngIf="imagenCargada()"
+     class="relative min-h-screen bg-cover bg-center text-gray-900 overflow-auto"
+     [style.backgroundImage]="'url(' + imagenFondo + ')'">
+  
+  <!-- Overlay con gradiente mejorado -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-gray-900/95"></div>
+
   <!-- Contenedor principal -->
-  <div class="flex items-center justify-center min-h-screen px-4 py-8">
-    <div
-    class="w-full max-w-lg lg:max-w-3xl p-6 sm:p-10 bg-white shadow-2xl rounded-xl sm:rounded-3xl opacity-95 relative my-3"
-    >
+  <div class="relative z-10 flex items-center justify-center min-h-screen px-4 py-8">
+    <div class="w-full max-w-lg lg:max-w-3xl p-6 sm:p-10 bg-white/95 backdrop-blur-sm shadow-2xl rounded-2xl sm:rounded-3xl relative my-3 transform transition-all duration-500 hover:shadow-blue-500/20">
+      
       <!-- Botón de Volver al Menú -->
       <div class="absolute top-4 left-4 sm:top-7 sm:left-7">
-        <a
-          routerLink="/home"
-          class="py-2 px-3 hover:bg-gray-100 text-white font-medium rounded-lg transition duration-300 w-full sm:w-auto flex items-center"
-        >
-          <i class="text-2xl pi pi-arrow-left text-black"></i>
-      </a>
+        <a routerLink="/home"
+           class="p-2 hover:bg-gray-100 text-gray-700 font-medium rounded-lg transition-all duration-300 flex items-center hover:scale-110">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+          </svg>
+        </a>
       </div>
 
       <!-- Logo -->
-      <div class="flex justify-center mb-6">
-        <img src="logo_industria.png" alt="logo_dici" class="w-20 h-20 sm:w-28 sm:h-28" />
+      <div class="flex justify-center mb-8 transform transition-all duration-500 hover:scale-105">
+        <img src="logo_industria.png" alt="logo_dici" class="w-20 h-20 sm:w-28 sm:h-28 drop-shadow-lg" />
       </div>
 
       <!-- Títulos -->
-      <h1 class="text-2xl sm:text-3xl font-bold text-center text-gray-800 mb-4">
-        Portal de Seguimiento de Práctica ICI
-      </h1>
-      <h2 class="text-lg sm:text-xl font-normal text-center text-gray-600 mb-6">Iniciar Sesión</h2>
+      <div class="text-center mb-8">
+        <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-3">
+          Portal de Seguimiento de Práctica ICI
+        </h1>
+        <div class="h-1 w-20 bg-blue-600 mx-auto rounded-full mb-4"></div>
+        <h2 class="text-xl sm:text-2xl font-medium text-gray-600">Iniciar Sesión</h2>
+      </div>
 
       <!-- Formulario -->
-      <form [formGroup]="loginForm" (ngSubmit)="submit()">
+      <form [formGroup]="loginForm" (ngSubmit)="submit()" class="space-y-6">
         <!-- Correo -->
-        <div class="mb-6">
-          <label for="correo" class="block text-gray-700 font-medium mb-2">Correo Electrónico</label>
-          <input
-            type="text"
-            id="correo"
-            name="correo"
-            class="w-full border-2 border-gray-300 rounded-lg py-3 px-4 focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-300 transition-all"
-            autocomplete="off"
-            placeholder="ejemplo@gmail.com"
-            formControlName="email"
-          />
-          <div
-            *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)"
-            class="text-red-500 text-sm mt-2"
-          >
+        <div class="space-y-2">
+          <label for="correo" class="block text-gray-700 font-medium">Correo Electrónico</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"/>
+              </svg>
+            </div>
+            <input
+              type="text"
+              id="correo"
+              name="correo"
+              class="w-full pl-10 border-2 border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+              autocomplete="off"
+              placeholder="ejemplo@gmail.com"
+              formControlName="email"
+            />
+          </div>
+          <div *ngIf="loginForm.get('email')?.invalid && (loginForm.get('email')?.touched || loginForm.get('email')?.dirty)"
+               class="text-red-500 text-sm mt-1 flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
             Por favor, introduzca un correo válido.
           </div>
         </div>
 
         <!-- Contraseña -->
-        <div class="mb-6">
-          <label for="password" class="block text-gray-700 font-medium mb-2">Contraseña</label>
+        <div class="space-y-2">
+          <label for="password" class="block text-gray-700 font-medium">Contraseña</label>
           <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+              </svg>
+            </div>
             <input
               [type]="showPassword() ? 'text' : 'password'"
               id="password"
               name="password"
-              class="w-full border-2 border-gray-300 rounded-lg py-3 px-4 focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-300 transition-all"
+              class="w-full pl-10 border-2 border-gray-300 rounded-xl py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               autocomplete="off"
               placeholder="••••••••"
               formControlName="password"
@@ -68,75 +91,48 @@ class="relative min-h-screen bg-cover bg-center text-gray-900 overflow-auto"
             <button
               type="button"
               (click)="togglePasswordVisibility()"
-              class="absolute right-3 top-3 text-gray-600"
+              class="absolute right-3 top-3 text-gray-500 hover:text-gray-700 transition-colors"
             >
               <span *ngIf="showPassword()">
-                <!-- Icono para mostrar contraseña -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0"></path>
-                  <path
-                    d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6"
-                  ></path>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                 </svg>
               </span>
               <span *ngIf="!showPassword()">
-                <!-- Icono para ocultar contraseña -->
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M10.585 10.587a2 2 0 0 0 2.829 2.828"></path>
-                  <path
-                    d="M16.681 16.673a8.717 8.717 0 0 1 -4.681 1.327c-3.6 0 -6.6 -2 -9 -6c1.272 -2.12 2.712 -3.678 4.32 -4.674m2.86 -1.146a9.055 9.055 0 0 1 1.82 -.18c3.6 0 6.6 2 9 6c-.666 1.11 -1.379 2.067 -2.138 2.87"
-                  ></path>
-                  <path d="M3 3l18 18"></path>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
                 </svg>
               </span>
             </button>
           </div>
-          <div
-            *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)"
-            class="text-red-500 text-sm mt-2"
-          >
+          <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.touched || loginForm.get('password')?.dirty)"
+               class="text-red-500 text-sm mt-1 flex items-center">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
             La contraseña es obligatoria.
           </div>
         </div>
 
         <!-- Spinner de carga -->
-        <div
-          *ngIf="cargandoLogin()"
-          class="absolute inset-0 flex items-center justify-center z-50 bg-white/40 rounded-xl"
-        >
-          <div
-            class="w-12 h-12 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"
-          ></div>
+        <div *ngIf="cargandoLogin()"
+             class="absolute inset-0 flex items-center justify-center z-50 bg-white/60 backdrop-blur-sm rounded-xl">
+          <div class="w-16 h-16 border-4 border-t-transparent border-blue-600 border-solid rounded-full animate-spin"></div>
         </div>
 
         <!-- Botón de Enviar -->
         <button
           type="submit"
-          class="bg-red-600 text-white font-medium rounded-lg py-3 px-6 w-full transition duration-200 ease-in-out my-3 
-                        hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-          [disabled]="loginForm.invalid"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl py-3.5 px-6 transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none"
+          [disabled]="loginForm.invalid || cargandoLogin()"
         >
-          Iniciar Sesión
+          <span class="flex items-center justify-center">
+            <svg *ngIf="!cargandoLogin()" class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+            </svg>
+            {{ cargandoLogin() ? 'Iniciando sesión...' : 'Iniciar Sesión' }}
+          </span>
         </button>
       </form>
     </div>

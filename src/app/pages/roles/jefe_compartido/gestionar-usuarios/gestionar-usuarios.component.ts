@@ -13,11 +13,11 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
 import { cambiarCorreo } from '../dto/usuarios.dto';
-
+import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
 @Component({
   selector: 'app-gestionar-usuarios',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, TableModule, InputTextModule, ButtonModule, FormsModule, DialogModule, ConfirmDialogModule, MessageModule, MessagesModule],
+  imports: [CommonModule, TableModule, InputTextModule, ButtonModule, FormsModule, DialogModule, ConfirmDialogModule, MessageModule, MessagesModule, NavbarComponent],
   templateUrl: './gestionar-usuarios.component.html',
   styleUrls: ['./gestionar-usuarios.component.css']
 })
