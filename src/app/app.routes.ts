@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/general/home/home.component';
 import { privateGuard, publicGuard } from './shared/guards/auth.guard';
-import { HomeAdministracionComponent } from './pages/roles/jefe_compartido/home/home-administracion.component';
 import { NuevaPracticaComponent } from './pages/roles/jefe_compartido/nueva-practica/nueva-practica.component';
 import { PreguntasInformeComponent } from './pages/roles/jefe_compartido/preguntas-informe/preguntas-informe.component';
 import { HomeSecretariaComponent } from './roles/secretaria/home/home-secretaria.component';
@@ -10,9 +8,6 @@ import { PracticasSecretariaComponent } from './roles/secretaria/components/prac
 import { HomeJefeEmpleadorComponent } from './roles/supervisor/components/home-jefe-empleador/home-jefe-empleador.component';
 import { InformePrimeraPracticaComponent } from './roles/supervisor/components/informe-primera-practica/informe-primera-practica.component';
 import { FinInformeJefeEmpleadorComponent } from './roles/supervisor/components/fin-informe-jefe-empleador/fin-informe-jefe-empleador.component';
-import { HomeAlumnoComponent } from './roles/alumno/home-alumno/home-alumno.component';
-import { FinInformeAlumnoComponent } from './roles/alumno/components/fin-informe-alumno/fin-informe-alumno.component';
-import { EstadoPracticaComponent } from './features/practicas/estado-practica/estado-practica.component';
 import { InformePrimeraPracticaAlumnoComponent } from './roles/alumno/informe-primera-practica/informe-primera-practica.component';
 import { NotFoundComponent } from './pages/general/not-found/not-found.component';
 import { TipoUsuario } from './enum/enumerables.enum';
@@ -39,14 +34,19 @@ export const routes: Routes = [
         canActivate: [publicGuard()],
         loadChildren: () => import('./pages/general/general.route').then(r => r.routes),
     },
-    //PROTEGIDO POR AUTENTICACIÓN
+    //PROTEGIDO POR AUTENTICACIÓN // Todo: Mover a privatelayout 
     {
         path: '',
-        loadComponent: () => import('./gestion-practicas/pages/menu-general-page/menu-general-page.component').then(c => c.MenuGeneralPageComponent),
+        loadComponent: () => import('./layout/auth-layout/auth-layout.component').then(c => c.AuthLayoutComponent),
         canActivate: [privateGuard()],
         loadChildren: () => import('./gestion-practicas/gestion-practicas.routes').then(r => r.routes),
     },
-
+    {
+        path: 'alumno',
+        canActivate: [roleGuard([TipoUsuario.ALUMNO_PRACTICA]), privateGuard()],
+        loadComponent: () => import('./layout/auth-layout/auth-layout.component').then(c => c.AuthLayoutComponent),
+        loadChildren: () => import('./roles/alumno/alumno.routes').then(r => r.routes)
+    },
     {
         path: 'informes', component: InformesComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.ADMINISTRADOR])]
@@ -104,26 +104,6 @@ export const routes: Routes = [
     {
         path: 'jefe_alumno/formulario_primer_practica/:idInforme', component: InformePrimeraPracticaComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
-    },
-    {
-        path: 'agradecimientos', component: FinInformeJefeEmpleadorComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
-    },
-    {
-        path: 'home-alumno', component: HomeAlumnoComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA])]
-    },
-    {
-        path: 'agradecimientos-alumno', component: FinInformeAlumnoComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA])]
-    },
-    {
-        path: 'estado-practica/:idAlumno', component: EstadoPracticaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA])]
-    },
-    {
-        path: 'informe-practica-alumno/:idAlumno/:idPractica/:idInforme', component: InformePrimeraPracticaAlumnoComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.ALUMNO_PRACTICA]), practicasGuard]
     },
     {
         path: 'resultados-practica', component: ResultadosPracticaComponent,

@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
-import { HeaderComponent } from "../../pages/roles/jefe_compartido/header-jefes/header.component";
 import { NavbarComponent } from "../../shared/components/navbar/navbar.component";
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-auth-layout',
   standalone: true,
-  imports: [NavbarComponent],
-  templateUrl: './auth-layout.component.html',
-  styleUrl: './auth-layout.component.css'
+  imports: [NavbarComponent, RouterOutlet],
+  template: `
+    <app-navbar />
+    <section class="w-full flex-1 flex flex-col min-h-0">
+  <router-outlet />
+</section>
+  `
 })
 export class AuthLayoutComponent {
-
+  // Aquí puedes agregar lógica común para todas las páginas autenticadas
 }

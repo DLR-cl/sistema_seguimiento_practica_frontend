@@ -14,7 +14,7 @@ import { DetallePractica } from '../../../gestion-practicas/interfaces/detalle-p
 @Component({
   selector: 'app-estado-practica',
   standalone: true,
-  imports: [HeaderComponent, CommonModule, FormsModule, InputTextareaModule],
+  imports: [CommonModule, FormsModule, InputTextareaModule],
   templateUrl: './estado-practica.component.html',
   styleUrls: ['./estado-practica.component.css'] // Cambiado a styleUrls para corregir un typo
 })
@@ -111,6 +111,7 @@ export class EstadoPracticaComponent implements OnInit {
 
   ngOnInit(): void {
     const idAlumnoParam = this.route.snapshot.paramMap.get('idAlumno');
+    console.log('ide alumno desde estado practica', idAlumnoParam);
     if (!idAlumnoParam || isNaN(Number(idAlumnoParam))) {
       console.error('ID de alumno no válido o no proporcionado');
       this.router.navigate(['/home-alumno']);

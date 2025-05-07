@@ -22,7 +22,7 @@ export class NavbarComponent implements OnInit{
   authStateService = inject(AuthStateService);
   usuarioRole?: string | null;
   router = inject(Router);
-
+  idUser = this.authStateService.getData()?.id_usuario;
   // menu que redigire a cada usuario a su 
   menuItems = signal<MenuOption[]>([
     { 
@@ -67,7 +67,7 @@ export class NavbarComponent implements OnInit{
     },
     {
       label: 'Estado Práctica',
-      path: '/estado-practica/',
+      path: 'estado-practica/' + this.idUser,
       roles: [TipoUsuario.ALUMNO_PRACTICA]
     }
   ]);
@@ -79,6 +79,56 @@ export class NavbarComponent implements OnInit{
 
   ngOnInit(): void {
     this.usuarioRole = this.authStateService.getRole();
+    this.idUser = this.authStateService.getData()?.id_usuario;
+    console.log(this.idUser);
+
+    this.menuItems = signal<MenuOption[]>([
+      { 
+        label: 'Resultados de Practica',
+        path: '/resultados-practica',
+        roles: [TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ACADEMICO, TipoUsuario.SECRETARIA_DEPARTAMENTO]
+      },
+      {
+        label: 'Informes Evaluativos',
+        path: '/informes',
+        roles: [TipoUsuario.ADMINISTRADOR]
+      },
+      {
+        label: 'Crear Práctica',
+        path: '/crear-practica',
+        roles: [TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.ADMINISTRADOR, TipoUsuario.JEFE_CARRERA]
+      },
+      {
+        label: 'Ver Prácticas',
+        path: '/ver-practicas',
+        roles: [TipoUsuario.JEFE_CARRERA, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.ADMINISTRADOR]
+      },
+      {
+        label: 'Gestionar usuarios',
+        path: '/gestionar-usuarios',
+        roles: [TipoUsuario.ADMINISTRADOR]
+      },
+      {
+        label: 'Académicos',
+        path: '/lista-academicos',
+        roles: [TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO]
+      },
+      {
+        label: 'Resultados de Práctica',
+        path: '/resultados-practica',
+        roles: [TipoUsuario.ACADEMICO]
+      },
+      {
+        label: 'Estado de Académicos',
+        path: '/seguimiento-academicos',
+        roles: [TipoUsuario.SECRETARIA_CARRERA]
+      },
+      {
+        label: 'Estado Práctica',
+        path: '/alumno/estado-practica/' + this.idUser,
+        roles: [TipoUsuario.ALUMNO_PRACTICA]
+      }
+    ]);
     this.filterMenuByRole();
     this.router.events.subscribe(() => {
       this.activePath = this.router.url.replace(/^\//, '');

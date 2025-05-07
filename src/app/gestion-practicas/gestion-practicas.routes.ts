@@ -6,7 +6,7 @@ import { TipoUsuario } from "../enum/enumerables.enum";
 export const routes: Routes = [
     {
         path: '',
-        loadComponent: () => import('./pages/menu-general-page/menu-general-page.component').then(c => c.MenuGeneralPageComponent),
+        loadComponent: () => import('../layout/auth-layout/auth-layout.component').then(c => c.AuthLayoutComponent),
         canActivate: [privateGuard()]
     },
     {

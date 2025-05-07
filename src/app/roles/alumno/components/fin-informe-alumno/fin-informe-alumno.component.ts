@@ -12,6 +12,6 @@ export class FinInformeAlumnoComponent {
   private readonly _router = inject(Router);
 
   goToHome(){
-    this._router.navigate(['home-alumno']);
+    this._router.navigate(['/alumno']);
   }
 }

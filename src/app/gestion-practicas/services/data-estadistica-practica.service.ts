@@ -43,6 +43,7 @@ export class DataEstadisticaPracticaService {
     }
   }
 
+
   obtenerEstadisticaPracticas() {
     this._httpClient.get<EstadisticasPractica>(`${enviroment.API_URL}/dashboard/estadistica-practicas-dashboard-jefe-carrera`)
       .subscribe((resp) => {

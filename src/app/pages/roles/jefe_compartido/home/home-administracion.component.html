@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<div *ngIf="true" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-200 dark:from-gray-900 dark:to-gray-800">
+<div *ngIf="cargando" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-blue-200 dark:from-gray-900 dark:to-gray-800">
   <div class="flex space-x-2 mb-4">
     <div class="w-4 h-4 bg-blue-600 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>
     <div class="w-4 h-4 bg-blue-600 rounded-full animate-bounce-bright" style="animation-delay: 0.2s"></div>
@@ -9,4 +9,4 @@
   <span class="text-base md:text-lg font-semibold text-blue-900 dark:text-blue-200 tracking-wide drop-shadow">Cargando, por favor espere...</span>
 </div>
 
-<app-dashboard [hidden]="true" (estadoCargando)="finalizoCarga(false)"></app-dashboard>
+<app-dashboard [hidden]="cargando" (estadoCargando)="finalizoCarga($event)"></app-dashboard>

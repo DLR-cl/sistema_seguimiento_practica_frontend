@@ -1,10 +1,10 @@
-<div class="relative min-h-screen bg-cover bg-center overflow-y-auto" [style.backgroundImage]="'url(' + imagenFondo + ')'">
+<!-- Contenido principal -->
+<div class="relative min-h-[calc(100vh-64px)] w-full bg-cover bg-center flex flex-col justify-center" [style.backgroundImage]="'url(' + imagenFondo + ')'">
   <!-- Capa de degradado mejorado -->
-  <div class="fixed inset-0 bg-gradient-to-b from-black/80 via-black/50 to-gray-900/95 dark:from-gray-900/90 dark:via-gray-800/80 dark:to-gray-900/95 z-0"></div>
+  <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/50 to-gray-900/95 dark:from-gray-900/90 dark:via-gray-800/80 dark:to-gray-900/95 pointer-events-none"></div>
 
   <!-- Contenido principal -->
-  <div class="relative z-10 flex flex-col items-center px-4">
-    <app-header class="absolute z-50 top-0 w-full"></app-header>
+  <div class="relative flex flex-col items-center px-4 py-8 flex-1">
 
     <!-- Spinner de carga mejorado -->
     @if (cargando) {
@@ -19,9 +19,9 @@
 
     <!-- Contenido principal -->
     @if (!cargando) {
-      <div class="w-full flex flex-col items-center">
+      <div class="w-full flex flex-col items-center flex-1 justify-center">
         <!-- Mensaje de bienvenida mejorado -->
-        <div class="text-center mb-12 pt-40">
+        <div class="text-center mb-12 pt-10">
           <h1 class="text-4xl lg:text-6xl font-extrabold text-white dark:text-gray-100 mb-6 tracking-tight">
             Bienvenido, {{ dataAlumno?.nombre }}
           </h1>
@@ -31,7 +31,7 @@
         </div>
 
         <!-- Contenedor de tarjetas mejorado -->
-        <div class="flex flex-col items-center justify-center w-full mt-16 px-4">
+        <div class="flex flex-col items-center justify-center w-full mt-8 px-4">
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl w-full">
             <!-- Tarjeta: Estado de la práctica mejorada -->
             <div
@@ -86,7 +86,7 @@
         </div>
 
         <!-- Espaciado adicional -->
-        <div class="h-16"></div>
+        <div class="h-8"></div>
       </div>
     }
   </div>

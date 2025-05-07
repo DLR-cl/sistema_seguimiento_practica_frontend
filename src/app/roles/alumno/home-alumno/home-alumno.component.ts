@@ -62,7 +62,7 @@ export class HomeAlumnoComponent implements OnInit{
 
   public goToEstado(){
     console.log(this.dataAlumno.id_usuario, "yendo a estado practica");
-    this._router.navigate(['estado-practica/'+this.dataAlumno.id_usuario]);
+    this._router.navigate(['/alumno/estado-practica/'+this.dataAlumno.id_usuario]);
   }
 
   public goToInforme(){
