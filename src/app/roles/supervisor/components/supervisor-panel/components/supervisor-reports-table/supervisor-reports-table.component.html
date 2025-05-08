@@ -1,0 +1,60 @@
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700">
+    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-6 flex items-center">
+        <i class="fas fa-list-alt mr-2"></i>
+        Detalles de Informes
+    </h2>
+
+    @if (detalleInformes.length > 0) {
+        <p-table [value]="detalleInformes" [paginator]="true" [rows]="5" 
+                class="border border-blue-100 dark:border-gray-700 rounded-lg">
+            <ng-template pTemplate="header">
+                <tr class="bg-blue-50 dark:bg-gray-700">
+                    <th class="text-blue-900 dark:text-white">Alumno</th>
+                    <th class="text-blue-900 dark:text-white">Práctica</th>
+                    <th class="text-blue-900 dark:text-white">Estado</th>
+                    <th class="text-blue-900 dark:text-white">Días Restantes</th>
+                    <th class="text-blue-900 dark:text-white">Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-informe>
+                <tr class="hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+                    <td class="font-medium text-gray-900 dark:text-white">{{ informe.nombre_alumno }}</td>
+                    <td class="text-gray-700 dark:text-gray-300">{{ getTipoPractica(informe.tipo_practica) }}</td>
+                    <td>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium"
+                            [ngClass]="{
+                                'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300': informe.estado_informe === 'APROBADA',
+                                'bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300': informe.estado_informe === 'ENVIADA',
+                                'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300': informe.estado_informe === 'ESPERA'
+                            }">
+                            {{ getEstadoInforme(informe.estado_informe) }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-sm">
+                            {{ informe.dias_restantes }} días
+                        </span>
+                    </td>
+                    <td>
+                        <div class="flex items-center space-x-3">
+                            <button
+                                pButton
+                                type="button"
+                                class="p-button-rounded p-button-text"
+                                (click)="informe.estado_informe === 'ESPERA' ? realizarInforme.emit(informe.id_informe_confidencial) : verInforme.emit(informe)">
+                                {{ informe.estado_informe === 'ESPERA' ? 'Realizar' : 'Ver' }}
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    } @else {
+        <div class="flex items-center justify-center space-x-4 p-8 bg-blue-50 dark:bg-gray-700 rounded-lg">
+            <i class="fas fa-info-circle text-blue-500 dark:text-blue-400 text-3xl"></i>
+            <p class="text-blue-700 dark:text-blue-300 text-lg">
+                No hay informes que mostrar aún.
+            </p>
+        </div>
+    }
+</div>

@@ -1,0 +1,26 @@
+<div class="bg-white dark:bg-gray-800 rounded-xl mb-6 shadow-lg p-6 border border-blue-100 dark:border-gray-700">
+    <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-4 flex items-center">
+        <i class="fas fa-user-tie mr-2"></i>
+        Información del Usuario
+    </h2>
+    @if(dataEmpresa){
+    <div  class="space-y-4">
+        <div class="flex justify-between items-center p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <span class="font-medium text-gray-600 dark:text-gray-300">Empresa:</span>
+            <span class="text-blue-900 dark:text-white font-semibold break-words">{{dataEmpresa.nombre_razon_social}}</span>
+        </div>
+        <div class="flex justify-between items-center p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <span class="font-medium text-gray-600 dark:text-gray-300">Rubro:</span>
+            <span class="text-blue-900 dark:text-white font-semibold">{{dataEmpresa.rubro}}</span>
+        </div>
+        <div class="flex justify-between items-center p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <span class="font-medium text-gray-600 dark:text-gray-300">Cargo:</span>
+            <span class="text-blue-900 dark:text-white font-semibold">{{dataJefe.cargo}}</span>
+        </div>
+        <div class="flex justify-between items-center p-2 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors">
+            <span class="font-medium text-gray-600 dark:text-gray-300">Dirección:</span>
+            <span class="text-blue-900 dark:text-white font-semibold break-words">{{dataEmpresa.ubicacion}}</span>
+        </div>
+    </div>
+    }
+</div>

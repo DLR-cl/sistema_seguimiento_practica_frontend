@@ -1,8 +1,9 @@
-import { Routes } from "@angular/router";
+import { Routes } from '@angular/router';
+import { SupervisorPanelComponent } from './components/supervisor-panel/supervisor-panel.component';
 
 export const routes: Routes = [
     {
         path: '',
-        loadComponent: () => import('./components/home-jefe-empleador/home-jefe-empleador.component').then(c => c.HomeJefeEmpleadorComponent),
+        component: SupervisorPanelComponent
     }
 ]

@@ -1,0 +1,43 @@
+<p-dialog [visible]="visible" (visibleChange)="close.emit($event)" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" 
+          [style]="{ width: '750px' }" class="rounded-xl">
+    <!-- Header -->
+    <ng-template pTemplate="header">
+        <div class="text-center mx-auto py-4">
+            <h2 class="text-2xl font-semibold text-blue-900 dark:text-white">Detalles de la Práctica</h2>
+        </div>
+    </ng-template>
+
+    <!-- Content -->
+    <ng-template pTemplate="content">
+        <div class="space-y-8">
+            <!-- Información General -->
+            <div class="space-y-6">
+                <div class="border-b border-blue-100 dark:border-gray-700 pb-4">
+                    <h3 class="text-xl font-semibold text-blue-900 dark:text-white flex items-center">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        Información General
+                    </h3>
+                </div>
+                <div class="grid grid-cols-2 gap-6 text-sm">
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Tipo de Práctica</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.tipo_practica === 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                        <p class="text-blue-600 dark:text-blue-400 font-medium">Alumno</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada?.informe_alumno?.alumno?.usuario?.nombre }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="flex justify-end space-x-4">
+                <button type="button" 
+                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
+                        (click)="close.emit(false)">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
