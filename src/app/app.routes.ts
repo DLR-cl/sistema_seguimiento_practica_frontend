@@ -48,6 +48,12 @@ export const routes: Routes = [
         loadChildren: () => import('./roles/alumno/alumno.routes').then(r => r.routes)
     },
     {
+        path: 'academico',
+        canActivate: [roleGuard([TipoUsuario.ACADEMICO]), privateGuard()],
+        loadComponent: () => import('./layout/auth-layout/auth-layout.component').then(c => c.AuthLayoutComponent),
+        loadChildren: () => import('./roles/academico/academico.routes').then(r => r.routes)
+    },
+    {
         path: 'informes', component: InformesComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.ADMINISTRADOR])]
     },
@@ -56,16 +62,8 @@ export const routes: Routes = [
         canActivate: [privateGuard, roleGuard([TipoUsuario.ADMINISTRADOR])]
     },
     {
-        path: 'home-academicos', component: AcademicoComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.ACADEMICO])]
-    },
-    {
         path: 'lista-academicos', component: InfoAcademicosComponent, 
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_DEPARTAMENTO])]
-    },
-    {
-        path: 'revision-informe/:idPractica', component: DetallesInformesComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.ACADEMICO])]
     },
     {
         path: 'nueva-practica', component: NuevaPracticaComponent,

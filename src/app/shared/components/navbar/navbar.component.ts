@@ -86,7 +86,7 @@ export class NavbarComponent implements OnInit{
       { 
         label: 'Resultados de Practica',
         path: '/resultados-practica',
-        roles: [TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ACADEMICO, TipoUsuario.SECRETARIA_DEPARTAMENTO]
+        roles: [TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.SECRETARIA_DEPARTAMENTO]
       },
       {
         label: 'Informes Evaluativos',
@@ -114,8 +114,8 @@ export class NavbarComponent implements OnInit{
         roles: [TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO]
       },
       {
-        label: 'Resultados de Práctica',
-        path: '/resultados-practica',
+        label: 'Estadísticas',
+        path: '/academico/estadisticas',
         roles: [TipoUsuario.ACADEMICO]
       },
       {
@@ -199,7 +199,7 @@ export class NavbarComponent implements OnInit{
       case 'SECRETARIA_DEPARTAMENTO':
         return '/home-secretaria';
       case 'ACADEMICO':
-        return '/home-academicos';
+        return '/academico';
       case 'ALUMNO_PRACTICA':
         return '/estado-practica';
       default:

@@ -107,7 +107,7 @@ export class AuthService {
       case TipoUsuario.SECRETARIA_DEPARTAMENTO:
         return '/home-secretaria';
       case TipoUsuario.ACADEMICO:
-        return '/home-academicos';
+        return '/academico';
       default:
         return '/home';
     }

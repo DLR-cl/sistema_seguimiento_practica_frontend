@@ -9,7 +9,7 @@ import { HeaderComponent } from '../../../pages/roles/jefe_compartido/header-jef
 @Component({
   selector: 'app-home-alumno',
   standalone: true,
-  imports: [HeaderComponent, CommonModule],
+  imports: [CommonModule],
   templateUrl: './home-alumno.component.html',
   styleUrl: './home-alumno.component.css'
 })

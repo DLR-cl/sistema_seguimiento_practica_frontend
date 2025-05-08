@@ -1,7 +1,5 @@
-<app-header></app-header>
-
 <div class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
-  <div class="container mx-auto px-4 py-6">
+  <div class="container mx-auto px-2 sm:px-4 md:px-8 py-4 md:py-8">
     <!-- Spinner de carga mejorado -->
     @if (cargando) {
       <div class="fixed inset-0 bg-black/30 dark:bg-gray-900/50 backdrop-blur-sm flex justify-center items-center z-50">
@@ -14,21 +12,21 @@
     }
 
     <!-- Contenedor principal con grid responsivo -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
       <!-- Perfil Data -->
-      <div class="md:col-span-1">
+      <div class="md:col-span-1 w-full h-full">
         <app-perfil-data
           [hidden]="cargando"
-          class="h-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl"
+          class="h-full w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl"
         ></app-perfil-data>
       </div>
 
       <!-- Tabla Funciones -->
-      <div class="md:col-span-2">
+      <div class="md:col-span-2 w-full h-full">
         <app-tabla-funciones
           [hidden]="cargando"
           (estadoCargando)="finalizoCarga($event)"
-          class="h-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl"
+          class="h-full w-full bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl"
         ></app-tabla-funciones>
       </div>
     </div>

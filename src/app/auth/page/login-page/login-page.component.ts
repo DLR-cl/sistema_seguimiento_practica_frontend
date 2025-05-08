@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -9,17 +9,15 @@ import { AuthStateService } from '../../../shared/data-access/auth-state.service
 @Component({
   selector: 'app-login-page',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, RouterLink],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login-page.component.html',
 })
 export class LoginPageComponent implements OnInit {
-  constructor(
-    private router: Router,
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private messageService: MessageService,
-    private authState: AuthStateService,
-  ) { }
+  private readonly router = inject(Router);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
+  private readonly messageService = inject(MessageService);
+  private readonly authState = inject(AuthStateService);
 
   ngOnInit(): void {
     this.cargarImagenFondo();

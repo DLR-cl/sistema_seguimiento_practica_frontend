@@ -1,5 +1,4 @@
 import { AfterViewChecked, AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { HeaderComponent } from "../../header-jefes/header.component";
 import { DashboardService } from '../../services/dashboard.service';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -10,20 +9,17 @@ import Chart from 'chart.js/auto';
 import { ConteoPorMes, ConteoPracticas } from '../../../../../shared/interface/reporte-practica.interface';
 import { CalendarModule } from 'primeng/calendar';
 import { DropdownModule } from 'primeng/dropdown';
-import { DatosSecretariaService } from '../../services/datos-secretaria.service';
-import { NavbarComponent } from '../../../../../shared/components/navbar/navbar.component';
 
 @Component({
   selector: 'app-resultados-practica',
   standalone: true,
-  imports: [NavbarComponent, ReactiveFormsModule, CommonModule, CalendarModule, DropdownModule],
+  imports: [ReactiveFormsModule, CommonModule, CalendarModule, DropdownModule],
   templateUrl: './resultados-practica.component.html',
   styleUrl: './resultados-practica.component.css'
 })
 export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
   private readonly _dataUserService = inject(AuthStateService);
   private readonly _dashboardService = inject(DashboardService);
-  private readonly _secretariaService = inject(DatosSecretariaService);
   
   dataUser?: PayloadInterface | null
   filtroForm!: FormGroup;

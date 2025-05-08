@@ -100,6 +100,6 @@ export class TablaFuncionesComponent implements OnInit {
   }
 
   public revision(idPractica: number) {
-    this.router.navigate(['/academico/revision', idPractica]);
+    this.router.navigate(['/academico/revision-informe', idPractica]);
   }
 }
