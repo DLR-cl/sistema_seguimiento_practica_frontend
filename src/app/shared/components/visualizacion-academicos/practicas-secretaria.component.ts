@@ -1,22 +1,22 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { HeaderSecretariaComponent } from "../header/header-secretaria.component";
+import { HeaderSecretariaComponent } from "../../../roles/secretaria/components/header/header-secretaria.component";
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { AsignacionInformesService } from '../../services/asignacion-informes.service';
-import { AsignacionDto } from '../../dto/secretaria-data.dto';
+import { AsignacionInformesService } from '../../../roles/secretaria/services/asignacion-informes.service';
+import { AsignacionDto } from '../../../roles/secretaria/dto/secretaria-data.dto';
 import { InputTextModule } from 'primeng/inputtext';
-import { AuthStateService } from '../../../../shared/data-access/auth-state.service';
-import { PayloadInterface } from '../../../../shared/interface/payload.interface';
-import { TipoUsuario } from '../../../../enum/enumerables.enum';
-import { AcademicoInformes, PracticaInfo } from '../../dto/asignacion-informes.dto';
+import { AuthStateService } from '../../data-access/auth-state.service';
+import { PayloadInterface } from '../../interface/payload.interface';
+import { TipoUsuario } from '../../../enum/enumerables.enum';
+import { AcademicoInformes, PracticaInfo } from '../../../roles/secretaria/dto/asignacion-informes.dto';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { HeaderComponent } from "../../../../pages/roles/jefe_compartido/header-jefes/header.component";
+import { HeaderComponent } from "../../../pages/roles/jefe_compartido/header-jefes/header.component";
 import { CalendarModule } from 'primeng/calendar';
 import { ButtonModule } from 'primeng/button';
-import { ExtensionDto } from '../../dto/practicas.dto';
-import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
+import { ExtensionDto } from '../../../roles/secretaria/dto/practicas.dto';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 
 @Component({

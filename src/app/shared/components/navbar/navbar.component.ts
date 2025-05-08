@@ -86,7 +86,32 @@ export class NavbarComponent implements OnInit{
       { 
         label: 'Resultados de Practica',
         path: '/resultados-practica',
-        roles: [TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.SECRETARIA_DEPARTAMENTO]
+        roles: [TipoUsuario.ADMINISTRADOR]
+      },
+      {
+        label: 'Reportes Administrativos',
+        path: '/jefe-carrera/reportes-administrativos',
+        roles: [TipoUsuario.JEFE_CARRERA]
+      },
+      {
+        label: 'Reportes Administrativos',
+        path: '/jefe-departamento/generar-reporte',
+        roles: [TipoUsuario.JEFE_DEPARTAMENTO]
+      },
+      {
+        label: 'Lista Académicos',
+        path: '/jefe-departamento/lista-academicos',
+        roles: [TipoUsuario.JEFE_DEPARTAMENTO]
+      },
+      {
+        label: 'Crear Práctica',
+        path: '/jefe-carrera/crear-practica',
+        roles: [TipoUsuario.JEFE_CARRERA]
+      },
+      {
+        label: 'Ver Académicos',
+        path: '/jefe-carrera/lista-academicos',
+        roles: [TipoUsuario.JEFE_CARRERA]
       },
       {
         label: 'Informes Evaluativos',
@@ -96,12 +121,12 @@ export class NavbarComponent implements OnInit{
       {
         label: 'Crear Práctica',
         path: '/crear-practica',
-        roles: [TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.ADMINISTRADOR, TipoUsuario.JEFE_CARRERA]
+        roles: [TipoUsuario.ADMINISTRADOR]
       },
       {
         label: 'Ver Prácticas',
         path: '/ver-practicas',
-        roles: [TipoUsuario.JEFE_CARRERA, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.ADMINISTRADOR]
+        roles: [ TipoUsuario.ADMINISTRADOR]
       },
       {
         label: 'Gestionar usuarios',
@@ -111,17 +136,42 @@ export class NavbarComponent implements OnInit{
       {
         label: 'Académicos',
         path: '/lista-academicos',
-        roles: [TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO]
+        roles: [TipoUsuario.ADMINISTRADOR]
+      },
+      {
+        label: 'Crear Práctica',
+        path: '/secretaria/crear-practica',
+        roles: [TipoUsuario.SECRETARIA_CARRERA]
+      },
+      {
+        label: 'Ver Prácticas',
+        path: '/secretaria/ver-practicas',
+        roles: [TipoUsuario.SECRETARIA_CARRERA]
+      },
+      {
+        label: 'Cargar Alumnos',
+        path: '/secretaria/cargar-alumnos-nomina',
+        roles: [TipoUsuario.SECRETARIA_CARRERA]
+      },
+      {
+        label: 'Generar Reportes',
+        path: '/secretaria/generar-reportes',
+        roles: [TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.SECRETARIA_DEPARTAMENTO]
+      },
+      {
+        label: 'Lista Académicos',
+        path: '/secretaria/lista-academicos',
+        roles: [TipoUsuario.SECRETARIA_CARRERA]
+      },
+      {
+        label: 'Estado de Académicos',
+        path: '/secretaria/seguimiento-academicos',
+        roles: [TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.SECRETARIA_DEPARTAMENTO]
       },
       {
         label: 'Estadísticas',
         path: '/academico/estadisticas',
         roles: [TipoUsuario.ACADEMICO]
-      },
-      {
-        label: 'Estado de Académicos',
-        path: '/seguimiento-academicos',
-        roles: [TipoUsuario.SECRETARIA_CARRERA]
       },
       {
         label: 'Estado Práctica',
@@ -193,11 +243,15 @@ export class NavbarComponent implements OnInit{
       case 'ADMINISTRADOR':
         return '/home-administracion';
       case 'JEFE_CARRERA':
+        return '/jefe-carrera/';
       case 'JEFE_DEPARTAMENTO':
-        return '/dashboard';
+        return '/jefe-departamento/';
       case 'SECRETARIA_CARRERA':
+        return '/secretaria/';
       case 'SECRETARIA_DEPARTAMENTO':
-        return '/home-secretaria';
+        return '/secretaria/';
+      case 'JEFE_EMPLEADOR':
+        return '/supervisor/';
       case 'ACADEMICO':
         return '/academico';
       case 'ALUMNO_PRACTICA':

@@ -1,5 +1,5 @@
 import { Component, inject, output, signal } from '@angular/core';
-import { DataEstadisticaPracticaService } from '../../../../gestion-practicas/services/data-estadistica-practica.service';
+import { DataEstadisticaPracticaService } from '../../../../../gestion-practicas/services/data-estadistica-practica.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

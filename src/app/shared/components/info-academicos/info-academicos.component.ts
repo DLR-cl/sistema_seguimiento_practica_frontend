@@ -1,11 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
-import { DatosAcademicosService } from '../../services/datos-academicos.service';
-import { HeaderComponent } from "../../header-jefes/header.component";
+import { DatosAcademicosService } from '../../../pages/roles/jefe_compartido/services/datos-academicos.service';
 import { CommonModule } from '@angular/common';
-import { checkRunValidator } from '../../../../../core/util/validator-rut.function';
+import { checkRunValidator } from '../../../core/util/validator-rut.function';
 import { MessageService } from 'primeng/api';
-import { NavbarComponent } from '../../../../../shared/components/navbar/navbar.component';
 
 
 @Component({
@@ -13,7 +11,7 @@ import { NavbarComponent } from '../../../../../shared/components/navbar/navbar.
   standalone: true,
   templateUrl: './info-academicos.component.html',
   styleUrls: ['./info-academicos.component.css'],
-  imports: [NavbarComponent, ReactiveFormsModule, CommonModule, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule],
 })
 export class InfoAcademicosComponent implements OnInit {
   academicosData?: any[]; // Lista de académicos

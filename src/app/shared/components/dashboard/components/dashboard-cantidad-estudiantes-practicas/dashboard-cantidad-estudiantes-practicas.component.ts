@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
-import { DataPracticaAlumnoService } from '../../../../gestion-practicas/services/data-practica-alumno.service';
-import { DataEstadisticaPracticaService } from '../../../../gestion-practicas/services/data-estadistica-practica.service';
+import { DataPracticaAlumnoService } from '../../../../../gestion-practicas/services/data-practica-alumno.service';
+import { DataEstadisticaPracticaService } from '../../../../../gestion-practicas/services/data-estadistica-practica.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ListboxModule } from 'primeng/listbox';

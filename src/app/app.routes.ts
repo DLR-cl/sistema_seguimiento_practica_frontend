@@ -1,17 +1,17 @@
 import { Routes } from '@angular/router';
 import { privateGuard, publicGuard } from './shared/guards/auth.guard';
-import { NuevaPracticaComponent } from './pages/roles/jefe_compartido/nueva-practica/nueva-practica.component';
+import { NuevaPracticaComponent } from './shared/components/generacion-practica/nueva-practica.component';
 import { PreguntasInformeComponent } from './pages/roles/jefe_compartido/preguntas-informe/preguntas-informe.component';
 import { HomeSecretariaComponent } from './roles/secretaria/home/home-secretaria.component';
 import { roleGuard } from './shared/guards/roleUsers.guard';
-import { PracticasSecretariaComponent } from './roles/secretaria/components/practicas-secretaria/practicas-secretaria.component';
+import { PracticasSecretariaComponent } from './shared/components/visualizacion-academicos/practicas-secretaria.component';
 import { HomeJefeEmpleadorComponent } from './roles/supervisor/components/home-jefe-empleador/home-jefe-empleador.component';
 import { InformePrimeraPracticaComponent } from './roles/supervisor/components/informe-primera-practica/informe-primera-practica.component';
 import { FinInformeJefeEmpleadorComponent } from './roles/supervisor/components/fin-informe-jefe-empleador/fin-informe-jefe-empleador.component';
 import { InformePrimeraPracticaAlumnoComponent } from './roles/alumno/informe-primera-practica/informe-primera-practica.component';
 import { NotFoundComponent } from './pages/general/not-found/not-found.component';
 import { TipoUsuario } from './enum/enumerables.enum';
-import { InfoAcademicosComponent } from './pages/roles/jefe_compartido/pages/info-academicos/info-academicos.component';
+import { InfoAcademicosComponent } from './shared/components/info-academicos/info-academicos.component';
 import { practicasGuard } from './shared/guards/practicas.guard';
 import { DetallesInformesComponent } from './features/evaluaciones/detalles-informes/detalles-informes.component';
 
@@ -54,6 +54,30 @@ export const routes: Routes = [
         loadChildren: () => import('./roles/academico/academico.routes').then(r => r.routes)
     },
     {
+        path: 'jefe-carrera',
+        canActivate: [privateGuard(), roleGuard([TipoUsuario.JEFE_CARRERA])],
+        loadComponent: () => import('./layout/auth-layout/auth-layout.component').then(c => c.AuthLayoutComponent),
+        loadChildren: () => import('./roles/jefe-carrera/jefe-carrera.routes').then(r => r.routes)
+    },  
+    {
+        path: 'jefe-departamento',
+        canActivate: [privateGuard(), roleGuard([TipoUsuario.JEFE_DEPARTAMENTO])],
+        loadComponent: () => import('./layout/auth-layout/auth-layout.component').then(c => c.AuthLayoutComponent),
+        loadChildren: () => import('./roles/director-departamento/director-departamento.routes').then(r => r.routes)
+    },
+    {
+        path: 'secretaria',
+        canActivate: [privateGuard(), roleGuard([TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.SECRETARIA_DEPARTAMENTO])],
+        loadComponent: () => import('./layout/auth-layout/auth-layout.component').then(c => c.AuthLayoutComponent),
+        loadChildren: () => import('./roles/secretaria/secretaria.routes').then(r => r.routes)
+    },
+    {
+        path: 'supervisor',
+        canActivate: [privateGuard(), roleGuard([TipoUsuario.JEFE_EMPLEADOR])],
+        loadComponent: () => import('./layout/auth-layout/auth-layout.component').then(c => c.AuthLayoutComponent),
+        loadChildren: () => import('./roles/supervisor/supervisor.routes').then(r => r.routes)
+    },
+    {
         path: 'informes', component: InformesComponent,
         canActivate: [privateGuard, roleGuard([TipoUsuario.ADMINISTRADOR])]
     },
@@ -75,33 +99,18 @@ export const routes: Routes = [
         // canActivate: [privateGuard, roleGuard([TipoUsuario.jefe_departamento, TipoUsuario.jefe_carrera])] 
     },
     {
-        path: 'cargar-alumnos-nomina', 
-        loadComponent: () => import('./roles/secretaria/components/cargar-usuarios-nomina/cargar-usuarios-nomina.component').then( c => c.CargarUsuariosNominaComponent),
-        canActivate: [privateGuard()]
-    },
-    {
         path: 'crear-practica', component: NuevaPracticaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.SECRETARIA_DEPARTAMENTO])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA])]
     },
-    {
-        path: 'home-secretaria',  component: HomeSecretariaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.SECRETARIA_DEPARTAMENTO])]
-    },
-    {
-        path: 'seguimiento-academicos', component: EstadoAcademicosComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA_DEPARTAMENTO, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA])]
-    },
+
     {
         path: 'ver-practicas', component: PracticasSecretariaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.SECRETARIA_DEPARTAMENTO, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.ADMINISTRADOR])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.ADMINISTRADOR])]
     },
-    {
-        path: 'home-jefe-alumno', component: HomeJefeEmpleadorComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
-    },
+
     {
         path: 'jefe_alumno/formulario_primer_practica/:idInforme', component: InformePrimeraPracticaComponent,
-        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR])]
+        canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_EMPLEADOR, TipoUsuario.ALUMNO_PRACTICA])]
     },
     {
         path: 'resultados-practica', component: ResultadosPracticaComponent,

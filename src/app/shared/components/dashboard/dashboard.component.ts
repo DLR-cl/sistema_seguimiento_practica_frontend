@@ -7,19 +7,17 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { PrimeNGConfig } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
-import { AuthStateService } from '../../shared/data-access/auth-state.service';
-import { DashboardService } from '../../pages/roles/jefe_compartido/services/dashboard.service';
-import { DatosAcademicosService } from '../../pages/roles/jefe_compartido/services/datos-academicos.service';
-import type { CantidadEmpresasPorTipo, detallePractica, estadisticasPractica } from '../../pages/roles/jefe_compartido/dto/dashboard-practicas.dto';
-import type { AcademicoSolo } from '../../pages/roles/jefe_compartido/dto/academicos.dto';
-import { DashboardTablaEstadisticasPracticasComponent } from "./components/tabla-estadistica/dashboard-tabla-estadisticas-practicas.component";
-import { ModalAlumnosPracticaComponent } from "../practicas/components/modals/alumnos-practica/modal-alumnos-practica.component";
-import { PracticaAlumno } from '../../gestion-practicas/interfaces/practica-alumno.interface';
-import { ModalDetallesPracticaAlumnoComponent } from "../practicas/components/modals/detalles-practica-alumno/modal-detalles-practica-alumno.component";
-import { DataEstadisticaPracticaService } from '../../gestion-practicas/services/data-estadistica-practica.service';
-import { DashboardCantidadEstudiantesPracticasComponent } from "./components/dashboard-cantidad-estudiantes-practicas/dashboard-cantidad-estudiantes-practicas.component";
 import { DashboardCantidadReprobadosAprobadosComponent } from "./components/dashboard-cantidad-reprobados-aprobados/dashboard-cantidad-reprobados-aprobados.component";
 import { DashboardCantidadAprobacionSegundaPracticaComponent } from "./components/dashboard-cantidad-aprobacion-segunda-practica/dashboard-cantidad-aprobacion-segunda-practica.component";
+import { DashboardCantidadEstudiantesPracticasComponent } from './components/dashboard-cantidad-estudiantes-practicas/dashboard-cantidad-estudiantes-practicas.component';
+import { DashboardTablaEstadisticasPracticasComponent } from './components/tabla-estadistica/dashboard-tabla-estadisticas-practicas.component';
+import { ModalAlumnosPracticaComponent } from '../../../features/practicas/components/modals/alumnos-practica/modal-alumnos-practica.component';
+import { ModalDetallesPracticaAlumnoComponent } from '../../../features/practicas/components/modals/detalles-practica-alumno/modal-detalles-practica-alumno.component';
+import { AuthStateService } from '../../data-access/auth-state.service';
+import { DashboardService } from '../../../pages/roles/jefe_compartido/services/dashboard.service';
+import { DataEstadisticaPracticaService } from '../../../gestion-practicas/services/data-estadistica-practica.service';
+import { DatosAcademicosService } from '../../../pages/roles/jefe_compartido/services/datos-academicos.service';
+import { CantidadEmpresasPorTipo } from '../../../pages/roles/jefe_compartido/dto/dashboard-practicas.dto';
 
 @Component({
   selector: 'app-dashboard',

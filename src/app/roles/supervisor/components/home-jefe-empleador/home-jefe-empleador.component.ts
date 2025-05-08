@@ -4,14 +4,13 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../../auth/services/auth.service';
 import { DataJefeAlumnoService } from '../../services/data-jefe-alumno.service';
 import { JefeAlumnoInterface } from '../../interface/jefe-alumno.interface';
-import { HeaderComponent } from "../../../../pages/roles/jefe_compartido/header-jefes/header.component";
 import { DashboardComponent } from "../dashboard/dashboard.component";
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home-jefe-empleador',
   standalone: true,
-  imports: [HeaderComponent, DashboardComponent, CommonModule],
+  imports: [DashboardComponent, CommonModule],
   templateUrl: './home-jefe-empleador.component.html',
   styleUrl: './home-jefe-empleador.component.css'
 })

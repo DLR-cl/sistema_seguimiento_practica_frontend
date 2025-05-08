@@ -1,17 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header-jefes/header.component";
 
-import { PerfilDataComponent } from "../../../../roles/academico/components/perfil-data/perfil-data.component";
-import { TablaFuncionesComponent } from "../../../../roles/academico/components/tabla-funciones/tabla-funciones.component";
 import { CommonModule } from '@angular/common';
 import { ChartModule } from 'primeng/chart';
 import { TableModule } from 'primeng/table';
-import { DashboardComponent } from '../../../../features/dashboard/dashboard.component';
+import { DashboardComponent } from '../../../../shared/components/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-home-administracion',
   standalone: true,
-  imports: [HeaderComponent, DashboardComponent, PerfilDataComponent, TablaFuncionesComponent, CommonModule, ChartModule, TableModule],
+  imports: [HeaderComponent, DashboardComponent, CommonModule, ChartModule, TableModule],
   templateUrl: './home-administracion.component.html',
   styleUrl: './home-administracion.component.css'
 })

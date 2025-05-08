@@ -1,9 +1,9 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ChartData } from 'chart.js';
 import { ChartModule } from 'primeng/chart';
-import { DataPracticaAlumnoService } from '../../../../gestion-practicas/services/data-practica-alumno.service';
-import { DataEstadisticaPracticaService } from '../../../../gestion-practicas/services/data-estadistica-practica.service';
-import type { EstadisticaAprobacionPorPractica } from '../../../../gestion-practicas/interfaces/estadistica-praactica.interface';
+import { DataPracticaAlumnoService } from '../../../../../gestion-practicas/services/data-practica-alumno.service';
+import { DataEstadisticaPracticaService } from '../../../../../gestion-practicas/services/data-estadistica-practica.service';
+import type { EstadisticaAprobacionPorPractica } from '../../../../../gestion-practicas/interfaces/estadistica-praactica.interface';
 
 @Component({
   selector: 'app-dashboard-cantidad-aprobacion-segunda-practica',

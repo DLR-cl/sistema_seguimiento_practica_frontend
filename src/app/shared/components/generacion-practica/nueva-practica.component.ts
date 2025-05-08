@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { HeaderComponent } from "../header-jefes/header.component";
+import { HeaderComponent } from "../../../pages/roles/jefe_compartido/header-jefes/header.component";
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -8,19 +8,19 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
-import { AlumnosNominaService } from '../services/alumnos-nomina.service';
-import { GenerarPracticaService } from '../services/generar-practica.service';
-import { Empresa, JefeSupervisor, NuevoSupervisor } from '../dto/empresa.dto';
-import { AlumnosDataDto, nuevoAlumno } from '../dto/alumno.dto';
+import { AlumnosNominaService } from '../../../pages/roles/jefe_compartido/services/alumnos-nomina.service';
+import { GenerarPracticaService } from '../../../pages/roles/jefe_compartido/services/generar-practica.service';
+import { Empresa, JefeSupervisor, NuevoSupervisor } from '../../../pages/roles/jefe_compartido/dto/empresa.dto';
+import { AlumnosDataDto, nuevoAlumno } from '../../../pages/roles/jefe_compartido/dto/alumno.dto';
 import { MessageService } from 'primeng/api';
-import { checkRunValidator } from '../../../../core/util/validator-rut.function';
-import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
+import { checkRunValidator } from '../../../core/util/validator-rut.function';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 
 @Component({
   selector: 'app-nueva-practica',
   standalone: true,
-  imports: [NavbarComponent, CommonModule, RouterLink, ReactiveFormsModule, DialogModule, FormsModule, FloatLabelModule, InputTextModule, DropdownModule, CalendarModule],
+  imports: [CommonModule, RouterLink, ReactiveFormsModule, DialogModule, FormsModule, FloatLabelModule, InputTextModule, DropdownModule, CalendarModule],
   templateUrl: './nueva-practica.component.html',
   styleUrl: './nueva-practica.component.css'
 })

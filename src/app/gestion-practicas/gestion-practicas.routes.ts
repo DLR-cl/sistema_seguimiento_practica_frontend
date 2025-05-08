@@ -20,7 +20,7 @@ export const routes: Routes = [
     },
     {
         path: 'home-administracion', 
-        loadComponent: () => import('./pages/home-administrativo/home-administrativo.component').then(c => c.HomeAdministrativoComponent),
+        loadComponent: () => import('../shared/components/home-administrativo/home-administrativo.component').then(c => c.HomeAdministrativoComponent),
         canActivate: [privateGuard, roleGuard([TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.JEFE_CARRERA, TipoUsuario.ADMINISTRADOR])]
     },
     {

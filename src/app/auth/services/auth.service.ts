@@ -96,18 +96,21 @@ export class AuthService {
   public getRedirectUrlByRole(role: TipoUsuario | null): string {
     switch(role) {
       case TipoUsuario.JEFE_EMPLEADOR:
-        return '/home-jefe-alumno';
+        return '/supervisor/';
       case TipoUsuario.ALUMNO_PRACTICA:
-        return '/alumno';
+        return '/alumno/';
       case TipoUsuario.JEFE_CARRERA:
+        return '/jefe-carrera/';
       case TipoUsuario.JEFE_DEPARTAMENTO:
+        return '/jefe-departamento/';
       case TipoUsuario.ADMINISTRADOR:
         return '/home-administracion';
       case TipoUsuario.SECRETARIA_CARRERA:
+        return '/secretaria/';
       case TipoUsuario.SECRETARIA_DEPARTAMENTO:
-        return '/home-secretaria';
+        return '/secretaria/';
       case TipoUsuario.ACADEMICO:
-        return '/academico';
+        return '/academico/';
       default:
         return '/home';
     }

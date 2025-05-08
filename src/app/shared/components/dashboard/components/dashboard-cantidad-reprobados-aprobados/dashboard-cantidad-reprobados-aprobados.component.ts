@@ -1,8 +1,8 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { DataPracticaAlumnoService } from '../../../../gestion-practicas/services/data-practica-alumno.service';
-import { DataEstadisticaPracticaService } from '../../../../gestion-practicas/services/data-estadistica-practica.service';
+import { DataPracticaAlumnoService } from '../../../../../gestion-practicas/services/data-practica-alumno.service';
+import { DataEstadisticaPracticaService } from '../../../../../gestion-practicas/services/data-estadistica-practica.service';
 import { ChartData } from 'chart.js';
-import { EstadisticaAprobacionPorPractica } from '../../../../gestion-practicas/interfaces/estadistica-praactica.interface';
+import { EstadisticaAprobacionPorPractica } from '../../../../../gestion-practicas/interfaces/estadistica-praactica.interface';
 import { ChartModule } from 'primeng/chart';
 
 @Component({
