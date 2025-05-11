@@ -1,21 +1,26 @@
 <!-- Fondo con gradiente institucional -->
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
     <!-- Loading Overlay -->
-    <div *ngIf="loading() && !dataJefe()" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div class="flex space-x-2">
+    @if(loading() && !dataJefe()) {
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="flex space-x-2"> 
             <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>
             <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0.2s"></div>
             <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0.4s"></div>
         </div>
     </div>
+    }
 
     <!-- Error Message -->
-    <div *ngIf="error()" class="fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+    @if(error()) {
+    <div class="fixed top-4 right-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
         {{ error() }}
     </div>
+    }
 
     <!-- Encabezado con logo y título -->
-    <div *ngIf="dataJefe()" class="bg-white dark:bg-gray-800 shadow-md border-b border-blue-100 dark:border-gray-700">
+    @if(dataJefe()) {
+    <div class="bg-white dark:bg-gray-800 shadow-md border-b border-blue-100 dark:border-gray-700">
         <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
@@ -29,6 +34,7 @@
             </div>
         </div>
     </div>
+    }
 
     <!-- Contenido Principal -->
     <div class="container mx-auto px-6 py-8">
@@ -36,17 +42,13 @@
             <!-- Columna Izquierda -->
             <div class="space-y-12 pb-8">
                 <!-- Información del Usuario y Empresa -->
-                <ng-container *ngIf="dataJefe() && dataEmpresa()">
-                    <app-supervisor-info-card 
-                        [dataJefe]="dataJefe()!" 
-                        [dataEmpresa]="dataEmpresa()!"
-                        class="mb-8">
-                    </app-supervisor-info-card>
-                </ng-container>
+                @if (dataJefe() && dataEmpresa()) {
+                <app-supervisor-info-card [dataJefe]="dataJefe()!" [dataEmpresa]="dataEmpresa()!" class="mb-8">
+                </app-supervisor-info-card>
+                }
 
                 <!-- Listado de Informes Pendientes -->
-                <app-supervisor-pending-reports 
-                    [informesPendientesList]="informesPendientesList()" 
+                <app-supervisor-pending-reports [informesPendientesList]="informesPendientesList()"
                     (informeSeleccionado)="realizarInforme($event)">
                 </app-supervisor-pending-reports>
             </div>
@@ -56,80 +58,81 @@
                 <!-- Paneles Resumidos -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <!-- Cuadro 1: Alumnos Asignados -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                        <ng-container *ngIf="alumnosAsignados() > 0; else noAlumnosAsignados">
-                            <div class="flex items-center justify-between">
-                                <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Alumnos Asignados</h2>
-                                <i class="fas fa-users text-blue-500 dark:text-blue-400 text-2xl"></i>
-                            </div>
-                            <p class="text-4xl text-blue-600 dark:text-blue-400 font-bold mt-4">{{ alumnosAsignados() }}</p>
-                        </ng-container>
-                        <ng-template #noAlumnosAsignados>
-                            <div class="flex flex-col items-center text-center">
-                                <i class="fas fa-user-graduate text-blue-300 dark:text-blue-500 text-4xl mb-2"></i>
-                                <p class="text-blue-700 dark:text-blue-300 text-sm font-semibold">Aún no hay alumnos asignados.</p>
-                            </div>
-                        </ng-template>
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                        @if (alumnosAsignados() > 0) {
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Alumnos Asignados</h2>
+                            <i class="fas fa-users text-blue-500 dark:text-blue-400 text-2xl"></i>
+                        </div>
+                        <p class="text-4xl text-blue-600 dark:text-blue-400 font-bold mt-4">{{ alumnosAsignados() }}</p>
+                        } @else {
+                        <div class="flex flex-col items-center text-center">
+                            <i class="fas fa-user-graduate text-blue-300 dark:text-blue-500 text-4xl mb-2"></i>
+                            <p class="text-blue-700 dark:text-blue-300 text-sm font-semibold">Aún no hay alumnos
+                                asignados.</p>
+                        </div>
+                        }
                     </div>
 
                     <!-- Cuadro 2: Informes Pendientes -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                        <ng-container *ngIf="informesPendientes() > 0; else noInformesPendientes">
-                            <div class="flex items-center justify-between">
-                                <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Informes Pendientes</h2>
-                                <i class="fas fa-file-alt text-red-500 dark:text-red-400 text-2xl"></i>
-                            </div>
-                            <p class="text-4xl text-red-600 dark:text-red-400 font-bold mt-4">{{ informesPendientes() }}</p>
-                        </ng-container>
-                        <ng-template #noInformesPendientes>
-                            <div class="flex flex-col items-center text-center">
-                                <i class="fas fa-check-circle text-green-300 dark:text-green-500 text-4xl mb-2"></i>
-                                <p class="text-green-700 dark:text-green-300 text-sm font-semibold">No hay informes pendientes.</p>
-                            </div>
-                        </ng-template>
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                        @if (informesPendientes() > 0) {
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Informes Pendientes</h2>
+                            <i class="fas fa-file-alt text-red-500 dark:text-red-400 text-2xl"></i>
+                        </div>
+                        <p class="text-4xl text-red-600 dark:text-red-400 font-bold mt-4">{{ informesPendientes() }}</p>
+                        } @else {
+                        <div class="flex flex-col items-center text-center">
+                            <i class="fas fa-check-circle text-green-300 dark:text-green-500 text-4xl mb-2"></i>
+                            <p class="text-green-700 dark:text-green-300 text-sm font-semibold">No hay informes
+                                pendientes.</p>
+                        </div>
+                        }
                     </div>
 
                     <!-- Cuadro 3: Informes Totales -->
-                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
-                        <ng-container *ngIf="totalInformes() > 0; else noInformesTotales">
-                            <div class="flex items-center justify-between">
-                                <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Informes Totales</h2>
-                                <i class="fas fa-chart-bar text-green-500 dark:text-green-400 text-2xl"></i>
-                            </div>
-                            <p class="text-4xl text-green-600 dark:text-green-400 font-bold mt-4">{{ totalInformes() }}</p>
-                        </ng-container>
-                        <ng-template #noInformesTotales>
-                            <div class="flex flex-col items-center text-center">
-                                <i class="fas fa-database text-green-300 dark:text-green-500 text-4xl mb-2"></i>
-                                <p class="text-green-700 dark:text-green-300 text-sm font-semibold">No hay informes revisados.</p>
-                            </div>
-                        </ng-template>
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
+                        @if (totalInformes() > 0) {
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Informes Totales</h2>
+                            <i class="fas fa-chart-bar text-green-500 dark:text-green-400 text-2xl"></i>
+                        </div>
+                        <p class="text-4xl text-green-600 dark:text-green-400 font-bold mt-4">{{ totalInformes() }}</p>
+                        } @else {
+                        <div class="flex flex-col items-center text-center">
+                            <i class="fas fa-database text-green-300 dark:text-green-500 text-4xl mb-2"></i>
+                            <p class="text-green-700 dark:text-green-300 text-sm font-semibold">No hay informes
+                                revisados.</p>
+                        </div>
+                        }
                     </div>
                 </div>
 
                 <!-- Tabla de Detalles de Informes -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700">
+                <div
+                    class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700">
                     <h2 class="text-lg font-semibold text-blue-900 dark:text-white mb-6 flex items-center">
                         <i class="fas fa-list-alt mr-2"></i>
                         Detalles de Informes
                     </h2>
 
-                    <ng-container *ngIf="detalleInformes().length > 0; else noInformes">
-                        <app-supervisor-reports-table 
-                            [detalleInformes]="detalleInformes()" 
-                            (realizarInforme)="realizarInforme($event)" 
-                            (verInforme)="verInforme($event)">
+                    @if(detalleInformes().length > 0) {
+                    <app-supervisor-reports-table [detalleInformes]="detalleInformes()"
+                        (realizarInforme)="realizarInforme($event)" (verInforme)="verInforme($event)">
                         </app-supervisor-reports-table>
-                    </ng-container>
-
-                    <ng-template #noInformes>
-                        <div class="flex items-center justify-center space-x-4 p-8 bg-blue-50 dark:bg-gray-700 rounded-lg">
+                    } @else {
+                    <div
+                        class="flex items-center justify-center space-x-4 p-8 bg-blue-50 dark:bg-gray-700 rounded-lg">
                             <i class="fas fa-info-circle text-blue-500 dark:text-blue-400 text-3xl"></i>
                             <p class="text-blue-700 dark:text-blue-300 text-lg">
                                 No hay informes que mostrar aún.
                             </p>
-                        </div>
-                    </ng-template>
+                    </div>
+                    }
                 </div>
             </div>
         </div>
@@ -137,8 +140,8 @@
 </div>
 
 <!-- Modal -->
-<p-dialog [visible]="modalDetalles()" (visibleChange)="setModalDetalles($event)" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true" 
-          [style]="{ width: '750px' }" class="rounded-xl">
+<p-dialog [visible]="modalDetalles()" (visibleChange)="setModalDetalles($event)" [modal]="true" [draggable]="false"
+    [closable]="false" [dismissableMask]="true" [style]="{ width: '750px' }" class="rounded-xl">
     <!-- Header -->
     <ng-template pTemplate="header">
         <div class="text-center mx-auto py-4">
@@ -160,20 +163,22 @@
                 <div class="grid grid-cols-2 gap-6 text-sm">
                     <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
                         <p class="text-blue-600 dark:text-blue-400 font-medium">Tipo de Práctica</p>
-                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada()?.tipo_practica === 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada()?.tipo_practica
+                            === 'PRACTICA_UNO' ? 'Práctica I' : 'Práctica II' }}</p>
                     </div>
                     <div class="p-3 bg-blue-50 dark:bg-gray-700 rounded-lg">
                         <p class="text-blue-600 dark:text-blue-400 font-medium">Alumno</p>
-                        <p class="text-blue-900 dark:text-white font-semibold">{{ practicaSeleccionada()?.informe_alumno?.alumno?.usuario?.nombre }}</p>
+                        <p class="text-blue-900 dark:text-white font-semibold">{{
+                            practicaSeleccionada()?.informe_alumno?.alumno?.usuario?.nombre }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Footer -->
             <div class="flex justify-end space-x-4">
-                <button type="button" 
-                        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
-                        (click)="cerrarModalDetalles()">
+                <button type="button"
+                    class="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg transition-colors"
+                    (click)="cerrarModalDetalles()">
                     Cerrar
                 </button>
             </div>

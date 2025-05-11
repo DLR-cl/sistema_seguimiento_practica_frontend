@@ -87,6 +87,7 @@ export class DashboardService {
         });
     }
 
+    // Reporte semestral de aprobados y reprobados
     public obtenerReporteSemestral(tipo_practica: TipoPractica, fecha_in: string | Date, fecha_fin: string | Date): void {
         // Asegúrate de que las fechas sean cadenas ISO
         const fechaInicioISO = fecha_in instanceof Date ? fecha_in.toISOString() : new Date(fecha_in).toISOString();

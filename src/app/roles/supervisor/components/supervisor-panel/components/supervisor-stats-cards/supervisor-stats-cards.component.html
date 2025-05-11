@@ -1,53 +1,49 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
     <!-- Cuadro 1: Alumnos Asignados -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
-        <ng-container *ngIf="alumnosAsignados > 0; else noAlumnosAsignados">
+        @if(alumnosAsignados > 0) {
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Alumnos Asignados</h2>
                 <i class="fas fa-users text-blue-500 dark:text-blue-400 text-2xl"></i>
             </div>
             <p class="text-4xl text-blue-600 dark:text-blue-400 font-bold mt-4">{{ alumnosAsignados }}</p>
-        </ng-container>
-        <ng-template #noAlumnosAsignados>
+        } @else {
             <div class="flex flex-col items-center text-center">
                 <i class="fas fa-user-graduate text-blue-300 dark:text-blue-500 text-4xl mb-2"></i>
                 <p class="text-blue-700 dark:text-blue-300 text-sm font-semibold">Aún no hay alumnos asignados.</p>
             </div>
-        </ng-template>
+        }
     </div>
 
     <!-- Cuadro 2: Informes Pendientes -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
-        
-        <ng-container *ngIf="informesPendientes > 0; else noInformesPendientes">
+        @if(informesPendientes > 0) {
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Informes Pendientes</h2>
                 <i class="fas fa-file-alt text-red-500 dark:text-red-400 text-2xl"></i>
             </div>
             <p class="text-4xl text-red-600 dark:text-red-400 font-bold mt-4">{{ informesPendientes }}</p>
-        </ng-container>
-        <ng-template #noInformesPendientes>
+        } @else {
             <div class="flex flex-col items-center text-center">
                 <i class="fas fa-check-circle text-green-300 dark:text-green-500 text-4xl mb-2"></i>
                 <p class="text-green-700 dark:text-green-300 text-sm font-semibold">No hay informes pendientes.</p>
             </div>
-        </ng-template>
+        }
     </div>
 
     <!-- Cuadro 3: Informes Totales -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-blue-100 dark:border-gray-700 hover:shadow-xl transition-shadow">
-        <ng-container *ngIf="totalInformes > 0; else noInformesTotales">
+        @if(totalInformes > 0) {
             <div class="flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-blue-900 dark:text-white">Informes Totales</h2>
                 <i class="fas fa-chart-bar text-green-500 dark:text-green-400 text-2xl"></i>
             </div>
             <p class="text-4xl text-green-600 dark:text-green-400 font-bold mt-4">{{ totalInformes }}</p>
-        </ng-container>
-        <ng-template #noInformesTotales>
+        } @else {
             <div class="flex flex-col items-center text-center">
                 <i class="fas fa-database text-green-300 dark:text-green-500 text-4xl mb-2"></i>
                 <p class="text-green-700 dark:text-green-300 text-sm font-semibold">No hay informes revisados.</p>
             </div>
-        </ng-template>
+        }
     </div>
 </div>

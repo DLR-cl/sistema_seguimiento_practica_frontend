@@ -23,6 +23,7 @@ import { PublicLayoutComponent } from './layout/public-layout/public-layout.comp
 import { SolicitarPracticanteComponent } from './pages/solicitar-practicante/solicitar-practicante.component';
 import { AcademicoComponent } from './roles/academico/components/home/academico.component';
 import { EstadoAcademicosComponent } from './roles/secretaria/components/estado-academicos/estado-academicos.component';
+import { GestionReportesComponent } from './features/gestion-reportes/gestion-reportes.component';
 
 
 export const routes: Routes = [
@@ -118,6 +119,9 @@ export const routes: Routes = [
     },
     {
         path: 'informe-pdf', component: PdfgeneratorComponent,
+    },
+    {
+        path: 'gestion-reportes', component: GestionReportesComponent,
     },
     {
         path: '**', component: NotFoundComponent

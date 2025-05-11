@@ -1,0 +1,42 @@
+<!-- Reporte semestral -->
+<div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700 mb-10">
+    <p-toast></p-toast>
+    <h2 class="text-xl md:text-2xl font-bold text-blue-800 dark:text-blue-300 mb-8 border-b pb-4">Generar Reporte
+        Semestral</h2>
+    <form [formGroup]="reporteSemestralForm" (ngSubmit)="generarReporteSemestral()">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label for="practica" class="block text-sm font-semibold text-gray-700 dark:text-gray-200">Tipo de
+                    Práctica</label>
+                <p-dropdown id="practica" formControlName="practica" [options]="tipoPracticaOptions()"
+                    placeholder="Selecciona una práctica" styleClass="w-full" class="w-full mt-2"></p-dropdown>
+                <small class="text-red-500" *ngIf="reporteSemestralForm.get('practica')?.invalid && reporteSemestralForm.get('practica')?.touched">
+                    El tipo de práctica es requerido
+                </small>
+            </div>
+            <div>
+                <label for="fecha_in" class="block text-sm font-semibold text-gray-700 dark:text-gray-200">Fecha de
+                    Inicio</label>
+                <p-calendar id="fecha_in" formControlName="fecha_in" styleClass="w-full" class="w-full mt-2"
+                    dateFormat="dd/mm/yy" [monthNavigator]="true" [yearNavigator]="true"
+                    [yearRange]="'2000:2030'"></p-calendar>
+                <small class="text-red-500" *ngIf="reporteSemestralForm.get('fecha_in')?.invalid && reporteSemestralForm.get('fecha_in')?.touched">
+                    La fecha de inicio es requerida
+                </small>
+            </div>
+            <div>
+                <label for="fecha_fin" class="block text-sm font-semibold text-gray-700 dark:text-gray-200">Fecha de
+                    Fin</label>
+                <p-calendar id="fecha_fin" formControlName="fecha_fin" styleClass="w-full" class="w-full mt-2"
+                    dateFormat="dd/mm/yy" [monthNavigator]="true" [yearNavigator]="true"></p-calendar>
+                <small class="text-red-500" *ngIf="reporteSemestralForm.get('fecha_fin')?.invalid && reporteSemestralForm.get('fecha_fin')?.touched">
+                    La fecha de fin es requerida
+                </small>
+            </div>
+        </div>
+        <button type="submit"
+            class="mt-8 w-full bg-blue-700 hover:bg-blue-800 text-white py-3 px-6 rounded-lg shadow font-semibold transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            Generar Reporte
+        </button>
+    </form>
+</div>
