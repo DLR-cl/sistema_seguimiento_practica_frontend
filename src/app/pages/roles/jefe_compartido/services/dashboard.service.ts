@@ -124,12 +124,13 @@ export class DashboardService {
     public generarReporteConfidencialPorPeriodo(fecha_ini: string, fecha_fin: string): Observable<Blob> {
         // Convertir las fechas a formato ISO para enviarlas como parámetros
         const params = {
-          fecha_ini: fecha_ini,
-          fecha_fin: fecha_fin,
+            fechaInicio: fecha_ini,
+          fechaFin: fecha_fin,
+          tipoPractica: TipoPractica.PRACTICA_UNO,
         };
     
         // Realizar la solicitud GET al endpoint
-        return this._http.get(`${enviroment.API_URL}/evaluacion-academica/reportes/generar/confidencial/practicas/periodo`, {
+        return this._http.get(`${enviroment.API_URL}/reportes-practica/informe-confidencial`, {
           params,
           responseType: 'blob', // Indicamos que la respuesta será un archivo binario
         });

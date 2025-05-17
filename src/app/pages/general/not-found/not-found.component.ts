@@ -33,20 +33,25 @@ export class NotFoundComponent {
     if (session) {
       switch (rol) {
         case TipoUsuario.JEFE_EMPLEADOR:
-          this._router.navigate(['home-jefe-alumno']);
+          this._router.navigate(['supervisor']);
           break;
         case TipoUsuario.ALUMNO_PRACTICA:
-          console.log("llevando al home-alumno")
-          this._router.navigate(['home-alumno']);
+          this._router.navigate(['alumno']);
           break;
         case TipoUsuario.JEFE_DEPARTAMENTO:
-          this._router.navigate(['home-administracion']);
+          this._router.navigate(['jefe-departamento']);
           break;
         case TipoUsuario.SECRETARIA_CARRERA:
-          this._router.navigate(['home-secretaria']);
+          this._router.navigate(['secretaria']);
+          break;
+        case TipoUsuario.ADMINISTRADOR:
+          this._router.navigate(['administrador']);
+          break;
+        case TipoUsuario.JEFE_CARRERA:
+          this._router.navigate(['jefe-carrera']);
           break;
         case TipoUsuario.SECRETARIA_DEPARTAMENTO:
-          this._router.navigate(['home-secretaria']);
+          this._router.navigate(['secretaria']);
           break;
         default:
           console.warn('Rol desconocido, redirigiendo al home genérico');

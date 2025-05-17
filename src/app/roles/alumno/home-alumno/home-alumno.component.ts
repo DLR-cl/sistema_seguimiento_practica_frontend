@@ -71,7 +71,7 @@ export class HomeAlumnoComponent implements OnInit{
 
     console.log(idPractica)
     console.log()
-    this._router.navigate(['informe-practica-alumno/'+this.dataAlumno.id_usuario+'/'+idPractica!+'/'+idInforme]);
+    this._router.navigate(['alumno/informe-practica-alumno/'+this.dataAlumno.id_usuario+'/'+idPractica!+'/'+idInforme]);
 
   }
 

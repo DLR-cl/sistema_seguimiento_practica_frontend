@@ -114,7 +114,7 @@ export class EstadoPracticaComponent implements OnInit {
     console.log('ide alumno desde estado practica', idAlumnoParam);
     if (!idAlumnoParam || isNaN(Number(idAlumnoParam))) {
       console.error('ID de alumno no válido o no proporcionado');
-      this.router.navigate(['/home-alumno']);
+      this.router.navigate(['/alumno']);
       return;
     }
 
@@ -184,19 +184,29 @@ export class EstadoPracticaComponent implements OnInit {
     const estados: Record<string, number> = {
       CURSANDO: 1,
       ESPERA: 2,
-      ENVIADA : 3,
+      ENVIADA: 3,
       REVISION_GENERAL: 4,
       FINALIZADA: 5,
+      INFORMES_RECIBIDOS: 3,
+      ESPERA_INFORMES: 2
     };
   
     if(estados[estado] >= 3){
-      this.informeService.obtenerRespuestasAlumno(this.detallesPractica!.informe_alumno.id_informe).subscribe({
-        next: result => {
-          this.respuestasAlumno = result
-          console.log(this.respuestasAlumno)
-          this.cargandoDetalle = false
-        }
-      })
+      if (this.detallesPractica?.informe_alumno?.id_informe) {
+        this.informeService.obtenerRespuestasAlumno(this.detallesPractica.informe_alumno.id_informe).subscribe({
+          next: result => {
+            this.respuestasAlumno = result
+            console.log(this.respuestasAlumno)
+            this.cargandoDetalle = false
+          },
+          error: (error) => {
+            console.error('Error al obtener respuestas:', error);
+            this.cargandoDetalle = false;
+          }
+        })
+      } else {
+        this.cargandoDetalle = false;
+      }
     } else {
       this.cargandoDetalle = false
     }

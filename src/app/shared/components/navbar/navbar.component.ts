@@ -255,7 +255,7 @@ export class NavbarComponent implements OnInit{
       case 'ACADEMICO':
         return '/academico';
       case 'ALUMNO_PRACTICA':
-        return '/estado-practica';
+        return '/alumno';
       default:
         return '/';
     }
