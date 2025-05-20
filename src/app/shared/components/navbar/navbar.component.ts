@@ -24,53 +24,7 @@ export class NavbarComponent implements OnInit{
   router = inject(Router);
   idUser = this.authStateService.getData()?.id_usuario;
   // menu que redigire a cada usuario a su 
-  menuItems = signal<MenuOption[]>([
-    { 
-      label: 'Resultados de Practica',
-      path: '/resultados-practica',
-      roles: [TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO, TipoUsuario.ACADEMICO, TipoUsuario.SECRETARIA_DEPARTAMENTO]
-    },
-    {
-      label: 'Informes Evaluativos',
-      path: '/informes',
-      roles: [TipoUsuario.ADMINISTRADOR]
-    },
-    {
-      label: 'Crear Práctica',
-      path: '/crear-practica',
-      roles: [TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.ADMINISTRADOR, TipoUsuario.JEFE_CARRERA]
-    },
-    {
-      label: 'Ver Prácticas',
-      path: '/ver-practicas',
-      roles: [TipoUsuario.JEFE_CARRERA, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.ADMINISTRADOR]
-    },
-    {
-      label: 'Gestionar usuarios',
-      path: '/gestionar-usuarios',
-      roles: [TipoUsuario.ADMINISTRADOR]
-    },
-    {
-      label: 'Académicos',
-      path: '/lista-academicos',
-      roles: [TipoUsuario.ADMINISTRADOR, TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.JEFE_CARRERA, TipoUsuario.JEFE_DEPARTAMENTO]
-    },
-    {
-      label: 'Resultados de Práctica',
-      path: '/resultados-practica',
-      roles: [TipoUsuario.ACADEMICO]
-    },
-    {
-      label: 'Estado de Académicos',
-      path: '/seguimiento-academicos',
-      roles: [TipoUsuario.SECRETARIA_CARRERA]
-    },
-    {
-      label: 'Estado Práctica',
-      path: 'estado-practica/' + this.idUser,
-      roles: [TipoUsuario.ALUMNO_PRACTICA]
-    }
-  ]);
+  menuItems = signal<MenuOption[]>([]);
 
   filteredMenu: MenuOption[] = [];
   mainMenu: MenuOption[] = [];
@@ -84,98 +38,98 @@ export class NavbarComponent implements OnInit{
 
     this.menuItems = signal<MenuOption[]>([
       { 
-        label: 'Resultados de Practica',
-        path: '/resultados-practica',
+        label: 'Reportes',
+        path: '/app/administrador/reportes',
         roles: [TipoUsuario.ADMINISTRADOR]
       },
       {
         label: 'Reportes Administrativos',
-        path: '/jefe-carrera/reportes-administrativos',
+        path: '/app/jefe-carrera/reportes-administrativos',
         roles: [TipoUsuario.JEFE_CARRERA]
       },
       {
         label: 'Reportes Administrativos',
-        path: '/jefe-departamento/generar-reporte',
+        path: '/app/jefe-departamento/reportes',
         roles: [TipoUsuario.JEFE_DEPARTAMENTO]
       },
       {
         label: 'Lista Académicos',
-        path: '/jefe-departamento/lista-academicos',
+        path: '/app/jefe-departamento/lista-academicos',
         roles: [TipoUsuario.JEFE_DEPARTAMENTO]
       },
       {
         label: 'Crear Práctica',
-        path: '/jefe-carrera/crear-practica',
+        path: '/app/jefe-carrera/crear-practica',
         roles: [TipoUsuario.JEFE_CARRERA]
       },
       {
         label: 'Ver Académicos',
-        path: '/jefe-carrera/lista-academicos',
+        path: '/app/jefe-carrera/lista-academicos',
         roles: [TipoUsuario.JEFE_CARRERA]
       },
       {
         label: 'Informes Evaluativos',
-        path: '/informes',
+        path: '/app/administrador/informes',
         roles: [TipoUsuario.ADMINISTRADOR]
       },
       {
         label: 'Crear Práctica',
-        path: '/crear-practica',
+        path: '/app/administrador/crear-practica',
         roles: [TipoUsuario.ADMINISTRADOR]
       },
       {
         label: 'Ver Prácticas',
-        path: '/ver-practicas',
-        roles: [ TipoUsuario.ADMINISTRADOR]
+        path: '/app/administrador/practicas',
+        roles: [TipoUsuario.ADMINISTRADOR]
       },
       {
         label: 'Gestionar usuarios',
-        path: '/gestionar-usuarios',
+        path: '/app/administrador/gestionar-usuarios',
         roles: [TipoUsuario.ADMINISTRADOR]
       },
       {
         label: 'Académicos',
-        path: '/lista-academicos',
+        path: '/app/administrador/academicos',
         roles: [TipoUsuario.ADMINISTRADOR]
       },
       {
         label: 'Crear Práctica',
-        path: '/secretaria/crear-practica',
+        path: '/app/secretaria/crear-practica',
         roles: [TipoUsuario.SECRETARIA_CARRERA]
       },
       {
         label: 'Ver Prácticas',
-        path: '/secretaria/ver-practicas',
+        path: '/app/secretaria/ver-practicas',
         roles: [TipoUsuario.SECRETARIA_CARRERA]
       },
       {
         label: 'Cargar Alumnos',
-        path: '/secretaria/cargar-alumnos-nomina',
+        path: '/app/secretaria/cargar-alumnos-nomina',
         roles: [TipoUsuario.SECRETARIA_CARRERA]
       },
       {
         label: 'Generar Reportes',
-        path: '/secretaria/generar-reportes',
+        path: '/app/secretaria/reportes',
         roles: [TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.SECRETARIA_DEPARTAMENTO]
       },
       {
         label: 'Lista Académicos',
-        path: '/secretaria/lista-academicos',
+        path: '/app/secretaria/lista-academicos',
         roles: [TipoUsuario.SECRETARIA_CARRERA]
       },
       {
         label: 'Estado de Académicos',
-        path: '/secretaria/seguimiento-academicos',
+        path: '/app/secretaria/seguimiento-academicos',
         roles: [TipoUsuario.SECRETARIA_CARRERA, TipoUsuario.SECRETARIA_DEPARTAMENTO]
       },
       {
         label: 'Estadísticas',
-        path: '/academico/estadisticas',
+        path: '/app/academico/estadisticas',
         roles: [TipoUsuario.ACADEMICO]
       },
       {
         label: 'Estado Práctica',
-        path: '/alumno/estado-practica/' + this.idUser,
+        path: '/app/alumno/estado-practica/' + this.idUser,
         roles: [TipoUsuario.ALUMNO_PRACTICA]
       }
     ]);
@@ -238,26 +192,26 @@ export class NavbarComponent implements OnInit{
   }
 
   getHomeRoute(): string {
-    // Puedes personalizar la lógica según los roles
+    // Actualizado para incluir el prefijo 'app/'
     switch (this.usuarioRole) {
       case 'ADMINISTRADOR':
-        return '/home-administracion';
+        return '/app/administrador';
       case 'JEFE_CARRERA':
-        return '/jefe-carrera/';
+        return '/app/jefe-carrera';
       case 'JEFE_DEPARTAMENTO':
-        return '/jefe-departamento/';
+        return '/app/jefe-departamento';
       case 'SECRETARIA_CARRERA':
-        return '/secretaria/';
+        return '/app/secretaria';
       case 'SECRETARIA_DEPARTAMENTO':
-        return '/secretaria/';
+        return '/app/secretaria';
       case 'JEFE_EMPLEADOR':
-        return '/supervisor/';
+        return '/app/supervisor';
       case 'ACADEMICO':
-        return '/academico';
+        return '/app/academico';
       case 'ALUMNO_PRACTICA':
-        return '/alumno';
+        return '/app/alumno';
       default:
-        return '/';
+        return '/public';
     }
   }
 }

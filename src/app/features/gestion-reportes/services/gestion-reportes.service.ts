@@ -1,23 +1,21 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { TipoPractica } from '../../../enum/enumerables.enum';
-import { TIPO_PRACTICA } from '../../../roles/supervisor/interface/supervisor.types';
+import { enviroment } from '../../../environment/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GestionReportesService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = enviroment.API_URL;
   constructor() { }
 
-  public obtenerReporteSemestral(tipo_practica: TipoPractica, fecha_in: string | Date, fecha_fin: string | Date) {
+  public obtenerReporteSemestral( fecha_in: string | Date, fecha_fin: string | Date) {
 
     const fechaInicioISO = fecha_in instanceof Date ? fecha_in.toISOString() : new Date(fecha_in).toISOString();
     const fechaFinISO = fecha_fin instanceof Date ? fecha_fin.toISOString() : new Date(fecha_fin).toISOString();
 
     const params = {
-      practica: tipo_practica,
       fecha_in: fechaInicioISO, // Convertir a formato ISO
       fecha_fin: fechaFinISO,  // Convertir a formato ISO
     };
@@ -28,17 +26,31 @@ export class GestionReportesService {
     });
   }
 
-  public generarReporteConfidencial(fecha_in: string | Date, fecha_fin: string | Date,) {
+  public generarReporteConfidencial(fecha_in: string | Date, fecha_fin: string | Date) {
     const fechaInicioISO = fecha_in instanceof Date ? fecha_in.toISOString() : new Date(fecha_in).toISOString();
     const fechaFinISO = fecha_fin instanceof Date ? fecha_fin.toISOString() : new Date(fecha_fin).toISOString();
 
     const params = {
-      fecha_in: fechaInicioISO,
-      fecha_fin: fechaFinISO,
-      tipo_practica: TIPO_PRACTICA.PRACTICA_UNO,
+      fechaInicio: fechaInicioISO,
+      fechaFin: fechaFinISO,
     };
 
     return this.http.get(`${this.apiUrl}/reportes-practica/informe-confidencial`, {
+      params,
+      responseType: 'blob',
+    });
+  }
+
+  public obtenerReporteAcademicos(fecha_in: string | Date, fecha_fin: string | Date) {
+    const fechaInicioISO = fecha_in instanceof Date ? fecha_in.toISOString() : new Date(fecha_in).toISOString();
+    const fechaFinISO = fecha_fin instanceof Date ? fecha_fin.toISOString() : new Date(fecha_fin).toISOString();
+
+    const params = {
+      fechaInicio: fechaInicioISO,
+      fechaFin: fechaFinISO,
+    };
+
+    return this.http.get(`${this.apiUrl}/reportes-practica/resultado-academico`, {
       params,
       responseType: 'blob',
     });

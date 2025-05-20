@@ -76,11 +76,19 @@ export class LoginPageComponent implements OnInit {
         this.cargandoLogin.set(false);
 
         if (response.primerInicioSesion) {
-          this.router.navigate(['/cambiar-clave']);
+          this.router.navigate(['/app/cambiar-clave']).then(success => {
+            if (!success) {
+              console.error('Error al navegar a cambiar-clave');
+              this.router.navigate(['/public']);
+            }
+          });
         } else {
-          setTimeout(() => {
-            this.router.navigate(['menu']);
-          }, 100);
+          this.router.navigate([`/app/menu`]).then(success => {
+            if (!success) {
+              console.error('Error al navegar a la ruta específica del rol');
+              this.router.navigate(['/app/menu']);
+            }
+          });
         }
       },
       error: (error: any) => {
@@ -102,6 +110,10 @@ export class LoginPageComponent implements OnInit {
   }
 
   goToHome() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/public']).then(success => {
+      if (!success) {
+        console.error('Error al navegar a home');
+      }
+    });
   }
 }

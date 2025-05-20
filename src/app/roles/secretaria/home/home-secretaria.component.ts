@@ -57,23 +57,23 @@ export class HomeSecretariaComponent {
   }
 
   public goToInformes() {
-    this.router.navigate(['/secretaria/ver-informes-jefe']);
+    this.router.navigate(['/app/secretaria/ver-informes-jefe']);
   }
 
   public goToPracticas() {
-    this.router.navigate(['/secretaria/ver-practicas']);
+    this.router.navigate(['/app/secretaria/ver-practicas']);
   }
 
   // Nueva función para Cargar Usuarios por Nómina
   public cargarUsuariosPorNomina() {
-    this.router.navigate(['/secretaria/cargar-alumnos-nomina']);
+    this.router.navigate(['/app/secretaria/cargar-alumnos-nomina']);
   }
 
   public goToEstadoAcademicos() {
-    this.router.navigate(['/secretaria/seguimiento-academicos']);
+    this.router.navigate(['/app/secretaria/seguimiento-academicos']);
   }
 
   public goToGenerarReportes() {
-    this.router.navigate(['/secretaria/generar-reportes']);
+    this.router.navigate(['/app/secretaria/reportes']);
   }
 }

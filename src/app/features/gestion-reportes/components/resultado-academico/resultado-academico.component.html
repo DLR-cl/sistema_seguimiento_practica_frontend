@@ -1,0 +1,65 @@
+<div class="min-h-[500px] w-full">
+    <p-toast></p-toast>
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-200 dark:border-gray-700">
+        <div class="space-y-8">
+            <!-- Header Section -->
+            <div class="text-center space-y-4">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100">Reporte de Resultados Académicos</h2>
+                <p class="text-gray-600 dark:text-gray-300">Seleccione el rango de fechas para generar el reporte de resultados de revisión de los académicos.</p>
+            </div>
+
+            <!-- Date Range Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-2">
+                    <label for="fechaInicio" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                        Fecha de Inicio
+                    </label>
+                    <p-calendar 
+                        id="fechaInicio"
+                        [(ngModel)]="fechaInicio"
+                        styleClass="w-full"
+                        dateFormat="dd/mm/yy"
+                        [showIcon]="true"
+                        [showButtonBar]="true"
+                        [monthNavigator]="true"
+                        [yearNavigator]="true"
+                        [yearRange]="'2000:2030'"
+                        [appendTo]="'body'"
+                        [panelStyleClass]="'custom-datepicker'"
+                        placeholder="Seleccione fecha de inicio">
+                    </p-calendar>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="fechaFin" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                        Fecha de Fin
+                    </label>
+                    <p-calendar 
+                        id="fechaFin"
+                        [(ngModel)]="fechaFin"
+                        styleClass="w-full"
+                        dateFormat="dd/mm/yy"
+                        [showIcon]="true"
+                        [showButtonBar]="true"
+                        [monthNavigator]="true"
+                        [yearNavigator]="true"
+                        [appendTo]="'body'"
+                        [panelStyleClass]="'custom-datepicker'"
+                        placeholder="Seleccione fecha final">
+                    </p-calendar>
+                </div>
+            </div>
+
+            <!-- Button Section -->
+            <div class="flex justify-center mt-8">
+                <p-button 
+                    label="Generar Reporte" 
+                    icon="pi pi-file-pdf" 
+                    (onClick)="generarReporte()"
+                    [loading]="loading"
+                    styleClass="p-button-primary px-6 py-3">
+                </p-button>
+            </div>
+        </div>
+    </div>
+</div>

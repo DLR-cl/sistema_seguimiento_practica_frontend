@@ -4,13 +4,9 @@ import { publicGuard } from "../../shared/guards/auth.guard";
 import { HomeComponent } from "./home/home.component";
 
 export const routes: Routes = [
+
     {
         path: '',
-        component: PublicLayoutComponent,
-        canActivate: [publicGuard()]
-    },
-    {
-        path: 'home',
         loadComponent: () => import('./home/home.component').then(c => c.HomeComponent),
         canActivate: [publicGuard()]
     },

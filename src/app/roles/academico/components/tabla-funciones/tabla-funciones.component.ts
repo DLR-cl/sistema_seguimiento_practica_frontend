@@ -26,9 +26,10 @@ export class TablaFuncionesComponent implements OnInit {
   constructor(
     private router: Router,
     private dataAccessService: DataAccessService,
-    private authService: AuthService,
     private datosPracticaService: DatosPracticaService,
-    private messageService: MessageService
+    private authService: AuthService,
+    private messageService: MessageService,
+
   ) {}
 
   ngOnInit(): void {
@@ -58,12 +59,15 @@ export class TablaFuncionesComponent implements OnInit {
   idInformeSeleccionado!: number;
   idDocenteSeleccionado!: number;
 
-  public descargarPDF(idPractica: number, idInforme: number, idDocente: number): void {
-    this.cargandoDescarga = true;
-    this.idPracticaSeleccionada = idPractica;
-    this.idInformeSeleccionado = idInforme;
-    this.idDocenteSeleccionado = idDocente;
-    this.mostrarPdfComponent = true;
+  // Paginación manual para la tabla nativa
+  paginaActual: number = 1;
+  filasPorPagina: number = 5;
+  get totalPaginas(): number {
+    return Math.ceil((this.data?.length || 0) / this.filasPorPagina) || 1;
+  }
+
+  public descargarPDF(idPractica: number): void {
+    this.datosPracticaService.descargarPDF(idPractica);
   }
 
   public onPdfGenerado(): void {
@@ -75,6 +79,7 @@ export class TablaFuncionesComponent implements OnInit {
     const token = this.decodedToken?.access_token;
     this.dataAccessService.getInformacionInformes(token).subscribe({
       next: (r) => {
+        console.log(r);
         this.data = r;
         this.asignado = this.data.length > 0;
         this.cargando = false;

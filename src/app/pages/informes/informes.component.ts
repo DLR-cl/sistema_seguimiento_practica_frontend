@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { InformesService } from '../services/informes.service';
-import { InformeEvaluativo } from '../dto/informes.dto';
+import { InformesService } from '../roles/jefe_compartido/services/informes.service';
+import { InformeEvaluativo } from '../roles/jefe_compartido/dto/informes.dto';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../header-jefes/header.component';
-import { PdfgeneratorComponent } from '../../../../shared/pdfgenerator/pdfgenerator.component';
-import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
+import { HeaderComponent } from '../roles/jefe_compartido/header-jefes/header.component';
+import { PdfgeneratorComponent } from '../../shared/pdfgenerator/pdfgenerator.component';
+import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { DatosPracticaService } from '../../roles/academico/services/datos-practica.service';
 
 @Component({
   selector: 'app-informes',
@@ -37,7 +38,10 @@ export class InformesComponent implements OnInit {
     PRACTICA_DOS: 'Práctica Profesional II'
   }
 
-  constructor(private informesService: InformesService) {}
+  constructor(
+    private informesService: InformesService,
+    private datosPracticaService: DatosPracticaService
+  ) {}
 
   ngOnInit(): void {
     this.informesService.obtenerInformes().subscribe({
@@ -83,12 +87,8 @@ export class InformesComponent implements OnInit {
     this.actualizarListaPaginada();
   }
 
-  public descargarPDF(idPractica: number, idInforme: number, idDocente: number): void {
-    this.cargandoDescarga = true;
-    this.idPracticaSeleccionada = idPractica;
-    this.idInformeSeleccionado = idInforme;
-    this.idDocenteSeleccionado = idDocente;
-    this.mostrarPdfComponent = true;
+  public descargarPDF(idPractica: number): void {
+    this.datosPracticaService.descargarPDF(idPractica);
   }
 
   public onPdfGenerado(): void {

@@ -104,7 +104,7 @@ export class AuthService {
       case TipoUsuario.JEFE_DEPARTAMENTO:
         return '/jefe-departamento/';
       case TipoUsuario.ADMINISTRADOR:
-        return '/home-administracion';
+        return '/administrador/';
       case TipoUsuario.SECRETARIA_CARRERA:
         return '/secretaria/';
       case TipoUsuario.SECRETARIA_DEPARTAMENTO:

@@ -120,13 +120,13 @@ export class DashboardService {
         });
     }
     
-
-    public generarReporteConfidencialPorPeriodo(fecha_ini: string, fecha_fin: string): Observable<Blob> {
+ //TODO: Borrar luego de reemplazar las dependencias
+    public generarReporteConfidencialPorPeriodo(fecha_ini: string, fecha_fin: string, tipoPractica: TipoPractica): Observable<Blob> {
         // Convertir las fechas a formato ISO para enviarlas como parámetros
         const params = {
             fechaInicio: fecha_ini,
           fechaFin: fecha_fin,
-          tipoPractica: TipoPractica.PRACTICA_UNO,
+          tipoPractica: tipoPractica,
         };
     
         // Realizar la solicitud GET al endpoint

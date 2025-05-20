@@ -39,13 +39,13 @@ import { firstValueFrom } from 'rxjs';
         } @else {
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
             <app-stats-card
-              title="Informes Aprobados"
-              [stats]="datosConteoPractica()?.aprobados"
+              title="Revisión Práctica I"
+              [stats]="datosConteoPractica()?.PRACTICA_UNO"
               type="success"
             />
             <app-stats-card
-              title="Informes Reprobados"
-              [stats]="datosConteoPractica()?.reprobados"
+              title="Revisión Práctica II"
+              [stats]="datosConteoPractica()?.PRACTICA_DOS"
               type="error"
             />
           </div>
@@ -116,10 +116,9 @@ export class StatiscComponent implements OnInit {
         firstValueFrom(this.dashboardService.obtenerInformesPorMesPractica(this.dataUser()?.id_usuario))
       ]);
 
-      console.log('Datos de conteo:', conteoData);
-      console.log('Datos por mes:', conteoByMesData);
 
       this.datosConteoPractica.set(conteoData);
+      console.log(conteoData)
       this.datosConteoPracticaInformesByMes.set(conteoByMesData);
     } catch (error) {
       console.error('Error al cargar estadísticas:', error);

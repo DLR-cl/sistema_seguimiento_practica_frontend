@@ -1,31 +1,120 @@
-<<<<<<< HEAD
-# sistema_seguimiento_practica_frontend
-=======
-# SistemaSeguimientoPracticaFrontend
+# Sistema de Seguimiento de Práctica - Optimización y Remodelación
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.9.
+## Descripción General
+Este documento detalla el proceso de optimización y remodelación del Sistema de Seguimiento de Práctica, enfocándose en la mejora de la gestión de usuarios y la experiencia del usuario.
 
-## Development server
+## Proceso de Optimización
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### 1. Componentización
+Se implementó una arquitectura basada en componentes para mejorar la mantenibilidad y reutilización del código:
 
-## Code scaffolding
+- **Componentes Principales**:
+  - `gestionar-usuarios`: Componente principal que coordina la gestión de usuarios
+  - `buscador-usuarios`: Componente dedicado a la búsqueda y filtrado
+  - `lista-usuarios`: Componente para la visualización y paginación de usuarios
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 2. Mejoras en la Gestión de Usuarios
 
-## Build
+#### 2.1 Filtrado y Búsqueda
+- Implementación de búsqueda en tiempo real
+- Filtrado por tipo de usuario
+- Búsqueda por nombre, correo y RUT
+- Optimización de la lógica de filtrado para mejor rendimiento
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+#### 2.2 Paginación
+- Implementación de paginación del lado del cliente
+- 10 usuarios por página
+- Navegación intuitiva entre páginas
+- Indicadores de página actual y total de resultados
 
-## Running unit tests
+#### 2.3 Gestión de Usuarios
+- Modal para gestión de usuarios individuales
+- Funcionalidades implementadas:
+  - Cambio de correo electrónico
+  - Restablecimiento de contraseña
+  - Validación de permisos por rol
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### 3. Mejoras en la Interfaz de Usuario
 
-## Running end-to-end tests
+#### 3.1 Diseño Responsivo
+- Implementación de Tailwind CSS para diseño adaptable
+- Soporte para modo oscuro
+- Diseño optimizado para diferentes tamaños de pantalla
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+#### 3.2 Feedback al Usuario
+- Indicadores de carga
+- Mensajes de confirmación
+- Notificaciones de éxito/error
+- Validaciones en tiempo real
 
-## Further help
+### 4. Optimizaciones Técnicas
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
->>>>>>> origin/master
+#### 4.1 Rendimiento
+- Implementación de lazy loading para componentes
+- Optimización de consultas al backend
+- Manejo eficiente de estados y actualizaciones
+
+#### 4.2 Seguridad
+- Validación de roles y permisos
+- Protección contra inyección de datos
+- Manejo seguro de contraseñas
+
+#### 4.3 Código
+- Implementación de TypeScript para mejor tipado
+- Uso de interfaces para definir estructuras de datos
+- Implementación de servicios para lógica de negocio
+
+## Estructura de Archivos
+
+```
+src/app/features/gestion-usuarios/
+├── body/
+│   ├── gestionar-usuarios.component.ts
+│   └── gestionar-usuarios.component.html
+├── components/
+│   ├── buscador-usuarios/
+│   │   └── buscador-usuarios.component.ts
+│   └── lista-usuarios/
+│       ├── lista-usuarios.component.ts
+│       └── lista-usuarios.component.html
+└── services/
+    └── usuarios.service.ts
+```
+
+## Tecnologías Utilizadas
+
+- Angular 18
+- TypeScript
+- Tailwind CSS
+- PrimeNG
+- RxJS
+
+## Mejoras Futuras Planificadas
+
+1. **Optimización de Rendimiento**
+   - Implementación de virtual scrolling para grandes conjuntos de datos
+   - Caché de resultados de búsqueda
+
+2. **Funcionalidades Adicionales**
+   - Exportación de datos
+   - Filtros avanzados
+   - Historial de cambios
+
+3. **Mejoras en la Experiencia de Usuario**
+   - Tutoriales interactivos
+   - Personalización de la interfaz
+   - Accesibilidad mejorada
+
+## Contribución
+
+Para contribuir al proyecto:
+
+1. Fork el repositorio
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+## Contacto
+
+Para reportar problemas o sugerir mejoras, por favor crear un issue en el repositorio.

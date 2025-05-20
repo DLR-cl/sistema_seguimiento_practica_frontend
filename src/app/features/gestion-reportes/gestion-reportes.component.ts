@@ -1,31 +1,46 @@
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { CalendarModule } from 'primeng/calendar';
-import { DropdownModule } from 'primeng/dropdown';
-import { TipoPractica } from '../../enum/enumerables.enum';
+import { DialogModule } from 'primeng/dialog';
 import { ReporteResultadosPracticaComponent } from './components/reporte-resultados-practica/reporte-resultados-practica.component';
 import { ReporteRespuestasConfidencialComponent } from './components/reporte-respuestas-confidencial/reporte-respuestas-confidencial.component';
+import { ResultadoAcademicoComponent } from './components/resultado-academico/resultado-academico.component';
+import { TipoPractica } from '../../enum/enumerables.enum';
 
 @Component({
   selector: 'app-gestion-reportes',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CalendarModule, DropdownModule, ReporteResultadosPracticaComponent, ReporteRespuestasConfidencialComponent],
+  imports: [
+    CommonModule,
+    DialogModule,
+    ReporteResultadosPracticaComponent,
+    ReporteRespuestasConfidencialComponent,
+    ResultadoAcademicoComponent
+  ],
   templateUrl: './gestion-reportes.component.html',
-  styleUrl: './gestion-reportes.component.css'
+  styleUrls: ['./gestion-reportes.component.css']
 })
-export class GestionReportesComponent implements OnInit {
+export class GestionReportesComponent {
+  tipoPracticaOptions = [
+    { label: 'Práctica Profesional I', value: TipoPractica.PRACTICA_UNO },
+    { label: 'Práctica Profesional II', value: TipoPractica.PRACTICA_DOS }
+  ];
 
+  // Variables para controlar la visibilidad de los modales
+  mostrarModalResultadosPractica = false;
+  mostrarModalRespuestasConfidencial = false;
+  mostrarModalResultadosAcademicos = false;
 
-  tipoPracticaOptions!: string[]; 
-
-  ngOnInit(): void {
-
-    this.tipoPracticaOptions = Object.values(TipoPractica).map(tipo => {
-      if(tipo === TipoPractica.PRACTICA_UNO) {
-        return 'Primera Práctica';
-      }
-        return 'Segunda Práctica';
-    });
+  mostrarModal(tipo: 'resultados-practica' | 'respuestas-confidenciales' | 'resultados-academicos') {
+    switch (tipo) {
+      case 'resultados-practica':
+        this.mostrarModalResultadosPractica = true;
+        break;
+      case 'respuestas-confidenciales':
+        this.mostrarModalRespuestasConfidencial = true;
+        break;
+      case 'resultados-academicos':
+        this.mostrarModalResultadosAcademicos = true;
+        break;
+    }
   }
 }

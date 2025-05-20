@@ -1,0 +1,210 @@
+<!-- Loading spinner -->
+<div *ngIf="cargando" class="flex justify-center items-center min-h-screen">
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- Main content -->
+<div class="x-auto w-full h-screen bg-white dark:bg-gray-800 shadow-md">
+
+  <div *ngIf="!cargando" class="container mx-auto w-full py-8 bg-white dark:bg-gray-800 shadow-md">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Gestión de Usuarios</h1>
+      <p class="text-gray-600 dark:text-gray-400">Administra los usuarios del sistema y sus permisos.</p>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Tipo de Usuario Filter -->
+        <div>
+          <label for="tipoUsuario" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Tipo de Usuario
+          </label>
+          <select id="tipoUsuario" [(ngModel)]="tipoUsuarioFiltro" (ngModelChange)="aplicarFiltros()"
+            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+            <option value="">Todos los usuarios</option>
+            <option value="JEFE_CARRERA">Jefe de Carrera</option>
+            <option value="JEFE_DEPARTAMENTO">Jefe de Departamento</option>
+            <option value="SECRETARIA_CARRERA">Secretaria de Carrera</option>
+            <option value="SECRETARIA_DEPARTAMENTO">Secretaria de Departamento</option>
+            <option value="ACADEMICO">Académico</option>
+            <option value="SUPERVISOR">Supervisor</option>
+            <option value="ALUMNO">Alumno</option>
+          </select>
+        </div>
+
+        <!-- Search -->
+        <div>
+          <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            Buscar
+          </label>
+          <input type="text" id="search" [(ngModel)]="terminoBusqueda" (ngModelChange)="aplicarFiltros()"
+            placeholder="Buscar por nombre, email o RUT..."
+            class="w-full rounded-lg border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+        </div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead class="bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Nombre
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Email
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                RUT
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Tipo de Usuario
+              </th>
+              <th
+                class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                Acciones
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr *ngFor="let usuario of usuariosFiltrados" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                {{usuario.nombre}}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                {{usuario.correo}}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                {{usuario.rut}}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                {{usuario.tipo_usuario}}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                <button *ngIf="esRolPermitido(usuario.tipo_usuario)" (click)="abrirModal(usuario)"
+                  class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">
+                  Gestionar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div
+        class="bg-white dark:bg-gray-800 px-4 py-3 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 sm:px-6">
+        <div class="flex-1 flex justify-between sm:hidden">
+          <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1"
+            class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            Anterior
+          </button>
+          <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas"
+            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+            Siguiente
+          </button>
+        </div>
+        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+          <div>
+            <p class="text-sm text-gray-700 dark:text-gray-300">
+              Mostrando
+              <span class="font-medium">{{(paginaActual - 1) * usuariosPorPagina + 1}}</span>
+              a
+              <span class="font-medium">{{Math.min(paginaActual * usuariosPorPagina, totalUsuarios)}}</span>
+              de
+              <span class="font-medium">{{totalUsuarios}}</span>
+              resultados
+            </p>
+          </div>
+          <div>
+            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+              <button (click)="cambiarPagina(paginaActual - 1)" [disabled]="paginaActual === 1"
+                class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <span class="sr-only">Anterior</span>
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                  aria-hidden="true">
+                  <path fill-rule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+              <button *ngFor="let pagina of [].constructor(totalPaginas); let i = index" (click)="cambiarPagina(i + 1)"
+                [class.bg-indigo-50]="paginaActual === i + 1"
+                class="relative inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">
+                {{i + 1}}
+              </button>
+              <button (click)="cambiarPagina(paginaActual + 1)" [disabled]="paginaActual === totalPaginas"
+                class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm font-medium text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <span class="sr-only">Siguiente</span>
+                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                  aria-hidden="true">
+                  <path fill-rule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<p-dialog [(visible)]="modalVisible" [style]="{width: '450px'}" header="Gestionar Usuario" [modal]="true"
+  [draggable]="false" [resizable]="false" (onHide)="cerrarModal()">
+  <div class="p-4">
+    <div *ngIf="usuarioSeleccionado" class="space-y-4">
+      <div>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          {{usuarioSeleccionado.nombre}}
+        </h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {{usuarioSeleccionado.correo}}
+        </p>
+      </div>
+
+      <!-- Cambiar Correo -->
+      <div *ngIf="rolesConCambiarCorreo.includes(usuarioSeleccionado.tipo_usuario)">
+        <div *ngIf="!mostrarInputCorreo">
+          <button (click)="activarEdicionCorreo()"
+            class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+            Cambiar correo electrónico
+          </button>
+        </div>
+        <div *ngIf="mostrarInputCorreo" class="space-y-2">
+          <input type="email" [(ngModel)]="nuevoCorreo"
+            class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+            placeholder="Nuevo correo electrónico">
+          <div class="flex justify-end space-x-2">
+            <button (click)="confirmarCambiarCorreo()"
+              class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">
+              Confirmar
+            </button>
+            <button (click)="mostrarInputCorreo = false"
+              class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-md">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Restablecer Contraseña -->
+      <button (click)="confirmarRestablecerContrasena()"
+        class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md">
+        Restablecer contraseña
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-toast></p-toast>

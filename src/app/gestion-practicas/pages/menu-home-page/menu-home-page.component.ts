@@ -5,7 +5,7 @@ import { TipoUsuario } from '../../../enum/enumerables.enum';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
-
+//TODO: Mover a shared.
 @Component({
   selector: 'app-menu-home-page',
   standalone: true,
@@ -71,9 +71,31 @@ export class MenuHomePageComponent implements OnInit {
   }
 
   goToHomeByRol() {
-    console.log(this.userRole());
-    const path = this.authService.getRedirectUrlByRole(this.userRole());
-    this.router.navigate([path])
-    console.log("hola")
+    try {
+      const role = this.userRole();
+      if (!role) {
+        console.error('No se pudo determinar el rol del usuario');
+        return;
+      }
+
+      const path = this.authService.getRedirectUrlByRole(role);
+      if (!path) {
+        console.error('No se encontró una ruta válida para el rol:', role);
+        return;
+      }
+
+      // Asegurarse de que la ruta comience con 'app/'
+      const fullPath = path.startsWith('app/') ? path : `app/${path}`;
+      
+      this.router.navigate([fullPath]).then(success => {
+        if (!success) {
+          console.error('Error al navegar a:', fullPath);
+        }
+      }).catch(error => {
+        console.error('Error en la navegación:', error);
+      });
+    } catch (error) {
+      console.error('Error en goToHomeByRol:', error);
+    }
   }
 }

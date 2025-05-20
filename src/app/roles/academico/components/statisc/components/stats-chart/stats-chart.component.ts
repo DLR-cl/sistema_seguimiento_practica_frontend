@@ -1,7 +1,9 @@
 import { Component, ElementRef, Input, OnInit, ViewChild, AfterViewInit, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Chart } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 import type { ConteoPorMes } from '../../../../../../shared/interface/reporte-practica.interface';
+
+Chart.register(...registerables);
 
 @Component({
   selector: 'app-stats-chart',

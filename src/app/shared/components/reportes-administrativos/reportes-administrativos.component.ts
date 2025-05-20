@@ -9,6 +9,7 @@ import { PayloadInterface } from '../../interface/payload.interface';
 import { DropdownModule } from 'primeng/dropdown';
 import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
+import { ReportesService } from '../../services/reportes.service';
 
 @Component({
   selector: 'app-reportes-administrativos',
@@ -19,6 +20,7 @@ import { CalendarModule } from 'primeng/calendar';
 })
 export class ReportesAdministrativosComponent {
   private readonly _dataUserService = inject(AuthStateService);
+  private readonly _reportesService = inject(ReportesService)
   private readonly _dashboardService = inject(DashboardService);
 
   dataUser?: PayloadInterface | null
@@ -55,6 +57,7 @@ export class ReportesAdministrativosComponent {
       this.reporteForm = this.fb.group({
         fecha_ini: ['', Validators.required],
         fecha_fin: ['', Validators.required],
+        tipoPractica: ['PRACTICA_UNO', [Validators.required, this.validarTipoPractica()]],
       });
     }
     this.reporteAnualAcademicos = this.fb.group(
@@ -88,6 +91,7 @@ export class ReportesAdministrativosComponent {
     };
   }
 
+  // TODO: Describir la funcionalidad, se obtiene los reportes generados automaticamente.
   generarReporteSemestral(): void {
     if (this.reporteSemestralForm.valid) {
       // Obtén los valores del formulario
@@ -101,18 +105,18 @@ export class ReportesAdministrativosComponent {
 
   generarReporteConfidencial(): void {
     if (this.reporteForm.valid) {
-        const { fecha_ini, fecha_fin } = this.reporteForm.value;
+        const { fecha_ini, fecha_fin, tipoPractica } = this.reporteForm.value;
 
         // Convertir las fechas a formato ISO y extraer la parte de la fecha
         const fechaInicioFormateada = new Date(fecha_ini).toISOString().split('T')[0];
         const fechaFinFormateada = new Date(fecha_fin).toISOString().split('T')[0];
 
-        this._dashboardService.generarReporteConfidencialPorPeriodo(fechaInicioFormateada, fechaFinFormateada).subscribe({
+        this._reportesService.generarReporteConfidencialPorPeriodo(fechaInicioFormateada, fechaFinFormateada, tipoPractica).subscribe({
             next: (response: Blob) => {
                 const url = window.URL.createObjectURL(response);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `reporte_confidencial_${fechaInicioFormateada}_a_${fechaFinFormateada}.xlsx`;
+                link.download = `reporte_confidencial_${fechaInicioFormateada}_a_${fechaFinFormateada}_${tipoPractica}.xlsx`;
                 link.click();
                 window.URL.revokeObjectURL(url);
             },

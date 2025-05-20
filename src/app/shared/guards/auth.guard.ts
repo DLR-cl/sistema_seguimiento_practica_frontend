@@ -3,39 +3,51 @@ import { AuthStateService } from "../data-access/auth-state.service";
 import { inject } from "@angular/core";
 import { AuthService } from "../../auth/services/auth.service";
 
-// si no inicia sesión, no entra a ningun lado
-export const privateGuard =  (): CanActivateFn => {
+// Guard para rutas protegidas
+export const privateGuard = (): CanActivateFn => {
     return () => {
-        const authState = inject(AuthStateService)
+        const authState = inject(AuthStateService);
         const router = inject(Router);
 
         const session = authState.getSession();
         
-        if(session){
+        if (session) {
             return true;
         }
 
-        router.navigateByUrl('login');
-        
+        // Redirigir a la página de login
+        router.navigate(['/public/login']);
         return false;
     }
 }
-// dsad
 
+// Guard para rutas públicas
 export const publicGuard = (): CanActivateFn => {
     return () => {
-
-
         const authState = inject(AuthStateService);
         const authService = inject(AuthService);
         const router = inject(Router);
         const session = authState.getSession();
-        // hay que redigir dependiendo del rol que tengan.
-        if(session) {
 
-            const redirectUrl = authService.getRedirectUrlByRole(authState.getRole());
-            return router.parseUrl(redirectUrl);
+        // Si hay sesión, redirigir según el rol
+        if (session) {
+            const role = authState.getRole();
+            if (!role) {
+                console.error('No se pudo determinar el rol del usuario');
+                return router.parseUrl('/public');
+            }
+
+            const redirectUrl = authService.getRedirectUrlByRole(role);
+            if (!redirectUrl) {
+                console.error('No se encontró una ruta válida para el rol:', role);
+                return router.parseUrl('/app/menu');
+            }
+
+            // Asegurarse de que la ruta comience con 'app/'
+            const fullPath = redirectUrl.startsWith('app/') ? redirectUrl : `app/${redirectUrl}`;
+            return router.parseUrl(`/${fullPath}`);
         }
+
         return true;
     }
 }

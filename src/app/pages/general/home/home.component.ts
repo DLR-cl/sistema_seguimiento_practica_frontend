@@ -61,10 +61,10 @@ export class HomeComponent implements OnInit {
   }
 
   toLogin(): void {
-    this.router.navigate(['login']);
+    this.router.navigate(['/login']);
   }
 
   toLetter(): void {
-    this.router.navigate(['solicitar-practicante']);
+    this.router.navigate(['/solicitar-practicante']);
   }
 }

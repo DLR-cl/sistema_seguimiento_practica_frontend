@@ -13,59 +13,74 @@
           }
         </div>
     
-        <p-table
-          [value]="data"
-          [paginator]="true"
-          [rows]="5"
-          [responsiveLayout]="'scroll'"
-          styleClass="shadow-sm border dark:border-gray-700 rounded-lg"
-          tableStyleClass="w-full text-sm text-left text-gray-800 dark:text-gray-200 bg-white dark:bg-gray-800"
-        >
-          <ng-template pTemplate="header">
-            <tr>
-              <th class="px-6 py-3 text-center bg-blue-500 dark:bg-blue-600 text-white">Alumno</th>
-              <th class="px-6 py-3 text-center bg-blue-500 dark:bg-blue-600 text-white">Práctica</th>
-              <th class="px-6 py-3 text-center bg-blue-500 dark:bg-blue-600 text-white">Días Restantes</th>
-              <th class="px-6 py-3 text-center bg-blue-500 dark:bg-blue-600 text-white">Estado</th>
-              <th class="px-6 py-3 text-center bg-blue-500 dark:bg-blue-600 text-white">Intentos Restantes</th>
-              <th class="px-6 py-3 text-center bg-blue-500 dark:bg-blue-600 text-white">Acción</th>
-            </tr>
-          </ng-template>
+        <!-- Tabla nativa -->
+        <div class="overflow-x-auto border-solid border-gray-200 dark:border-gray-700 rounded-lg shadow-2xl">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700">
+              <tr>
+                <th class="px-6 py-4 font-semibold text-gray-700 dark:text-gray-200">Alumno</th>
+                <th class="px-6 py-4 font-semibold text-gray-700 dark:text-gray-200">Práctica</th>
+                <th class="px-6 py-4 font-semibold text-gray-700 dark:text-gray-200">Días Restantes</th>
+                <th class="px-6 py-4 font-semibold text-gray-700 dark:text-gray-200">Estado</th>
+                <th class="px-6 py-4 font-semibold text-gray-700 dark:text-gray-200">Intentos Restantes</th>
+                <th class="px-6 py-4 font-semibold text-gray-700 dark:text-gray-200">Acción</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+              <tr *ngFor="let informe of data.slice((paginaActual-1)*filasPorPagina, paginaActual*filasPorPagina)">
+                <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200 text-center">{{ informe.nombre_alumno }}</td>
+                <td class="px-6 py-4 text-gray-600 dark:text-gray-300 text-center">{{ tipoPractica[informe.tipo_practica] }}</td>
+                <td class="px-6 py-4 text-gray-600 dark:text-gray-300 text-center">
+                  {{ informe.estado_informe === 'APROBADA' || informe.estado_informe === 'DESAPROBADA' ? 'Revisión Enviada' : informe.dias_para_revision }}
+                </td>
+                <td class="px-6 py-4 text-gray-600 dark:text-gray-300 text-center">{{ textoEstadoInforme[informe.estado_informe] }}</td>
+                <td class="px-6 py-4 text-gray-600 dark:text-gray-300 text-center">{{ informe.intentos }}</td>
+                <td class="px-6 py-4 text-center">
+                  <div>
+                    @if (informe.estado_informe === 'REVISION') {
+                      <button
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 text-sm rounded-md transition-all duration-200 shadow-sm"
+                        (click)="revision(informe.id_practica)"
+                      >
+                        Revisar
+                      </button>
+                    }
+                    @if (informe.estado_informe === 'APROBADA' || informe.estado_informe === 'DESAPROBADA') {
+                      <button
+                        class="w-full bg-red-600 hover:bg-red-700 text-white px-2 py-2 text-sm rounded-md transition-all duration-200 shadow-sm flex items-center justify-center"
+                      >
+                        <span class="truncate flex items-center justify-center" (click)="descargarPDF(informe.id_practica)">
+                          Descargar
+                          <i class="pi pi-file-pdf ml-2 text-xl"></i>
+                        </span>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="data.length === 0">
+                <td colspan="6" class="text-center py-8 text-gray-500 dark:text-gray-400">No hay informes asignados.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-          <ng-template pTemplate="body" let-informe>
-            <tr class="h-14 border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
-              <td class="px-6 py-2 font-medium text-gray-900 dark:text-white text-center">{{ informe.nombre_alumno }}</td>
-              <td class="px-6 py-2 text-gray-700 dark:text-gray-300 text-center">{{ tipoPractica[informe.tipo_practica] }}</td>
-              <td class="px-6 py-2 text-gray-600 dark:text-gray-400 text-center">
-                {{ informe.estado_informe === 'APROBADA' || informe.estado_informe === 'DESAPROBADA' ? 'Revisión Enviada' : informe.dias_para_revision }}
-              </td>
-              <td class="px-6 py-2 text-gray-600 dark:text-gray-400 text-center">{{ textoEstadoInforme[informe.estado_informe] }}</td>
-              <td class="px-6 py-2 text-gray-600 dark:text-gray-400 text-center">{{ informe.intentos }}</td>
-              <td class="px-6 py-2 text-center">
-                <div>
-                  @if (informe.estado_informe === 'REVISION') {
-                    <button
-                      class="w-full bg-blue-500 dark:bg-blue-600 text-white px-2 py-2 text-sm rounded-md hover:bg-blue-600 dark:hover:bg-blue-700 transition-colors duration-200"
-                      (click)="revision(informe.id_practica)"
-                    >
-                      Revisar
-                    </button>
-                  }
-                  @if (informe.estado_informe === 'APROBADA' || informe.estado_informe === 'DESAPROBADA') {
-                    <button
-                      class="w-full bg-red-500 dark:bg-red-600 text-white px-2 py-2 text-sm rounded-md hover:bg-red-600 dark:hover:bg-red-700 transition-colors duration-200 flex items-center justify-center"
-                    >
-                      <span class="truncate flex items-center justify-center" (click)="descargarPDF(informe.id_practica, informe.id_informe_evaluacion, decodedToken.id_usuario)">
-                        Descargar
-                        <i class="pi pi-file-pdf ml-2 text-xl"></i>
-                      </span>
-                    </button>
-                  }
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
+        <!-- Paginación manual -->
+        <div class="flex justify-center items-center mt-4 gap-2">
+          <button
+            class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
+            [disabled]="paginaActual === 1"
+            (click)="paginaActual = paginaActual - 1"
+          >&laquo;</button>
+          <span class="px-3 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-semibold">
+            {{ paginaActual }}
+          </span>
+          <button
+            class="px-3 py-1 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
+            [disabled]="paginaActual === totalPaginas"
+            (click)="paginaActual = paginaActual + 1"
+          >&raquo;</button>
+        </div>
       </div>
     }
   

@@ -192,13 +192,13 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
 
   generarReporteConfidencial(): void {
     if (this.reporteForm.valid) {
-        const { fecha_ini, fecha_fin } = this.reporteForm.value;
+        const { fecha_ini, fecha_fin, tipoPractica } = this.reporteForm.value;
 
         // Convertir las fechas a formato ISO y extraer la parte de la fecha
         const fechaInicioFormateada = new Date(fecha_ini).toISOString().split('T')[0];
         const fechaFinFormateada = new Date(fecha_fin).toISOString().split('T')[0];
 
-        this._dashboardService.generarReporteConfidencialPorPeriodo(fechaInicioFormateada, fechaFinFormateada).subscribe({
+        this._dashboardService.generarReporteConfidencialPorPeriodo(fechaInicioFormateada, fechaFinFormateada, tipoPractica).subscribe({
             next: (response: Blob) => {
                 const url = window.URL.createObjectURL(response);
                 const link = document.createElement('a');
@@ -326,5 +326,7 @@ export class ResultadosPracticaComponent implements OnInit, AfterViewInit {
       this
     }
   }
+
+  
 
 }

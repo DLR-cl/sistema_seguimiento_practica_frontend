@@ -8,7 +8,7 @@ export const routes: Routes = [
     },
     {
         path: 'ver-practicas',
-        loadComponent: () => import('../../shared/components/visualizacion-academicos/practicas-secretaria.component').then(c => c.PracticasSecretariaComponent),
+        loadComponent: () => import('../../shared/components/gestion-practicas/practicas-secretaria.component').then(c => c.PracticasSecretariaComponent),
     },
     {
         path: 'cargar-alumnos-nomina',
@@ -28,7 +28,7 @@ export const routes: Routes = [
     },
     //TODO: Fix, mover la generación de reportes a local para servidor.
     {
-        path: 'generar-reportes',
-        loadComponent: () => import('../../shared/components/reportes-administrativos/reportes-administrativos.component').then(c => c.ReportesAdministrativosComponent),
+        path: 'reportes',
+        loadComponent: () => import('../../features/gestion-reportes/gestion-reportes.component').then(c => c.GestionReportesComponent), 
     }
 ]

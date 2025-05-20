@@ -36,14 +36,13 @@ export class DatosPracticaService {
     return this.http.patch<any>(`${enviroment.API_URL}/academicos/subir-correccion`, formdata)
   }
 
-  public descargarPDF(practica: GenerarPDF) {
+  public descargarPDF(practica: number) {
     const params = { 
-      id_practica: practica.id_practica, 
-      id_informe_evaluativo: practica.id_informe_evaluativo, 
-      id_docente: practica.id_docente 
+      id_practica: practica, 
     };
+    
     this.http
-    .get(`${enviroment.API_URL}/practicas/reportes/generar/semestral`, {
+    .get(`${enviroment.API_URL}/evaluacion-academica/obtener-informe/evaluacion-practica`, {
       params, // Parámetros en formato JSON
       responseType: 'blob', // Necesario para manejar archivos binarios
     })
@@ -53,12 +52,12 @@ export class DatosPracticaService {
         const url = window.URL.createObjectURL(response);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `reporte_semestral_${practica}.xlsx`;
+        link.download = `informe_evaluacion_practica_${practica}.pdf`;
         link.click();
         window.URL.revokeObjectURL(url); // Liberar la memoria
       },
       error: (error) => {
-        console.error('Error al descargar el reporte semestral:', error);
+        console.error('Error al descargar el informe de evaluación de la práctica:', error);
       },
     });
   }

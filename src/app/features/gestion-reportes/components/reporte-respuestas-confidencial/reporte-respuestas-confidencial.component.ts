@@ -1,33 +1,59 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, input, OnInit } from '@angular/core';
+import { AbstractControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators, FormBuilder } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormControl } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { TipoPractica } from '../../../../enum/enumerables.enum';
 import { GestionReportesService } from '../../services/gestion-reportes.service';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-reporte-respuestas-confidencial',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CalendarModule, DropdownModule, ToastModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    CalendarModule,
+    DropdownModule,
+    ToastModule,
+    ButtonModule
+  ],
+  providers: [MessageService],
   templateUrl: './reporte-respuestas-confidencial.component.html',
   styleUrl: './reporte-respuestas-confidencial.component.css'
 })
-export class ReporteRespuestasConfidencialComponent {
+export class ReporteRespuestasConfidencialComponent implements OnInit {
   
   private gestionReportesService = inject(GestionReportesService);  
   private messageService = inject(MessageService);
+  private fb = inject(FormBuilder);
+  private config = inject(PrimeNGConfig);
   
-  reporteRespuestasConfidencialForm = new FormGroup({
-    fecha_ini: new FormControl('', [Validators.required]),
-    fecha_fin: new FormControl('', [Validators.required]),
-  });
+  reporteRespuestasConfidencialForm: FormGroup;
 
-  tipoPracticaOptions = input.required<string[]>();
-  
+  constructor() {
+    this.reporteRespuestasConfidencialForm = this.fb.group({
+      fecha_ini: [null, Validators.required],
+      fecha_fin: [null, Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+    this.config.setTranslation({
+      firstDayOfWeek: 1,
+      dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+      dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+      dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+      monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+      monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+      today: 'Hoy',
+      clear: 'Limpiar'
+    });
+  }
+
   public generarReporteConfidencial() {
     if(this.reporteRespuestasConfidencialForm.invalid) {
       this.messageService.add({
@@ -40,6 +66,15 @@ export class ReporteRespuestasConfidencialComponent {
 
     const fechaInicio = this.reporteRespuestasConfidencialForm.value.fecha_ini!;
     const fechaFin = this.reporteRespuestasConfidencialForm.value.fecha_fin!;
+
+    if (fechaInicio > fechaFin) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'La fecha de inicio no puede ser posterior a la fecha final'
+      });
+      return;
+    }
 
     this.gestionReportesService.generarReporteConfidencial(fechaInicio, fechaFin).subscribe({
       next: (response) => {
@@ -64,5 +99,15 @@ export class ReporteRespuestasConfidencialComponent {
         });
       },
     });
+  }
+
+  validarTipoPractica(): (control: AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const validValues = Object.values(TipoPractica);
+      if (!validValues.includes(control.value)) {
+        return { tipoPracticaInvalida: true }; // Retorna un error si no es válido
+      }
+      return null; // Válido
+    };
   }
 }

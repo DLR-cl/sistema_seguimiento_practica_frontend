@@ -68,11 +68,6 @@ export class MasInfoPageComponent implements OnInit {
             description: 'Monitorea el progreso de las prácticas y el desarrollo de los practicantes.',
             icon: 'M2 3h20M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3m7 21 5-5 5 5'
           },
-          {
-            title: 'Comunicación con Académicos',
-            description: 'Mantén una comunicación efectiva con los académicos supervisores.',
-            icon: 'm2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8'
-          }
         ];
       case TipoUsuario.JEFE_CARRERA:
       case TipoUsuario.JEFE_DEPARTAMENTO:

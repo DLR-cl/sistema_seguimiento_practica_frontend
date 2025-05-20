@@ -1,32 +1,56 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, input, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators, FormBuilder } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { TipoPractica } from '../../../../enum/enumerables.enum';
 import { GestionReportesService } from '../../services/gestion-reportes.service';
-import { MessageService } from 'primeng/api';
+import { MessageService, PrimeNGConfig } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-reporte-resultados-practica',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CalendarModule, DropdownModule, ToastModule],
+  imports: [
+    ReactiveFormsModule,
+    CommonModule,
+    CalendarModule,
+    DropdownModule,
+    ToastModule,
+    ButtonModule
+  ],
+  providers: [MessageService],
   templateUrl: './reporte-resultados-practica.component.html',
   styleUrl: './reporte-resultados-practica.component.css'
 })
-export class ReporteResultadosPracticaComponent {
+export class ReporteResultadosPracticaComponent implements OnInit {
 
   private gestionReportesService = inject(GestionReportesService);
   private messageService = inject(MessageService);
+  private config = inject(PrimeNGConfig);
 
-  reporteSemestralForm = new FormGroup({
-    practica: new FormControl('', [Validators.required]),
-    fecha_in: new FormControl('', [Validators.required]),
-    fecha_fin: new FormControl('', [Validators.required]),
-  });
+  reporteSemestralForm: FormGroup;
 
-  tipoPracticaOptions = input.required<string[]>();
+  constructor(private fb: FormBuilder) {
+    this.reporteSemestralForm = this.fb.group({
+      fecha_in: [null, [Validators.required]],
+      fecha_fin: [null, [Validators.required]],
+    });
+  }
+
+  ngOnInit(): void {
+    this.config.setTranslation({
+      firstDayOfWeek: 1,
+      dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+      dayNamesShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+      dayNamesMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+      monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+      monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+      today: 'Hoy',
+      clear: 'Limpiar'
+    });
+  }
 
   generarReporteSemestral() {
     if (this.reporteSemestralForm.invalid) {
@@ -38,12 +62,19 @@ export class ReporteResultadosPracticaComponent {
       return;
     }
 
-    const tipoPractica = this.reporteSemestralForm.value.practica! as TipoPractica;
     const fechaInicio = this.reporteSemestralForm.value.fecha_in!;
     const fechaFin = this.reporteSemestralForm.value.fecha_fin!;
 
+    if (fechaInicio > fechaFin) {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'La fecha de inicio no puede ser posterior a la fecha final'
+      });
+      return;
+    }
+
     this.gestionReportesService.obtenerReporteSemestral(
-      tipoPractica,
       fechaInicio,
       fechaFin
     ).subscribe({
@@ -51,7 +82,7 @@ export class ReporteResultadosPracticaComponent {
         const url = window.URL.createObjectURL(response);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `reporte-semestral-${tipoPractica}-${fechaInicio}-${fechaFin}.xlsx`;
+        link.download = `reporte-semestral-${fechaInicio}-${fechaFin}.xlsx`;
         link.click();
         window.URL.revokeObjectURL(url);
         this.messageService.add({

@@ -1,0 +1,126 @@
+/* Los estilos se han movido a styles.css para mejor alcance global */
+
+:host ::ng-deep {
+  .p-dialog {
+    .p-dialog-header {
+      background-color: rgb(31, 41, 55) !important; /* bg-gray-800 */
+      border-bottom: 1px solid rgb(55, 65, 81) !important; /* border-gray-700 */
+      padding: 1.5rem !important;
+      border-top-left-radius: 8px !important;
+      border-top-right-radius: 8px !important;
+    }
+
+    .p-dialog-title {
+      color: rgb(243, 244, 246) !important; /* text-gray-100 */
+      font-size: 1.25rem !important;
+      font-weight: 600 !important;
+    }
+
+    .p-dialog-content {
+      padding: 2rem !important;
+      background-color: rgb(31, 41, 55) !important; /* bg-gray-800 */
+      color: rgb(243, 244, 246) !important; /* text-gray-100 */
+      border-bottom-left-radius: 8px !important;
+      border-bottom-right-radius: 8px !important;
+    }
+
+    .p-dialog-header-close {
+      color: rgb(156, 163, 175) !important; /* text-gray-400 */
+      transition: color 0.2s !important;
+
+      &:hover {
+        color: rgb(243, 244, 246) !important; /* text-gray-100 */
+      }
+    }
+  }
+
+  /* Calendar Styles */
+  .p-calendar {
+    .p-inputtext {
+      background-color: rgb(31, 41, 55) !important; /* bg-gray-800 */
+      border-color: rgb(55, 65, 81) !important; /* border-gray-700 */
+      color: rgb(243, 244, 246) !important; /* text-gray-100 */
+
+      &:hover {
+        border-color: rgb(75, 85, 99) !important; /* border-gray-600 */
+      }
+
+      &:focus {
+        border-color: #3b82f6 !important;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
+      }
+    }
+
+    .p-button {
+      background-color: rgb(31, 41, 55) !important; /* bg-gray-800 */
+      border-color: rgb(55, 65, 81) !important; /* border-gray-700 */
+      color: rgb(243, 244, 246) !important; /* text-gray-100 */
+
+      &:hover {
+        background-color: rgb(55, 65, 81) !important; /* bg-gray-700 */
+      }
+    }
+  }
+
+  /* Datepicker Styles */
+  .p-datepicker {
+    background-color: rgb(31, 41, 55) !important; /* bg-gray-800 */
+    border: 1px solid rgb(55, 65, 81) !important; /* border-gray-700 */
+    color: rgb(243, 244, 246) !important; /* text-gray-100 */
+
+    .p-datepicker-header {
+      background-color: rgb(31, 41, 55) !important; /* bg-gray-800 */
+      border-bottom: 1px solid rgb(55, 65, 81) !important; /* border-gray-700 */
+    }
+
+    .p-datepicker-title {
+      color: rgb(243, 244, 246) !important; /* text-gray-100 */
+    }
+
+    .p-datepicker-prev,
+    .p-datepicker-next {
+      color: rgb(243, 244, 246) !important; /* text-gray-100 */
+
+      &:hover {
+        background-color: rgb(55, 65, 81) !important; /* bg-gray-700 */
+      }
+    }
+
+    .p-datepicker-calendar {
+      th {
+        color: rgb(156, 163, 175) !important; /* text-gray-400 */
+      }
+
+      td {
+        > span {
+          color: rgb(243, 244, 246) !important; /* text-gray-100 */
+
+          &:hover {
+            background-color: rgb(55, 65, 81) !important; /* bg-gray-700 */
+          }
+
+          &.p-highlight {
+            background-color: #3b82f6 !important;
+            color: #ffffff !important;
+          }
+        }
+      }
+    }
+
+    .p-datepicker-buttonbar {
+      border-top: 1px solid rgb(55, 65, 81) !important; /* border-gray-700 */
+      padding: 1rem !important;
+
+      .p-button {
+        background-color: #3b82f6 !important;
+        border-color: #3b82f6 !important;
+        color: #ffffff !important;
+
+        &:hover {
+          background-color: #2563eb !important;
+          border-color: #2563eb !important;
+        }
+      }
+    }
+  }
+}

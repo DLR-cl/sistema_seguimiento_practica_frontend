@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { HeaderComponent } from '../header-jefes/header.component';
-import { UsuariosService } from '../services/usuarios.service';
+import { HeaderComponent } from '../../../../pages/roles/jefe_compartido/header-jefes/header.component';
+import { UsuariosService } from '../../../../pages/roles/jefe_compartido/services/usuarios.service';
 import { forkJoin } from 'rxjs';  // Importamos forkJoin
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,23 +12,57 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MessageModule } from 'primeng/message';
 import { MessagesModule } from 'primeng/messages';
-import { cambiarCorreo } from '../dto/usuarios.dto';
+import { cambiarCorreo } from '../../../../pages/roles/jefe_compartido/dto/usuarios.dto';
 import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
+import { ToastModule } from 'primeng/toast';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+
+interface Usuario {
+  id_usuario: number;
+  nombre: string;
+  correo: string;
+  rut: string;
+  tipo_usuario: string;
+}
+
 @Component({
   selector: 'app-gestionar-usuarios',
   standalone: true,
-  imports: [CommonModule, TableModule, InputTextModule, ButtonModule, FormsModule, DialogModule, ConfirmDialogModule, MessageModule, MessagesModule, NavbarComponent],
+  imports: [
+    CommonModule,
+    TableModule,
+    InputTextModule,
+    ButtonModule,
+    FormsModule,
+    DialogModule,
+    ConfirmDialogModule,
+    MessageModule,
+    MessagesModule,
+    ToastModule,
+    ProgressSpinnerModule
+  ],
   templateUrl: './gestionar-usuarios.component.html',
-  styleUrls: ['./gestionar-usuarios.component.css']
+  styleUrls: ['./gestionar-usuarios.component.css'],
+  providers: [MessageService]
 })
 export class GestionarUsuariosComponent implements OnInit {
 
   cargando: boolean = true;
 
   modalVisible: boolean = false;
-  usuarioSeleccionado: any;
+  usuarioSeleccionado: Usuario | null = null;
   nuevoCorreo: string = '';
   rolesConCambiarCorreo: string[] = ['JEFE_CARRERA', 'JEFE_DEPARTAMENTO'];
+
+  // Propiedades para el filtrado y paginación
+  tipoUsuarioFiltro: string = '';
+  terminoBusqueda: string = '';
+  usuariosFiltrados: Usuario[] = [];
+  paginaActual: number = 1;
+  usuariosPorPagina: number = 10;
+  totalUsuarios: number = 0;
+  totalPaginas: number = 0;
+  Math = Math; // Para usar en el template
 
   constructor(
     private usuariosService: UsuariosService,
@@ -37,6 +71,10 @@ export class GestionarUsuariosComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.cargarUsuarios();
+  }
+
+  cargarUsuarios() {
     forkJoin({
       academicos: this.usuariosService.getUsuariosRol('ACADEMICO'),
       supervisores: this.usuariosService.getUsuariosRol('JEFE_EMPLEADOR'),
@@ -74,6 +112,9 @@ export class GestionarUsuariosComponent implements OnInit {
         this.searchTerms = Array(this.filteredListas.length).fill('');
   
         this.cargando = false; // Finalizamos la carga
+
+        // Combinar todas las listas y aplicar filtros iniciales
+        this.aplicarFiltros();
       },
       error: error => {
         console.error("Error al obtener los datos de los usuarios", error);
@@ -82,21 +123,27 @@ export class GestionarUsuariosComponent implements OnInit {
     });
   }
 
-  listaSecretarias: any = [];
-  listaAcademicos: any = [];
-  listaAlumnos: any = [];
-  // listaJefeCarrera: any = [];
-  // listaJefeDepartamento: any = [];
-  listaSupervisores: any = [];
-  listaJefesCarreraDepartamento: any = []
-  listaAdministradores: any = []
+  listaSecretarias: Usuario[] = [];
+  listaAcademicos: Usuario[] = [];
+  listaAlumnos: Usuario[] = [];
+  listaSupervisores: Usuario[] = [];
+  listaJefesCarreraDepartamento: Usuario[] = [];
+  listaAdministradores: any = [];
 
   searchTerms: string[] = []; // Array para los términos de búsqueda de cada lista
   filteredListas: any[][] = []; // Array de listas filtradas
 
   // Verifica si el rol del usuario es permitido
   esRolPermitido(rol: string): boolean {
-    return this.rolesConCambiarCorreo.includes(rol);
+    const rolesPermitidos = [
+      'JEFE_CARRERA',
+      'JEFE_DEPARTAMENTO',
+      'SECRETARIA_CARRERA',
+      'SECRETARIA_DEPARTAMENTO',
+      'ACADEMICO',
+      'JEFE_EMPLEADOR'
+    ];
+    return rolesPermitidos.includes(rol);
   }
 
   debeMostrarRut(lista: any[]): boolean {
@@ -105,10 +152,11 @@ export class GestionarUsuariosComponent implements OnInit {
     return lista.some((usuario) => rolesConRut.includes(usuario.tipo_usuario));
   }
 
-  abrirModal(usuario: any) {
+  abrirModal(usuario: Usuario) {
     this.usuarioSeleccionado = usuario;
     this.nuevoCorreo = usuario.correo;
     this.modalVisible = true;
+    this.mostrarInputCorreo = false;
     console.log(this.usuarioSeleccionado, 'usuario')
   }
 
@@ -124,6 +172,7 @@ export class GestionarUsuariosComponent implements OnInit {
   // Método que se llama cuando el usuario hace clic en "Editar Correo"
   activarEdicionCorreo() {
     this.mostrarInputCorreo = true;  // Mostrar el input de correo
+    this.nuevoCorreo = this.usuarioSeleccionado?.correo || '';
   }
 
   // El resto del código se mantiene igual
@@ -136,7 +185,7 @@ export class GestionarUsuariosComponent implements OnInit {
       rejectLabel: 'Cancelar',
       accept: () => {
         const usuario: cambiarCorreo = {
-          correoAnterior: this.usuarioSeleccionado.correo,
+          correoAnterior: this.usuarioSeleccionado?.correo || '',
           correoActual: this.nuevoCorreo
         }
         this.usuariosService.cambiarCorreo(usuario).subscribe({
@@ -154,13 +203,13 @@ export class GestionarUsuariosComponent implements OnInit {
 
   confirmarRestablecerContrasena() {
     this.confirmationService.confirm({
-      message: `¿Estás seguro de restablecer la contraseña para ${this.usuarioSeleccionado.nombre}?`,
+      message: `¿Estás seguro de restablecer la contraseña para ${this.usuarioSeleccionado?.nombre}?`,
       acceptButtonStyleClass: 'bg-red-600 border-none hover:bg-red-700 text-white text-sm font-medium px-4 py-2 rounded-lg',
       rejectButtonStyleClass: 'bg-gray-300 border-none hover:bg-gray-400 text-black text-sm font-medium px-4 py-2 rounded-lg',
       acceptLabel: 'Confirmar',
       rejectLabel: 'Cancelar',
       accept: () => {
-        this.usuariosService.restablecerContraseña(this.usuarioSeleccionado.id_usuario, this.usuarioSeleccionado.tipo_usuario).subscribe({
+        this.usuariosService.restablecerContraseña(this.usuarioSeleccionado?.id_usuario || 0, this.usuarioSeleccionado?.tipo_usuario || '').subscribe({
           next: result => {
             this.messageService.add({ severity: 'success', summary: 'Contraseña Restablecida', detail: 'La contraseña ha sido restablecida.' });
             this.cerrarModal();
@@ -205,5 +254,48 @@ export class GestionarUsuariosComponent implements OnInit {
     if (lista === this.listaAlumnos) return 'Alumnos';
     if (lista === this.listaSupervisores) return 'Supervisores';
     return 'Usuarios';
+  }
+
+  aplicarFiltros() {
+    // Combinar todas las listas
+    let todosLosUsuarios = [
+      ...this.listaJefesCarreraDepartamento,
+      ...this.listaSecretarias,
+      ...this.listaAcademicos,
+      ...this.listaSupervisores,
+      ...this.listaAlumnos
+    ];
+
+    // Aplicar filtro por tipo de usuario
+    if (this.tipoUsuarioFiltro) {
+      todosLosUsuarios = todosLosUsuarios.filter(usuario => 
+        usuario.tipo_usuario === this.tipoUsuarioFiltro
+      );
+    }
+
+    // Aplicar búsqueda
+    if (this.terminoBusqueda) {
+      const busqueda = this.terminoBusqueda.toLowerCase().trim();
+      todosLosUsuarios = todosLosUsuarios.filter(usuario =>
+        (usuario.nombre && usuario.nombre.toLowerCase().includes(busqueda)) ||
+        (usuario.correo && usuario.correo.toLowerCase().includes(busqueda)) ||
+        (usuario.rut && usuario.rut.toLowerCase().includes(busqueda))
+      );
+    }
+
+    // Actualizar totales
+    this.totalUsuarios = todosLosUsuarios.length;
+    this.totalPaginas = Math.ceil(this.totalUsuarios / this.usuariosPorPagina);
+
+    // Aplicar paginación
+    const inicio = (this.paginaActual - 1) * this.usuariosPorPagina;
+    this.usuariosFiltrados = todosLosUsuarios.slice(inicio, inicio + this.usuariosPorPagina);
+  }
+
+  cambiarPagina(nuevaPagina: number) {
+    if (nuevaPagina >= 1 && nuevaPagina <= this.totalPaginas) {
+      this.paginaActual = nuevaPagina;
+      this.aplicarFiltros();
+    }
   }
 }

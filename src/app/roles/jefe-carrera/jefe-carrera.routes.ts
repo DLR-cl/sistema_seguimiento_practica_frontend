@@ -3,11 +3,11 @@ import { Routes } from "@angular/router";
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('../../shared/components/home-administrativo/home-administrativo.component').then(c => c.HomeAdministrativoComponent),
+    loadComponent: () => import('../../shared/components/dashboard/dashboard.component').then(c => c.DashboardComponent),
   },
   {
     path: 'reportes-administrativos',
-    loadComponent: () => import('../../shared/components/reportes-administrativos/reportes-administrativos.component').then(c => c.ReportesAdministrativosComponent),
+    loadComponent: () => import('../../features/gestion-reportes/gestion-reportes.component').then(c => c.GestionReportesComponent),
   },
   {
     path: 'crear-practica',

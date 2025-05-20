@@ -8,7 +8,7 @@ import { RouterOutlet } from '@angular/router';
   imports: [NavbarComponent, RouterOutlet],
   template: `
     <app-navbar />
-    <section class="w-full flex-1 flex flex-col min-h-0">
+    <section class="w-full h-full flex-1 flex flex-col ">
   <router-outlet />
 </section>
   `
