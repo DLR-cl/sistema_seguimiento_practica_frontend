@@ -5,13 +5,13 @@ import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BrowserAnimationsModule, provideAnimations } from '@angular/platform-browser/animations';
 import { combinedInterceptor } from './core/interceptors/error-handler.interceptor';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, PrimeNGConfig } from 'primeng/api';
 import { SlowHttpInterceptor } from './core/interceptors/slow-http.interceptor';
 import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 
-
 export const appConfig: ApplicationConfig = {
   providers: [
+    PrimeNGConfig,
     provideZoneChangeDetection({ eventCoalescing: true }),  // Detecta cambios en la zona
     provideRouter(routes), // Proporciona las rutas de la aplicación
     provideHttpClient(
@@ -25,6 +25,6 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom([BrowserAnimationsModule]),
     provideAnimations(), // Animaciones de Angular
     MessageService, // Servicio de PrimeNG para mensajes,
-    ConfirmationService
+    ConfirmationService,
   ]
 };

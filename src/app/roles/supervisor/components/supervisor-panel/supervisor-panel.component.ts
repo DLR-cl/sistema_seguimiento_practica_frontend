@@ -200,8 +200,9 @@ export class SupervisorPanelComponent implements OnInit {
     }
   }
 
-  public realizarInforme(id_informe: number): void {
-    this.router.navigate(['jefe_alumno/formulario_primer_practica/' + id_informe]);
+  public realizarInforme(idInforme: number): void {
+    console.log('idInforme', idInforme)
+    this.router.navigate(['app/supervisor/formulario-practica/' + idInforme]);
   }
 
   public verInforme(informe: DetallesInformes): void {
