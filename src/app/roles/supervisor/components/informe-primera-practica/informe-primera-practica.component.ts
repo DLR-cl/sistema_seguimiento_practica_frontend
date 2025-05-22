@@ -14,13 +14,12 @@ import { PreguntasInformeService } from '../../../../pages/roles/jefe_compartido
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { MessageService } from 'primeng/api';
 import { Pregunta } from '../../dto/informe-alumno.dto';
-import { HeaderComponent } from "../../../../pages/roles/jefe_compartido/header-jefes/header.component";
 import { respuestaInformeConfidencial } from '../../dto/informe-confidencial.dto';
 
 @Component({
   selector: 'app-informe-primera-practica',
   standalone: true,
-  imports: [CommonModule, NgxPaginationModule, HeaderComponent, FormsModule, ReactiveFormsModule, CalendarModule, RadioButtonModule, ButtonModule, InputTextareaModule, InputNumberModule, FloatLabelModule, HeaderComponent],
+  imports: [CommonModule, NgxPaginationModule, FormsModule, ReactiveFormsModule, CalendarModule, RadioButtonModule, ButtonModule, InputTextareaModule, InputNumberModule, FloatLabelModule],
   templateUrl: './informe-primera-practica.component.html',
   styleUrl: './informe-primera-practica.component.css'
 })

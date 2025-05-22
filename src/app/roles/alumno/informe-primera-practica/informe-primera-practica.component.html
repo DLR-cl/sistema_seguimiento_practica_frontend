@@ -1,5 +1,4 @@
-
-<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
+<div *ngIf="cargando" class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none bg-gray-900/50 backdrop-blur-sm z-50">
     <div class="flex space-x-2">
       <!-- Puntos animados con rebote e iluminación progresiva -->
       <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright"
@@ -11,15 +10,15 @@
     </div>
 </div>
 
-<div *ngIf="!cargando" class="bg-gray-50 min-h-screen">
-  <div class="bg-gray-50 py-12 flex items-center justify-center px-4 sm:px-6 lg:px-8">
-    <div class="container max-w-screen-lg p-6 sm:p-8 lg:p-10 bg-white rounded-lg shadow-lg">
+<div *ngIf="!cargando" class="min-h-screen bg-gray-900">
+  <div class="py-12 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+    <div class="container max-w-screen-lg p-6 sm:p-8 lg:p-10 bg-gray-800 rounded-xl shadow-2xl border border-gray-700">
       <div *ngIf="!datos_listo">
         <!-- Título -->
-        <h1 class="text-3xl font-bold text-center text-blue-700 mb-6">
+        <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">
           Encuesta de Satisfacción de la Experiencia de Práctica
         </h1>
-        <p class="text-center text-gray-600 mb-10">
+        <p class="text-center text-gray-300 mb-10">
           Por favor, responda las preguntas reflexionando sobre tu desempeño, aprendizaje y satisfacción durante tu periodo de práctica profesional, con el objetivo de mejorar futuras experiencias formativas.
         </p>
 
@@ -27,9 +26,9 @@
         <div class="preguntas-container min-h-[450px] mb-6">
           <div
             *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index"
-            class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm"
+            class="pregunta bg-gray-700/50 rounded-lg p-6 mb-6 shadow-lg border border-gray-600 hover:border-blue-500/50 transition-colors"
           >
-            <p class="text-lg font-semibold text-gray-700">
+            <p class="text-lg font-semibold text-gray-200">
               {{ preg.enunciado_pregunta }}
             </p>
 
@@ -42,11 +41,11 @@
                   [value]="value"
                   [(ngModel)]="respuestasAlumno[i + (page-1) * preguntas_paginas]!.puntaje"
                   (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_pregunta: preg.id_pregunta, puntaje: value })"
-                ></p-radioButton>
+                  class="custom-radio">
+                </p-radioButton>
                 <label
                   [for]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value"
-                  class="ml-2 text-gray-600 text-sm cursor-pointer"
-                >
+                  class="ml-2 text-gray-300 text-sm cursor-pointer hover:text-blue-400 transition-colors">
                   {{ value }} - {{ getOptionText(value) }}
                 </label>
               </div>
@@ -54,7 +53,7 @@
 
             <!-- Pregunta Abierta -->
             <div *ngIf="preg.tipo_pregunta == 'ABIERTA'" class="respuestas mt-4 space-y-3">
-              <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Tu respuesta</label>
+              <label for="message" class="block mb-2 text-sm font-medium text-gray-300">Tu respuesta</label>
               <textarea
                 pInputTextarea
                 id="message"
@@ -63,28 +62,28 @@
                 rows="4"
                 autoResize="true"
                 placeholder="Deja tu respuesta aquí"
-                class="w-full text-sm"
-              ></textarea>
+                class="w-full text-sm bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
+              </textarea>
             </div>
 
             <!-- Pregunta Desarrollo Profesional -->
             <div *ngIf="preg.tipo_pregunta == 'DESARROLLO_PROFESIONAL'" class="respuestas mt-4 space-y-3">
-              <div *ngIf="asignaturas_seleccionadas.length > 0" class="my-4 bg-white rounded-lg shadow-lg p-4 border border-gray-200">
-                <h3 class="text-md font-semibold text-blue-600 mb-4">Asignaturas seleccionadas:</h3>
+              <div *ngIf="asignaturas_seleccionadas.length > 0" class="my-4 bg-gray-700/50 rounded-lg shadow-lg p-4 border border-gray-600">
+                <h3 class="text-md font-semibold text-blue-400 mb-4">Asignaturas seleccionadas:</h3>
                 <ul class="list-disc pl-6 space-y-2">
-                  <li *ngFor="let asignatura of asignaturas_seleccionadas" class="text-sm text-gray-700 bg-blue-200 p-2 rounded shadow-md mb-3">
-                    <span class="font-semibold text-gray-700">{{ asignatura.nombre }}</span> ({{ asignatura.codigo }})
+                  <li *ngFor="let asignatura of asignaturas_seleccionadas" class="text-sm text-gray-300 bg-gray-700 p-2 rounded shadow-md mb-3 border border-gray-600">
+                    <span class="font-semibold text-blue-400">{{ asignatura.nombre }}</span> 
+                    <span class="text-gray-400">({{ asignatura.codigo }})</span>
                   </li>
                 </ul>
               </div>
-              <div *ngIf="asignaturas_seleccionadas.length === 0" class="my-4 bg-white rounded-lg shadow-lg p-4">
+              <div *ngIf="asignaturas_seleccionadas.length === 0" class="my-4 bg-gray-700/50 rounded-lg shadow-lg p-4 border border-gray-600 text-gray-400">
                 No se han seleccionado asignaturas aún.
               </div>
               <button
                 type="button"
                 class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
-                (click)="mostrarDialogo()"
-              >
+                (click)="mostrarDialogo()">
                 Seleccionar asignaturas
               </button>
             </div>
@@ -102,35 +101,35 @@
             pButton
             label="Continuar"
             class="bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:bg-blue-700 transition duration-200 mt-2"
-            (click)="changeForm()"
-          ></button>
+            (click)="changeForm()">
+          </button>
         </div>
       </div>
 
       <div *ngIf="datos_listo" class="relative">
         <!-- Spinner -->
-        <div *ngIf="cargandoEnviar" class="absolute inset-0 flex rounded-lg items-center justify-center bg-white bg-opacity-75 z-50">
+        <div *ngIf="cargandoEnviar" class="absolute inset-0 flex rounded-lg items-center justify-center bg-gray-900/75 backdrop-blur-sm z-50">
           <div class="w-16 h-16 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
         </div>
 
         <!-- Título de Subida -->
         <div class="text-center">
-          <h2 class="text-3xl font-bold text-blue-700 mb-2">Sube tu Informe de Práctica Profesional</h2>
-          <p class="text-gray-600">Por favor, asegúrate de que el archivo esté en formato PDF y cumpla con los requisitos especificados.</p>
+          <h2 class="text-3xl font-bold text-blue-400 mb-2">Sube tu Informe de Práctica Profesional</h2>
+          <p class="text-gray-300">Por favor, asegúrate de que el archivo esté en formato PDF y cumpla con los requisitos especificados.</p>
         </div>
 
         <!-- Contenedor de Subida de Archivos -->
         <div class="flex items-center justify-center w-full mt-8">
           <div
-            class="flex flex-col items-center justify-center w-full max-w-lg p-6 h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-white hover:bg-gray-50 shadow-md"
+            class="flex flex-col items-center justify-center w-full max-w-lg p-6 h-64 border-2 border-gray-600 border-dashed rounded-lg cursor-pointer bg-gray-700/50 hover:bg-gray-700/70 shadow-lg transition-colors"
             (drop)="onDrop($event)"
             (dragover)="onDragOver($event)"
-            (click)="seleccionarArchivo()"
-          >
+            (click)="seleccionarArchivo()">
+            
             <!-- Placeholder for Archivo no Subido -->
             <div *ngIf="!uploadedFile" class="flex flex-col items-center justify-center">
               <svg
-                class="w-10 h-10 mb-3 text-blue-500"
+                class="w-10 h-10 mb-3 text-blue-400"
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -144,15 +143,15 @@
                   d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
                 />
               </svg>
-              <p class="text-lg font-semibold text-gray-700 mb-1">Arrastra y suelta tu archivo aquí</p>
-              <p class="text-sm text-gray-500">o haz clic para seleccionar el archivo</p>
-              <p class="text-xs text-gray-400 mt-1">Solo se permiten archivos en formato PDF.</p>
+              <p class="text-lg font-semibold text-gray-200 mb-1">Arrastra y suelta tu archivo aquí</p>
+              <p class="text-sm text-gray-400">o haz clic para seleccionar el archivo</p>
+              <p class="text-xs text-gray-500 mt-1">Solo se permiten archivos en formato PDF.</p>
             </div>
 
             <!-- Mensaje para Archivo Subido -->
-            <div *ngIf="uploadedFile" class="text-center text-green-600">
+            <div *ngIf="uploadedFile" class="text-center text-green-400">
               <p class="mb-2 font-semibold">Archivo "{{ uploadedFile.name }}" subido correctamente</p>
-              <button class="mt-2 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700" (click)="removeFile()">
+              <button class="mt-2 px-3 py-1 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors" (click)="removeFile()">
                 Subir otro archivo
               </button>
             </div>
@@ -164,16 +163,14 @@
         <div class="flex justify-center space-x-5 mt-10 max-w-lg w-full mx-auto">
           <button
             *ngIf="!correccion"
-            class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
-            (click)="volverCuestionario()"
-          >
+            class="bg-gray-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-gray-700 transition duration-200"
+            (click)="volverCuestionario()">
             Volver a la encuesta
           </button>
           <button
             class="bg-blue-600 text-white font-semibold py-2 w-full rounded-lg shadow-md hover:bg-blue-700 transition duration-200"
             (click)="enviarInforme()"
-            [disabled]="cargandoEnviar"
-          >
+            [disabled]="cargandoEnviar">
             Enviar informe
           </button>
         </div>
@@ -182,8 +179,6 @@
   </div>
 </div>
 
-
-
 <p-dialog
   [(visible)]="dialogVisible"
   [modal]="true"
@@ -191,18 +186,19 @@
   [closable]="true"
   [dismissableMask]="true"
   [style]="{ width: '1300px' }"
+  class="dark-dialog"
 >
     <ng-template pTemplate="header">
-        <h2 class="text-3xl font-bold text-center text-blue-600 w-full">{{tituloDialogo}}</h2>
+        <h2 class="text-3xl font-bold text-center text-blue-700 w-full">{{tituloDialogo}}</h2>
     </ng-template>
 
-    <h3 class="text-xl font-semibold mb-5">
+    <h3 class="text-xl font-semibold mb-5 text-gray-400">
         Selecciona las asignaturas que más te ayudaron en tu práctica
     </h3>
     <div class="overflow-x-scroll pb-8 px-8 flex gap-3">
         <!-- Semestres como columnas -->
         <div *ngFor="let semestre of semestres" class="flex flex-col gap-3 w-56">
-        <h3 class="text-xl font-medium text-center">{{ semestre.nombre }}</h3>
+        <h3 class="text-xl font-medium text-center text-gray-400">{{ semestre.nombre }}</h3>
         <div class="flex flex-col gap-3">
             <!-- Asignaturas dentro de cada semestre -->
             <div
@@ -215,7 +211,7 @@
                 'bg-[#00ff01] hover:bg-[#01dc03]': asignatura.tipo === 'FP' && !asignaturasFPCeleste.includes(asignatura.codigo),
                 'bg-blue-600 scale-105 hover:bg-blue-700': isSelected(asignatura)
               }"
-            class="flex flex-col cursor-pointer justify-center text-black text-center p-4 rounded-sm border border-black w-44 h-24 shadow transition-transform hover:scale-105 hover:opacity"
+            class="flex flex-col cursor-pointer justify-center text-black text-center p-4 rounded-sm border border-gray-600 w-44 h-24 shadow-lg transition-transform hover:scale-105"
             (click)="toggleSeleccion(asignatura)"
             >
             <p class="font-bold text-xs">{{ asignatura.nombre }}</p>
@@ -225,8 +221,12 @@
         </div>
     </div>
     <ng-template pTemplate="footer">
-        <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-2 rounded-lg" (click)="cancelar()">Cancelar</button>
-        <button type="button" class="bg-blue-600 hover:bg-blue-700 ms-4 px-3 py-2 text-white rounded-lg" (click)="guardarAsignaturas()">Seleccionar</button>
+        <button type="button" 
+            class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-lg transition-colors" 
+            (click)="cancelar()">Cancelar</button>
+        <button type="button" 
+            class="bg-blue-600 hover:bg-blue-700 ms-4 px-3 py-2 text-white rounded-lg transition-colors" 
+            (click)="guardarAsignaturas()">Seleccionar</button>
     </ng-template>
 </p-dialog>
 
@@ -237,18 +237,19 @@
   [closable]="true"
   [dismissableMask]="true"
   [style]="{ width: '600px' }"
+  class="dark-dialog"
 >
   <ng-template pTemplate="header">
-    <h3 class="text-xl font-bold text-center">Selecciona una asignatura electiva</h3>
+    <h3 class="text-xl font-bold text-center text-blue-400">Selecciona una asignatura electiva</h3>
   </ng-template>
 
   <div class="flex flex-col gap-3 p-5">
     <div
       *ngFor="let electiva of asignaturasElectivas"
-      class="cursor-pointer p-3 text-center border rounded transition-transform hover:scale-105"
+      class="cursor-pointer p-3 text-center border border-gray-600 rounded-lg transition-all hover:scale-105"
       [ngClass]="{
         'bg-blue-600 text-white': isElectivaSelected(electiva),
-        'bg-gray-100': !isElectivaSelected(electiva)
+        'bg-gray-700 text-gray-300': !isElectivaSelected(electiva)
       }"
       (click)="toggleSeleccionElectiva(electiva)"
     >
@@ -258,6 +259,8 @@
   </div>
 
   <ng-template pTemplate="footer">
-    <button type="button" class="bg-gray-400 hover:bg-gray-500 text-white px-3 py-2 rounded-lg" (click)="cerrarElectiva()">Cerrar</button>
+    <button type="button" 
+        class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-lg transition-colors" 
+        (click)="cerrarElectiva()">Cerrar</button>
   </ng-template>
 </p-dialog>

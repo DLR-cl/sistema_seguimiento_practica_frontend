@@ -1,7 +1,5 @@
-<app-header></app-header>
-
 <div *ngIf="cargando"
-  class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none">
+  class="absolute top-0 left-0 w-full h-[calc(100%)] flex justify-center items-center pointer-events-none bg-gray-900/50 backdrop-blur-sm z-50">
   <div class="flex space-x-2">
     <!-- Puntos animados con rebote e iluminación progresiva -->
     <div class="w-4 h-4 bg-blue-500 rounded-full animate-bounce-bright" style="animation-delay: 0s"></div>
@@ -10,17 +8,16 @@
   </div>
 </div>
 
-<div *ngIf="!cargando" class="bg-gray-50 py-12 flex items-center justify-center min-h-screen">
-
-  <div class="container max-w-screen-lg p-10 bg-white rounded-lg shadow-lg relative">
+<div *ngIf="!cargando" class="bg-gray-900 py-12 flex items-center justify-center min-h-screen">
+  <div class="container max-w-screen-lg p-10 bg-gray-800 rounded-xl shadow-2xl border border-gray-700 relative">
     <!-- Spinner Overlay -->
     <div *ngIf="cargandoEnviar"
-      class="absolute top-0 left-0 w-full rounded-lg h-full bg-white bg-opacity-90 flex items-center justify-center z-50">
+      class="absolute top-0 left-0 w-full rounded-xl h-full bg-gray-900/90 flex items-center justify-center z-50">
       <div class="w-16 h-16 border-8 border-t-transparent border-blue-500 border-solid rounded-full animate-spin"></div>
     </div>
 
-    <h1 class="text-3xl font-bold text-center text-blue-800 mb-6">Formulario de Seguimiento de Práctica</h1>
-    <p class="text-center text-gray-600 mb-10">Por favor, complete las preguntas para ayudar en el seguimiento del
+    <h1 class="text-3xl font-bold text-center text-blue-400 mb-6">Formulario de Seguimiento de Práctica</h1>
+    <p class="text-center text-gray-300 mb-10">Por favor, complete las preguntas para ayudar en el seguimiento del
       desempeño del alumno en su práctica profesional.</p>
 
     <div *ngIf="!datos_listo" class="w-full max-w-4xl mx-auto p-8 rounded-md mb-5">
@@ -31,51 +28,51 @@
           <p-floatLabel>
             <p-calendar id="fecha_inicio" formControlName="fecha_inicio_practica" dateFormat="dd-mm-yy"
               styleClass="w-full"
-              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-600 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               [showIcon]="false"></p-calendar>
-            <label for="fecha_inicio">Fecha Inicio</label>
+            <label for="fecha_inicio" class="text-gray-300">Fecha Inicio</label>
           </p-floatLabel>
 
           <!-- Fecha Término -->
           <p-floatLabel>
             <p-calendar id="fecha_termino" formControlName="fecha_fin_practica" dateFormat="dd-mm-yy"
               styleClass="w-full"
-              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-600 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               [showIcon]="false"></p-calendar>
-            <label for="fecha_termino">Fecha Término</label>
+            <label for="fecha_termino" class="text-gray-300">Fecha Término</label>
           </p-floatLabel>
 
           <!-- Horas Semanales -->
           <p-floatLabel>
             <p-inputNumber id="horas_semanales" formControlName="horas_semanales" class="w-full" styleClass="w-full"
-              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-600 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               [showButtons]="false"></p-inputNumber>
-            <label for="horas_semanales">Horas Semanales de Trabajo</label>
+            <label for="horas_semanales" class="text-gray-300">Horas Semanales de Trabajo</label>
           </p-floatLabel>
 
           <p-floatLabel>
             <p-inputNumber id="horas_regulares" formControlName="horas_practicas_regulares" class="w-full"
               styleClass="w-full"
-              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-600 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               [showButtons]="false"></p-inputNumber>
-            <label for="horas_regulares">Horas de Prácticas Regulares</label>
+            <label for="horas_regulares" class="text-gray-300">Horas de Prácticas Regulares</label>
           </p-floatLabel>
 
           <!-- Horas Extraordinarias -->
           <p-floatLabel>
             <p-inputNumber id="horas_extraordinarias" formControlName="horas_practicas_extraordinarias" class="w-full"
               styleClass="w-full"
-              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-600 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               [showButtons]="false"></p-inputNumber>
-            <label for="horas_extraordinarias">Horas de Prácticas Extraordinarias</label>
+            <label for="horas_extraordinarias" class="text-gray-300">Horas de Prácticas Extraordinarias</label>
           </p-floatLabel>
 
           <p-floatLabel>
             <p-inputNumber id="horas_inasistencia" formControlName="horas_inasistencia" class="w-full"
               styleClass="w-full"
-              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-500"
+              inputStyleClass="w-full py-1 border-0 rounded-none border-b-2 border-gray-600 bg-gray-700 text-gray-200 focus:outline-none focus:ring-0 focus:border-blue-500"
               [showButtons]="false"></p-inputNumber>
-            <label for="horas_inasistencia">Horas de Inasistencia</label>
+            <label for="horas_inasistencia" class="text-gray-300">Horas de Inasistencia</label>
           </p-floatLabel>
         </div>
       </form>
@@ -85,8 +82,8 @@
     <div *ngIf="datos_listo">
       <div class="preguntas-container min-h-[450px] mb-6">
         <div *ngFor="let preg of preguntas | paginate: { itemsPerPage: 3, currentPage: page }; let i = index"
-          class="pregunta bg-blue-50 rounded-lg p-6 mb-6 shadow-sm">
-          <p class="text-lg font-semibold text-gray-700">{{ preg.enunciado_pregunta }}</p>
+          class="pregunta bg-gray-700/50 rounded-lg p-6 mb-6 shadow-lg border border-gray-600 hover:border-blue-500/50 transition-colors">
+          <p class="text-lg font-semibold text-gray-200">{{ preg.enunciado_pregunta }}</p>
 
           <!-- Pregunta "Empresa de Carácter" -->
           <div *ngIf="preg.enunciado_pregunta == 'Empresa de carácter'" class="mt-4 space-y-3">
@@ -95,12 +92,11 @@
                 [value]="option" [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto"
                 (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: option })">
               </p-radioButton>
-              <label [for]="'empresa_caracter_' + i + '_' + j" class="ml-2 text-gray-600 text-sm cursor-pointer">
+              <label [for]="'empresa_caracter_' + i + '_' + j" class="ml-2 text-gray-300 text-sm cursor-pointer hover:text-blue-400 transition-colors">
                 {{ option }}
               </label>
             </div>
           </div>
-
 
           <!-- Pregunta "Tamaño de la Empresa" -->
           <div *ngIf="preg.enunciado_pregunta == 'Tamaño de la Empresa'" class="mt-4 space-y-3">
@@ -109,12 +105,11 @@
                 [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto"
                 (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: option })">
               </p-radioButton>
-              <label [for]="'tamano_empresa_' + i + '_' + j" class="ml-2 text-gray-600 text-sm cursor-pointer">
+              <label [for]="'tamano_empresa_' + i + '_' + j" class="ml-2 text-gray-300 text-sm cursor-pointer hover:text-blue-400 transition-colors">
                 {{ option }}
               </label>
             </div>
           </div>
-
 
           <div *ngIf="preg.tipo_pregunta == 'CERRADA' && preg.dimension.nombre != 'Antecedentes de la Empresa' " class="respuestas mt-4 space-y-3">
             <div *ngFor="let value of [1, 2, 3, 4, 5]" class="flex items-center">
@@ -124,7 +119,7 @@
                 (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, puntos: respuestasSupervisor[i + (page-1) * preguntas_paginas]!.puntos })">
               </p-radioButton>
               <label [for]="'experiencia_' + (i + (page-1) * preguntas_paginas) + '_' + value"
-                class="ml-2 text-gray-600 text-sm cursor-pointer">
+                class="ml-2 text-gray-300 text-sm cursor-pointer hover:text-blue-400 transition-colors">
                 {{ value }} - {{ getOptionText(value) }}
               </label>
             </div>
@@ -132,12 +127,13 @@
 
           <!-- Pregunta Abierta -->
           <div *ngIf="preg.tipo_pregunta == 'ABIERTA'" class="respuestas mt-4 space-y-3">
-            <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Tu respuesta</label>
+            <label for="message" class="block mb-2 text-sm font-medium text-gray-300">Tu respuesta</label>
             <textarea pInputTextarea id="message"
               [(ngModel)]="respuestasSupervisor[i + (page-1) * preguntas_paginas]!.respuesta_texto"
               (ngModelChange)="actualizarRespuesta(preg.id_pregunta, {id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: $event })"
-              rows="4" autoResize="true" placeholder="Deja tu respuesta aquí" class="w-full text-sm">
-                    </textarea>
+              rows="4" autoResize="true" placeholder="Deja tu respuesta aquí"
+              class="w-full text-sm bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 rounded-lg">
+            </textarea>
           </div>
 
           <!-- Pregunta Evaluativa -->
@@ -150,21 +146,18 @@
                 (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: value })">
               </p-radioButton>
               <label [for]="'habilidad_' + (i + (page - 1) * preguntas_paginas) + '_' + value"
-                class="ml-2 text-gray-600 text-sm cursor-pointer">
+                class="ml-2 text-gray-300 text-sm cursor-pointer hover:text-blue-400 transition-colors">
                 {{ value }}
               </label>
             </div>
 
             <!-- Campo de texto para otras herramientas -->
             <div class="mt-4">
-              <input type="text" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm"
-                placeholder="Escriba otra herramienta"
+              <input type="text" class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 text-sm bg-gray-700 border-gray-600 text-gray-200 placeholder-gray-400" placeholder="Escriba otra herramienta"
                 [(ngModel)]="respuestasSupervisor[i + (page - 1) * preguntas_paginas]!.respuesta_texto"
                 (ngModelChange)="actualizarInputText(preg.id_pregunta, $event)" />
             </div>
           </div>
-
-
 
           <div *ngIf="preg.tipo_pregunta === 'VINCULACION_MEDIO'" class="respuestas mt-4 space-y-3">
             <!-- Opciones Sí, No y Tal vez -->
@@ -175,13 +168,11 @@
                 (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: value })">
               </p-radioButton>
               <label [for]="'vinculacion_' + (i + (page - 1) * preguntas_paginas) + '_' + value"
-                class="ml-2 text-gray-600 text-sm cursor-pointer">
+                class="ml-2 text-gray-300 text-sm cursor-pointer hover:text-blue-400 transition-colors">
                 {{ value }}
               </label>
             </div>
           </div>
-
-
 
           <div *ngIf="preg.tipo_pregunta === 'SALARIO_ESTIMADO'" class="respuestas mt-4 space-y-3">
             <!-- Opciones Salariales -->
@@ -197,13 +188,11 @@
                 (ngModelChange)="actualizarRespuesta(preg.id_pregunta, { id_informe: idInforme, id_pregunta: preg.id_pregunta, respuesta_texto: value })">
               </p-radioButton>
               <label [for]="'salario_' + (i + (page - 1) * preguntas_paginas) + '_' + value"
-                class="ml-2 text-gray-600 text-sm cursor-pointer">
+                class="ml-2 text-gray-300 text-sm cursor-pointer hover:text-blue-400 transition-colors">
                 {{ value }}
               </label>
             </div>
           </div>
-
-
         </div>
       </div>
 
