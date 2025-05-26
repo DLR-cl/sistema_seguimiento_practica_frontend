@@ -23,7 +23,7 @@ export class LoginPageComponent implements OnInit {
     this.cargarImagenFondo();
   }
 
-  imagenFondo: string = '/departamento_ici/transicion_5.webp';
+  imagenFondo: string = 'departamento_ici/transicion_5.webp';
   imagenCargada = signal<boolean>(false);
   showPassword = signal<boolean>(false);
   errorMessage: string | null = null;

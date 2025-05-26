@@ -36,7 +36,6 @@ export class DataEstadisticaPracticaService {
   }
 
   showModalDetallesPractica() {
-    console.log(this.modalViewDetallesPractica())
     this.modalViewDetallesPractica.update((current) => !current);
     if (this.modalViewDetallesPractica()) {
       this.obtenerDetallesAlumnosEnPractica();
@@ -61,7 +60,6 @@ export class DataEstadisticaPracticaService {
 
   seleccionarPractica(practica: DetallePractica) {
     this.practicaSeleccionada.set(practica);
-    console.log("practica cambiada en servicio", this.practicaSeleccionada())
   }
 
   mostrarPractica() {
@@ -81,7 +79,6 @@ export class DataEstadisticaPracticaService {
   checkCargandoFinalizado() {
     if (this.contadorSolicitudes() === 0) {
       this.cargandoDatosDashboard.update(current => !current);
-      console.log("Todas las solicitudes han finalizado.");
     }
   }
 }

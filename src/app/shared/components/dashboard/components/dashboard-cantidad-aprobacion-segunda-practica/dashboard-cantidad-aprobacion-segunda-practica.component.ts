@@ -54,7 +54,6 @@ export class DashboardCantidadAprobacionSegundaPracticaComponent implements OnIn
     })
   }
   private filterSegundaPractica(result: EstadisticaAprobacionPorPractica) {
-    console.log("valores segunda practica: ", result)
     if (result && result.practica_dos.aprobadas > 0 || result.practica_dos.desaprobadas > 0) {
       const aprobadosSegundaPractica = result.practica_dos.aprobadas;
       const totalSegundaPractica = result.practica_dos.aprobadas + result.practica_dos.desaprobadas;

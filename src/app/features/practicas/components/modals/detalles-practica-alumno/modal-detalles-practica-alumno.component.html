@@ -1,3 +1,4 @@
+@if (this.dataEstadisticaAlumno.verDetallePractica()) { 
 <p-dialog [visible]="this.dataEstadisticaAlumno.verDetallePractica()" [modal]="true" [draggable]="false" [closable]="false" [dismissableMask]="true"
   [style]="{ width: '47rem' }">
   <!-- Header -->
@@ -8,18 +9,26 @@
   </ng-template>
 
   <!-- Content -->
+
   <ng-template pTemplate="content">
     <div class="space-y-8">
-      <!-- Información General  Recibir practica-->
-      <app-modal-detalles-informacion-general [practicaAlumno]="practicaAlumno()" />
-      <!-- Cierre componente información general -->
+      <!-- Animación de carga -->
+      @if (!practicaAlumno()) {
+        <div class="flex justify-center items-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      } @else {
+        <!-- Información General  Recibir practica-->
+        <app-modal-detalles-informacion-general [practicaAlumno]="practicaAlumno()" />
+        <!-- Cierre componente información general -->
 
-      <!-- Componente info academico -->
-      <app-modal-detalles-info-academico-practica [data]="{
-        practica: practicaAlumno()!,
-        academico: academico()!
-      }"/>
-      <!-- Cierr componente info academico-->
+        <!-- Componente info academico -->
+        <app-modal-detalles-info-academico-practica [data]="{
+          practica: practicaAlumno()!,
+          academico: academico()!
+        }"/>
+        <!-- Cierr componente info academico-->
+      }
     </div>
   </ng-template>
 
@@ -33,3 +42,4 @@
     </div>
   </ng-template>
 </p-dialog>
+}

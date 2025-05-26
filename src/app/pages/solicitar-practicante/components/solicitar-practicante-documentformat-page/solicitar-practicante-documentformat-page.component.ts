@@ -13,6 +13,6 @@ export class SolicitarPracticanteDocumentformatPageComponent {
   urlPDF: SafeResourceUrl;
 
   constructor(private sanitizer: DomSanitizer){
-    this.urlPDF = this.sanitizer.bypassSecurityTrustResourceUrl('/sample.pdf');
+    this.urlPDF = this.sanitizer.bypassSecurityTrustResourceUrl('documentos/sample.pdf');
   }
 }

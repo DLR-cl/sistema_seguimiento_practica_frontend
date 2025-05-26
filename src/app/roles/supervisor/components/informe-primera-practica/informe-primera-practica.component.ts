@@ -37,7 +37,6 @@ export class InformePrimeraPracticaComponent implements OnInit{
   ngOnInit(): void {
     this.obtenerPreguntas()
     this.idInforme = Number(this.route.snapshot.paramMap.get('idInforme'))!;
-    console.log(this.idInforme)
   }
 
   cargando: boolean = true;
@@ -111,9 +110,7 @@ export class InformePrimeraPracticaComponent implements OnInit{
       // Si no existe, agrega la nueva respuesta
       this.respuestasSupervisor.push(respuesta);
     }
-    console.log(this.datos_listo, 'datos listo')
   
-    console.log("respuestas registradas", this.respuestasSupervisor);
   }
   
   public actualizarInputText(preguntaId: number, texto: string) {
@@ -129,7 +126,6 @@ export class InformePrimeraPracticaComponent implements OnInit{
       });
     }
   
-    console.log(this.respuestasSupervisor);
   }
   
 
@@ -151,7 +147,6 @@ export class InformePrimeraPracticaComponent implements OnInit{
         }
         return respuesta;
       });
-      console.log(this.respuestasSupervisor, 'respuestas')
       this.cargando = false
     })
   }
@@ -162,11 +157,8 @@ export class InformePrimeraPracticaComponent implements OnInit{
 
   changeForm(){
     if (!this.formularioDatos.invalid) {
-      console.log(this.formularioDatos.value);
       this.datos_listo = !this.datos_listo;
-      console.log(this.respuestasSupervisor)
     } else {
-      console.log(this.formularioDatos.value);
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Rellene correctamente el formulario' });
     }
   }
@@ -185,18 +177,15 @@ export class InformePrimeraPracticaComponent implements OnInit{
     
     this.respuestasService.registrarRespuestasConfidencial(this.respuestasSupervisor).subscribe({
       next: result =>{
-        console.log(result)
 
         this.respuestasService.enviarInformeConfidencial(this.formularioDatos.value, this.idInforme).subscribe(
           {
             next: result => {
-              console.log(result);
               this.messageService.add({ severity: 'success', summary: 'Éxito', detail: 'Respuestas enviadas con éxito'});
               this.goTofin()
               this.cargandoEnviar = false;
             },
             error: error => {
-              console.log(error);
               this.cargandoEnviar = false;
               this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar las respuestas'});
             }
@@ -204,7 +193,6 @@ export class InformePrimeraPracticaComponent implements OnInit{
         )
       },
       error: error =>{
-        console.log(error)
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error al enviar las respuestas'});
         this.cargandoEnviar = false;
       }

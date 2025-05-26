@@ -32,12 +32,10 @@ export class ModalAlumnosPracticaComponent implements OnInit{
     this.dataEstadisticaService.obtenerDetallesAlumnosEnPractica().subscribe(
       (resp) => {
         this.listaPracticas.set(resp);
-        console.log("detalles practica",resp);
       }
     );
   }
   seleccionarPractica(practica: DetallePractica): void {
-    console.log("practica seleccionada: ",practica);
     this.practica.emit(practica);
     this.dataEstadisticaService.mostrarPractica()
   }

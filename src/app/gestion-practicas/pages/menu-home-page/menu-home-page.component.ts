@@ -5,6 +5,7 @@ import { TipoUsuario } from '../../../enum/enumerables.enum';
 import { AuthStateService } from '../../../shared/data-access/auth-state.service';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth.service';
+import { ImagePreloaderService } from '../../../core/services/image-preloader.service';
 //TODO: Mover a shared.
 @Component({
   selector: 'app-menu-home-page',
@@ -28,22 +29,30 @@ export class MenuHomePageComponent implements OnInit {
 
   private usuarioService = inject(AuthStateService);
   private authService = inject(AuthService);
+  private imagePreloaderService = inject(ImagePreloaderService);
   userRole = signal<TipoUsuario | null>(null);
   private router = inject(Router);
 
   images = signal([
     'images/departamento/imagen-departamento-vista-arriba.webp',
-    'departamento_dici.png',
+    'images/departamento/laboratorio_1.webp',
+    'images/departamento/letrero_logo.webp',
+    'images/departamento/primer_piso.webp',
+    'images/departamento/ultimo_piso.webp',
   ]);
 
   currentIndex = signal<number>(0); // Índice de la diapositiva actual
   autoPlayInterval: any; // Para manejar el intervalo de auto-play
-
+  imagesLoaded = signal<boolean>(false);
+  
   ngOnInit(): void {
+    this.imagePreloaderService.preloadImages(this.images()).subscribe(() => {
+      this.imagesLoaded.set(true);
+    });
 
     setInterval(() => {
       this.currentIndex.update((index) => (index + 1) % this.images().length);
-    }, 4000); // Cambia cada 3 segundos
+    }, 4000); // Cambia cada 4 segundos
     this.obtenerDatosUsuario();
   }
 

@@ -26,6 +26,10 @@ export const routes: Routes = [
         path: 'seguimiento-academicos',
         loadComponent: () => import('./components/estado-academicos/estado-academicos.component').then(c => c.EstadoAcademicosComponent),
     },
+    {
+        path: 'formato-subida-excel',
+        loadComponent: () => import('./components/formato-subida-excel/formato-subida-excel.component').then(c => c.FormatoSubidaExcelComponent),
+    },
     //TODO: Fix, mover la generación de reportes a local para servidor.
     {
         path: 'reportes',

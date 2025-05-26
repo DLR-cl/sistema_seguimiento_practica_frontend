@@ -240,7 +240,6 @@ export class DashboardComponent implements OnInit{
     if (this.cargandoSolicitudes === 0) {
         this.cargando = false;
         this.estadoCargando.emit(this.cargando);
-        console.log("Todas las solicitudes han finalizado.");
     }
   }
 }

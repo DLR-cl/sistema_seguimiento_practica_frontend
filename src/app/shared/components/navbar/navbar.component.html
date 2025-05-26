@@ -27,7 +27,7 @@
         <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
           <div class="flex shrink-0 items-center">
             <a [routerLink]="[getHomeRoute()]" class="focus:outline-none focus:ring-2 focus:ring-blue-400 rounded">
-              <img class="h-10 w-auto" src="logo_industria.png" alt="Ir al inicio">
+              <img class="h-10 w-auto" src="logos/logo_industria.png" alt="Ir al inicio">
             </a>
           </div>
           <div class="hidden sm:ml-6 sm:block">
@@ -104,9 +104,9 @@
                 }"
             >
               <!-- Active: "bg-gray-100 outline-hidden", Not Active: "" -->
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Tu Perfil</a>
-              <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Configuracion</a>
-              <a class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2" (click)="logout()">Cerrar Sesión</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-0">Tu Perfil</a>
+              <a href="#" class="block px-4 py-2 text-sm text-gray-700 cursor-pointer hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-1">Configuracion</a>
+              <a class="block px-4 py-2 text-sm text-red-500 cursor-pointer hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2" (click)="logout()">Cerrar Sesión</a>
             </div>
           </div>
         </div>
